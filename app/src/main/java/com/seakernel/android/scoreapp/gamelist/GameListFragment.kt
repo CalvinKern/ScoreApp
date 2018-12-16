@@ -1,10 +1,11 @@
-package com.seakernel.android.scoreapp
+package com.seakernel.android.scoreapp.gamelist
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.seakernel.android.scoreapp.R
 import kotlinx.android.synthetic.main.fragment_game_list.*
 
 /**
