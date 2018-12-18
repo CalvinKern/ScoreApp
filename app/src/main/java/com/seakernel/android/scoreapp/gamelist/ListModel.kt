@@ -1,6 +1,6 @@
 package com.seakernel.android.scoreapp.gamelist
 
-import com.seakernel.android.scoreapp.Game
+import com.seakernel.android.scoreapp.data.Game
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
 
