@@ -1,0 +1,11 @@
+<!--TODO-->
+<!--Attribute the author from: https://www.flaticon.com-->
+<!--<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>-->
+<!--For apps:-->
+<!--Place the attribution on the credits/description page of the application.-->
+
+<vector android:autoMirrored="true" android:height="24dp"
+    android:viewportHeight="357" android:viewportWidth="357"
+    android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M357,35.7l-35.7,-35.7l-142.8,142.8l-142.8,-142.8l-35.7,35.7l142.8,142.8l-142.8,142.8l35.7,35.7l142.8,-142.8l142.8,142.8l35.7,-35.7l-142.8,-142.8z"/>
+</vector>

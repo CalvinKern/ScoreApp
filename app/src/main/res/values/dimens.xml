@@ -1,4 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="min_touch_size">48dp</dimen>
+
+    <!--Text Size-->
+    <dimen name="text_detail">12sp</dimen>
+    <dimen name="text_title">16sp</dimen>
 </resources>
