@@ -36,29 +36,14 @@ data class ListModel(val gameList: List<Game> = listOf()) {
             return when (event) {
                 is Loaded -> Next.next(model.copy(gameList = event.games))
                 is LoadData -> Next.dispatch(Effects.effects(FetchData))
-                is AddGameClicked -> {
-                    Next.dispatch(Effects.effects(ShowNewGameScreen))
-                }
-                is GameRowClicked -> Next.dispatch(Effects.effects(
-                    ShowGameScreen(
-                        event.gameId
-                    )
-                ))
-                is GameRowLongPressed -> Next.dispatch(Effects.effects(
-                    ShowGameRowDialog(
-                        event.gameId
-                    )
-                ))
+                is AddGameClicked -> Next.dispatch(Effects.effects(ShowNewGameScreen))
+                is GameRowClicked -> Next.dispatch(Effects.effects(ShowGameScreen(event.gameId)))
+                is GameRowLongPressed -> Next.dispatch(Effects.effects(ShowGameRowDialog(event.gameId)))
                 is AddGameSuccessful -> Next.next(model.copy(gameList = model.gameList.plus(event.game)))
                 is GameDeleteSuccessful -> {
                     val name = model.gameList.find { it.id == event.gameId }?.name
                     val newModel = model.copy(gameList = model.gameList.filter { it.id != event.gameId })
-                    Next.next(newModel, Effects.effects(
-                        ShowDeleteSnackbar(
-                            event.gameId,
-                            name
-                        )
-                    ))
+                    Next.next(newModel, Effects.effects(ShowDeleteSnackbar(event.gameId, name)))
                 }
             }
         }
