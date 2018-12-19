@@ -2,6 +2,7 @@ package com.seakernel.android.scoreapp.gamecreate
 import com.seakernel.android.scoreapp.data.Player
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
+import java.util.*
 
 /**
  * Created by Calvin on 12/16/18.
@@ -12,6 +13,7 @@ sealed class CreateEvent
 object AddPlayerClicked : CreateEvent()
 data class StartGameClicked(val gameId: Long) : CreateEvent()
 data class PlayerRowClicked(val playerId: Long) : CreateEvent()
+data class PlayerSelected(val playerId: Long, val selected: Boolean) : CreateEvent()
 data class PlayerDeleteClicked(val playerId: Long) : CreateEvent()
 data class PlayerNameChanged(val playerId: Long, val newName: String) : CreateEvent()
 data class PlayerDeleteSuccessful(val playerId: Long) : CreateEvent()
@@ -22,7 +24,7 @@ data class ShowPlayerNameDialog(val playerId: Long, val playerName: String?) : C
 data class ShowDeleteDialog(val playerId: Long, val playerName: String?) : CreateEffect()
 data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : CreateEffect()
 
-data class CreateModel(val playerList: List<Player> = listOf()) {
+data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlayerList: List<Long> = listOf()) {
 
     fun player(playerId: Long): Player? {
         return playerList.find { it.id == playerId }
@@ -45,6 +47,20 @@ data class CreateModel(val playerList: List<Player> = listOf()) {
                     val name = model.playerName(event.playerId)
                     Next.dispatch(Effects.effects(ShowPlayerNameDialog(event.playerId, name)))
                 }
+                is PlayerSelected -> {
+                    val selected = model.selectedPlayerList.toMutableList()
+                    if (event.selected) {
+                        selected.find { it == event.playerId } ?: selected.add(event.playerId)
+                    } else {
+                        selected.remove(event.playerId)
+                    }
+
+                    if (selected.size == model.selectedPlayerList.size) {
+                        Next.noChange()
+                    } else {
+                        Next.next(model.copy(selectedPlayerList = selected))
+                    }
+                }
                 is PlayerDeleteClicked -> {
                     val name = model.playerName(event.playerId)
                     Next.dispatch(Effects.effects(ShowDeleteDialog(event.playerId, name)))
@@ -57,7 +73,7 @@ data class CreateModel(val playerList: List<Player> = listOf()) {
                         val oldPlayer = list[index]
                         list[index] = oldPlayer.copy(name = event.newName)
                     } else {
-                        list.add(Player(id = event.playerId, name = event.newName))
+                        list.add(Player(id = Random().nextLong(), name = event.newName))
                     }
 
                     Next.next(model.copy(playerList = list))

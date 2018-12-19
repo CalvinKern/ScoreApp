@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.gamelist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,8 +26,20 @@ import kotlinx.android.synthetic.main.holder_game_list.view.*
  */
 class GameListFragment : Fragment() {
 
+    interface GameListListener {
+        fun onShowGameScreen(gameId: Long)
+        fun onShowCreateGameScreen()
+    }
+
     private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
     private val controller = MobiusAndroid.controller(loop, ListModel.createDefault())
+
+    private var listener: GameListListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as? GameListListener
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_game_list, container, false)
@@ -57,6 +70,10 @@ class GameListFragment : Fragment() {
         controller.connect(::connectViews)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        activity?.setTitle(R.string.gameListTitle)
+    }
     // Mobius functions
 
     private fun initMobius(model: ListModel): First<ListModel, ListEffect> {
@@ -85,10 +102,10 @@ class GameListFragment : Fragment() {
 
     private fun effectHandler(eventConsumer: Consumer<ListEvent>): Connection<ListEffect> {
         return object : Connection<ListEffect> {
-            override fun accept(value: ListEffect) {
-                when (value) {
-                    is ShowNewGameScreen -> {}
-                    is ShowGameScreen -> {}
+            override fun accept(effect: ListEffect) {
+                when (effect) {
+                    is ShowCreateGameScreen -> listener?.onShowCreateGameScreen()
+                    is ShowGameScreen -> listener?.onShowGameScreen(effect.gameId)
                     is ShowGameRowDialog -> {}
                     is ShowDeleteSnackbar -> {}
                     is FetchData -> {}
@@ -96,7 +113,7 @@ class GameListFragment : Fragment() {
             }
 
             override fun dispose() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }
     }

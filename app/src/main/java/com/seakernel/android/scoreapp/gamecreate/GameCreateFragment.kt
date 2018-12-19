@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.gamecreate.CreateModel.Companion.update
@@ -16,7 +17,6 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_create.*
-import kotlinx.android.synthetic.main.holder_game_list.view.*
 import kotlinx.android.synthetic.main.holder_player_list.view.*
 
 /**
@@ -57,6 +57,11 @@ class GameCreateFragment : Fragment() {
         controller.connect(::connectViews)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        activity?.setTitle(R.string.gameCreateTitle)
+    }
+
     // Mobius functions
 
     private fun connectViews(eventConsumer: Consumer<CreateEvent>): Connection<CreateModel> {
@@ -68,7 +73,7 @@ class GameCreateFragment : Fragment() {
         return object : Connection<CreateModel> {
             override fun accept(model: CreateModel) {
                 // This will be called whenever there is a new model
-                playerRecycler.swapAdapter(PlayerListAdapter(model.playerList, eventConsumer), true)
+                playerRecycler.swapAdapter(PlayerListAdapter(model.playerList, model.selectedPlayerList, eventConsumer), false)
             }
 
             override fun dispose() {
@@ -81,8 +86,8 @@ class GameCreateFragment : Fragment() {
 
     private fun effectHandler(eventConsumer: Consumer<CreateEvent>): Connection<CreateEffect> {
         return object : Connection<CreateEffect> {
-            override fun accept(value: CreateEffect) {
-                when (value) {
+            override fun accept(effect: CreateEffect) {
+                when (effect) {
                     is ShowGameScreen -> {}
                     is ShowPlayerNameDialog -> {}
                     is ShowDeleteDialog -> {}
@@ -105,7 +110,7 @@ class GameCreateFragment : Fragment() {
     }
 }
 
-private class PlayerListAdapter(private val playerList: List<Player>, private val eventConsumer: Consumer<CreateEvent>) : RecyclerView.Adapter<PlayerListViewHolder>() {
+private class PlayerListAdapter(private val playerList: List<Player>, private val selectedPlayerIds: List<Long>, private val eventConsumer: Consumer<CreateEvent>) : RecyclerView.Adapter<PlayerListViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -121,7 +126,8 @@ private class PlayerListAdapter(private val playerList: List<Player>, private va
     }
 
     override fun onBindViewHolder(holder: PlayerListViewHolder, position: Int) {
-        holder.bind(playerList[position], eventConsumer)
+        val player = playerList[position]
+        holder.bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
     }
 
     override fun getItemId(position: Int): Long {
@@ -131,13 +137,19 @@ private class PlayerListAdapter(private val playerList: List<Player>, private va
 
 private class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val nameHolder: TextView by lazy { itemView.gameNameHolder }
-    val deleteHolder: View by lazy { itemView.playerDeleteHolder }
+    val nameHolder: TextView by lazy { itemView.playerNameHolder }
+    val checkHolder: MaterialCheckBox by lazy { itemView.playerCheckHolder }
 
-    fun bind(player: Player, eventConsumer: Consumer<CreateEvent>) {
+    fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<CreateEvent>) {
         nameHolder.text = player.name
+
+        checkHolder.setOnCheckedChangeListener(null)
+        checkHolder.isChecked = isSelected
+        checkHolder.setOnCheckedChangeListener { _, selected ->
+            eventConsumer.accept(PlayerSelected(player.id, selected))
+        }
+
         itemView.setOnClickListener { eventConsumer.accept(PlayerRowClicked(player.id)) }
-        deleteHolder.setOnClickListener { eventConsumer.accept(PlayerDeleteClicked(player.id)) }
     }
 
     companion object {
