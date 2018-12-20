@@ -1,8 +1,8 @@
 package com.seakernel.android.scoreapp.gamecreate
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
-import java.util.*
 
 /**
  * Created by Calvin on 12/16/18.
@@ -24,7 +24,7 @@ data class ShowPlayerNameDialog(val playerId: Long, val playerName: String?) : C
 data class ShowDeleteDialog(val playerId: Long, val playerName: String?) : CreateEffect()
 data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : CreateEffect()
 
-data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlayerList: List<Long> = listOf()) {
+data class CreateModel(private var playerRepo: PlayerRepository?, val playerList: List<Player> = listOf(), val selectedPlayerList: List<Long> = listOf()) {
 
     fun player(playerId: Long): Player? {
         return playerList.find { it.id == playerId }
@@ -34,9 +34,13 @@ data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlay
         return player(playerId)?.name
     }
 
+    fun clearRepository() {
+        playerRepo = null
+    }
+
     companion object {
-        fun createDefault(): CreateModel {
-            return CreateModel()
+        fun createDefault(repository: PlayerRepository): CreateModel {
+            return CreateModel(repository)
         }
 
         fun update(model: CreateModel, event: CreateEvent): Next<CreateModel, CreateEffect> {
@@ -72,8 +76,9 @@ data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlay
                     if (index >= 0) {
                         val oldPlayer = list[index]
                         list[index] = oldPlayer.copy(name = event.newName)
+                        model.playerRepo?.updateUser(oldPlayer)
                     } else {
-                        list.add(Player(id = Random().nextLong(), name = event.newName))
+                        model.playerRepo?.creatUser(event.newName)?.let { list.add(it) }
                     }
 
                     Next.next(model.copy(playerList = list))
@@ -81,6 +86,7 @@ data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlay
                 is PlayerDeleteSuccessful -> {
                     model.player(event.playerId)?.let { player ->
                         val list = model.playerList.toMutableList().also { it.remove(player) }
+                        model.playerRepo?.deleteUser(event.playerId)
                         Next.next<CreateModel, CreateEffect>(model.copy(playerList = list), Effects.effects(ShowDeletePlayerSnackbar(event.playerId, player.name)))
                     } ?: Next.noChange()
                 }

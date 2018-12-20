@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.gamecreate
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +13,10 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.gamecreate.CreateModel.Companion.update
+import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.spotify.mobius.Connection
 import com.spotify.mobius.Mobius
+import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_create.*
@@ -26,7 +29,17 @@ import kotlinx.android.synthetic.main.holder_player_list.view.*
 class GameCreateFragment : Fragment() {
 
     private val loop = Mobius.loop(::update, ::effectHandler)
-    private val controller = MobiusAndroid.controller(loop, CreateModel.createDefault())
+    private var controller: MobiusLoop.Controller<CreateModel, CreateEvent>? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        controller = MobiusAndroid.controller(loop, CreateModel.createDefault(PlayerRepository(requireContext())))
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        controller?.model?.clearRepository() // Clear references to the context
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_game_create, container, false)
@@ -34,17 +47,17 @@ class GameCreateFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        controller.disconnect()
+        controller?.disconnect()
     }
 
     override fun onStart() {
         super.onStart()
-        controller.start()
+        controller?.start()
     }
 
     override fun onPause() {
         super.onPause()
-        controller.stop()
+        controller?.stop()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +67,7 @@ class GameCreateFragment : Fragment() {
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         // Setup Mobius
-        controller.connect(::connectViews)
+        controller?.connect(::connectViews)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
