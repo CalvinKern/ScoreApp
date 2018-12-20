@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, GameListFragment.newInstance(), "gameList")
+                .add(R.id.fragmentContainer, GameListFragment.newInstance())
                 .commit()
         }
     }

@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
 data class PlayerEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID, index = true) var uid: Long,
-    @ColumnInfo(name = COLUMN_NAME) var name: String?
+    @ColumnInfo(name = COLUMN_NAME) var name: String
 ) {
     companion object {
         const val TABLE_NAME = "players"
