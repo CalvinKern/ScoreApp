@@ -26,6 +26,8 @@ import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_create.*
 import kotlinx.android.synthetic.main.holder_player_list.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by Calvin on 12/15/18.
@@ -154,9 +156,11 @@ class GameCreateFragment : Fragment() {
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 if (name.isNotEmpty()) {
-//                    playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
-//                        eventConsumer.accept(PlayerNameChanged(player.id, player.name))
-//                    }
+                    GlobalScope.launch {
+                        playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
+                            eventConsumer.accept(PlayerNameChanged(player.id, player.name))
+                        }
+                    }
                 }
             }
             .setNegativeButton(android.R.string.cancel, null)

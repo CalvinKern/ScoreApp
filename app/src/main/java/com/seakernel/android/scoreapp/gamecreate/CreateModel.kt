@@ -69,6 +69,7 @@ data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlay
                 }
                 is PlayerNameChanged -> {
                     val list = model.playerList.toMutableList()
+                    val selected = model.selectedPlayerList.toMutableList()
                     val index = list.indexOfFirst { it.id == event.playerId }
 
                     if (index >= 0) {
@@ -76,9 +77,10 @@ data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlay
                         list[index] = oldPlayer.copy(name = event.newName)
                     } else {
                         list.add(Player(event.playerId, event.newName))
+                        selected.add(event.playerId)
                     }
 
-                    Next.next(model.copy(playerList = list))
+                    Next.next(model.copy(playerList = list, selectedPlayerList = selected))
                 }
                 is PlayerDeleteSuccessful -> {
                     model.player(event.playerId)?.let { player ->
