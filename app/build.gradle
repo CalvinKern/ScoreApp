@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -39,7 +38,7 @@ dependencies {
 
     // Room
     implementation "androidx.room:room-runtime:$ROOM_VERSION"
-    annotationProcessor "androidx.room:room-compiler:$ROOM_VERSION" // use kapt for Kotlin
+    kapt "androidx.room:room-compiler:$ROOM_VERSION"
     implementation "androidx.room:room-coroutines:$ROOM_VERSION"
     testImplementation "androidx.room:room-testing:$ROOM_VERSION"
 
