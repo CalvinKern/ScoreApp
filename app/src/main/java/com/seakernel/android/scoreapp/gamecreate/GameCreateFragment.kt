@@ -2,10 +2,14 @@ package com.seakernel.android.scoreapp.gamecreate
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -110,10 +114,9 @@ class GameCreateFragment : Fragment() {
                 when (effect) {
                     is ShowGameScreen -> {}
                     is ShowPlayerNameDialog -> {
-                        // TODO: Show dialog for inputting name
-//                        playerRepository?.addOrUpdateUser(effect.playerId, effect.playerName)?.let {
-//                            eventConsumer.accept(PlayerNameChanged(it.id, it.name))
-//                        }
+                        view?.post {
+                            showPlayerNameDialog(eventConsumer, effect)
+                        }
                     }
                     is ShowDeleteDialog -> {
                         // TODO: Show dialog for confirm delete
@@ -134,6 +137,32 @@ class GameCreateFragment : Fragment() {
     }
 
     // End Mobius functions
+
+    private fun showPlayerNameDialog(eventConsumer: Consumer<CreateEvent>, effect: ShowPlayerNameDialog) {
+        var name = ""
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_player_name, null, false)
+        (view as? EditText)?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {
+                name = p0?.toString() ?: ""
+            }
+        })
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.playerName)
+            .setView(view)
+            .setCancelable(false)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                if (name.isNotEmpty()) {
+//                    playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
+//                        eventConsumer.accept(PlayerNameChanged(player.id, player.name))
+//                    }
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+            .show()
+    }
 
     companion object {
         fun newInstance() : GameCreateFragment {

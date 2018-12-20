@@ -7,4 +7,7 @@
 
     <string name="playersHolder">%d Players</string>
     <string name="playerIcon">Player Icon</string>
+
+    <!--Player dialog-->
+    <string name="playerName">Player Name</string>
 </resources>
