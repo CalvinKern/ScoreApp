@@ -15,6 +15,7 @@ import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.gamecreate.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.spotify.mobius.Connection
+import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
 import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.android.MobiusAndroid
@@ -28,17 +29,19 @@ import kotlinx.android.synthetic.main.holder_player_list.view.*
  */
 class GameCreateFragment : Fragment() {
 
-    private val loop = Mobius.loop(::update, ::effectHandler)
+    private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
     private var controller: MobiusLoop.Controller<CreateModel, CreateEvent>? = null
+    private var playerRepository: PlayerRepository? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        controller = MobiusAndroid.controller(loop, CreateModel.createDefault(PlayerRepository(requireContext())))
+        playerRepository = PlayerRepository(requireContext())
+        controller = MobiusAndroid.controller(loop, CreateModel.createDefault())
     }
 
     override fun onDetach() {
         super.onDetach()
-        controller?.model?.clearRepository() // Clear references to the context
+        playerRepository = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -77,6 +80,10 @@ class GameCreateFragment : Fragment() {
 
     // Mobius functions
 
+    private fun initMobius(model: CreateModel): First<CreateModel, CreateEffect> {
+        return First.first(model, setOf(FetchData))
+    }
+
     private fun connectViews(eventConsumer: Consumer<CreateEvent>): Connection<CreateModel> {
         // Send events to the consumer when the button is pressed
         fab.setOnClickListener { _ ->
@@ -102,9 +109,21 @@ class GameCreateFragment : Fragment() {
             override fun accept(effect: CreateEffect) {
                 when (effect) {
                     is ShowGameScreen -> {}
-                    is ShowPlayerNameDialog -> {}
-                    is ShowDeleteDialog -> {}
-                    is ShowDeletePlayerSnackbar -> {}
+                    is ShowPlayerNameDialog -> {
+                        // TODO: Show dialog for inputting name
+//                        playerRepository?.addOrUpdateUser(effect.playerId, effect.playerName)?.let {
+//                            eventConsumer.accept(PlayerNameChanged(it.id, it.name))
+//                        }
+                    }
+                    is ShowDeleteDialog -> {
+                        // TODO: Show dialog for confirm delete
+//                        playerRepository?.deleteUser(effect.playerId)
+//                        eventConsumer.accept(PlayerDeleteSuccessful(effect.playerId))
+                    }
+                    is ShowDeletePlayerSnackbar -> { /* TODO: Show snackbar to undo? or show a toast? */ }
+                    is FetchData -> {
+                        eventConsumer.accept(PlayersLoaded(playerRepository?.loadAllUsers() ?: listOf()))
+                    }
                 }
             }
 

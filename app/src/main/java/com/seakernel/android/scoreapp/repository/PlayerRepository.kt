@@ -17,11 +17,20 @@ class PlayerRepository(val context: Context) {
         return playerDao.getAll().map { Player(it.uid, it.name) }
     }
 
-    fun updateUser(player: Player) {
-        playerDao.update(PlayerEntity(player.id, player.name))
+    fun addOrUpdateUser(playerId: Long, playerName: String): Player {
+        return if (playerId == 0L) { // treat 0 as not-set while inserting the item
+            createUser(playerName)
+        } else {
+            updateUser(playerId, playerName)
+        }
     }
 
-    fun creatUser(name: String): Player {
+    private fun updateUser(playerId: Long, playerName: String): Player {
+        playerDao.update(PlayerEntity(playerId, playerName))
+        return Player(playerId, playerName)
+    }
+
+    private fun createUser(name: String): Player {
         val player = PlayerEntity(0, name)
         playerDao.insertAll(player)
         return Player(player.uid, name)

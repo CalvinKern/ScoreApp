@@ -1,6 +1,5 @@
 package com.seakernel.android.scoreapp.gamecreate
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
 
@@ -17,14 +16,16 @@ data class PlayerSelected(val playerId: Long, val selected: Boolean) : CreateEve
 data class PlayerDeleteClicked(val playerId: Long) : CreateEvent()
 data class PlayerNameChanged(val playerId: Long, val newName: String) : CreateEvent()
 data class PlayerDeleteSuccessful(val playerId: Long) : CreateEvent()
+data class PlayersLoaded(val players: List<Player>) : CreateEvent()
 
 sealed class CreateEffect
 data class ShowGameScreen(val gameId: Long) : CreateEffect()
-data class ShowPlayerNameDialog(val playerId: Long, val playerName: String?) : CreateEffect()
+data class ShowPlayerNameDialog(val playerId: Long, val playerName: String) : CreateEffect()
 data class ShowDeleteDialog(val playerId: Long, val playerName: String?) : CreateEffect()
 data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : CreateEffect()
+object FetchData : CreateEffect()
 
-data class CreateModel(private var playerRepo: PlayerRepository?, val playerList: List<Player> = listOf(), val selectedPlayerList: List<Long> = listOf()) {
+data class CreateModel(val playerList: List<Player> = listOf(), val selectedPlayerList: List<Long> = listOf()) {
 
     fun player(playerId: Long): Player? {
         return playerList.find { it.id == playerId }
@@ -34,22 +35,19 @@ data class CreateModel(private var playerRepo: PlayerRepository?, val playerList
         return player(playerId)?.name
     }
 
-    fun clearRepository() {
-        playerRepo = null
-    }
-
     companion object {
-        fun createDefault(repository: PlayerRepository): CreateModel {
-            return CreateModel(repository)
+        fun createDefault(): CreateModel {
+            return CreateModel()
         }
 
         fun update(model: CreateModel, event: CreateEvent): Next<CreateModel, CreateEffect> {
             return when (event) {
-                is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerNameDialog(0, null)))
+                is PlayersLoaded -> Next.next(model.copy(playerList = event.players))
+                is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerNameDialog(0, "")))
                 is StartGameClicked -> Next.dispatch(Effects.effects(ShowGameScreen(event.gameId)))
                 is PlayerRowClicked -> {
                     val name = model.playerName(event.playerId)
-                    Next.dispatch(Effects.effects(ShowPlayerNameDialog(event.playerId, name)))
+                    Next.dispatch(Effects.effects(ShowPlayerNameDialog(event.playerId, name ?: "")))
                 }
                 is PlayerSelected -> {
                     val selected = model.selectedPlayerList.toMutableList()
@@ -76,9 +74,8 @@ data class CreateModel(private var playerRepo: PlayerRepository?, val playerList
                     if (index >= 0) {
                         val oldPlayer = list[index]
                         list[index] = oldPlayer.copy(name = event.newName)
-                        model.playerRepo?.updateUser(oldPlayer)
                     } else {
-                        model.playerRepo?.creatUser(event.newName)?.let { list.add(it) }
+                        list.add(Player(event.playerId, event.newName))
                     }
 
                     Next.next(model.copy(playerList = list))
@@ -86,7 +83,6 @@ data class CreateModel(private var playerRepo: PlayerRepository?, val playerList
                 is PlayerDeleteSuccessful -> {
                     model.player(event.playerId)?.let { player ->
                         val list = model.playerList.toMutableList().also { it.remove(player) }
-                        model.playerRepo?.deleteUser(event.playerId)
                         Next.next<CreateModel, CreateEffect>(model.copy(playerList = list), Effects.effects(ShowDeletePlayerSnackbar(event.playerId, player.name)))
                     } ?: Next.noChange()
                 }
