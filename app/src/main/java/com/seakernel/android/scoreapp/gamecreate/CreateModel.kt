@@ -18,6 +18,7 @@ data class PlayerNameChanged(val playerId: Long, val newName: String) : CreateEv
 data class PlayerDeleteSuccessful(val playerId: Long) : CreateEvent()
 data class PlayersLoaded(val players: List<Player>) : CreateEvent()
 object RequestLoad : CreateEvent()
+data class GameNameChanged(val gameName: String) : CreateEvent()
 
 sealed class CreateEffect
 data class ShowGameScreen(val gameId: Long) : CreateEffect()
@@ -27,6 +28,7 @@ data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?)
 object FetchData : CreateEffect()
 
 data class CreateModel(
+    val gameName: String = "",
     val playerList: List<Player> = listOf(),
     val selectedPlayerList: List<Long> = listOf(),
     val loading: Boolean = false) {
@@ -46,6 +48,7 @@ data class CreateModel(
 
         fun update(model: CreateModel, event: CreateEvent): Next<CreateModel, CreateEffect> {
             return when (event) {
+                is GameNameChanged -> Next.next(model.copy(gameName = event.gameName))
                 is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(FetchData))
                 is PlayersLoaded -> Next.next(model.copy(playerList = event.players))
                 is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerNameDialog(0, "")))

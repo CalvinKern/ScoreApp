@@ -40,6 +40,8 @@ class GameCreateFragment : Fragment() {
     private var controller: MobiusLoop.Controller<CreateModel, CreateEvent> = MobiusAndroid.controller(loop, CreateModel.createDefault())
     private var playerRepository: PlayerRepository? = null
 
+    private lateinit var nameTextWatcher: TextWatcher
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         playerRepository = PlayerRepository(requireContext())
@@ -54,8 +56,20 @@ class GameCreateFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_game_create, container, false) // TODO: Retrieve selected state
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Setup views
+        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new game? */ }
+        playerRecycler.layoutManager = LinearLayoutManager(requireContext())
+
+        // Setup Mobius
+        controller.connect(::connectViews)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        gameNameEdit.removeTextChangedListener(nameTextWatcher)
         controller.disconnect()
     }
 
@@ -73,21 +87,6 @@ class GameCreateFragment : Fragment() {
         super.onSaveInstanceState(outState) // TODO: Store selected state
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Setup views
-        playerRecycler.layoutManager = LinearLayoutManager(requireContext())
-
-        // Setup Mobius
-        controller.connect(::connectViews)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        activity?.setTitle(R.string.gameCreateTitle)
-    }
-
     // Mobius functions
 
     private fun initMobius(model: CreateModel): First<CreateModel, CreateEffect> {
@@ -95,10 +94,18 @@ class GameCreateFragment : Fragment() {
     }
 
     private fun connectViews(eventConsumer: Consumer<CreateEvent>): Connection<CreateModel> {
-        // Send events to the consumer when the button is pressed
+        nameTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {
+                eventConsumer.accept(GameNameChanged(p0?.toString() ?: ""))
+            }
+        }
+
         fab.setOnClickListener { _ ->
             eventConsumer.accept(AddPlayerClicked)
         }
+        gameNameEdit.addTextChangedListener(nameTextWatcher)
 
         return object : Connection<CreateModel> {
             override fun accept(model: CreateModel) {
