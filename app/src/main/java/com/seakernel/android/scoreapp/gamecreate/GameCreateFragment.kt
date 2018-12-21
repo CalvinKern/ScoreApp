@@ -51,7 +51,7 @@ class GameCreateFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_game_create, container, false)
+        return inflater.inflate(R.layout.fragment_game_create, container, false) // TODO: Retrieve selected state
     }
 
     override fun onDestroyView() {
@@ -67,6 +67,10 @@ class GameCreateFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         controller?.stop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState) // TODO: Store selected state
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -150,6 +154,7 @@ class GameCreateFragment : Fragment() {
                 name = p0?.toString() ?: ""
             }
         })
+        // TODO: Disable "ok" button until there is text in the dialog
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.playerName)
             .setView(view)
