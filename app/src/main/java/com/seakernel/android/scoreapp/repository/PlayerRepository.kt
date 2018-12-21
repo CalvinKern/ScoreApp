@@ -32,8 +32,8 @@ class PlayerRepository(val context: Context) {
 
     private fun createUser(name: String): Player {
         val player = PlayerEntity(0, name)
-        playerDao.insertAll(player)
-        return Player(player.uid, name)
+        val id = playerDao.insertAll(player)[0]
+        return Player(id, name)
     }
 
     fun deleteUser(id: Long) {
