@@ -3,9 +3,10 @@
     <string name="action_settings">Settings</string>
 
     <string name="gameListTitle">Games</string>
-    <string name="gameCreateTitle">New Game</string>
-
     <string name="playersHolder">%d Players</string>
+
+    <!--Create Game Screen-->
+    <string name="gameNameHint">Game Name</string>
     <string name="playerIcon">Player Icon</string>
 
     <!--Player dialog-->
