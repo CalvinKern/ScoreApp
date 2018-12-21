@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.gamecreate
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -146,15 +147,7 @@ class GameCreateFragment : Fragment() {
     private fun showPlayerNameDialog(eventConsumer: Consumer<CreateEvent>, effect: ShowPlayerNameDialog) {
         var name = ""
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_player_name, null, false)
-        (view as? EditText)?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {
-                name = p0?.toString() ?: ""
-            }
-        })
-        // TODO: Disable "ok" button until there is text in the dialog
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle(R.string.playerName)
             .setView(view)
             .setCancelable(false)
@@ -169,7 +162,25 @@ class GameCreateFragment : Fragment() {
             }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
-            .show()
+
+        (view as? EditText)?.apply {
+            setText(effect.playerName)
+            setSelection(effect.playerName.length)
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun afterTextChanged(p0: Editable?) {
+                    name = p0?.toString() ?: ""
+                    dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = name.isNotEmpty()
+                }
+            })
+        }
+
+        // Disable "ok" button until there is text in the dialog
+        dialog.setOnShowListener {
+            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = effect.playerName.isNotEmpty()
+        }
+        dialog.show()
     }
 
     companion object {
