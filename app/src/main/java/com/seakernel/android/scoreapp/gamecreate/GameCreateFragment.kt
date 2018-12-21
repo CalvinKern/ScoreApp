@@ -36,13 +36,12 @@ import kotlinx.coroutines.launch
 class GameCreateFragment : Fragment() {
 
     private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
-    private var controller: MobiusLoop.Controller<CreateModel, CreateEvent>? = null
+    private var controller: MobiusLoop.Controller<CreateModel, CreateEvent> = MobiusAndroid.controller(loop, CreateModel.createDefault())
     private var playerRepository: PlayerRepository? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         playerRepository = PlayerRepository(requireContext())
-        controller = MobiusAndroid.controller(loop, CreateModel.createDefault())
     }
 
     override fun onDetach() {
@@ -56,17 +55,17 @@ class GameCreateFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        controller?.disconnect()
+        controller.disconnect()
     }
 
     override fun onStart() {
         super.onStart()
-        controller?.start()
+        controller.start()
     }
 
     override fun onPause() {
         super.onPause()
-        controller?.stop()
+        controller.stop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -80,7 +79,7 @@ class GameCreateFragment : Fragment() {
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         // Setup Mobius
-        controller?.connect(::connectViews)
+        controller.connect(::connectViews)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
