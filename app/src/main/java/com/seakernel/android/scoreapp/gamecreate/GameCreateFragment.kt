@@ -48,7 +48,6 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
 
     init {
         loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
-        controller = MobiusAndroid.controller(loop, CreateModel.createDefault())
     }
 
     override fun onAttach(context: Context) {
@@ -67,7 +66,9 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState) // TODO: Retrieve selected state
+        controller = MobiusAndroid.controller(loop, CreateModel.createDefault(savedInstanceState?.getLongArray(ARG_SELECTED_IDS)?.toList()))
+
+        super.onViewCreated(view, savedInstanceState)
 
         // Setup views
         toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new game? */ }
@@ -82,7 +83,8 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState) // TODO: Store selected state
+        outState.putLongArray(ARG_SELECTED_IDS, controller.model.selectedPlayerList.toLongArray())
+        super.onSaveInstanceState(outState)
     }
 
     // Mobius functions
@@ -201,6 +203,8 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
     }
 
     companion object {
+        private const val ARG_SELECTED_IDS = "selected_ids"
+
         fun newInstance() : GameCreateFragment {
             return GameCreateFragment()
         }

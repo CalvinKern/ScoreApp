@@ -43,8 +43,8 @@ data class CreateModel(
     }
 
     companion object {
-        fun createDefault(): CreateModel {
-            return CreateModel()
+        fun createDefault(selectedPlayers: List<Long>?): CreateModel {
+            return CreateModel(selectedPlayerList = selectedPlayers ?: listOf())
         }
 
         fun update(model: CreateModel, event: CreateEvent): Next<CreateModel, CreateEffect> {
