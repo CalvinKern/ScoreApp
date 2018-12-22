@@ -14,6 +14,7 @@ import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -25,6 +26,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override val layoutId = R.layout.fragment_game
 
     private var gameRepository: GameRepository? = null
+    private var loadGameJob: Job? = null
 
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
@@ -49,6 +51,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun onDestroyView() {
         super.onDestroyView()
         toolbar.setNavigationOnClickListener(null)
+        loadGameJob?.cancel()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -64,7 +67,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun connectViews(eventConsumer: Consumer<GameEvent>): Connection<GameModel> {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
-                GlobalScope.launch(Dispatchers.Main) {
+                loadGameJob = GlobalScope.launch(Dispatchers.Main) {
                     toolbar.title = model.game.name
                     gamePlayers.text = model.game.players.joinToString { it.name }
                 }

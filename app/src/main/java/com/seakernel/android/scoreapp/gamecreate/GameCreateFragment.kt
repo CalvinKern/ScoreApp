@@ -23,6 +23,7 @@ import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_create.*
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -40,6 +41,7 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
     private var playerRepository: PlayerRepository? = null
     private var gameRepository: GameRepository? = null
     private var listener: GameCreateListener? = null
+    private var addPlayerJob: Job? = null
 
     private lateinit var nameTextWatcher: TextWatcher
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
@@ -76,6 +78,7 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
     override fun onDestroyView() {
         super.onDestroyView()
         gameNameEdit.removeTextChangedListener(nameTextWatcher)
+        addPlayerJob?.cancel()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -167,7 +170,7 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 if (name.isNotEmpty()) {
-                    GlobalScope.launch {
+                    addPlayerJob = GlobalScope.launch {
                         playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
                             eventConsumer.accept(PlayerNameChanged(player.id, player.name))
                         }
