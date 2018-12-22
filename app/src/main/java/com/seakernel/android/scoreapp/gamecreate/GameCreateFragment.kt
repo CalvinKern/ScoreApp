@@ -38,10 +38,15 @@ import kotlinx.coroutines.launch
  */
 class GameCreateFragment : Fragment() {
 
+    interface GameCreateListener {
+        fun onShowGameScreen(gameId: Long)
+    }
+
     private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
     private var controller: MobiusLoop.Controller<CreateModel, CreateEvent> = MobiusAndroid.controller(loop, CreateModel.createDefault())
     private var playerRepository: PlayerRepository? = null
     private var gameRepository: GameRepository? = null
+    private var listener: GameCreateListener? = null
 
     private lateinit var nameTextWatcher: TextWatcher
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
@@ -50,12 +55,15 @@ class GameCreateFragment : Fragment() {
         super.onAttach(context)
         playerRepository = PlayerRepository(requireContext())
         gameRepository = GameRepository(requireContext())
+
+        listener = context as? GameCreateListener
     }
 
     override fun onDetach() {
         super.onDetach()
         playerRepository = null
         gameRepository = null
+        listener = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -156,7 +164,7 @@ class GameCreateFragment : Fragment() {
                     }
                     is SaveGame -> {
                         gameRepository?.createGame(effect.gameName, effect.playerIds)?.let {
-                            // TODO: Tell activity to launch game screen
+                            listener?.onShowGameScreen(it)
                         }
                     }
                 }
@@ -210,6 +218,7 @@ class GameCreateFragment : Fragment() {
     }
 
     companion object {
+        const val FRAGMENT_TAG = "game_create"
         fun newInstance() : GameCreateFragment {
             return GameCreateFragment()
         }
