@@ -1,7 +1,8 @@
-package com.seakernel.android.scoreapp
+package com.seakernel.android.scoreapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.game.GameFragment
 import com.seakernel.android.scoreapp.gamecreate.GameCreateFragment
 import com.seakernel.android.scoreapp.gamelist.GameListFragment

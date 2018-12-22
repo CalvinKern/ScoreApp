@@ -7,16 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.gamecreate.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
@@ -27,7 +22,6 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_create.*
-import kotlinx.android.synthetic.main.holder_player_list.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -207,52 +201,5 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
         fun newInstance() : GameCreateFragment {
             return GameCreateFragment()
         }
-    }
-}
-
-private class PlayerListAdapter(private val playerList: List<Player>, private val selectedPlayerIds: List<Long>, private val eventConsumer: Consumer<CreateEvent>) : RecyclerView.Adapter<PlayerListViewHolder>() {
-
-    init {
-        setHasStableIds(true)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerListViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(PlayerListViewHolder.RESOURCE_ID, parent, false)
-        return PlayerListViewHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return playerList.count()
-    }
-
-    override fun onBindViewHolder(holder: PlayerListViewHolder, position: Int) {
-        val player = playerList[position]
-        holder.bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return playerList[position].id
-    }
-}
-
-private class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    val nameHolder: TextView by lazy { itemView.playerNameHolder }
-    val checkHolder: MaterialCheckBox by lazy { itemView.playerCheckHolder }
-
-    fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<CreateEvent>) {
-        nameHolder.text = player.name
-
-        checkHolder.setOnCheckedChangeListener(null)
-        checkHolder.isChecked = isSelected
-        checkHolder.setOnCheckedChangeListener { _, selected ->
-            eventConsumer.accept(PlayerSelected(player.id, selected))
-        }
-
-        itemView.setOnClickListener { eventConsumer.accept(PlayerRowClicked(player.id)) }
-    }
-
-    companion object {
-        const val RESOURCE_ID = R.layout.holder_player_list
     }
 }
