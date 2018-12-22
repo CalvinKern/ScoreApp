@@ -117,7 +117,6 @@ class GameFragment : Fragment() {
     // End Mobius functions
 
     companion object {
-        const val FRAGMENT_TAG = "game_fragment"
         private const val ARG_GAME_ID = "game_id"
 
         fun newInstance(gameId: Long): GameFragment {

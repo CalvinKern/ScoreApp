@@ -22,21 +22,21 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Gam
     }
 
     override fun onShowGameScreen(gameId: Long) {
-        supportFragmentManager.findFragmentByTag(GameCreateFragment.FRAGMENT_TAG)?.let {
+        supportFragmentManager.findFragmentByTag(GameCreateFragment::class.java.simpleName)?.let {
             supportFragmentManager.popBackStack() // Get rid of create fragment if it exists
         }
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, GameFragment.newInstance(gameId), GameFragment.FRAGMENT_TAG)
-            .addToBackStack(GameFragment.FRAGMENT_TAG)
+            .replace(R.id.fragmentContainer, GameFragment.newInstance(gameId), GameFragment::class.java.simpleName)
+            .addToBackStack(GameFragment::class.java.simpleName)
             .commit()
     }
 
     override fun onShowCreateGameScreen() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, GameCreateFragment.newInstance(), GameCreateFragment.FRAGMENT_TAG)
-            .addToBackStack(GameCreateFragment.FRAGMENT_TAG)
+            .replace(R.id.fragmentContainer, GameCreateFragment.newInstance(), GameCreateFragment::class.java.simpleName)
+            .addToBackStack(GameCreateFragment::class.java.simpleName)
             .commit()
     }
 }

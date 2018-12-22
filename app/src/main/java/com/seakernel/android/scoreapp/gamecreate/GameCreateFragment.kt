@@ -218,7 +218,6 @@ class GameCreateFragment : Fragment() {
     }
 
     companion object {
-        const val FRAGMENT_TAG = "game_create"
         fun newInstance() : GameCreateFragment {
             return GameCreateFragment()
         }
