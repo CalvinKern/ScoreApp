@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
-import com.seakernel.android.scoreapp.gamelist.ListModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
+import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
@@ -25,18 +24,22 @@ import kotlinx.android.synthetic.main.holder_game_list.view.*
  * Created by Calvin on 12/15/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameListFragment : Fragment() {
+class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     interface GameListListener {
         fun onShowGameScreen(gameId: Long)
         fun onShowCreateGameScreen()
     }
 
-    private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
-    private val controller = MobiusAndroid.controller(loop, ListModel.createDefault())
+    override val layoutId = R.layout.fragment_game_list
 
     private var gameRepository: GameRepository? = null
     private var listener: GameListListener? = null
+
+    init {
+        loop = Mobius.loop(ListModel.Companion::update, ::effectHandler).init(::initMobius)
+        controller = MobiusAndroid.controller(loop, ListModel.createDefault())
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,33 +55,11 @@ class GameListFragment : Fragment() {
         listener = null
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_game_list, container, false)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        controller.disconnect()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        controller.start()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        controller.stop()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
         gameRecycler.layoutManager = LinearLayoutManager(requireContext())
-
-        // Setup Mobius
-        controller.connect(::connectViews)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -87,11 +68,11 @@ class GameListFragment : Fragment() {
     }
     // Mobius functions
 
-    private fun initMobius(model: ListModel): First<ListModel, ListEffect> {
+    override fun initMobius(model: ListModel): First<ListModel, ListEffect> {
         return First.first(model, setOf(FetchData))
     }
 
-    private fun connectViews(eventConsumer: Consumer<ListEvent>): Connection<ListModel> {
+    override fun connectViews(eventConsumer: Consumer<ListEvent>): Connection<ListModel> {
         // Send events to the consumer when the button is pressed
         fab.setOnClickListener { _ ->
             eventConsumer.accept(AddGameClicked)
@@ -111,7 +92,7 @@ class GameListFragment : Fragment() {
         }
     }
 
-    private fun effectHandler(eventConsumer: Consumer<ListEvent>): Connection<ListEffect> {
+    override fun effectHandler(eventConsumer: Consumer<ListEvent>): Connection<ListEffect> {
         return object : Connection<ListEffect> {
             override fun accept(effect: ListEffect) {
                 when (effect) {

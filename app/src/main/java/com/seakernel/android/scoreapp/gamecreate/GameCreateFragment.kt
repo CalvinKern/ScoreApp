@@ -12,7 +12,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -21,10 +20,10 @@ import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.gamecreate.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
+import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
-import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_create.*
@@ -36,20 +35,25 @@ import kotlinx.coroutines.launch
  * Created by Calvin on 12/15/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameCreateFragment : Fragment() {
+class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect>() {
 
     interface GameCreateListener {
         fun onShowGameScreen(gameId: Long)
     }
 
-    private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
-    private var controller: MobiusLoop.Controller<CreateModel, CreateEvent> = MobiusAndroid.controller(loop, CreateModel.createDefault())
+    override val layoutId = R.layout.fragment_game_create
+
     private var playerRepository: PlayerRepository? = null
     private var gameRepository: GameRepository? = null
     private var listener: GameCreateListener? = null
 
     private lateinit var nameTextWatcher: TextWatcher
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
+
+    init {
+        loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
+        controller = MobiusAndroid.controller(loop, CreateModel.createDefault())
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,36 +70,18 @@ class GameCreateFragment : Fragment() {
         listener = null
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_game_create, container, false) // TODO: Retrieve selected state
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view, savedInstanceState) // TODO: Retrieve selected state
 
         // Setup views
         toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new game? */ }
         toolbar.inflateMenu(R.menu.menu_game_create)
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
-
-        // Setup Mobius
-        controller.connect(::connectViews)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         gameNameEdit.removeTextChangedListener(nameTextWatcher)
-        controller.disconnect()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        controller.start()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        controller.stop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -104,11 +90,11 @@ class GameCreateFragment : Fragment() {
 
     // Mobius functions
 
-    private fun initMobius(model: CreateModel): First<CreateModel, CreateEffect> {
+    override fun initMobius(model: CreateModel): First<CreateModel, CreateEffect> {
         return First.first(model, setOf(FetchData))
     }
 
-    private fun connectViews(eventConsumer: Consumer<CreateEvent>): Connection<CreateModel> {
+    override fun connectViews(eventConsumer: Consumer<CreateEvent>): Connection<CreateModel> {
         nameTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -144,7 +130,7 @@ class GameCreateFragment : Fragment() {
         }
     }
 
-    private fun effectHandler(eventConsumer: Consumer<CreateEvent>): Connection<CreateEffect> {
+    override fun effectHandler(eventConsumer: Consumer<CreateEvent>): Connection<CreateEffect> {
         return object : Connection<CreateEffect> {
             override fun accept(effect: CreateEffect) {
                 when (effect) {
