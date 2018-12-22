@@ -11,10 +11,11 @@ data class Game(val id: Long = 0,
                 val name: String = "",
                 val lastPlayed: ZonedDateTime = ZonedDateTime.now(),
                 val players: List<Player> = listOf()) {
-    val lastPlayedAt: String = lastPlayed.format(DATE_FORMATTER)
+    val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
 
     companion object {
         private const val DATE_FORMAT = "MMM dd, YYYY"
-        val DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT)!!
+        val DATE_FORMATTER = DateTimeFormatter.ISO_DATE_TIME!!
+        val UI_DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT)!!
     }
 }
