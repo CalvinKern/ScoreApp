@@ -10,7 +10,7 @@ import com.spotify.mobius.Next
 
 sealed class CreateEvent
 object AddPlayerClicked : CreateEvent()
-data class StartGameClicked(val gameId: Long) : CreateEvent()
+object StartGameClicked : CreateEvent()
 data class PlayerRowClicked(val playerId: Long) : CreateEvent()
 data class PlayerSelected(val playerId: Long, val selected: Boolean) : CreateEvent()
 data class PlayerDeleteClicked(val playerId: Long) : CreateEvent()
@@ -22,6 +22,7 @@ data class GameNameChanged(val gameName: String) : CreateEvent()
 
 sealed class CreateEffect
 data class ShowGameScreen(val gameId: Long) : CreateEffect()
+data class SaveGame(val gameName: String, val playerIds: List<Long>) : CreateEffect()
 data class ShowPlayerNameDialog(val playerId: Long, val playerName: String) : CreateEffect()
 data class ShowDeleteDialog(val playerId: Long, val playerName: String?) : CreateEffect()
 data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : CreateEffect()
@@ -52,7 +53,7 @@ data class CreateModel(
                 is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(FetchData))
                 is PlayersLoaded -> Next.next(model.copy(playerList = event.players))
                 is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerNameDialog(0, "")))
-                is StartGameClicked -> Next.dispatch(Effects.effects(ShowGameScreen(event.gameId)))
+                is StartGameClicked -> Next.dispatch(Effects.effects(SaveGame(model.gameName, model.selectedPlayerList)))
                 is PlayerRowClicked -> {
                     val name = model.playerName(event.playerId)
                     Next.dispatch(Effects.effects(ShowPlayerNameDialog(event.playerId, name ?: "")))

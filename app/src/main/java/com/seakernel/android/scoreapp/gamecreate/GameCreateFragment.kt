@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.gamecreate.CreateModel.Companion.update
+import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -39,17 +41,21 @@ class GameCreateFragment : Fragment() {
     private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
     private var controller: MobiusLoop.Controller<CreateModel, CreateEvent> = MobiusAndroid.controller(loop, CreateModel.createDefault())
     private var playerRepository: PlayerRepository? = null
+    private var gameRepository: GameRepository? = null
 
     private lateinit var nameTextWatcher: TextWatcher
+    private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         playerRepository = PlayerRepository(requireContext())
+        gameRepository = GameRepository(requireContext())
     }
 
     override fun onDetach() {
         super.onDetach()
         playerRepository = null
+        gameRepository = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,6 +67,7 @@ class GameCreateFragment : Fragment() {
 
         // Setup views
         toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new game? */ }
+        toolbar.inflateMenu(R.menu.menu_game_create)
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         // Setup Mobius
@@ -102,10 +109,18 @@ class GameCreateFragment : Fragment() {
             }
         }
 
+        toolbarItemClickListener = Toolbar.OnMenuItemClickListener { item ->
+            when(item.itemId) {
+                R.id.actionSave -> eventConsumer.accept(StartGameClicked)
+            }
+            false
+        }
+
         fab.setOnClickListener { _ ->
             eventConsumer.accept(AddPlayerClicked)
         }
         gameNameEdit.addTextChangedListener(nameTextWatcher)
+        toolbar.setOnMenuItemClickListener(toolbarItemClickListener)
 
         return object : Connection<CreateModel> {
             override fun accept(model: CreateModel) {
@@ -125,7 +140,6 @@ class GameCreateFragment : Fragment() {
         return object : Connection<CreateEffect> {
             override fun accept(effect: CreateEffect) {
                 when (effect) {
-                    is ShowGameScreen -> {}
                     is ShowPlayerNameDialog -> {
                         view?.post {
                             showPlayerNameDialog(eventConsumer, effect)
@@ -139,6 +153,11 @@ class GameCreateFragment : Fragment() {
                     is ShowDeletePlayerSnackbar -> { /* TODO: Show snackbar to undo? or show a toast? */ }
                     is FetchData -> {
                         eventConsumer.accept(PlayersLoaded(playerRepository?.loadAllUsers() ?: listOf()))
+                    }
+                    is SaveGame -> {
+                        gameRepository?.createGame(effect.gameName, effect.playerIds)?.let {
+                            // TODO: Tell activity to launch game screen
+                        }
                     }
                 }
             }

@@ -28,7 +28,7 @@ class GameRepository(val context: Context) {
     /**
      * @return newly created game id
      */
-    private fun createGame(name: String, playerIds: List<Long>): Long {
+    fun createGame(name: String, playerIds: List<Long>): Long {
         val game = GameEntity(0, name, ZonedDateTime.now().format(Game.DATE_FORMATTER))
         val id = gameDao.insertAll(game)[0]
         gamePlayerDao.insertAll(joins = *playerIds.map { GamePlayerJoin(id, it) }.toTypedArray())
