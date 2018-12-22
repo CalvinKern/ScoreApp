@@ -17,12 +17,11 @@ class GameRepository(val context: Context) {
     private val gamePlayerDao = AppDatabase.getInstance(context).gamePlayerDao()
 
     fun loadAllGames(): List<Game> {
-        return gameDao.getAll().map { game ->
-            Game(game.uid,
-                game.name,
-                ZonedDateTime.parse(game.date),
-                gamePlayerDao.getPlayersForGame(game.uid).map { player -> Player(player.uid, player.name) })
-        }
+        return gameDao.getAll().map { convertToGame(it) }
+    }
+
+    fun loadGame(gameId: Long): Game? {
+        return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
 
     /**
@@ -37,5 +36,13 @@ class GameRepository(val context: Context) {
 
     fun deleteGame(id: Long) {
         gameDao.deleteById(id)
+    }
+
+    private fun convertToGame(game: GameEntity): Game {
+        return Game(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid))
+    }
+
+    private fun loadPlayers(gameId: Long): List<Player> {
+        return gamePlayerDao.getPlayersForGame(gameId).map { player -> Player(player.uid, player.name) }
     }
 }
