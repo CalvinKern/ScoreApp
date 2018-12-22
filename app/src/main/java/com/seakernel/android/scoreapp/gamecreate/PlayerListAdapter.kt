@@ -15,35 +15,59 @@ import kotlinx.android.synthetic.main.holder_player_list.view.*
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class PlayerListAdapter(private val playerList: List<Player>, private val selectedPlayerIds: List<Long>, private val eventConsumer: Consumer<CreateEvent>) : RecyclerView.Adapter<PlayerListViewHolder>() {
+class PlayerListAdapter(private val playerList: List<Player>, private val selectedPlayerIds: List<Long>, private val eventConsumer: Consumer<CreateEvent>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerListViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(PlayerListViewHolder.RESOURCE_ID, parent, false)
-        return PlayerListViewHolder(view)
+    private val TYPE_HEADER = 1
+    private val TYPE_PLAYER = 2
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_HEADER -> PlayerListHeaderViewHolder(LayoutInflater.from(parent.context).inflate(PlayerListHeaderViewHolder.RESOURCE_ID, parent, false))
+            TYPE_PLAYER -> PlayerListViewHolder(LayoutInflater.from(parent.context).inflate(PlayerListViewHolder.RESOURCE_ID, parent, false))
+            else -> {
+                throw RuntimeException("Unhandled view type in ${this::class.java.simpleName} - $viewType")
+            }
+        }
     }
 
     override fun getItemCount(): Int {
-        return playerList.count()
+        return playerList.count() + 1
     }
 
-    override fun onBindViewHolder(holder: PlayerListViewHolder, position: Int) {
-        val player = playerList[position]
-        holder.bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            TYPE_PLAYER -> {
+                val player = playerList[position - 1]
+                (holder as PlayerListViewHolder).bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
+            }
+        }
     }
 
     override fun getItemId(position: Int): Long {
-        return playerList[position].id
+        return if (position == 0) {
+            0
+        } else {
+            playerList[position - 1].id
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) {
+            TYPE_HEADER
+        } else {
+            TYPE_PLAYER
+        }
     }
 }
 
 class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val nameHolder: TextView by lazy { itemView.playerNameHolder }
-    val checkHolder: MaterialCheckBox by lazy { itemView.playerCheckHolder }
+    private val nameHolder: TextView by lazy { itemView.playerNameHolder }
+    private val checkHolder: MaterialCheckBox by lazy { itemView.playerCheckHolder }
 
     fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<CreateEvent>) {
         nameHolder.text = player.name
@@ -59,5 +83,11 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     companion object {
         const val RESOURCE_ID = R.layout.holder_player_list
+    }
+}
+
+class PlayerListHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    companion object {
+        const val RESOURCE_ID = R.layout.holder_player_header
     }
 }

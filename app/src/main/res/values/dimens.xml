@@ -5,4 +5,5 @@
     <!--Text Size-->
     <dimen name="text_detail">12sp</dimen>
     <dimen name="text_title">16sp</dimen>
+    <dimen name="text_header">20sp</dimen>
 </resources>

@@ -6,6 +6,7 @@
     <string name="playersHolder">%d Players</string>
 
     <!--Create Game Screen-->
+    <string name="pickPlayers">Pick Players</string>
     <string name="gameNameHint">Game Name</string>
     <string name="playerIcon">Player Icon</string>
     <string name="actionSave">Save</string>
