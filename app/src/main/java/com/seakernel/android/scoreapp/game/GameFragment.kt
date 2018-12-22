@@ -48,6 +48,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
+        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
 
         // Setup Mobius
         controller.connect(::connectViews)
@@ -55,6 +56,7 @@ class GameFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        toolbar.setNavigationOnClickListener(null)
         controller.disconnect()
     }
 
@@ -82,7 +84,7 @@ class GameFragment : Fragment() {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
                 GlobalScope.launch(Dispatchers.Main) {
-                    gameName.text = model.game.name
+                    toolbar.title = model.game.name
                     gamePlayers.text = model.game.players.joinToString { it.name }
                 }
             }
