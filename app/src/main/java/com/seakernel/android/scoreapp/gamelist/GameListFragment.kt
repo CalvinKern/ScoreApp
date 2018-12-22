@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.gamelist.ListModel.Companion.update
+import com.seakernel.android.scoreapp.repository.GameRepository
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
@@ -34,11 +35,21 @@ class GameListFragment : Fragment() {
     private val loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
     private val controller = MobiusAndroid.controller(loop, ListModel.createDefault())
 
+    private var gameRepository: GameRepository? = null
     private var listener: GameListListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        gameRepository = GameRepository(requireContext())
         listener = context as? GameListListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        gameRepository = null
+        listener = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -108,7 +119,9 @@ class GameListFragment : Fragment() {
                     is ShowGameScreen -> listener?.onShowGameScreen(effect.gameId)
                     is ShowGameRowDialog -> {}
                     is ShowDeleteSnackbar -> {}
-                    is FetchData -> {}
+                    is FetchData -> {
+                        eventConsumer.accept(Loaded(gameRepository?.loadAllGames() ?: listOf()))
+                    }
                 }
             }
 
