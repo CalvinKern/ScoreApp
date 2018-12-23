@@ -1,6 +1,9 @@
 package com.seakernel.android.scoreapp.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 /**
  * Created by Calvin on 12/20/18.
@@ -19,9 +22,6 @@ interface PlayerDao {
 
     @Insert
     fun insertAll(vararg players: PlayerEntity): LongArray
-
-    @Delete
-    fun delete(player: PlayerEntity)
 
     @Query("DELETE FROM ${PlayerEntity.TABLE_NAME} WHERE ${PlayerEntity.COLUMN_ID} = :id")
     fun deleteById(id: Long)

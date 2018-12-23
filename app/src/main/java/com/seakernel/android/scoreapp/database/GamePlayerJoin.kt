@@ -15,7 +15,7 @@ data class GamePlayerJoin(
 
     @ForeignKey(entity = PlayerEntity::class, parentColumns = [PlayerEntity.COLUMN_ID], childColumns = [COLUMN_PLAYER_ID], onDelete = ForeignKey.CASCADE)
     @ColumnInfo(name = COLUMN_PLAYER_ID, index = true) var playerId: Long
-    ) {
+) {
     companion object {
         const val TABLE_NAME = "game_player_entity"
         const val COLUMN_GAME_ID = "gameId"
