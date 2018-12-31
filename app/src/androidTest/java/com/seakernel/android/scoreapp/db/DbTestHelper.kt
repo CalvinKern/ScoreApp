@@ -69,7 +69,7 @@ class DbTestHelper {
         fun insertGamesRaw(n: Int, db: SupportSQLiteDatabase) {
             var gameValues = ""
             repeat(n) {
-                gameValues = gameValues.plus("($it, Game $it, ${now()})")
+                gameValues = gameValues.plus("($it, \"Game $it\", \"${now()}\")")
                 if (it < n - 1) {
                     gameValues = gameValues.plus(", ")
                 }
@@ -80,6 +80,9 @@ class DbTestHelper {
                     "VALUES $gameValues")
         }
 
+        /**
+         * Generates raw data with {@code n} users and games.
+         */
         fun generateDataRaw(n: Int, db: SupportSQLiteDatabase) {
             insertUsersRaw(n, db)
             insertGamesRaw(n, db)

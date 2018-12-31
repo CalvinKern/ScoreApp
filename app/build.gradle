@@ -34,7 +34,8 @@ android {
 
 ext {
     MOBIUS_VERSION = '1.2.0'
-    ROOM_VERSION = '2.1.0-alpha03'
+    ROOM_VERSION = '2.0.0'
+//    ROOM_VERSION = '2.1.0-alpha03' // Buggy when testing migrations
 }
 
 dependencies {
@@ -58,7 +59,6 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:$ROOM_VERSION"
     kapt "androidx.room:room-compiler:$ROOM_VERSION"
-    implementation "androidx.room:room-coroutines:$ROOM_VERSION"
     testImplementation "androidx.room:room-testing:$ROOM_VERSION"
 
     // Mobius
