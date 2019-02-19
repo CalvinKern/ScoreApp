@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +20,7 @@ import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
+import kotlinx.android.synthetic.main.dialog_player_name.view.*
 import kotlinx.android.synthetic.main.fragment_game_create.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -182,7 +182,7 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
             .setNegativeButton(android.R.string.cancel, null)
             .create()
 
-        (view as? EditText)?.apply {
+        view.playerNameEdit.apply {
             setText(effect.playerName)
             setSelection(effect.playerName.length)
             addTextChangedListener(object : TextWatcher {
