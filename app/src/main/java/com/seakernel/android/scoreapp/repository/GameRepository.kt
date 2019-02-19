@@ -1,11 +1,8 @@
 package com.seakernel.android.scoreapp.repository
 
 import android.content.Context
-import com.seakernel.android.scoreapp.data.Game
-import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.database.AppDatabase
-import com.seakernel.android.scoreapp.database.GameEntity
-import com.seakernel.android.scoreapp.database.GamePlayerJoin
+import com.seakernel.android.scoreapp.data.*
+import com.seakernel.android.scoreapp.database.*
 import org.threeten.bp.ZonedDateTime
 
 /**
@@ -24,6 +21,12 @@ class GameRepository(val context: Context) {
         return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
 
+    fun loadFullGame(gameId: Long): FullGame? {
+        val fullGame = gameDao.getFullGame(gameId)
+        val game = convertToGame(fullGame.game)
+        return FullGame(game, convertToRounds(game, fullGame.rounds))
+    }
+
     /**
      * @return newly created game id
      */
@@ -38,11 +41,33 @@ class GameRepository(val context: Context) {
         gameDao.deleteById(id)
     }
 
+    private fun loadPlayers(gameId: Long): List<Player> {
+        return gamePlayerDao.getPlayersForGame(gameId).map { player -> Player(player.uid, player.name) }
+    }
+
     private fun convertToGame(game: GameEntity): Game {
         return Game(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid))
     }
 
-    private fun loadPlayers(gameId: Long): List<Player> {
-        return gamePlayerDao.getPlayersForGame(gameId).map { player -> Player(player.uid, player.name) }
+    private fun convertToRounds(game: Game, rounds: List<GameDao.FulLRoundEntity>): List<Round> {
+        return rounds.map {
+            Round(
+                it.round.id,
+                game.players.find { player -> player.id == it.round.dealerId },
+                it.round.roundNumber,
+                convertToScores(game, it.scores)
+            )
+        }
+    }
+
+    private fun convertToScores(game: Game, scores: List<ScoreEntity>): List<Score> {
+        return scores.map { score ->
+            Score(
+                score.id,
+                game.players.find { player -> player.id == score.playerId }!!,
+                score.score,
+                score.scoreData
+            )
+        }
     }
 }

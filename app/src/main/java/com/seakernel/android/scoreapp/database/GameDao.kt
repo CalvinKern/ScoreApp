@@ -25,4 +25,27 @@ interface GameDao {
 
     @Query("DELETE FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID} = :id")
     fun deleteById(id: Long)
+
+    @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID}=:gameId")
+    fun getFullGame(gameId: Long): FullGameEntity
+
+    class FullGameEntity {
+        @Embedded
+        lateinit var game: GameEntity
+
+        @Relation(
+            parentColumn = GameEntity.COLUMN_ID,
+            entityColumn = RoundEntity.COLUMN_GAME_ID,
+            entity = RoundEntity::class
+        )
+        lateinit var rounds: List<FulLRoundEntity>
+    }
+
+    class FulLRoundEntity {
+        @Embedded
+        lateinit var round: RoundEntity
+
+        @Relation(parentColumn = RoundEntity.COLUMN_ID, entityColumn = ScoreEntity.COLUMN_ROUND_ID)
+        lateinit var scores: List<ScoreEntity>
+    }
 }

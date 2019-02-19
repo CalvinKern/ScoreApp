@@ -16,6 +16,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun playerDao(): PlayerDao
     abstract fun gameDao(): GameDao
     abstract fun gamePlayerDao(): GamePlayerJoinDao
+    abstract fun roundDao(): RoundDao
 
     companion object {
         const val database: String = "score_app"

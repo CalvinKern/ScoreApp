@@ -12,10 +12,6 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 /**
  * Created by Calvin on 12/21/18.
@@ -26,7 +22,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override val layoutId = R.layout.fragment_game
 
     private var gameRepository: GameRepository? = null
-    private var loadGameJob: Job? = null
 
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
@@ -51,7 +46,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun onDestroyView() {
         super.onDestroyView()
         toolbar.setNavigationOnClickListener(null)
-        loadGameJob?.cancel()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -67,10 +61,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun connectViews(eventConsumer: Consumer<GameEvent>): Connection<GameModel> {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
-                loadGameJob = GlobalScope.launch(Dispatchers.Main) {
-                    toolbar.title = model.game.name
-                    gamePlayers.text = model.game.players.joinToString { it.name }
-                }
+                 toolbar.title = model.game.name
+                gamePlayers.text = model.game.players.joinToString { it.name }
             }
 
             override fun dispose() {
@@ -85,13 +77,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             override fun accept(effect: GameEffect) {
                 when (effect) {
                     is FetchData -> {
-                        gameRepository?.loadGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
+                        gameRepository?.loadFullGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
                             eventConsumer.accept(Loaded(it))
                         } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
                 }
             }
-
             override fun dispose() {
                 // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
