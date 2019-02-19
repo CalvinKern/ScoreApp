@@ -13,10 +13,13 @@ import com.spotify.mobius.Next
 
 sealed class GameEvent
 object RequestLoad : GameEvent()
+data class RequestSaveRound(val round: Round) : GameEvent()
 data class Loaded(val game: FullGame) : GameEvent()
+data class RoundSaved(val round: Round) : GameEvent()
 
 sealed class GameEffect
 object FetchData : GameEffect()
+data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
 
 data class GameModel(val game: Game = Game(), val rounds: List<Round> = emptyList()) {
 
@@ -29,6 +32,18 @@ data class GameModel(val game: Game = Game(), val rounds: List<Round> = emptyLis
             return when (event) {
                 is Loaded -> Next.next(model.copy(game = event.game.game, rounds = event.game.rounds))
                 is RequestLoad -> Next.dispatch(Effects.effects(FetchData))
+                is RequestSaveRound -> Next.dispatch(Effects.effects(SaveRound(model.game.id, event.round)))
+                is RoundSaved -> {
+                    val rounds = model.rounds.toMutableList()
+                    val index = rounds.indexOfFirst { it.id == event.round.id }
+                    if (index >= 0) {
+                        rounds.removeAt(index)
+                        rounds.add(index, event.round)
+                    } else {
+                        rounds.add(event.round)
+                    }
+                    Next.next(model.copy(rounds = rounds))
+                }
             }
         }
     }

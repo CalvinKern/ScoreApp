@@ -4,7 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.data.Round
+import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.repository.GameRepository
+import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -22,6 +25,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override val layoutId = R.layout.fragment_game
 
     private var gameRepository: GameRepository? = null
+    private var roundRepository: RoundRepository? = null
 
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
@@ -31,11 +35,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         gameRepository = GameRepository(requireContext())
+        roundRepository = RoundRepository(requireContext())
     }
 
     override fun onDetach() {
         super.onDetach()
         gameRepository = null
+        roundRepository = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,12 +67,35 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun connectViews(eventConsumer: Consumer<GameEvent>): Connection<GameModel> {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
-                 toolbar.title = model.game.name
-                gamePlayers.text = model.game.players.joinToString { it.name }
+                toolbar.title = model.game.name
+
+                var scores = ""
+                model.rounds.forEach { round ->
+                    scores += "Round ${round.number}\n"
+
+                    round.scores.forEach { score ->
+                        scores += "${score.player.name}: ${score.value} "
+                    }
+
+                    scores += "\n\n"
+                }
+                gameScores.text = scores
+                gameFab.setOnClickListener {
+                    // TODO: Get rid of dummy data
+                    eventConsumer.accept(
+                        RequestSaveRound(
+                            Round(
+                                0,
+                                model.game.players.first(),
+                                (model.rounds.lastOrNull()?.number ?: 0) + 1,
+                                model.game.players.map { player -> Score(0, player, 12, "phase 2") })
+                        )
+                    )
+                }
             }
 
             override fun dispose() {
-                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                gameFab.setOnClickListener(null)
             }
 
         }
@@ -81,8 +110,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                             eventConsumer.accept(Loaded(it))
                         } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
-                }
+                    is SaveRound -> {
+                        roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {
+                            eventConsumer.accept(RoundSaved(it))
+                        }
+                    }
+                }.hashCode() // Exhaustive call
             }
+
             override fun dispose() {
                 // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
