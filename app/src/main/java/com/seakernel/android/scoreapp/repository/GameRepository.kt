@@ -21,7 +21,7 @@ class GameRepository(val context: Context) {
         return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
 
-    fun loadFullGame(gameId: Long): FullGame? {
+    fun loadFullGame(gameId: Long): FullGame {
         val fullGame = gameDao.getFullGame(gameId)
         val game = convertToGame(fullGame.game)
         return FullGame(game, convertToRounds(game, fullGame.rounds))
@@ -34,6 +34,9 @@ class GameRepository(val context: Context) {
         val game = GameEntity(0, name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
         val id = gameDao.insertAll(game)[0]
         gamePlayerDao.insertAll(joins = *playerIds.map { GamePlayerJoin(id, it) }.toTypedArray())
+
+        // Create an empty round for ease TODO: Cleanup and move somewhere better
+        RoundRepository(context).addOrUpdateRound(id, Round(0, Player(id = playerIds.random()), 0, List(playerIds.size) { Score(player = Player(playerIds[it])) }))
         return id
     }
 

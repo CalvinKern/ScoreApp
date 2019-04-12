@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.game
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
@@ -67,37 +68,16 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun connectViews(eventConsumer: Consumer<GameEvent>): Connection<GameModel> {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
-                toolbar.title = model.game.settings.name
+                toolbar.title = model.settings.name
 
-                var scores = ""
-                model.rounds.forEach { round ->
-                    scores += "Round ${round.number}\n"
-
-                    round.scores.forEach { score ->
-                        scores += "${score.player.name}: ${score.value} "
-                    }
-
-                    scores += "\n\n"
+                if (scoreRows.layoutManager == null && model.settings.players.isNotEmpty()) {
+                    scoreRows.layoutManager = GridLayoutManager(requireContext(), model.settings.players.size)
                 }
-                gameScores.text = scores
-                gameFab.setOnClickListener {
-                    // TODO: Get rid of dummy data
-                    eventConsumer.accept(
-                        RequestSaveRound(
-                            Round(
-                                0,
-                                model.game.settings.players.first(),
-                                (model.rounds.lastOrNull()?.number ?: 0) + 1,
-                                model.game.settings.players.map { player -> Score(0, player, 12, "phase 2") })
-                        )
-                    )
-                }
+                scoreRows.swapAdapter(GameScoreAdapter(model.rounds, eventConsumer), false)
             }
 
             override fun dispose() {
-                gameFab.setOnClickListener(null)
             }
-
         }
     }
 
