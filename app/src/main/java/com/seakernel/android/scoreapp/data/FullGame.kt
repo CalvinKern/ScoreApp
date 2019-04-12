@@ -5,6 +5,6 @@ package com.seakernel.android.scoreapp.data
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 data class FullGame(
-    val game: Game = Game(),
+    val simpleGame: SimpleGame = SimpleGame(),
     val rounds: List<Round> = emptyList()
 )

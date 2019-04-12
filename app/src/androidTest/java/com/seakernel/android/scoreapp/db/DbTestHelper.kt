@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.core.app.ApplicationProvider
-import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.data.SimpleGame
 import com.seakernel.android.scoreapp.database.*
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -50,7 +50,7 @@ class DbTestHelper {
     companion object {
 
         private fun now(): String {
-            return ZonedDateTime.now().format(Game.DATE_FORMATTER)
+            return ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER)
         }
 
         fun insertUsersRaw(n: Int, db: SupportSQLiteDatabase) {
@@ -69,7 +69,7 @@ class DbTestHelper {
         fun insertGamesRaw(n: Int, db: SupportSQLiteDatabase) {
             var gameValues = ""
             repeat(n) {
-                gameValues = gameValues.plus("($it, \"Game $it\", \"${now()}\")")
+                gameValues = gameValues.plus("($it, \"SimpleGame $it\", \"${now()}\")")
                 if (it < n - 1) {
                     gameValues = gameValues.plus(", ")
                 }

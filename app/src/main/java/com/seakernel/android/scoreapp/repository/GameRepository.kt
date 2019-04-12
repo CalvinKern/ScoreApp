@@ -13,11 +13,11 @@ class GameRepository(val context: Context) {
     private val gameDao = AppDatabase.getInstance(context).gameDao()
     private val gamePlayerDao = AppDatabase.getInstance(context).gamePlayerDao()
 
-    fun loadAllGames(): List<Game> {
+    fun loadAllGames(): List<SimpleGame> {
         return gameDao.getAll().map { convertToGame(it) }
     }
 
-    fun loadGame(gameId: Long): Game? {
+    fun loadGame(gameId: Long): SimpleGame? {
         return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
 
@@ -28,10 +28,10 @@ class GameRepository(val context: Context) {
     }
 
     /**
-     * @return newly created game id
+     * @return newly created simpleGame id
      */
     fun createGame(name: String, playerIds: List<Long>): Long {
-        val game = GameEntity(0, name, ZonedDateTime.now().format(Game.DATE_FORMATTER))
+        val game = GameEntity(0, name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
         val id = gameDao.insertAll(game)[0]
         gamePlayerDao.insertAll(joins = *playerIds.map { GamePlayerJoin(id, it) }.toTypedArray())
         return id
@@ -45,11 +45,11 @@ class GameRepository(val context: Context) {
         return gamePlayerDao.getPlayersForGame(gameId).map { player -> Player(player.uid, player.name) }
     }
 
-    private fun convertToGame(game: GameEntity): Game {
-        return Game(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid))
+    private fun convertToGame(game: GameEntity): SimpleGame {
+        return SimpleGame(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid))
     }
 
-    private fun convertToRounds(game: Game, rounds: List<GameDao.FulLRoundEntity>): List<Round> {
+    private fun convertToRounds(game: SimpleGame, rounds: List<GameDao.FulLRoundEntity>): List<Round> {
         return rounds.map {
             Round(
                 it.round.id,
@@ -60,7 +60,7 @@ class GameRepository(val context: Context) {
         }
     }
 
-    private fun convertToScores(game: Game, scores: List<ScoreEntity>): List<Score> {
+    private fun convertToScores(game: SimpleGame, scores: List<ScoreEntity>): List<Score> {
         return scores.map { score ->
             Score(
                 score.id,

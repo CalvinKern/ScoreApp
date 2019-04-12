@@ -5,7 +5,7 @@
     <string name="gameListTitle">Games</string>
     <string name="playersHolder">%d Players</string>
 
-    <!--Create Game Screen-->
+    <!--Create SimpleGame Screen-->
     <string name="pickPlayers">Pick Players</string>
     <string name="gameNameHint">Game Name</string>
     <string name="playerIcon">Player Icon</string>

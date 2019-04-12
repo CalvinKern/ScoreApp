@@ -108,7 +108,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     is FetchData -> {
                         gameRepository?.loadFullGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
                             eventConsumer.accept(Loaded(it))
-                        } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
+                        } ?: requireActivity().onBackPressed() // TODO: Handle error finding simpleGame better
                     }
                     is SaveRound -> {
                         roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {

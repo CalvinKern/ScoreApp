@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.data.SimpleGame
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.holder_game_list.view.*
 
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.holder_game_list.view.*
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameListAdapter(private val gameList: List<Game>, private val eventConsumer: Consumer<ListEvent>) : RecyclerView.Adapter<GameListViewHolder>() {
+class GameListAdapter(private val gameList: List<SimpleGame>, private val eventConsumer: Consumer<ListEvent>) : RecyclerView.Adapter<GameListViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -44,7 +44,7 @@ class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val dateHolder: TextView by lazy { itemView.gameDateHolder }
     val playersHolder: TextView by lazy { itemView.gamePlayersHolder }
 
-    fun bind(game: Game, eventConsumer: Consumer<ListEvent>) {
+    fun bind(game: SimpleGame, eventConsumer: Consumer<ListEvent>) {
         nameHolder.text = game.name
         dateHolder.text = game.lastPlayedAt
         playersHolder.text = itemView.context.getString(R.string.playersHolder, game.players.size)
