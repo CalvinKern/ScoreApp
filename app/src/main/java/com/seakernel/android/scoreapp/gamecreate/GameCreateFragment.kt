@@ -71,7 +71,7 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
-        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new simpleGame? */ }
+        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
         toolbar.inflateMenu(R.menu.menu_game_create)
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
     }

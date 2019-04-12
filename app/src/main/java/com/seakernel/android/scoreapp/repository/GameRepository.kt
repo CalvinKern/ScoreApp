@@ -28,7 +28,7 @@ class GameRepository(val context: Context) {
     }
 
     /**
-     * @return newly created simpleGame id
+     * @return newly created game id
      */
     fun createGame(name: String, playerIds: List<Long>): Long {
         val game = GameEntity(0, name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))

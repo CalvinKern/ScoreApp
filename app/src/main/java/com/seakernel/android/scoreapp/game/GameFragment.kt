@@ -67,7 +67,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun connectViews(eventConsumer: Consumer<GameEvent>): Connection<GameModel> {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
-                toolbar.title = model.game.name
+                toolbar.title = model.game.settings.name
 
                 var scores = ""
                 model.rounds.forEach { round ->
@@ -86,9 +86,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         RequestSaveRound(
                             Round(
                                 0,
-                                model.game.players.first(),
+                                model.game.settings.players.first(),
                                 (model.rounds.lastOrNull()?.number ?: 0) + 1,
-                                model.game.players.map { player -> Score(0, player, 12, "phase 2") })
+                                model.game.settings.players.map { player -> Score(0, player, 12, "phase 2") })
                         )
                     )
                 }
@@ -108,7 +108,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     is FetchData -> {
                         gameRepository?.loadFullGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
                             eventConsumer.accept(Loaded(it))
-                        } ?: requireActivity().onBackPressed() // TODO: Handle error finding simpleGame better
+                        } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
                     is SaveRound -> {
                         roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {
