@@ -4,9 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.Round
-import com.seakernel.android.scoreapp.data.Score
+import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -59,6 +59,17 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onSaveInstanceState(outState) // TODO: Store state
     }
 
+    private fun setupHeaderAndFooter(players: List<Player>) {
+        totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
+        nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
+
+        // Only set the name adapter, that will never be changed. Scores need to update every score update
+        nameRow.adapter = PlayersAdapter(players)
+
+        totalsRow.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        nameRow.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+    }
+
     // Mobius functions
 
     override fun initMobius(model: GameModel): First<GameModel, GameEffect> {
@@ -72,12 +83,16 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                 if (scoreRows.layoutManager == null && model.settings.players.isNotEmpty()) {
                     scoreRows.layoutManager = GridLayoutManager(requireContext(), model.settings.players.size)
+                    scoreRows.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+                        if (bottom < oldBottom) scoreRows.layoutManager?.smoothScrollToPosition(scoreRows, null, scoreRows.adapter?.itemCount ?: 0)
+                    }
+                    setupHeaderAndFooter(model.settings.players)
                 }
                 scoreRows.swapAdapter(GameScoreAdapter(model.rounds, eventConsumer), false)
+                totalsRow.swapAdapter(TotalsAdapter(model.rounds), false)
             }
 
-            override fun dispose() {
-            }
+            override fun dispose() {}
         }
     }
 

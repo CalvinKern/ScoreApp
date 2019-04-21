@@ -22,11 +22,36 @@
         android:id="@+id/scoreRows"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:spanCount="4"
+        tools:listitem="@layout/holder_score_row_data"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/nameRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/scoreRows"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:spanCount="4"
+        tools:itemCount="4"
+        tools:listitem="@layout/holder_score_row_header"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/totalsRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/scoreRows"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:spanCount="4"
+        tools:itemCount="4"
         tools:listitem="@layout/holder_score_row_data"
         />
 

@@ -19,27 +19,10 @@ import kotlinx.android.synthetic.main.holder_score_row_header.view.*
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameScoreAdapter(private val rounds: List<Round>, private val eventConsumer: Consumer<GameEvent>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private val leadPlayerIds: ArrayList<Long> = arrayListOf()
-    private val totalsMap: HashMap<Long, Int> = HashMap(rounds.size) // PlayerID to total
+class GameScoreAdapter(private val rounds: List<Round>, private val eventConsumer: Consumer<GameEvent>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         setHasStableIds(true)
-
-        rounds.forEach { round ->
-            round.scores.forEach { score ->
-                totalsMap[score.player.id] = (totalsMap[score.player.id] ?: 0) + score.value
-            }
-        }
-
-        var leadScore = 0
-        totalsMap.forEach {
-            if (leadScore > it.value) return@forEach
-            if (leadScore < it.value) leadPlayerIds.clear()
-            leadPlayerIds.add(it.key)
-            leadScore = it.value
-        }
     }
 
     override fun getItemViewType(position: Int): Int = when {
@@ -70,8 +53,7 @@ class GameScoreAdapter(private val rounds: List<Round>, private val eventConsume
             is ScoreViewHolder -> {
                 val roundIndex = toRoundIndex(position)
                 if (roundIndex >= rounds.size) {
-                    val playerId = rounds.first().scores[toScoreIndex(position)].player.id
-                    holder.bindTotal(totalsMap[playerId] ?: 0, leadPlayerIds.contains(playerId))
+                    holder.clearBind()
                 } else {
                     val round = rounds[roundIndex]
                     holder.bind(rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
@@ -87,6 +69,57 @@ class GameScoreAdapter(private val rounds: List<Round>, private val eventConsume
     private fun toScoreIndex(position: Int) = (position - playerCount()) % playerCount()
 
     private fun toRoundIndex(position: Int): Int = (position - playerCount()) / playerCount()
+}
+
+class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<PlayerViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
+        PlayerViewHolder(LayoutInflater.from(parent.context).inflate(PlayerViewHolder.RESOURCE_ID, parent, false))
+
+    override fun getItemCount(): Int {
+        return players.count()
+    }
+
+    override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
+        holder.bind(players[position])
+    }
+}
+
+class TotalsAdapter(private val rounds: List<Round>) : RecyclerView.Adapter<ScoreViewHolder>() {
+    private val leadPlayerIds: ArrayList<Long> = arrayListOf()
+    private val totalsMap: HashMap<Long, Int> = HashMap(rounds.size) // PlayerID to total
+
+    init {
+        setHasStableIds(true)
+
+        rounds.forEach { round ->
+            round.scores.forEach { score ->
+                totalsMap[score.player.id] = (totalsMap[score.player.id] ?: 0) + score.value
+            }
+        }
+
+        var leadScore = 0
+        totalsMap.forEach {
+            if (leadScore > it.value) return@forEach
+            if (leadScore < it.value) leadPlayerIds.clear()
+            leadPlayerIds.add(it.key)
+            leadScore = it.value
+        }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder =
+        ScoreViewHolder(LayoutInflater.from(parent.context).inflate(ScoreViewHolder.RESOURCE_ID, parent, false))
+
+    override fun getItemCount(): Int = totalsMap.size
+
+    override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
+        val playerId = rounds.first().scores[position].player.id
+        holder.bindTotal(totalsMap[playerId] ?: 0, leadPlayerIds.contains(playerId))
+    }
+
 }
 
 class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -106,7 +139,7 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val scoreHolder: EditText by lazy { itemView.playerScore }
 
-    fun bind(rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>) {
+    fun bind(rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
         if (score.player == round.dealer) {
             scoreHolder.setBackgroundColor(Color.YELLOW)
         } else {
@@ -116,6 +149,7 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             // Hack to get score view to stay selected on next focus after an update occurs
             scoreHolder.setText(score.value.toString())
         }
+        scoreHolder.isEnabled = true
         scoreHolder.isFocusableInTouchMode = true
         scoreHolder.setOnEditorActionListener { _, _, _ ->
             updateScore(eventConsumer, round, score)
@@ -131,27 +165,34 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bindTotal(score: Int, isLeader: Boolean) {
+        clearBind()
         if (isLeader) {
             scoreHolder.setBackgroundColor(Color.GREEN)
         } else {
             scoreHolder.setBackgroundColor(Color.LTGRAY)
         }
-        scoreHolder.isFocusable = false
         scoreHolder.setText(score.toString())
+    }
+
+    fun clearBind() {
+        scoreHolder.setBackgroundColor(Color.WHITE)
+        scoreHolder.isFocusable = false
+        scoreHolder.isEnabled = false
+        scoreHolder.text = null
         scoreHolder.setOnEditorActionListener(null)
         scoreHolder.onFocusChangeListener = null
     }
 
     // TODO: Remove rounds and move adding a new round to the update loop
-    private fun updateScore(eventConsumer: Consumer<GameEvent>, round: Round, score: Score) {
+    private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         // Update the score
-        eventConsumer.accept(UpdateScore(round.id, score.player.id, scoreHolder.text.toString().toInt(), score.metadata))
+        eventConsumer?.accept(UpdateScore(round.id, score.player.id, scoreHolder.text.toString().toInt(), score.metadata))
     }
 
-    private fun addRound(eventConsumer: Consumer<GameEvent>, rounds: List<Round>, round: Round) {
+    private fun addRound(eventConsumer: Consumer<GameEvent>?, rounds: List<Round>, round: Round) {
         // Add a new round if they just added a new score to the last round
         if (rounds.indexOf(round) == rounds.size - 1) {
-            eventConsumer.accept(
+            eventConsumer?.accept(
                 RequestSaveRound(
                     Round(
                         0,
