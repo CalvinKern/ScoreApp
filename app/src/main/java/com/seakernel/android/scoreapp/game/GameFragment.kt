@@ -83,9 +83,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                 if (scoreRows.layoutManager == null && model.settings.players.isNotEmpty()) {
                     scoreRows.layoutManager = GridLayoutManager(requireContext(), model.settings.players.size)
-                    scoreRows.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-                        if (bottom < oldBottom) scoreRows.layoutManager?.smoothScrollToPosition(scoreRows, null, scoreRows.adapter?.itemCount ?: 0)
-                    }
                     setupHeaderAndFooter(model.settings.players)
                 }
                 scoreRows.swapAdapter(GameScoreAdapter(model.rounds, eventConsumer), false)

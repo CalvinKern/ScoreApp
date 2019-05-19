@@ -30,13 +30,12 @@ class GameScoreAdapter(private val rounds: List<Round>, private val eventConsume
         else -> ScoreViewHolder.RESOURCE_ID
     }
 
-    override fun getItemCount(): Int = (rounds.count() * playerCount()) + (playerCount() * 2)
+    override fun getItemCount(): Int = (rounds.count() * playerCount()) + playerCount()
 
     override fun getItemId(position: Int): Long =
         when {
             position < playerCount() -> position.toLong() // player header
-            position >= (rounds.count() * playerCount()) + playerCount() -> 0 - position.toLong() // player total
-            else -> rounds[toRoundIndex(position)].scores[toScoreIndex(position)].id + (playerCount() * 2)
+            else -> rounds[toRoundIndex(position)].scores[toScoreIndex(position)].id + playerCount()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -51,13 +50,8 @@ class GameScoreAdapter(private val rounds: List<Round>, private val eventConsume
         when (holder) {
             is PlayerViewHolder -> holder.bind(rounds.first().scores[position].player)
             is ScoreViewHolder -> {
-                val roundIndex = toRoundIndex(position)
-                if (roundIndex >= rounds.size) {
-                    holder.clearBind()
-                } else {
-                    val round = rounds[roundIndex]
-                    holder.bind(rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
-                }
+                val round = rounds[toRoundIndex(position)]
+                holder.bind(rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
             }
         }
     }
