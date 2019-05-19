@@ -73,7 +73,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     // Mobius functions
 
     override fun initMobius(model: GameModel): First<GameModel, GameEffect> {
-        return First.first(model, setOf(FetchData))
+        return First.first(model, setOf(GameEffect.FetchData))
     }
 
     override fun connectViews(eventConsumer: Consumer<GameEvent>): Connection<GameModel> {
@@ -100,14 +100,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         return object : Connection<GameEffect> {
             override fun accept(effect: GameEffect) {
                 when (effect) {
-                    is FetchData -> {
+                    is GameEffect.FetchData -> {
                         gameRepository?.loadFullGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
-                            eventConsumer.accept(Loaded(it))
+                            eventConsumer.accept(GameEvent.Loaded(it))
                         } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
-                    is SaveRound -> {
+                    is GameEffect.SaveRound -> {
                         roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {
-                            eventConsumer.accept(RoundSaved(it))
+                            eventConsumer.accept(GameEvent.RoundSaved(it))
                         }
                     }
                 }.hashCode() // Exhaustive call

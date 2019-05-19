@@ -12,16 +12,18 @@ import com.spotify.mobius.Next
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 
-sealed class GameEvent
-object RequestLoad : GameEvent()
-data class RequestSaveRound(val round: Round) : GameEvent()
-data class Loaded(val game: FullGame) : GameEvent()
-data class RoundSaved(val round: Round) : GameEvent()
-data class UpdateScore(val roundId: Long, val playerId: Long, val score: Int, val metadata: String) : GameEvent()
+sealed class GameEvent {
+    object RequestLoad : GameEvent()
+    data class RequestSaveRound(val round: Round) : GameEvent()
+    data class Loaded(val game: FullGame) : GameEvent()
+    data class RoundSaved(val round: Round) : GameEvent()
+    data class UpdateScore(val roundId: Long, val playerId: Long, val score: Int, val metadata: String) : GameEvent()
+}
 
-sealed class GameEffect
-object FetchData : GameEffect()
-data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
+sealed class GameEffect {
+    object FetchData : GameEffect()
+    data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
+}
 
 data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<Round> = emptyList()) {
 
@@ -32,10 +34,15 @@ data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<R
 
         fun update(model: GameModel, event: GameEvent): Next<GameModel, GameEffect> {
             return when (event) {
-                is Loaded -> Next.next(model.copy(settings = event.game.settings, rounds = event.game.rounds))
-                is RequestLoad -> Next.dispatch(Effects.effects(FetchData))
-                is RequestSaveRound -> Next.dispatch(Effects.effects(SaveRound(model.settings.id, event.round)))
-                is RoundSaved -> {
+                is GameEvent.Loaded -> Next.next(model.copy(settings = event.game.settings, rounds = event.game.rounds))
+                is GameEvent.RequestLoad -> Next.dispatch(Effects.effects(GameEffect.FetchData))
+                is GameEvent.RequestSaveRound -> Next.dispatch(Effects.effects(
+                    GameEffect.SaveRound(
+                        model.settings.id,
+                        event.round
+                    )
+                ))
+                is GameEvent.RoundSaved -> {
                     val rounds = model.rounds.toMutableList()
                     val index = rounds.indexOfFirst { it.id == event.round.id }
                     if (index >= 0) {
@@ -46,12 +53,12 @@ data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<R
                     }
                     Next.next(model.copy(rounds = rounds))
                 }
-                is UpdateScore -> {
+                is GameEvent.UpdateScore -> {
                     val rounds = model.rounds.toMutableList()
                     val round = rounds.first { it.id == event.roundId }
                     val scores = round.scores.map { if (it.player.id == event.playerId) it.copy(value = event.score, metadata = event.metadata) else it }
 
-                    Next.dispatch(Effects.effects(SaveRound(model.settings.id, round.copy(scores = scores))))
+                    Next.dispatch(Effects.effects(GameEffect.SaveRound(model.settings.id, round.copy(scores = scores))))
                 }
             }
         }

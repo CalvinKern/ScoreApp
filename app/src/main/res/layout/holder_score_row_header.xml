@@ -8,4 +8,6 @@
     android:maxLines="3"
     android:ellipsize="end"
     android:padding="8dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:text="@tools:sample/full_names"
     />

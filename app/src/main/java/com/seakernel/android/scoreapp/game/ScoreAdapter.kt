@@ -183,17 +183,24 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         scoreHolder.onFocusChangeListener = null
     }
 
-    // TODO: Remove rounds and move adding a new round to the update loop
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         // Update the score
-        eventConsumer?.accept(UpdateScore(round.id, score.player.id, scoreHolder.text.toString().toInt(), score.metadata))
+        eventConsumer?.accept(
+            GameEvent.UpdateScore(
+                round.id,
+                score.player.id,
+                scoreHolder.text.toString().toInt(),
+                score.metadata
+            )
+        )
     }
 
+    // TODO: Remove rounds and move adding a new round to the update loop
     private fun addRound(eventConsumer: Consumer<GameEvent>?, rounds: List<Round>, round: Round) {
         // Add a new round if they just added a new score to the last round
         if (rounds.indexOf(round) == rounds.size - 1) {
             eventConsumer?.accept(
-                RequestSaveRound(
+                GameEvent.RequestSaveRound(
                     Round(
                         0,
                         round.scores[(round.scores.indexOfFirst { it.player == round.dealer } + 1) % round.scores.size].player,
