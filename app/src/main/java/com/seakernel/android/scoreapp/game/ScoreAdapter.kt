@@ -151,10 +151,6 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         scoreHolder.isEnabled = true
         scoreHolder.isFocusableInTouchMode = true
-        scoreHolder.setOnEditorActionListener { _, _, _ ->
-            updateScore(eventConsumer, round, score)
-            false
-        }
         scoreHolder.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 addRound(eventConsumer, rounds, round)
@@ -175,11 +171,9 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun clearBind() {
-        scoreHolder.setBackgroundColor(Color.WHITE)
-        scoreHolder.isFocusable = false
         scoreHolder.isEnabled = false
-        scoreHolder.text = null
-        scoreHolder.setOnEditorActionListener(null)
+        scoreHolder.isFocusable = false
+        scoreHolder.isFocusableInTouchMode = false
         scoreHolder.onFocusChangeListener = null
     }
 
@@ -195,20 +189,10 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         )
     }
 
-    // TODO: Remove rounds and move adding a new round to the update loop
     private fun addRound(eventConsumer: Consumer<GameEvent>?, rounds: List<Round>, round: Round) {
-        // Add a new round if they just added a new score to the last round
         if (rounds.indexOf(round) == rounds.size - 1) {
-            eventConsumer?.accept(
-                GameEvent.RequestSaveRound(
-                    Round(
-                        0,
-                        round.scores[(round.scores.indexOfFirst { it.player == round.dealer } + 1) % round.scores.size].player,
-                        round.number + 1,
-                        round.scores.map { Score(player = it.player) }
-                    )
-                )
-            )
+            // Add a new round if they just added a new score to the last round
+            eventConsumer?.accept(GameEvent.RequestCreateRound)
         }
     }
 

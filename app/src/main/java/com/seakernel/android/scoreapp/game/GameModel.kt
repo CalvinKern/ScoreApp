@@ -2,8 +2,8 @@ package com.seakernel.android.scoreapp.game
 
 import com.seakernel.android.scoreapp.data.FullGame
 import com.seakernel.android.scoreapp.data.Round
+import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.data.SimpleGame
-import com.seakernel.android.scoreapp.repository.GameRepository
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
 
@@ -14,6 +14,7 @@ import com.spotify.mobius.Next
 
 sealed class GameEvent {
     object RequestLoad : GameEvent()
+    object RequestCreateRound : GameEvent()
     data class RequestSaveRound(val round: Round) : GameEvent()
     data class Loaded(val game: FullGame) : GameEvent()
     data class RoundSaved(val round: Round) : GameEvent()
@@ -42,6 +43,20 @@ data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<R
                         event.round
                     )
                 ))
+                GameEvent.RequestCreateRound -> {
+                    val lastRound = model.rounds.last()
+                    Next.dispatch(Effects.effects(
+                        GameEffect.SaveRound(
+                            model.settings.id,
+                            Round(
+                                0,
+                                lastRound.scores[(lastRound.scores.indexOfFirst { it.player == lastRound.dealer } + 1) % lastRound.scores.size].player,
+                                lastRound.number + 1,
+                                lastRound.scores.map { Score(player = it.player) }
+                            )
+                        )
+                    ))
+                }
                 is GameEvent.RoundSaved -> {
                     val rounds = model.rounds.toMutableList()
                     val index = rounds.indexOfFirst { it.id == event.round.id }
