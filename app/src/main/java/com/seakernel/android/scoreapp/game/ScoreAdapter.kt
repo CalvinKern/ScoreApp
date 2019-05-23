@@ -142,20 +142,13 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bindTotal(score: Int, isLeader: Boolean) {
-        clearBind()
         if (isLeader) {
-            scoreHolder.setBackgroundColor(Color.GREEN)
+            scoreHolder.setBackgroundResource(R.color.winnerGreen)
         } else {
-            scoreHolder.setBackgroundColor(Color.LTGRAY)
+            scoreHolder.setBackgroundResource(R.color.black)
         }
         scoreHolder.setText(score.toString())
-    }
-
-    fun clearBind() {
-        scoreHolder.isEnabled = false
-        scoreHolder.isFocusable = false
-        scoreHolder.isFocusableInTouchMode = false
-        scoreHolder.onFocusChangeListener = null
+        scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.white))
     }
 
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
