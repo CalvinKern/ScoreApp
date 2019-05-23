@@ -142,6 +142,10 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bindTotal(score: Int, isLeader: Boolean) {
+        scoreHolder.isEnabled = false
+        scoreHolder.isFocusable = false
+        scoreHolder.isFocusableInTouchMode = false
+
         if (isLeader) {
             scoreHolder.setBackgroundResource(R.color.winnerGreen)
         } else {
