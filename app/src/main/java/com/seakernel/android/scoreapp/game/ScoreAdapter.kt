@@ -119,7 +119,12 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         if (score.player == round.dealer) {
             scoreHolder.setBackgroundColor(Color.YELLOW)
         } else {
-            scoreHolder.setBackgroundColor(Color.WHITE)
+            // Make odd rows with a slight gray background to look a little better
+            if (round.number % 2 == 0) {
+                scoreHolder.setBackgroundResource(R.color.slightGray)
+            } else {
+                scoreHolder.setBackgroundResource(R.color.white)
+            }
         }
         if (!scoreHolder.hasFocus()) {
             // Hack to get score view to stay selected on next focus after an update occurs
