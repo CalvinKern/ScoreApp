@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.SimpleGame
@@ -40,16 +41,20 @@ class GameListAdapter(private val gameList: List<SimpleGame>, private val eventC
 
 class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val nameHolder: TextView by lazy { itemView.gameNameHolder }
-    val dateHolder: TextView by lazy { itemView.gameDateHolder }
-    val playersHolder: TextView by lazy { itemView.gamePlayersHolder }
+    private val nameHolder: TextView by lazy { itemView.gameNameHolder }
+    private val dateHolder: TextView by lazy { itemView.gameDateHolder }
+    private val playersHolder: TextView by lazy { itemView.gamePlayersHolder }
 
     fun bind(game: SimpleGame, eventConsumer: Consumer<ListEvent>) {
         nameHolder.text = game.name
         dateHolder.text = game.lastPlayedAt
         playersHolder.text = itemView.context.getString(R.string.playersHolder, game.players.size)
 
-        itemView.setOnClickListener { eventConsumer.accept(GameRowClicked(game.id)) }
+        itemView.setOnClickListener { eventConsumer.accept(ListEvent.GameRowClicked(game.id)) }
+        itemView.setOnLongClickListener {
+            eventConsumer.accept(ListEvent.GameRowLongPressed(game.id))
+            return@setOnLongClickListener true
+        }
     }
 
     companion object {

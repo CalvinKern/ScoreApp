@@ -1,8 +1,10 @@
 package com.seakernel.android.scoreapp.gamelist
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.repository.GameRepository
@@ -13,6 +15,8 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_list.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by Calvin on 12/15/18.
@@ -63,13 +67,13 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     // Mobius functions
 
     override fun initMobius(model: ListModel): First<ListModel, ListEffect> {
-        return First.first(model, setOf(FetchData))
+        return First.first(model, setOf(ListEffect.FetchData))
     }
 
     override fun connectViews(eventConsumer: Consumer<ListEvent>): Connection<ListModel> {
         // Send events to the consumer when the button is pressed
-        fab.setOnClickListener { _ ->
-            eventConsumer.accept(AddGameClicked)
+        fab.setOnClickListener {
+            eventConsumer.accept(ListEvent.AddGameClicked)
         }
 
         return object : Connection<ListModel> {
@@ -90,12 +94,15 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         return object : Connection<ListEffect> {
             override fun accept(effect: ListEffect) {
                 when (effect) {
-                    is ShowCreateGameScreen -> listener?.onShowCreateGameScreen()
-                    is ShowGameScreen -> listener?.onShowGameScreen(effect.gameId)
-                    is ShowGameRowDialog -> {}
-                    is ShowDeleteSnackbar -> {}
-                    is FetchData -> {
-                        eventConsumer.accept(Loaded(gameRepository?.loadAllGames() ?: listOf()))
+                    is ListEffect.ShowCreateGameScreen -> listener?.onShowCreateGameScreen()
+                    is ListEffect.ShowGameScreen -> listener?.onShowGameScreen(effect.gameId)
+                    is ListEffect.ShowGameRowDialog -> {
+                        showDeleteGameDialog(eventConsumer, effect.gameId)
+                    }
+                    is ListEffect.ShowDeleteSnackbar -> {
+                    }
+                    is ListEffect.FetchData -> {
+                        eventConsumer.accept(ListEvent.Loaded(gameRepository?.loadAllGames() ?: listOf()))
                     }
                 }
             }
@@ -106,10 +113,33 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         }
     }
 
+    private fun showDeleteGameDialog(eventConsumer: Consumer<ListEvent>, gameId: Long) {
+        view?.post {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage(R.string.deleteGameConfirmation)
+                .setPositiveButton(R.string.delete) { _, _ ->
+                    deleteGameAsync(eventConsumer, gameId)
+                }
+                .setNegativeButton(R.string.cancel, null)
+            builder.create().show()
+        }
+    }
+
+    private fun deleteGameAsync(eventConsumer: Consumer<ListEvent>, gameId: Long) {
+        GlobalScope.launch {
+            if (gameRepository?.deleteGame(gameId) == true) {
+                eventConsumer.accept(ListEvent.GameDeleteSuccessful(gameId))
+            } else {
+                // TODO: Show error, shouldn't happen, but why not catch it?
+                Toast.makeText(requireContext(), R.string.delete, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     // End Mobius functions
 
     companion object {
-        fun newInstance() : GameListFragment {
+        fun newInstance(): GameListFragment {
             return GameListFragment()
         }
     }

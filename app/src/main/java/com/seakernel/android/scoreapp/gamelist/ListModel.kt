@@ -9,21 +9,22 @@ import com.spotify.mobius.Next
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 
-sealed class ListEvent
-object AddGameClicked : ListEvent()
-data class GameRowClicked(val gameId: Long) : ListEvent()
-data class GameRowLongPressed(val gameId: Long) : ListEvent()
-data class GameDeleteSuccessful(val gameId: Long) : ListEvent()
-data class AddGameSuccessful(val game: SimpleGame) : ListEvent()
-object LoadData : ListEvent()
-data class Loaded(val games: List<SimpleGame>) : ListEvent()
+sealed class ListEvent {
+    object AddGameClicked : ListEvent()
+    data class GameRowClicked(val gameId: Long) : ListEvent()
+    data class GameRowLongPressed(val gameId: Long) : ListEvent()
+    data class GameDeleteSuccessful(val gameId: Long) : ListEvent()
+    object LoadData : ListEvent()
+    data class Loaded(val games: List<SimpleGame>) : ListEvent()
+}
 
-sealed class ListEffect
-object ShowCreateGameScreen : ListEffect()
-data class ShowGameScreen(val gameId: Long) : ListEffect()
-data class ShowGameRowDialog(val gameId: Long) : ListEffect()
-data class ShowDeleteSnackbar(val gameId: Long, val gameName: String?) : ListEffect()
-object FetchData : ListEffect()
+sealed class ListEffect {
+    object ShowCreateGameScreen : ListEffect()
+    data class ShowGameScreen(val gameId: Long) : ListEffect()
+    data class ShowGameRowDialog(val gameId: Long) : ListEffect()
+    data class ShowDeleteSnackbar(val gameId: Long, val gameName: String?) : ListEffect()
+    object FetchData : ListEffect()
+}
 
 data class ListModel(val gameList: List<SimpleGame> = listOf()) {
 
@@ -34,16 +35,15 @@ data class ListModel(val gameList: List<SimpleGame> = listOf()) {
 
         fun update(model: ListModel, event: ListEvent): Next<ListModel, ListEffect> {
             return when (event) {
-                is Loaded -> Next.next(model.copy(gameList = event.games))
-                is LoadData -> Next.dispatch(Effects.effects(FetchData))
-                is AddGameClicked -> Next.dispatch(Effects.effects(ShowCreateGameScreen))
-                is GameRowClicked -> Next.dispatch(Effects.effects(ShowGameScreen(event.gameId)))
-                is GameRowLongPressed -> Next.dispatch(Effects.effects(ShowGameRowDialog(event.gameId)))
-                is AddGameSuccessful -> Next.next(model.copy(gameList = model.gameList.plus(event.game)))
-                is GameDeleteSuccessful -> {
+                is ListEvent.Loaded -> Next.next(model.copy(gameList = event.games))
+                is ListEvent.LoadData -> Next.dispatch(Effects.effects(ListEffect.FetchData))
+                is ListEvent.AddGameClicked -> Next.dispatch(Effects.effects(ListEffect.ShowCreateGameScreen))
+                is ListEvent.GameRowClicked -> Next.dispatch(Effects.effects(ListEffect.ShowGameScreen(event.gameId)))
+                is ListEvent.GameRowLongPressed -> Next.dispatch(Effects.effects(ListEffect.ShowGameRowDialog(event.gameId)))
+                is ListEvent.GameDeleteSuccessful -> {
                     val name = model.gameList.find { it.id == event.gameId }?.name
                     val newModel = model.copy(gameList = model.gameList.filter { it.id != event.gameId })
-                    Next.next(newModel, Effects.effects(ShowDeleteSnackbar(event.gameId, name)))
+                    Next.next(newModel, Effects.effects(ListEffect.ShowDeleteSnackbar(event.gameId, name)))
                 }
             }
         }

@@ -40,8 +40,8 @@ class GameRepository(val context: Context) {
         return id
     }
 
-    fun deleteGame(id: Long) {
-        gameDao.deleteById(id)
+    fun deleteGame(id: Long): Boolean {
+        return gameDao.deleteById(id) > 0
     }
 
     private fun loadPlayers(gameId: Long): List<Player> {

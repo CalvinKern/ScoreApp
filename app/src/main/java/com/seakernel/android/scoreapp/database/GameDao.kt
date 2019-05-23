@@ -24,7 +24,7 @@ interface GameDao {
     fun delete(game: GameEntity)
 
     @Query("DELETE FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID} = :id")
-    fun deleteById(id: Long)
+    fun deleteById(id: Long): Int
 
     @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID}=:gameId")
     fun getFullGame(gameId: Long): FullGameEntity
