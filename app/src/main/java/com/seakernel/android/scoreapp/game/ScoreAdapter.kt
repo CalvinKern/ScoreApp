@@ -117,7 +117,7 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
         if (score.player == round.dealer) {
-            scoreHolder.setBackgroundColor(Color.YELLOW)
+            scoreHolder.setBackgroundResource(R.color.dealer)
         } else {
             // Make odd rows with a slight gray background to look a little better
             if (round.number % 2 == 0) {

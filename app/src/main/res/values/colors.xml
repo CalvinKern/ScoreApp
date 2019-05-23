@@ -7,4 +7,5 @@
     <color name="black">#000</color>
     <color name="slightGray">#F5F5F5</color>
     <color name="winnerGreen">#087f23</color>
+    <color name="dealer">#ff9800</color>
 </resources>
