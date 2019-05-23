@@ -25,44 +25,26 @@ class GameScoreAdapter(private val rounds: List<Round>, private val eventConsume
         setHasStableIds(true)
     }
 
-    override fun getItemViewType(position: Int): Int = when {
-        position < playerCount() -> PlayerViewHolder.RESOURCE_ID
-        else -> ScoreViewHolder.RESOURCE_ID
-    }
+    override fun getItemCount(): Int = (rounds.count() * playerCount())
 
-    override fun getItemCount(): Int = (rounds.count() * playerCount()) + playerCount()
-
-    override fun getItemId(position: Int): Long =
-        when {
-            position < playerCount() -> position.toLong() // player header
-            else -> rounds[toRoundIndex(position)].scores[toScoreIndex(position)].id + playerCount()
-        }
+    override fun getItemId(position: Int): Long = rounds[toRoundIndex(position)].scores[toScoreIndex(position)].id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            PlayerViewHolder.RESOURCE_ID -> PlayerViewHolder(LayoutInflater.from(parent.context).inflate(PlayerViewHolder.RESOURCE_ID, parent, false))
-            ScoreViewHolder.RESOURCE_ID -> ScoreViewHolder(LayoutInflater.from(parent.context).inflate(ScoreViewHolder.RESOURCE_ID, parent, false))
-            else -> throw IllegalStateException("No view holder for provided view type: $viewType")
-        }
+        return ScoreViewHolder(LayoutInflater.from(parent.context).inflate(ScoreViewHolder.RESOURCE_ID, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is PlayerViewHolder -> holder.bind(rounds.first().scores[position].player)
-            is ScoreViewHolder -> {
-                val round = rounds[toRoundIndex(position)]
-                holder.bind(rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
-            }
-        }
+        val round = rounds[toRoundIndex(position)]
+        (holder as ScoreViewHolder).bind(rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
     }
 
     // Helper functions
 
     private fun playerCount() = rounds.first().scores.size
 
-    private fun toScoreIndex(position: Int) = (position - playerCount()) % playerCount()
+    private fun toScoreIndex(position: Int) = position % playerCount()
 
-    private fun toRoundIndex(position: Int): Int = (position - playerCount()) / playerCount()
+    private fun toRoundIndex(position: Int): Int = position / playerCount()
 }
 
 class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<PlayerViewHolder>() {
