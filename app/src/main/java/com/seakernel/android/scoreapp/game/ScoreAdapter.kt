@@ -1,6 +1,5 @@
 package com.seakernel.android.scoreapp.game
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -116,7 +115,7 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val scoreHolder: EditText by lazy { itemView.playerScore }
 
     fun bind(rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
-        if (score.player == round.dealer) {
+        if (score.player == round.dealer && rounds.last().id == round.id) {
             scoreHolder.setBackgroundResource(R.color.dealer)
         } else {
             // Make odd rows with a slight gray background to look a little better
