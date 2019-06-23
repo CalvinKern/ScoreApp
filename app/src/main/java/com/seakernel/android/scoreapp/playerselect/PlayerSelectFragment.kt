@@ -43,7 +43,6 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     private var listener: PlayerSelectListener? = null
     private var addPlayerJob: Job? = null
 
-    private lateinit var nameTextWatcher: TextWatcher
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
 
     init {
@@ -151,11 +150,6 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                             )
                         )
                     }
-//                    is SaveGame -> {
-//                        gameRepository?.createGame(effect.gameName, effect.playerIds)?.let {
-//                            listener?.onPlayersSelected()
-//                        }
-//                    }
                     is DoneSelectingPlayers -> listener?.onPlayersSelected(effect.playerIds)
                 }
             }

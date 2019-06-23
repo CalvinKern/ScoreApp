@@ -4,9 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,6 +21,7 @@ class GameSetupFragment : Fragment() {
 
     interface GameSetupListener {
         fun onShowPlayerSelectScreen(playerIds: List<Long>)
+        fun onShowGameScreen(gameId: Long)
     }
 
     private var listener: GameSetupListener? = null
@@ -50,15 +49,21 @@ class GameSetupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Setup toolbar
         toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
-        // TODO: Set toolbar menu
+        toolbar.inflateMenu(R.menu.menu_game_create)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.actionSave -> {
+                    viewModel.createGame()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        }
 
         // Setup recycler
         val adapter = PlayersAdapter()
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
         playerRecycler.adapter = adapter
-        viewModel.getGameSettings().observe(this, Observer { settings ->
-            adapter.submitList(settings.players)
-        })
 
         // Setup various views
         playersHeaderEdit.setOnClickListener {
@@ -74,6 +79,14 @@ class GameSetupFragment : Fragment() {
             }
         }
         gameNameEdit.addTextChangedListener(nameTextWatcher)
+
+        // Start observing the data
+        viewModel.getGameSettings().observe(this, Observer { settings ->
+            adapter.submitList(settings.players)
+        })
+        viewModel.getGameCreatedEvent().observe(this, Observer { gameId ->
+            listener?.onShowGameScreen(gameId)
+        })
     }
 
     fun updateForNewPlayers(playerIds: List<Long>) {

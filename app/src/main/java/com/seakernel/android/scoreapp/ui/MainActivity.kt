@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
     }
 
     override fun onShowGameScreen(gameId: Long) {
-        popBackStackIfFound(PlayerSelectFragment::class)
+        popBackStackIfFound(GameSetupFragment::class)
         showFragment(GameFragment.newInstance(gameId), GameFragment::class.java.simpleName)
     }
 
