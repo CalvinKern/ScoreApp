@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.gamecreate
+package com.seakernel.android.scoreapp.playerselect
 
 import android.app.Dialog
 import android.content.Context
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.gamecreate.CreateModel.Companion.update
+import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -66,7 +66,12 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        controller = MobiusAndroid.controller(loop, CreateModel.createDefault(savedInstanceState?.getLongArray(ARG_SELECTED_IDS)?.toList() ?: arguments?.getLongArray(PLAYER_IDS)?.toList()))
+        controller = MobiusAndroid.controller(loop,
+            CreateModel.createDefault(
+                savedInstanceState?.getLongArray(ARG_SELECTED_IDS)?.toList()
+                    ?: arguments?.getLongArray(PLAYER_IDS)?.toList()
+            )
+        )
 
         super.onViewCreated(view, savedInstanceState)
 
@@ -118,7 +123,12 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         return object : Connection<CreateModel> {
             override fun accept(model: CreateModel) {
                 // This will be called whenever there is a new model
-                playerRecycler.swapAdapter(PlayerListAdapter(model.playerList, model.selectedPlayerList, eventConsumer), false)
+                playerRecycler.swapAdapter(
+                    PlayerListAdapter(
+                        model.playerList,
+                        model.selectedPlayerList,
+                        eventConsumer
+                    ), false)
             }
 
             override fun dispose() {
@@ -145,7 +155,11 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     }
                     is ShowDeletePlayerSnackbar -> { /* TODO: Show snackbar to undo? or show a toast? */ }
                     is FetchData -> {
-                        eventConsumer.accept(PlayersLoaded(playerRepository?.loadAllUsers() ?: listOf()))
+                        eventConsumer.accept(
+                            PlayersLoaded(
+                                playerRepository?.loadAllUsers() ?: listOf()
+                            )
+                        )
                     }
 //                    is SaveGame -> {
 //                        gameRepository?.createGame(effect.gameName, effect.playerIds)?.let {
@@ -175,7 +189,12 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                 if (name.isNotEmpty()) {
                     addPlayerJob = GlobalScope.launch {
                         playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
-                            eventConsumer.accept(PlayerNameChanged(player.id, player.name))
+                            eventConsumer.accept(
+                                PlayerNameChanged(
+                                    player.id,
+                                    player.name
+                                )
+                            )
                         }
                     }
                 }

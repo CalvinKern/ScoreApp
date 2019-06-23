@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.gamecreate
+package com.seakernel.android.scoreapp.playerselect
 
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +26,22 @@ class PlayerListAdapter(private val playerList: List<Player>, private val select
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_HEADER -> PlayerListHeaderViewHolder(LayoutInflater.from(parent.context).inflate(PlayerListHeaderViewHolder.RESOURCE_ID, parent, false))
-            TYPE_PLAYER -> PlayerListViewHolder(LayoutInflater.from(parent.context).inflate(PlayerListViewHolder.RESOURCE_ID, parent, false))
+            TYPE_HEADER -> PlayerListHeaderViewHolder(
+                LayoutInflater.from(
+                    parent.context
+                ).inflate(
+                    PlayerListHeaderViewHolder.RESOURCE_ID,
+                    parent,
+                    false
+                )
+            )
+            TYPE_PLAYER -> PlayerListViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    PlayerListViewHolder.RESOURCE_ID,
+                    parent,
+                    false
+                )
+            )
             else -> {
                 throw RuntimeException("Unhandled view type in ${this::class.java.simpleName} - $viewType")
             }
@@ -78,8 +92,17 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             eventConsumer.accept(PlayerSelected(player.id, selected))
         }
 
-        itemView.setOnClickListener { eventConsumer.accept(PlayerSelected(player.id, !isSelected)) }
-        itemView.setOnLongClickListener { eventConsumer.accept(PlayerRowLongClicked(player.id)); true }
+        itemView.setOnClickListener { eventConsumer.accept(
+            PlayerSelected(
+                player.id,
+                !isSelected
+            )
+        ) }
+        itemView.setOnLongClickListener { eventConsumer.accept(
+            PlayerRowLongClicked(
+                player.id
+            )
+        ); true }
     }
 
     companion object {

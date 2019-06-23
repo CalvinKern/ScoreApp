@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.gamecreate
+package com.seakernel.android.scoreapp.playerselect
 import com.seakernel.android.scoreapp.data.Player
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
@@ -47,20 +47,34 @@ data class CreateModel(
 
     companion object {
         fun createDefault(selectedPlayers: List<Long>?): CreateModel {
-            return CreateModel(selectedPlayerList = selectedPlayers ?: listOf())
+            return CreateModel(
+                selectedPlayerList = selectedPlayers ?: listOf()
+            )
         }
 
         fun update(model: CreateModel, event: PlayerEvent): Next<CreateModel, PlayerEffect> {
             return when (event) {
 //                is GameNameChanged -> Next.next(model.copy(gameName = event.gameName))
                 is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects())
-                is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(FetchData))
+                is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(
+                    FetchData
+                ))
                 is PlayersLoaded -> Next.next(model.copy(playerList = event.players))
-                is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerNameDialog(0, "")))
+                is AddPlayerClicked -> Next.dispatch(Effects.effects(
+                    ShowPlayerNameDialog(
+                        0,
+                        ""
+                    )
+                ))
 //                is StartGameClicked -> Next.dispatch(Effects.effects(SaveGame(model.gameId, model.selectedPlayerList)))
                 is PlayerRowLongClicked -> {
                     val name = model.playerName(event.playerId)
-                    Next.dispatch(Effects.effects(ShowPlayerNameDialog(event.playerId, name ?: "")))
+                    Next.dispatch(Effects.effects(
+                        ShowPlayerNameDialog(
+                            event.playerId,
+                            name ?: ""
+                        )
+                    ))
                 }
                 is PlayerSelected -> {
                     val selected = model.selectedPlayerList.toMutableList()
@@ -78,7 +92,12 @@ data class CreateModel(
                 }
                 is PlayerDeleteClicked -> {
                     val name = model.playerName(event.playerId)
-                    Next.dispatch(Effects.effects(ShowDeleteDialog(event.playerId, name)))
+                    Next.dispatch(Effects.effects(
+                        ShowDeleteDialog(
+                            event.playerId,
+                            name
+                        )
+                    ))
                 }
                 is PlayerNameChanged -> {
                     val list = model.playerList.toMutableList()
@@ -98,7 +117,12 @@ data class CreateModel(
                 is PlayerDeleteSuccessful -> {
                     model.player(event.playerId)?.let { player ->
                         val list = model.playerList.toMutableList().also { it.remove(player) }
-                        Next.next<CreateModel, PlayerEffect>(model.copy(playerList = list), Effects.effects(ShowDeletePlayerSnackbar(event.playerId, player.name)))
+                        Next.next<CreateModel, PlayerEffect>(model.copy(playerList = list), Effects.effects(
+                            ShowDeletePlayerSnackbar(
+                                event.playerId,
+                                player.name
+                            )
+                        ))
                     } ?: Next.noChange()
                 }
             }
