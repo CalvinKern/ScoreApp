@@ -70,5 +70,6 @@ dependencies {
 
     // Misc.
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
+    implementation "com.github.hadilq.liveevent:liveevent:1.0.1"
     implementation 'com.jakewharton.timber:timber:4.7.1'
 }
