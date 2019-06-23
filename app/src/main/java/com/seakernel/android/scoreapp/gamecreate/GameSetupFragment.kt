@@ -8,10 +8,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import kotlinx.android.synthetic.main.fragment_game_create.*
@@ -64,6 +61,7 @@ class GameSetupFragment : Fragment() {
         val adapter = PlayersAdapter()
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
         playerRecycler.adapter = adapter
+        ItemTouchHelper(createItemTouchHelperCallback()).attachToRecyclerView(playerRecycler)
 
         // Setup various views
         playersHeaderEdit.setOnClickListener {
@@ -93,6 +91,21 @@ class GameSetupFragment : Fragment() {
         viewModel.updateForNewPlayers(playerIds)
     }
 
+    // TODO: Handle swipe to remove a player
+    private fun createItemTouchHelperCallback(): ItemTouchHelper.Callback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            viewModel.movePlayer(viewHolder.adapterPosition, target.adapterPosition)
+            return true
+        }
+
+        // TODO: Handle swipe to remove a player
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
+    }
+
     companion object {
         fun newInstance(): GameSetupFragment {
             return GameSetupFragment()
@@ -106,7 +119,7 @@ private class PlayerDiffCallback : DiffUtil.ItemCallback<Player>() {
 }
 class PlayersAdapter : ListAdapter<Player, PlayerViewHolder>(PlayerDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
-        return PlayerViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_player_select_list, parent, false))
+        return PlayerViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_game_create_player, parent, false))
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {

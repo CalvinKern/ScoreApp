@@ -11,6 +11,7 @@ import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.utility.safePostValue
 import kotlinx.coroutines.*
+import java.util.*
 
 class GameSetupViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -56,6 +57,14 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
             val players = settings.players.filter { playerIds.contains(it.id) }
             val newPlayers = playerRepository.loadUsers(playerIds.filterNot { id -> players.any { player -> player.id == id} })
             gameSettings.safePostValue(settings.copy(players = players + newPlayers))
+        }
+    }
+
+    fun movePlayer(fromPosition: Int, toPosition: Int) {
+        gameSettings.value?.let { settings ->
+            val players = settings.players.toMutableList()
+            Collections.swap(players, fromPosition, toPosition)
+            gameSettings.value = settings.copy(players = players)
         }
     }
 }
