@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.holder_player_list.view.*
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class PlayerListAdapter(private val playerList: List<Player>, private val selectedPlayerIds: List<Long>, private val eventConsumer: Consumer<CreateEvent>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PlayerListAdapter(private val playerList: List<Player>, private val selectedPlayerIds: List<Long>, private val eventConsumer: Consumer<PlayerEvent>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -69,7 +69,7 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val nameHolder: TextView by lazy { itemView.playerNameHolder }
     private val checkHolder: MaterialCheckBox by lazy { itemView.playerCheckHolder }
 
-    fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<CreateEvent>) {
+    fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<PlayerEvent>) {
         nameHolder.text = player.name
 
         checkHolder.setOnCheckedChangeListener(null)
@@ -78,7 +78,8 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             eventConsumer.accept(PlayerSelected(player.id, selected))
         }
 
-        itemView.setOnClickListener { eventConsumer.accept(PlayerRowClicked(player.id)) }
+        itemView.setOnClickListener { eventConsumer.accept(PlayerSelected(player.id, !isSelected)) }
+        itemView.setOnLongClickListener { eventConsumer.accept(PlayerRowLongClicked(player.id)); true }
     }
 
     companion object {

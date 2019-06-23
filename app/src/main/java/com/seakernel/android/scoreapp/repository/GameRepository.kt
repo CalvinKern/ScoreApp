@@ -33,11 +33,15 @@ class GameRepository(val context: Context) {
     fun createGame(name: String, playerIds: List<Long>): Long {
         val game = GameEntity(0, name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
         val id = gameDao.insertAll(game)[0]
-        gamePlayerDao.insertAll(joins = *playerIds.map { GamePlayerJoin(id, it) }.toTypedArray())
+        gamePlayerDao.insertAll(*playerIds.map { GamePlayerJoin(id, it) }.toTypedArray())
 
-        // Create an empty round for ease TODO: Cleanup and move somewhere better
+        // Create an empty round for ease TODO: Cleanup and move somewhere better (move to opening a game to check there, rather than trying to catch some weird errors)
         RoundRepository(context).addOrUpdateRound(id, Round(0, Player(id = playerIds.random()), 0, List(playerIds.size) { Score(player = Player(playerIds[it])) }))
         return id
+    }
+
+    fun addPlayerToGame(id: Long, playerIds: List<Long>) {
+        gamePlayerDao.insertAll(*playerIds.map { GamePlayerJoin(id, it) }.toTypedArray())
     }
 
     fun deleteGame(id: Long): Boolean {

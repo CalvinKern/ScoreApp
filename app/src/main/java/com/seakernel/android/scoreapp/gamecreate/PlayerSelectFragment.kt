@@ -21,7 +21,7 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.dialog_player_name.view.*
-import kotlinx.android.synthetic.main.fragment_game_create.*
+import kotlinx.android.synthetic.main.fragment_player_select.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -30,17 +30,17 @@ import kotlinx.coroutines.launch
  * Created by Calvin on 12/15/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect>() {
+class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffect>() {
 
-    interface GameCreateListener {
-        fun onShowGameScreen(gameId: Long)
+    interface PlayerSelectListener {
+        fun onPlayersSelected(playerIds: List<Long>)
     }
 
-    override val layoutId = R.layout.fragment_game_create
+    override val layoutId = R.layout.fragment_player_select
 
     private var playerRepository: PlayerRepository? = null
     private var gameRepository: GameRepository? = null
-    private var listener: GameCreateListener? = null
+    private var listener: PlayerSelectListener? = null
     private var addPlayerJob: Job? = null
 
     private lateinit var nameTextWatcher: TextWatcher
@@ -55,7 +55,7 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
         playerRepository = PlayerRepository(requireContext())
         gameRepository = GameRepository(requireContext())
 
-        listener = context as? GameCreateListener
+        listener = context as? PlayerSelectListener
     }
 
     override fun onDetach() {
@@ -66,19 +66,19 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        controller = MobiusAndroid.controller(loop, CreateModel.createDefault(savedInstanceState?.getLongArray(ARG_SELECTED_IDS)?.toList()))
+        controller = MobiusAndroid.controller(loop, CreateModel.createDefault(savedInstanceState?.getLongArray(ARG_SELECTED_IDS)?.toList() ?: arguments?.getLongArray(PLAYER_IDS)?.toList()))
 
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
         toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
-        toolbar.inflateMenu(R.menu.menu_game_create)
+        toolbar.inflateMenu(R.menu.menu_player_select)
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        gameNameEdit.removeTextChangedListener(nameTextWatcher)
+//        gameNameEdit.removeTextChangedListener(nameTextWatcher)
         addPlayerJob?.cancel()
     }
 
@@ -89,30 +89,30 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
 
     // Mobius functions
 
-    override fun initMobius(model: CreateModel): First<CreateModel, CreateEffect> {
+    override fun initMobius(model: CreateModel): First<CreateModel, PlayerEffect> {
         return First.first(model, setOf(FetchData))
     }
 
-    override fun connectViews(eventConsumer: Consumer<CreateEvent>): Connection<CreateModel> {
-        nameTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {
-                eventConsumer.accept(GameNameChanged(p0?.toString() ?: ""))
-            }
-        }
+    override fun connectViews(eventConsumer: Consumer<PlayerEvent>): Connection<CreateModel> {
+//        nameTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+//            override fun afterTextChanged(p0: Editable?) {
+//                eventConsumer.accept(GameNameChanged(p0?.toString() ?: ""))
+//            }
+//        }
 
         toolbarItemClickListener = Toolbar.OnMenuItemClickListener { item ->
             when(item.itemId) {
-                R.id.actionSave -> eventConsumer.accept(StartGameClicked)
+                R.id.actionSave -> eventConsumer.accept(DoneSelectingPlayersClicked)
             }
             false
         }
 
-        fab.setOnClickListener { _ ->
+        fab.setOnClickListener {
             eventConsumer.accept(AddPlayerClicked)
         }
-        gameNameEdit.addTextChangedListener(nameTextWatcher)
+//        gameNameEdit.addTextChangedListener(nameTextWatcher)
         toolbar.setOnMenuItemClickListener(toolbarItemClickListener)
 
         return object : Connection<CreateModel> {
@@ -129,9 +129,9 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
         }
     }
 
-    override fun effectHandler(eventConsumer: Consumer<CreateEvent>): Connection<CreateEffect> {
-        return object : Connection<CreateEffect> {
-            override fun accept(effect: CreateEffect) {
+    override fun effectHandler(eventConsumer: Consumer<PlayerEvent>): Connection<PlayerEffect> {
+        return object : Connection<PlayerEffect> {
+            override fun accept(effect: PlayerEffect) {
                 when (effect) {
                     is ShowPlayerNameDialog -> {
                         view?.post {
@@ -147,11 +147,12 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
                     is FetchData -> {
                         eventConsumer.accept(PlayersLoaded(playerRepository?.loadAllUsers() ?: listOf()))
                     }
-                    is SaveGame -> {
-                        gameRepository?.createGame(effect.gameName, effect.playerIds)?.let {
-                            listener?.onShowGameScreen(it)
-                        }
-                    }
+//                    is SaveGame -> {
+//                        gameRepository?.createGame(effect.gameName, effect.playerIds)?.let {
+//                            listener?.onPlayersSelected()
+//                        }
+//                    }
+                    is DoneSelectingPlayers -> listener?.onPlayersSelected(effect.playerIds)
                 }
             }
 
@@ -163,7 +164,7 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
 
     // End Mobius functions
 
-    private fun showPlayerNameDialog(eventConsumer: Consumer<CreateEvent>, effect: ShowPlayerNameDialog) {
+    private fun showPlayerNameDialog(eventConsumer: Consumer<PlayerEvent>, effect: ShowPlayerNameDialog) {
         var name = ""
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_player_name, null, false)
         val dialog = AlertDialog.Builder(requireContext())
@@ -204,9 +205,12 @@ class GameCreateFragment : MobiusFragment<CreateModel, CreateEvent, CreateEffect
 
     companion object {
         private const val ARG_SELECTED_IDS = "selected_ids"
+        private const val PLAYER_IDS = "game_id"
 
-        fun newInstance() : GameCreateFragment {
-            return GameCreateFragment()
+        fun newInstance(playerIds: List<Long>) : PlayerSelectFragment {
+            return PlayerSelectFragment().apply {
+                arguments = Bundle().apply { putLongArray(PLAYER_IDS, playerIds.toLongArray()) }
+            }
         }
     }
 }

@@ -13,22 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay"
+        app:title="@string/pickPlayers"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         android:background="?attr/colorPrimary"
         app:navigationIcon="?attr/homeAsUpIndicator"
-        >
-
-        <EditText
-            android:id="@+id/gameNameEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/gameNameHint"
-            android:lines="1"
-            android:imeOptions="actionDone"
-            android:inputType="text|textCapWords|textAutoComplete"
-            />
-
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playerRecycler"

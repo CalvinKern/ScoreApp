@@ -8,29 +8,32 @@ import com.spotify.mobius.Next
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 
-sealed class CreateEvent
-object AddPlayerClicked : CreateEvent()
-object StartGameClicked : CreateEvent()
-data class PlayerRowClicked(val playerId: Long) : CreateEvent()
-data class PlayerSelected(val playerId: Long, val selected: Boolean) : CreateEvent()
-data class PlayerDeleteClicked(val playerId: Long) : CreateEvent()
-data class PlayerNameChanged(val playerId: Long, val newName: String) : CreateEvent()
-data class PlayerDeleteSuccessful(val playerId: Long) : CreateEvent()
-data class PlayersLoaded(val players: List<Player>) : CreateEvent()
-object RequestLoad : CreateEvent()
-data class GameNameChanged(val gameName: String) : CreateEvent()
+sealed class PlayerEvent
+object AddPlayerClicked : PlayerEvent()
+//object StartGameClicked : PlayerEvent()
+object DoneSelectingPlayersClicked : PlayerEvent()
+data class PlayerRowLongClicked(val playerId: Long) : PlayerEvent()
+data class PlayerSelected(val playerId: Long, val selected: Boolean) : PlayerEvent()
+data class PlayerDeleteClicked(val playerId: Long) : PlayerEvent()
+data class PlayerNameChanged(val playerId: Long, val newName: String) : PlayerEvent()
+data class PlayerDeleteSuccessful(val playerId: Long) : PlayerEvent()
+data class PlayersLoaded(val players: List<Player>) : PlayerEvent()
+object RequestLoad : PlayerEvent()
+//data class GameNameChanged(val gameName: String) : PlayerEvent()
 
-sealed class CreateEffect
-data class ShowGameScreen(val gameId: Long) : CreateEffect()
-data class SaveGame(val gameName: String, val playerIds: List<Long>) : CreateEffect()
-data class ShowPlayerNameDialog(val playerId: Long, val playerName: String) : CreateEffect()
-data class ShowDeleteDialog(val playerId: Long, val playerName: String?) : CreateEffect()
-data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : CreateEffect()
-object FetchData : CreateEffect()
+sealed class PlayerEffect
+//data class ShowGameScreen(val gameId: Long) : PlayerEffect()
+//data class SaveGame(val gameId: Long, val playerIds: List<Long>) : PlayerEffect()
+data class DoneSelectingPlayers(val playerIds: List<Long>) : PlayerEffect()
+data class ShowPlayerNameDialog(val playerId: Long, val playerName: String) : PlayerEffect()
+data class ShowDeleteDialog(val playerId: Long, val playerName: String?) : PlayerEffect()
+data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : PlayerEffect()
+object FetchData : PlayerEffect()
 
 data class CreateModel(
-    val gameName: String = "",
+    val gameId:Long = 0,
     val playerList: List<Player> = listOf(),
+    val gameName: String = "",
     val selectedPlayerList: List<Long> = listOf(),
     val loading: Boolean = false) {
 
@@ -47,14 +50,15 @@ data class CreateModel(
             return CreateModel(selectedPlayerList = selectedPlayers ?: listOf())
         }
 
-        fun update(model: CreateModel, event: CreateEvent): Next<CreateModel, CreateEffect> {
+        fun update(model: CreateModel, event: PlayerEvent): Next<CreateModel, PlayerEffect> {
             return when (event) {
-                is GameNameChanged -> Next.next(model.copy(gameName = event.gameName))
+//                is GameNameChanged -> Next.next(model.copy(gameName = event.gameName))
+                is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects())
                 is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(FetchData))
                 is PlayersLoaded -> Next.next(model.copy(playerList = event.players))
                 is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerNameDialog(0, "")))
-                is StartGameClicked -> Next.dispatch(Effects.effects(SaveGame(model.gameName, model.selectedPlayerList)))
-                is PlayerRowClicked -> {
+//                is StartGameClicked -> Next.dispatch(Effects.effects(SaveGame(model.gameId, model.selectedPlayerList)))
+                is PlayerRowLongClicked -> {
                     val name = model.playerName(event.playerId)
                     Next.dispatch(Effects.effects(ShowPlayerNameDialog(event.playerId, name ?: "")))
                 }
@@ -94,7 +98,7 @@ data class CreateModel(
                 is PlayerDeleteSuccessful -> {
                     model.player(event.playerId)?.let { player ->
                         val list = model.playerList.toMutableList().also { it.remove(player) }
-                        Next.next<CreateModel, CreateEffect>(model.copy(playerList = list), Effects.effects(ShowDeletePlayerSnackbar(event.playerId, player.name)))
+                        Next.next<CreateModel, PlayerEffect>(model.copy(playerList = list), Effects.effects(ShowDeletePlayerSnackbar(event.playerId, player.name)))
                     } ?: Next.noChange()
                 }
             }
