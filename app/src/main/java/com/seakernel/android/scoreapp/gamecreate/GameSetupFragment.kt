@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import kotlinx.android.synthetic.main.fragment_game_create.*
-import kotlinx.android.synthetic.main.holder_player_list.view.*
+import kotlinx.android.synthetic.main.holder_player_select_list.view.*
 
 class GameSetupFragment : Fragment() {
 
@@ -106,7 +106,7 @@ private class PlayerDiffCallback : DiffUtil.ItemCallback<Player>() {
 }
 class PlayersAdapter : ListAdapter<Player, PlayerViewHolder>(PlayerDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
-        return PlayerViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_player_list, parent, false))
+        return PlayerViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_player_select_list, parent, false))
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {

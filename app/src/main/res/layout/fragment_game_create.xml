@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     >
 
@@ -87,6 +88,7 @@
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/playersHeaderEdit"
+                tools:listitem="@layout/holder_game_create_player"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

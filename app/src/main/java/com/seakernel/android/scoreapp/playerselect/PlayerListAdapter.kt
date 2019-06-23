@@ -9,7 +9,7 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.spotify.mobius.functions.Consumer
-import kotlinx.android.synthetic.main.holder_player_list.view.*
+import kotlinx.android.synthetic.main.holder_player_select_list.view.*
 
 /**
  * Created by Calvin on 12/21/18.
@@ -106,7 +106,7 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     companion object {
-        const val RESOURCE_ID = R.layout.holder_player_list
+        const val RESOURCE_ID = R.layout.holder_player_select_list
     }
 }
 
