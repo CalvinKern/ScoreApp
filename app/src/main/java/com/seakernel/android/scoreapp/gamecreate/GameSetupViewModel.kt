@@ -33,13 +33,10 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun updateForNewPlayers(playerIds: List<Long>) {
         scope.launch {
-            val oldPlayerIds = gameSettings.value?.players?.map { it.id } ?: emptyList()
-            val removedPlayers = oldPlayerIds.filterNot { playerIds.contains(it) }
-            val players = playerRepository.loadUsers(playerIds.filterNot { oldPlayerIds.contains(it) })
+            val players = gameSettings.value?.players?.filter { playerIds.contains(it.id) } ?: emptyList()
+            val newPlayers = playerRepository.loadUsers(playerIds.filterNot { id -> players.any { player -> player.id == id} })
             withContext(Dispatchers.Main) {
-                gameSettings.value = gameSettings.value?.copy(
-                    players = gameSettings.value!!.players.filterNot { removedPlayers.contains(it.id) } + players
-                )
+                gameSettings.value = gameSettings.value?.copy(players = players + newPlayers)
             }
         }
     }
