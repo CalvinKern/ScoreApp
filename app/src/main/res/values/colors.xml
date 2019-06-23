@@ -8,4 +8,5 @@
     <color name="slightGray">#F5F5F5</color>
     <color name="winnerGreen">#087f23</color>
     <color name="dealer">#ff9800</color>
+    <color name="dealerSoft">#ffe0b2</color>
 </resources>

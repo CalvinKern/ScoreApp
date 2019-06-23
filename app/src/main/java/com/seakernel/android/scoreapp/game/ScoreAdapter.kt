@@ -115,8 +115,12 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val scoreHolder: EditText by lazy { itemView.playerScore }
 
     fun bind(rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
-        if (score.player == round.dealer && rounds.last().id == round.id) {
-            scoreHolder.setBackgroundResource(R.color.dealer)
+        if (score.player == round.dealer) {
+            if (rounds.last().id == round.id) {
+                scoreHolder.setBackgroundResource(R.color.dealer)
+            } else {
+                scoreHolder.setBackgroundResource(R.color.dealerSoft)
+            }
         } else {
             // Make odd rows with a slight gray background to look a little better
             if (round.number % 2 == 0) {
