@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.game.GameFragment
-import com.seakernel.android.scoreapp.gamecreate.PlayerSelectFragment
+import com.seakernel.android.scoreapp.gamecreate.GameSetupFragment
+import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import com.seakernel.android.scoreapp.gamelist.GameListFragment
 import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, PlayerSelectFragment.PlayerSelectListener {
+class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, PlayerSelectFragment.PlayerSelectListener,
+    GameSetupFragment.GameSetupListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +28,12 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
 
     override fun onPlayersSelected(playerIds: List<Long>) {
         popBackStackIfFound(PlayerSelectFragment::class)
-        // TODO: Find the create game fragment and add new players
-//        supportFragmentManager.findFragmentByTag()
+        val fragment =
+            supportFragmentManager.findFragmentByTag(GameSetupFragment::class.java.simpleName) as GameSetupFragment
+        fragment.updateForNewPlayers(playerIds)
     }
 
-    fun onShowPlayerSelectScreen(playerIds: List<Long>) {
+    override fun onShowPlayerSelectScreen(playerIds: List<Long>) {
         showFragment(PlayerSelectFragment.newInstance(playerIds), PlayerSelectFragment::class.java.simpleName)
     }
 
@@ -40,7 +43,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
     }
 
     override fun onShowCreateGameScreen() {
-        TODO("Create this screen")
+        showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.simpleName)
     }
 
     // Helper Functions
@@ -50,6 +53,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
         }
     }
 
+    // TODO: make first param generic (inheriting from fragment) so that it can be used to generate the tag without resolving the super classes name
     private fun showFragment(fragment: Fragment, tag: String) {
         supportFragmentManager
             .beginTransaction()

@@ -55,7 +55,7 @@ data class CreateModel(
         fun update(model: CreateModel, event: PlayerEvent): Next<CreateModel, PlayerEffect> {
             return when (event) {
 //                is GameNameChanged -> Next.next(model.copy(gameName = event.gameName))
-                is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects())
+                is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects(DoneSelectingPlayers(model.selectedPlayerList)))
                 is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(
                     FetchData
                 ))

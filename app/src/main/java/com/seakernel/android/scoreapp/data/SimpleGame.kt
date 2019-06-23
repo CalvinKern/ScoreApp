@@ -7,6 +7,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * Created by Calvin on 12/16/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
+// TODO: Rename to GameSettings
 data class SimpleGame(
     val id: Long = 0,
     val name: String = "",

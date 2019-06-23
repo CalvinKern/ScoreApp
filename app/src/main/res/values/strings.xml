@@ -5,11 +5,18 @@
     <string name="gameListTitle">Games</string>
     <string name="playersHolder">%d Players</string>
 
-    <!--Create SimpleGame Screen-->
-    <string name="pickPlayers">Pick Players</string>
-    <string name="gameNameHint">Game Name</string>
-    <string name="playerIcon">Player Icon</string>
+    <!--Common Actions-->
     <string name="actionSave">Save</string>
+    <string name="actionEdit">Edit</string>
+
+    <!--Create Game Screen-->
+    <string name="gameCreateTitle">New Game</string>
+    <string name="gameNameHint">Game Name</string>
+    <string name="playersHeader">Players</string>
+
+    <!--Select Player Screen-->
+    <string name="pickPlayers">Pick Players</string>
+    <string name="playerIcon">Player Icon</string>
 
     <!--Player dialog-->
     <string name="playerName">Player Name</string>
