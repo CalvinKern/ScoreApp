@@ -19,6 +19,7 @@ interface GamePlayerJoinDao {
         INNER JOIN ${GamePlayerJoin.TABLE_NAME}
         ON ${PlayerEntity.COLUMN_ID}=${GamePlayerJoin.COLUMN_PLAYER_ID}
         WHERE ${GamePlayerJoin.COLUMN_GAME_ID}=:gameId
+        ORDER BY ${GamePlayerJoin.COLUMN_PLAYER_POSITION}
     """)
     fun getPlayersForGame(gameId: Long): List<PlayerEntity>
 

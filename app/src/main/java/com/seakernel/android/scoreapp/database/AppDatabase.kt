@@ -6,12 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import com.seakernel.android.scoreapp.database.migrations.Migration_1_2
+import com.seakernel.android.scoreapp.database.migrations.Migration_2_3
 
 /**
  * Created by Calvin on 12/20/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-@Database(entities = [PlayerEntity::class, GameEntity::class, GamePlayerJoin::class, RoundEntity::class, ScoreEntity::class], version = 2)
+@Database(
+    version = 3,
+    entities = [PlayerEntity::class, GameEntity::class, GamePlayerJoin::class, RoundEntity::class, ScoreEntity::class]
+    )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun playerDao(): PlayerDao
     abstract fun gameDao(): GameDao
@@ -34,7 +38,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun migrations(): Array<Migration> {
-            return arrayOf(Migration_1_2())
+            return arrayOf(Migration_1_2(), Migration_2_3())
         }
     }
 }

@@ -83,6 +83,7 @@ class DbTestHelper {
         /**
          * Generates raw data with {@code n} users and games.
          */
+        @Deprecated("Only used on database versions 2 or less")
         fun generateDataRaw(n: Int, db: SupportSQLiteDatabase) {
             insertUsersRaw(n, db)
             insertGamesRaw(n, db)

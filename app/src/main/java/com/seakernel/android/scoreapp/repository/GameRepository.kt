@@ -33,7 +33,7 @@ class GameRepository(val context: Context) {
     fun createGame(settings: SimpleGame, dealerId: Long = settings.players.random().id): Long {
         val game = GameEntity(0, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
         val id = gameDao.insertAll(game)[0]
-        gamePlayerDao.insertAll(*settings.players.map { GamePlayerJoin(id, it.id) }.toTypedArray())
+        gamePlayerDao.insertAll(*settings.players.mapIndexed { index, player ->  GamePlayerJoin(id, player.id, index) }.toTypedArray())
 
         // Create an empty round for ease
         RoundRepository(context).addOrUpdateRound(
