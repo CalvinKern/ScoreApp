@@ -1,6 +1,7 @@
 package com.seakernel.android.scoreapp.gamecreate
 
 import android.app.Application
+import androidx.annotation.MainThread
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,6 +26,11 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getGameSettings(): LiveData<SimpleGame> {
         return gameSettings
+    }
+
+    @MainThread
+    fun updateGameName(name: String) {
+        gameSettings.value = gameSettings.value!!.copy(name = name)
     }
 
     /**

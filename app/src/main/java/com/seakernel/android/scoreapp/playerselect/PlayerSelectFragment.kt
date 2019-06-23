@@ -76,14 +76,13 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
-        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
+        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
         toolbar.inflateMenu(R.menu.menu_player_select)
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        gameNameEdit.removeTextChangedListener(nameTextWatcher)
         addPlayerJob?.cancel()
     }
 
@@ -99,14 +98,6 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     }
 
     override fun connectViews(eventConsumer: Consumer<PlayerEvent>): Connection<CreateModel> {
-//        nameTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-//            override fun afterTextChanged(p0: Editable?) {
-//                eventConsumer.accept(GameNameChanged(p0?.toString() ?: ""))
-//            }
-//        }
-
         toolbarItemClickListener = Toolbar.OnMenuItemClickListener { item ->
             when(item.itemId) {
                 R.id.actionSave -> eventConsumer.accept(DoneSelectingPlayersClicked)
@@ -117,7 +108,6 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         fab.setOnClickListener {
             eventConsumer.accept(AddPlayerClicked)
         }
-//        gameNameEdit.addTextChangedListener(nameTextWatcher)
         toolbar.setOnMenuItemClickListener(toolbarItemClickListener)
 
         return object : Connection<CreateModel> {

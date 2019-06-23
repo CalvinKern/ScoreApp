@@ -2,6 +2,8 @@ package com.seakernel.android.scoreapp.gamecreate
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +26,7 @@ class GameSetupFragment : Fragment() {
     }
 
     private var listener: GameSetupListener? = null
+    private var nameTextWatcher: TextWatcher? = null
     private val viewModel: GameSetupViewModel by lazy { ViewModelProviders.of(this).get(GameSetupViewModel::class.java) }
 
     override fun onAttach(context: Context) {
@@ -39,7 +42,17 @@ class GameSetupFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_game_create, container, false)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        gameNameEdit?.removeTextChangedListener(nameTextWatcher)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Setup toolbar
+        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
+        // TODO: Set toolbar menu
+
+        // Setup recycler
         val adapter = PlayersAdapter()
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
         playerRecycler.adapter = adapter
@@ -47,13 +60,20 @@ class GameSetupFragment : Fragment() {
             adapter.submitList(settings.players)
         })
 
+        // Setup various views
         playersHeaderEdit.setOnClickListener {
             val ids = viewModel.getGameSettings().value?.players?.map { it.id } ?: emptyList()
             listener?.onShowPlayerSelectScreen(ids)
         }
 
-        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
-        // TODO: Set toolbar menu
+        nameTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(text: Editable?) {
+                viewModel.updateGameName(text.toString())
+            }
+        }
+        gameNameEdit.addTextChangedListener(nameTextWatcher)
     }
 
     fun updateForNewPlayers(playerIds: List<Long>) {
