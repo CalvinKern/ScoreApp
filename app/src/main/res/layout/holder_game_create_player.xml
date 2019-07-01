@@ -31,11 +31,37 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         app:layout_constraintStart_toEndOf="@id/playerDragImage"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/playerDealerLabel"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="@dimen/text_title"
         tools:text="@tools:sample/full_names"
         />
 
+    <TextView
+        android:id="@+id/playerDealerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/playerDealerBox"
+        app:layout_constraintStart_toEndOf="@id/playerNameHolder"
+        android:labelFor="@id/playerDealerBox"
+        android:text="@string/dealerLabel"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <RadioButton
+        android:id="@+id/playerDealerBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/playerDealerLabel"
+        android:layout_marginEnd="@dimen/fab_margin"
+        tools:checked="true"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

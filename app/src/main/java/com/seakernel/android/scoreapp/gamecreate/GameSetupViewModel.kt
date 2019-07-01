@@ -10,7 +10,10 @@ import com.seakernel.android.scoreapp.data.SimpleGame
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.utility.safePostValue
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.util.*
 
 class GameSetupViewModel(application: Application) : AndroidViewModel(application) {
@@ -41,7 +44,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         val settings = gameSettings.value ?: SimpleGame()
 
         scope.launch {
-            val gameId = gameRepository.createGame(settings) // TODO: Use dealerId
+            val gameId = gameRepository.createGame(settings)
             gameCreatedEvent.safePostValue(gameId)
         }
     }
@@ -54,9 +57,10 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         val settings = gameSettings.value ?: SimpleGame()
 
         scope.launch {
+            val dealerId = if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
             val players = settings.players.filter { playerIds.contains(it.id) }
             val newPlayers = playerRepository.loadUsers(playerIds.filterNot { id -> players.any { player -> player.id == id} })
-            gameSettings.safePostValue(settings.copy(players = players + newPlayers))
+            gameSettings.safePostValue(settings.copy(players = players + newPlayers, initialDealerId = dealerId))
         }
     }
 
@@ -65,6 +69,12 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
             val players = settings.players.toMutableList()
             Collections.swap(players, fromPosition, toPosition)
             gameSettings.value = settings.copy(players = players)
+        }
+    }
+
+    fun setDealer(playerId: Long) {
+        gameSettings.value?.let { settings ->
+            gameSettings.value = settings.copy(initialDealerId = playerId)
         }
     }
 }

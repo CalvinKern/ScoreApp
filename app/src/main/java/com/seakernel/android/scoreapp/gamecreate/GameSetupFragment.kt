@@ -4,15 +4,18 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.*
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import kotlinx.android.synthetic.main.fragment_game_create.*
-import kotlinx.android.synthetic.main.holder_player_select_list.view.*
+import kotlinx.android.synthetic.main.holder_game_create_player.view.*
 
 class GameSetupFragment : Fragment() {
 
@@ -23,7 +26,9 @@ class GameSetupFragment : Fragment() {
 
     private var listener: GameSetupListener? = null
     private var nameTextWatcher: TextWatcher? = null
-    private val viewModel: GameSetupViewModel by lazy { ViewModelProviders.of(this).get(GameSetupViewModel::class.java) }
+
+    // Require activity so that we can share updates with the activity and the view holders (unless it's refactored to use a callback instead of accessing the viewmodel directly)
+    private val viewModel: GameSetupViewModel by lazy { ViewModelProviders.of(requireActivity()).get(GameSetupViewModel::class.java) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,7 +85,8 @@ class GameSetupFragment : Fragment() {
 
         // Start observing the data
         viewModel.getGameSettings().observe(this, Observer { settings ->
-            adapter.submitList(settings.players)
+            val players = settings.players.map { PlayerState(it, it.id == settings.initialDealerId) }
+            adapter.submitList(players)
         })
         viewModel.getGameCreatedEvent().observe(this, Observer { gameId ->
             listener?.onShowGameScreen(gameId)
@@ -113,11 +119,14 @@ class GameSetupFragment : Fragment() {
     }
 }
 
-private class PlayerDiffCallback : DiffUtil.ItemCallback<Player>() {
-    override fun areItemsTheSame(oldItem: Player, newItem: Player) = oldItem.id == newItem.id
-    override fun areContentsTheSame(oldItem: Player, newItem: Player) = oldItem == newItem
+// Player Adapter classes
+
+private class PlayerDiffCallback : DiffUtil.ItemCallback<PlayerState>() {
+    override fun areItemsTheSame(oldItem: PlayerState, newItem: PlayerState) = oldItem.player.id == newItem.player.id
+    override fun areContentsTheSame(oldItem: PlayerState, newItem: PlayerState) = oldItem == newItem
 }
-class PlayersAdapter : ListAdapter<Player, PlayerViewHolder>(PlayerDiffCallback()) {
+
+class PlayersAdapter : ListAdapter<PlayerState, PlayerViewHolder>(PlayerDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
         return PlayerViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_game_create_player, parent, false))
     }
@@ -128,9 +137,19 @@ class PlayersAdapter : ListAdapter<Player, PlayerViewHolder>(PlayerDiffCallback(
 }
 
 class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(player: Player) {
+    fun bind(state: PlayerState) {
         with (itemView) {
-            playerNameHolder.text = player.name
+            playerNameHolder.text = state.player.name
+            playerDealerLabel.visibility = if (state.isDealer) View.VISIBLE else View.GONE
+            playerDealerBox.isChecked = state.isDealer
+            playerDealerBox.setOnClickListener {
+                ViewModelProviders.of(itemView.context as FragmentActivity).get(GameSetupViewModel::class.java).setDealer(state.player.id)
+            }
         }
     }
 }
+
+data class PlayerState(
+    val player: Player,
+    val isDealer: Boolean
+)
