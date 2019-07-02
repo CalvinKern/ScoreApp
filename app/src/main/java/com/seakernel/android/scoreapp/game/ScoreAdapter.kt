@@ -159,17 +159,18 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
-        if (scoreHolder.text.isEmpty()) {
-            return
+        val updatedScore = if (scoreHolder.text.isNotBlank()) {
+            scoreHolder.text.toString().toInt()
+        } else {
+            0
         }
 
-        val newScore = scoreHolder.text.toString().toInt()
         // Update the score
         eventConsumer?.accept(
             GameEvent.UpdateScore(
                 round.id,
                 score.player.id,
-                newScore,
+                updatedScore,
                 score.metadata
             )
         )
