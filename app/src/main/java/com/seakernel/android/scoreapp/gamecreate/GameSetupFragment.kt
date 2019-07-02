@@ -89,6 +89,7 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameSettings().observe(this, Observer { settings ->
             val players = settings.players.map { PlayerState(it, it.id == settings.initialDealerId) }
             adapter.submitList(players)
+            toolbar.menu.findItem(R.id.actionSave).isEnabled = settings.name.isNotBlank() && settings.players.isNotEmpty()
         })
         viewModel.getGameCreatedEvent().observe(this, Observer { gameId ->
             listener?.onShowGameScreen(gameId)

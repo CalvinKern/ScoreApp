@@ -8,7 +8,6 @@
         android:id="@+id/actionSave"
         android:orderInCategory="100"
         android:title="@string/actionSave"
-        android:icon="@drawable/ic_done_white"
         app:showAsAction="ifRoom"
         />
 </menu>
