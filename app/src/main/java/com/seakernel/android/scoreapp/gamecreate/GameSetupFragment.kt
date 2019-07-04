@@ -1,6 +1,7 @@
 package com.seakernel.android.scoreapp.gamecreate
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -111,6 +112,19 @@ class GameSetupFragment : Fragment() {
             return true
         }
 
+        override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+            super.onSelectedChanged(viewHolder, actionState)
+            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+                (viewHolder as? PlayerSelectionListener)?.onSelected()
+            }
+        }
+
+        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            super.clearView(recyclerView, viewHolder)
+
+            (viewHolder as? PlayerSelectionListener)?.onCleared()
+        }
+
         // TODO: Handle swipe to remove a player
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
     }
@@ -123,6 +137,11 @@ class GameSetupFragment : Fragment() {
 }
 
 // Player Adapter classes
+
+private interface PlayerSelectionListener {
+    fun onSelected()
+    fun onCleared()
+}
 
 private interface PlayerAdapterCallback {
     fun onSelectedDealer(playerId: Long)
@@ -149,7 +168,7 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) : List
     }
 }
 
-private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallback) : RecyclerView.ViewHolder(itemView) {
+private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallback) : RecyclerView.ViewHolder(itemView), PlayerSelectionListener {
     fun bind(state: PlayerState) {
         with (itemView) {
             playerNameHolder.text = state.player.name
@@ -159,5 +178,13 @@ private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallba
                 callback.onSelectedDealer(state.player.id)
             }
         }
+    }
+
+    override fun onSelected() {
+        itemView.setBackgroundColor(Color.LTGRAY)
+    }
+
+    override fun onCleared() {
+        itemView.setBackgroundColor(Color.WHITE)
     }
 }
