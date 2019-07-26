@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.game.GameFragment
-import com.seakernel.android.scoreapp.gamecreate.GameSetupFragment
+import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import com.seakernel.android.scoreapp.gamelist.GameListFragment
 import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, PlayerSelectFragment.PlayerSelectListener,
-    GameSetupFragment.GameSetupListener {
+    GameSetupFragment.GameSetupListener, GameFragment.GameListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, GameListFragment.newInstance())
+                .add(R.id.fragmentContainer, GameListFragment.newInstance(), GameListFragment::class.java.simpleName)
                 .commit()
         }
     }
@@ -44,6 +44,17 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
 
     override fun onShowCreateGameScreen() {
         showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.simpleName)
+    }
+
+    override fun onGameSettingsSelected(gameId: Long) {
+        showFragment(GameSetupFragment.newInstance(gameId), GameSetupFragment::class.java.simpleName)
+    }
+
+    override fun onGameUpdated() {
+        popBackStackIfFound(GameSetupFragment::class)
+        val fragment =
+            supportFragmentManager.findFragmentByTag(GameFragment::class.java.simpleName) as GameFragment
+        fragment.updateGame()
     }
 
     // Helper Functions

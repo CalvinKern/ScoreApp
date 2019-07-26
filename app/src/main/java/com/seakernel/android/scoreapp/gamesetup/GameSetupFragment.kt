@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.gamecreate
+package com.seakernel.android.scoreapp.gamesetup
 
 import android.content.Context
 import android.graphics.Color
@@ -22,11 +22,14 @@ class GameSetupFragment : Fragment() {
     interface GameSetupListener {
         fun onShowPlayerSelectScreen(playerIds: List<Long>)
         fun onShowGameScreen(gameId: Long)
+        fun onGameUpdated()
     }
 
     private var listener: GameSetupListener? = null
     private var nameTextWatcher: TextWatcher? = null
 
+    private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
+    private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
     private val viewModel: GameSetupViewModel by lazy { ViewModelProviders.of(this).get(GameSetupViewModel::class.java) }
 
     override fun onAttach(context: Context) {
@@ -38,6 +41,7 @@ class GameSetupFragment : Fragment() {
         super.onDetach()
         listener = null
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_game_create, container, false)
     }
@@ -45,6 +49,8 @@ class GameSetupFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         gameNameEdit?.removeTextChangedListener(nameTextWatcher)
+        viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
+        viewModel.getGameUpdatedEvent().removeObserver(gameUpdatedObserver)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +60,7 @@ class GameSetupFragment : Fragment() {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> {
-                    viewModel.createGame()
+                    viewModel.saveGame()
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
@@ -88,13 +94,21 @@ class GameSetupFragment : Fragment() {
 
         // Start observing the data
         viewModel.getGameSettings().observe(this, Observer { settings ->
-            val players = settings.players.map { PlayerState(it, it.id == settings.initialDealerId) }
+            val players = settings.players.map { PlayerState(it, it.id == settings.initialDealerId, settings.id == 0L) }
             adapter.submitList(players)
             toolbar.menu.findItem(R.id.actionSave).isEnabled = settings.name.isNotBlank() && settings.players.isNotEmpty()
+            if (!gameNameEdit.hasFocus()) {
+                gameNameEdit.removeTextChangedListener(nameTextWatcher)
+                gameNameEdit.setText(settings.name)
+                gameNameEdit.addTextChangedListener(nameTextWatcher)
+            }
         })
-        viewModel.getGameCreatedEvent().observe(this, Observer { gameId ->
-            listener?.onShowGameScreen(gameId)
-        })
+        viewModel.getGameCreatedEvent().observe(this, gameCreatedObserver)
+        viewModel.getGameUpdatedEvent().observe(this, gameUpdatedObserver)
+
+        arguments?.getLong(ARG_GAME_ID)?.let {
+            viewModel.loadGame(it)
+        }
     }
 
     fun updateForNewPlayers(playerIds: List<Long>) {
@@ -130,8 +144,16 @@ class GameSetupFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): GameSetupFragment {
-            return GameSetupFragment()
+        private const val ARG_GAME_ID = "game_id"
+
+        fun newInstance(gameId: Long? = null): GameSetupFragment {
+            return GameSetupFragment().apply {
+                gameId?.let {
+                    arguments = Bundle().apply {
+                        putLong(ARG_GAME_ID, it)
+                    }
+                }
+            }
         }
     }
 }
@@ -149,7 +171,8 @@ private interface PlayerAdapterCallback {
 
 private data class PlayerState(
     val player: Player,
-    val isDealer: Boolean
+    val isDealer: Boolean,
+    val showDealer: Boolean
 )
 
 private class PlayerDiffCallback : DiffUtil.ItemCallback<PlayerState>() {
@@ -172,7 +195,8 @@ private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallba
     fun bind(state: PlayerState) {
         with (itemView) {
             playerNameHolder.text = state.player.name
-            playerDealerLabel.visibility = if (state.isDealer) View.VISIBLE else View.GONE
+            playerDealerLabel.visibility = if (state.showDealer && state.isDealer) View.VISIBLE else View.GONE
+            playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE
             playerDealerBox.isChecked = state.isDealer
             playerDealerBox.setOnClickListener {
                 callback.onSelectedDealer(state.player.id)

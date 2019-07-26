@@ -20,6 +20,9 @@ class RoundRepository(val context: Context) {
             updateRound(gameId, round)
         }
     }
+    fun insertScores(vararg scores: ScoreEntity) {
+        roundDao.insertAll(*scores)
+    }
 
     private fun updateRound(gameId: Long, round: Round): Round {
         roundDao.update(RoundEntity(round.id, gameId, round.dealer?.id ?: 0, round.number))

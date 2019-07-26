@@ -23,10 +23,16 @@ import kotlinx.android.synthetic.main.fragment_game.*
  */
 class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
+    interface GameListener {
+        fun onGameSettingsSelected(gameId: Long)
+    }
+
     override val layoutId = R.layout.fragment_game
 
+    private var listener: GameListener? = null
     private var gameRepository: GameRepository? = null
     private var roundRepository: RoundRepository? = null
+    private var eventConsumer: Consumer<GameEvent>? = null
 
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
@@ -35,12 +41,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        listener = context as? GameListener
         gameRepository = GameRepository(requireContext())
         roundRepository = RoundRepository(requireContext())
     }
 
     override fun onDetach() {
         super.onDetach()
+        listener = null
         gameRepository = null
         roundRepository = null
     }
@@ -48,6 +56,18 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState) // TODO: Restore state
         toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        toolbar.inflateMenu(R.menu.menu_game)
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.actionEdit -> {
+                    arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
+                        listener?.onGameSettingsSelected(gameId)
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -70,6 +90,10 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         nameRow.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
     }
 
+    fun updateGame() {
+        eventConsumer?.accept(GameEvent.RequestLoad)
+    }
+
     // Mobius functions
 
     override fun initMobius(model: GameModel): First<GameModel, GameEffect> {
@@ -77,12 +101,16 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     }
 
     override fun connectViews(eventConsumer: Consumer<GameEvent>): Connection<GameModel> {
+        this.eventConsumer = eventConsumer
+
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
                 toolbar.title = model.settings.name
 
-                if (scoreRows.layoutManager == null && model.settings.players.isNotEmpty()) {
-                    scoreRows.layoutManager = GridLayoutManager(requireContext(), model.settings.players.size)
+                if (model.settings.players.isNotEmpty()) {
+                    if ((scoreRows.layoutManager as? GridLayoutManager)?.spanCount != model.settings.players.size) {
+                        scoreRows.layoutManager = GridLayoutManager(requireContext(), model.settings.players.size)
+                    }
                     setupHeaderAndFooter(model.settings.players)
                 }
                 scoreRows.swapAdapter(GameScoreAdapter(model.rounds, eventConsumer), false)

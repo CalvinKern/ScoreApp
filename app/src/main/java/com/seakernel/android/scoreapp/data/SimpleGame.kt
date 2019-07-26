@@ -13,7 +13,7 @@ data class SimpleGame(
     val name: String = "",
     val lastPlayed: ZonedDateTime = ZonedDateTime.now(),
     val players: List<Player> = listOf(),
-    val initialDealerId: Long? = null) {
+    val initialDealerId: Long? = players.firstOrNull()?.id) {
 
     val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
 

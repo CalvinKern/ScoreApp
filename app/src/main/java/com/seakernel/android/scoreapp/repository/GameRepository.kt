@@ -33,18 +33,50 @@ class GameRepository(val context: Context) {
     fun createGame(settings: SimpleGame): Long {
         val game = GameEntity(0, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
         val id = gameDao.insertAll(game)[0]
-        gamePlayerDao.insertAll(*settings.players.mapIndexed { index, player ->
-            GamePlayerJoin(id, player.id, index)
-        }.toTypedArray())
+        gamePlayerDao.insertAll(*getPlayerJoins(settings.copy(id = id)))
 
         // Create an empty round for ease
-        RoundRepository(context).addOrUpdateRound(
-            id,
-            Round(0, Player(id = settings.initialDealerId ?: settings.players.random().id), 0, List(settings.players.size) {
-                Score(player = Player(settings.players[it].id))
-            })
-        )
+        val dealer = Player(id = settings.initialDealerId ?: settings.players.random().id)
+        val round = List(settings.players.size) {
+            Score(player = Player(settings.players[it].id))
+        }
+        RoundRepository(context).addOrUpdateRound(id, Round(0, dealer, 0, round))
         return id
+    }
+
+    fun updateGame(settings: SimpleGame) {
+        val originalPlayerIds = gamePlayerDao.getPlayersForGame(settings.id).map { it.uid }
+        val game = GameEntity(settings.id, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
+        gameDao.update(game)
+
+        // Remove players not in the new game
+        val currentPlayerIds = settings.players.map { it.id }
+        val removedPlayers = originalPlayerIds.filterNot { it in currentPlayerIds }.toLongArray()
+
+        if (removedPlayers.isNotEmpty()) {
+            gamePlayerDao.deleteAllPlayersForGame(settings.id, *removedPlayers)
+        }
+
+        // Update the players in the new order
+        val (oldPlayers, newPlayers) = getPlayerJoins(settings).partition { it.playerId in originalPlayerIds }
+
+        gamePlayerDao.updatePlayerPositions(*oldPlayers.toTypedArray())
+        gamePlayerDao.insertAll(*newPlayers.toTypedArray())
+
+        val rounds = gameDao.getRounds(settings.id)
+        val roundRepository = RoundRepository(context)
+        rounds.forEach { fullRound ->
+            // Update old rounds to add players
+            roundRepository.insertScores(*newPlayers.map {
+                ScoreEntity(0, it.playerId, fullRound.round.id, 0, "")
+            }.toTypedArray())
+            // Remove scores from players not in the game anymore
+            removedPlayers.forEach { playerId ->
+                fullRound.scores.find { score -> score.playerId == playerId }?.id?.let { scoreId ->
+                    roundRepository.deleteScore(scoreId)
+                }
+            }
+        }
     }
 
     fun deleteGame(id: Long): Boolean {
@@ -59,6 +91,10 @@ class GameRepository(val context: Context) {
         return SimpleGame(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid))
     }
 
+    private fun getPlayerJoins(settings: SimpleGame) = settings.players.mapIndexed { index, player ->
+        GamePlayerJoin(settings.id, player.id, index)
+    }.toTypedArray()
+
     private fun convertToRounds(game: SimpleGame, rounds: List<GameDao.FulLRoundEntity>): List<Round> {
         return rounds.map {
             Round(
@@ -71,7 +107,9 @@ class GameRepository(val context: Context) {
     }
 
     private fun convertToScores(game: SimpleGame, scores: List<ScoreEntity>): List<Score> {
-        return scores.map { score ->
+        // TODO: Could clean up this logic by removing the embedded objects in `GameDao.kt`, and instead using a bigger SQL query
+        val playerIds = game.players.map { it.id }
+        return scores.sortedBy { playerIds.indexOf(it.playerId) }.map { score ->
             Score(
                 score.id,
                 game.players.find { player -> player.id == score.playerId }!!,

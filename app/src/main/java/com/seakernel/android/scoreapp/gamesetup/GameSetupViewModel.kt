@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.gamecreate
+package com.seakernel.android.scoreapp.gamesetup
 
 import android.app.Application
 import androidx.annotation.MainThread
@@ -25,6 +25,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     private var playerRepository: PlayerRepository = PlayerRepository(application)
     private val gameSettings = MutableLiveData<SimpleGame>().apply { value = SimpleGame() }
     private val gameCreatedEvent = LiveEvent<Long>()
+    private val gameUpdatedEvent = LiveEvent<Long>()
 
     override fun onCleared() {
         super.onCleared()
@@ -35,17 +36,24 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getGameCreatedEvent(): LiveData<Long> = gameCreatedEvent
 
+    fun getGameUpdatedEvent(): LiveData<Long> = gameUpdatedEvent
+
     @MainThread
     fun updateGameName(name: String) {
         gameSettings.value = gameSettings.value!!.copy(name = name)
     }
 
-    fun createGame() {
+    fun saveGame() {
         val settings = gameSettings.value ?: SimpleGame()
 
         scope.launch {
-            val gameId = gameRepository.createGame(settings)
-            gameCreatedEvent.safePostValue(gameId)
+            if (settings.id != 0L) {
+                gameRepository.updateGame(settings)
+                gameUpdatedEvent.safePostValue(settings.id)
+            } else {
+                val gameId = gameRepository.createGame(settings)
+                gameCreatedEvent.safePostValue(gameId)
+            }
         }
     }
 
@@ -75,6 +83,17 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     fun setDealer(playerId: Long) {
         gameSettings.value?.let { settings ->
             gameSettings.value = settings.copy(initialDealerId = playerId)
+        }
+    }
+
+    fun loadGame(gameId: Long, forceRefresh: Boolean = false) {
+        // Return early if it is the same game
+        if (gameSettings.value?.id == gameId && !forceRefresh) return
+
+        scope.launch {
+            gameRepository.loadGame(gameId)?.let {
+                gameSettings.safePostValue(it)
+            }
         }
     }
 }

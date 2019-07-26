@@ -29,6 +29,9 @@ interface GameDao {
     @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID}=:gameId")
     fun getFullGame(gameId: Long): FullGameEntity
 
+    @Query("SELECT * FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID}=:gameId")
+    fun getRounds(gameId: Long): List<FulLRoundEntity>
+
     class FullGameEntity {
         @Embedded
         lateinit var game: GameEntity

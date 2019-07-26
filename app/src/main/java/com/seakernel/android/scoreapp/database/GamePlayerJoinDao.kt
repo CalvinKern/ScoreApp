@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 /**
  * Created by Calvin on 12/21/18.
@@ -31,4 +32,14 @@ interface GamePlayerJoinDao {
         WHERE ${GamePlayerJoin.COLUMN_PLAYER_ID}=:playerId
         """)
     fun getGamesForPlayer(playerId: Long): List<GameEntity>
+
+    @Update
+    fun updatePlayerPositions(vararg joins: GamePlayerJoin)
+
+    @Query("""
+       DELETE FROM ${GamePlayerJoin.TABLE_NAME}
+       WHERE ${GamePlayerJoin.COLUMN_GAME_ID} = :gameId
+       AND ${GamePlayerJoin.COLUMN_PLAYER_ID} IN (:playerIds)
+    """)
+    fun deleteAllPlayersForGame(gameId: Long, vararg playerIds: Long)
 }
