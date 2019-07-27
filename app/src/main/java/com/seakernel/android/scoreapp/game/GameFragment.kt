@@ -90,7 +90,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         nameRow.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
     }
 
-    fun updateGame() {
+    override fun onResume() {
+        super.onResume()
         eventConsumer?.accept(GameEvent.RequestLoad)
     }
 
@@ -113,7 +114,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     }
                     setupHeaderAndFooter(model.settings.players)
                 }
-                scoreRows.swapAdapter(GameScoreAdapter(model.rounds, eventConsumer), false)
+                scoreRows.swapAdapter(GameScoreAdapter(model.settings.hasDealer, model.rounds, eventConsumer), false)
                 totalsRow.swapAdapter(TotalsAdapter(model.rounds), false)
             }
 

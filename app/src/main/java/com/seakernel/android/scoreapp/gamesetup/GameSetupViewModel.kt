@@ -23,7 +23,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     private var gameRepository: GameRepository = GameRepository(application)
     private var playerRepository: PlayerRepository = PlayerRepository(application)
-    private val gameSettings = MutableLiveData<SimpleGame>().apply { value = SimpleGame() }
+    private val gameSettings = MutableLiveData<SimpleGame?>().apply { value = null }
     private val gameCreatedEvent = LiveEvent<Long>()
     private val gameUpdatedEvent = LiveEvent<Long>()
 
@@ -32,7 +32,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         job.cancel()
     }
 
-    fun getGameSettings(): LiveData<SimpleGame> = gameSettings
+    fun getGameSettings(): LiveData<SimpleGame?> = gameSettings
 
     fun getGameCreatedEvent(): LiveData<Long> = gameCreatedEvent
 
@@ -41,6 +41,11 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     @MainThread
     fun updateGameName(name: String) {
         gameSettings.value = gameSettings.value!!.copy(name = name)
+    }
+
+    @MainThread
+    fun setHasDealer(hasDealer: Boolean) {
+        gameSettings.value = gameSettings.value!!.copy(hasDealer = hasDealer)
     }
 
     fun saveGame() {
@@ -94,6 +99,13 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
             gameRepository.loadGame(gameId)?.let {
                 gameSettings.safePostValue(it)
             }
+        }
+    }
+
+    @MainThread
+    fun initializeGame() {
+        if (gameSettings.value == null) {
+            gameSettings.value = SimpleGame()
         }
     }
 }

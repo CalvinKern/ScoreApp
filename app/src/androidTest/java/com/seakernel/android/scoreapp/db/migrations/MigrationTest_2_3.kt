@@ -43,6 +43,7 @@ class MigrationTest_2_3 {
     fun migrate2To3() {
         val testN = 5
         helper.createDatabase(AppDatabase.database, 2).apply {
+            @Suppress("DEPRECATION")
             DbTestHelper.generateDataRaw(testN, this)
 
             // Prepare for the next version.

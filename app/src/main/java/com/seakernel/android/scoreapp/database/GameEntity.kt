@@ -13,12 +13,14 @@ data class GameEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID, index = true) var uid: Long,
     @ColumnInfo(name = COLUMN_NAME) var name: String,
-    @ColumnInfo(name = COLUMN_LAST_PLAYED) var date: String
+    @ColumnInfo(name = COLUMN_LAST_PLAYED) var date: String,
+    @ColumnInfo(name = COLUMN_HAS_DEALER) var hasDealer: Boolean
 ) {
     companion object {
         const val TABLE_NAME = "games"
         const val COLUMN_ID = "uid"
         const val COLUMN_NAME = "name"
         const val COLUMN_LAST_PLAYED = "date"
+        const val COLUMN_HAS_DEALER = "hasDealer"
     }
 }

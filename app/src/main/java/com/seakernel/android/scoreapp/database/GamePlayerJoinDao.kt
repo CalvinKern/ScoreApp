@@ -25,7 +25,7 @@ interface GamePlayerJoinDao {
     fun getPlayersForGame(gameId: Long): List<PlayerEntity>
 
     @Query("""
-        SELECT ${GameEntity.COLUMN_ID}, ${GameEntity.COLUMN_NAME}, ${GameEntity.COLUMN_LAST_PLAYED}
+        SELECT ${GameEntity.COLUMN_ID}, ${GameEntity.COLUMN_NAME}, ${GameEntity.COLUMN_LAST_PLAYED}, ${GameEntity.COLUMN_HAS_DEALER}
         FROM ${GameEntity.TABLE_NAME}
         INNER JOIN ${GamePlayerJoin.TABLE_NAME}
         ON ${GameEntity.COLUMN_ID}=${GamePlayerJoin.COLUMN_GAME_ID}

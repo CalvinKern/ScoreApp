@@ -28,7 +28,7 @@ data class RoundEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID) var id: Long,
     @ColumnInfo(name = COLUMN_GAME_ID) var gameId: Long,
-    @ColumnInfo(name = COLUMN_DEALER_ID) var dealerId: Long,
+    @ColumnInfo(name = COLUMN_DEALER_ID) var dealerId: Long?,
     @ColumnInfo(name = COLUMN_ROUND_NUMBER) var roundNumber: Int
 ) {
     companion object {

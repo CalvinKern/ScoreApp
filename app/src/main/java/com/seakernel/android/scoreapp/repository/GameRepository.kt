@@ -31,7 +31,7 @@ class GameRepository(val context: Context) {
      * @return newly created game id
      */
     fun createGame(settings: SimpleGame): Long {
-        val game = GameEntity(0, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
+        val game = GameEntity(0, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER), settings.hasDealer)
         val id = gameDao.insertAll(game)[0]
         gamePlayerDao.insertAll(*getPlayerJoins(settings.copy(id = id)))
 
@@ -46,7 +46,7 @@ class GameRepository(val context: Context) {
 
     fun updateGame(settings: SimpleGame) {
         val originalPlayerIds = gamePlayerDao.getPlayersForGame(settings.id).map { it.uid }
-        val game = GameEntity(settings.id, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER))
+        val game = GameEntity(settings.id, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER), settings.hasDealer)
         gameDao.update(game)
 
         // Remove players not in the new game
@@ -88,7 +88,7 @@ class GameRepository(val context: Context) {
     }
 
     private fun convertToGame(game: GameEntity): SimpleGame {
-        return SimpleGame(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid))
+        return SimpleGame(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid), hasDealer = game.hasDealer)
     }
 
     private fun getPlayerJoins(settings: SimpleGame) = settings.players.mapIndexed { index, player ->

@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.holder_score_row_header.view.*
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameScoreAdapter(private val rounds: List<Round>, private val eventConsumer: Consumer<GameEvent>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<Round>, private val eventConsumer: Consumer<GameEvent>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -34,7 +34,7 @@ class GameScoreAdapter(private val rounds: List<Round>, private val eventConsume
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val round = rounds[toRoundIndex(position)]
-        (holder as ScoreViewHolder).bind(rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
+        (holder as ScoreViewHolder).bind(hasDealer, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
     }
 
     // Helper functions
@@ -114,8 +114,8 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val scoreHolder: EditText by lazy { itemView.playerScore }
 
-    fun bind(rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
-        if (score.player == round.dealer) {
+    fun bind(hasDealer: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
+        if (hasDealer && score.player == round.dealer) {
             if (rounds.last().id == round.id) {
                 scoreHolder.setBackgroundResource(R.color.dealer)
             } else {

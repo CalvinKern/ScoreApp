@@ -8,12 +8,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.*
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.utility.isCheckedSafe
 import kotlinx.android.synthetic.main.fragment_game_create.*
 import kotlinx.android.synthetic.main.holder_game_create_player.view.*
 
@@ -27,10 +30,15 @@ class GameSetupFragment : Fragment() {
 
     private var listener: GameSetupListener? = null
     private var nameTextWatcher: TextWatcher? = null
+    private var hasDealerListener: CompoundButton.OnCheckedChangeListener? = null
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
-    private val viewModel: GameSetupViewModel by lazy { ViewModelProviders.of(this).get(GameSetupViewModel::class.java) }
+    private val modelObserver = Observer<SimpleGame?> { settings -> renderSettings(settings) }
+
+    private val viewModel: GameSetupViewModel by lazy {
+        ViewModelProviders.of(this).get(GameSetupViewModel::class.java)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,7 +56,12 @@ class GameSetupFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        playersHeaderEdit?.setOnClickListener(null)
+        hasDealerCheckbox?.setOnCheckedChangeListener(null)
         gameNameEdit?.removeTextChangedListener(nameTextWatcher)
+
+        viewModel.getGameSettings().removeObserver(modelObserver)
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
         viewModel.getGameUpdatedEvent().removeObserver(gameUpdatedObserver)
     }
@@ -92,56 +105,78 @@ class GameSetupFragment : Fragment() {
         }
         gameNameEdit.addTextChangedListener(nameTextWatcher)
 
+        hasDealerListener = CompoundButton.OnCheckedChangeListener { _, checked ->
+            viewModel.setHasDealer(checked)
+        }
+        hasDealerCheckbox.setOnCheckedChangeListener(hasDealerListener)
+
         // Start observing the data
-        viewModel.getGameSettings().observe(this, Observer { settings ->
-            val players = settings.players.map { PlayerState(it, it.id == settings.initialDealerId, settings.id == 0L) }
-            adapter.submitList(players)
-            toolbar.menu.findItem(R.id.actionSave).isEnabled = settings.name.isNotBlank() && settings.players.isNotEmpty()
-            if (!gameNameEdit.hasFocus()) {
-                gameNameEdit.removeTextChangedListener(nameTextWatcher)
-                gameNameEdit.setText(settings.name)
-                gameNameEdit.addTextChangedListener(nameTextWatcher)
-            }
-        })
+        viewModel.getGameSettings().observe(this, modelObserver)
         viewModel.getGameCreatedEvent().observe(this, gameCreatedObserver)
         viewModel.getGameUpdatedEvent().observe(this, gameUpdatedObserver)
 
         arguments?.getLong(ARG_GAME_ID)?.let {
             viewModel.loadGame(it)
-        }
+        } ?: viewModel.initializeGame()
     }
 
     fun updateForNewPlayers(playerIds: List<Long>) {
         viewModel.updateForNewPlayers(playerIds)
     }
 
-    // TODO: Handle swipe to remove a player
-    private fun createItemTouchHelperCallback(): ItemTouchHelper.Callback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
-        override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
-        ): Boolean {
-            viewModel.movePlayer(viewHolder.adapterPosition, target.adapterPosition)
-            return true
+    private fun renderSettings(settings: SimpleGame?) {
+        if (settings == null) {
+            return // TODO: Show loading spinner
         }
+        toolbar.menu.findItem(R.id.actionSave).isEnabled = settings.name.isNotBlank() && settings.players.isNotEmpty()
 
-        override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-            super.onSelectedChanged(viewHolder, actionState)
-            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-                (viewHolder as? PlayerSelectionListener)?.onSelected()
-            }
+        val players = settings.players.map {
+            PlayerState(
+                it,
+                it.id == settings.initialDealerId,
+                settings.hasDealer && settings.id == 0L // Don't show dealer for games that have started
+            )
         }
+        (playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
 
-        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-            super.clearView(recyclerView, viewHolder)
+        hasDealerCheckbox.isCheckedSafe(settings.hasDealer, hasDealerListener)
 
-            (viewHolder as? PlayerSelectionListener)?.onCleared()
+        // Update game name unless it has focus (being edited)
+        if (!gameNameEdit.hasFocus()) {
+            gameNameEdit.removeTextChangedListener(nameTextWatcher)
+            gameNameEdit.setText(settings.name)
+            gameNameEdit.addTextChangedListener(nameTextWatcher)
         }
-
-        // TODO: Handle swipe to remove a player
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
     }
+
+    // TODO: Handle swipe to remove a player
+    private fun createItemTouchHelperCallback(): ItemTouchHelper.Callback =
+        object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                viewModel.movePlayer(viewHolder.adapterPosition, target.adapterPosition)
+                return true
+            }
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+                if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+                    (viewHolder as? PlayerSelectionListener)?.onSelected()
+                }
+            }
+
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+
+                (viewHolder as? PlayerSelectionListener)?.onCleared()
+            }
+
+            // TODO: Handle swipe to remove a player
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
+        }
 
     companion object {
         private const val ARG_GAME_ID = "game_id"
@@ -180,7 +215,8 @@ private class PlayerDiffCallback : DiffUtil.ItemCallback<PlayerState>() {
     override fun areContentsTheSame(oldItem: PlayerState, newItem: PlayerState) = oldItem == newItem
 }
 
-private class PlayersAdapter(private val callback: PlayerAdapterCallback) : ListAdapter<PlayerState, PlayerViewHolder>(PlayerDiffCallback()) {
+private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
+    ListAdapter<PlayerState, PlayerViewHolder>(PlayerDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.holder_game_create_player, parent, false)
         return PlayerViewHolder(view, callback)
@@ -191,9 +227,10 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) : List
     }
 }
 
-private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallback) : RecyclerView.ViewHolder(itemView), PlayerSelectionListener {
+private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallback) : RecyclerView.ViewHolder(itemView),
+    PlayerSelectionListener {
     fun bind(state: PlayerState) {
-        with (itemView) {
+        with(itemView) {
             playerNameHolder.text = state.player.name
             playerDealerLabel.visibility = if (state.showDealer && state.isDealer) View.VISIBLE else View.GONE
             playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE

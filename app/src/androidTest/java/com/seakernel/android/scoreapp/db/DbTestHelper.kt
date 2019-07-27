@@ -49,7 +49,7 @@ class DbTestHelper {
 
     companion object {
 
-        private fun now(): String {
+        fun now(): String {
             return ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER)
         }
 
@@ -66,6 +66,7 @@ class DbTestHelper {
                     "VALUES $userValues")
         }
 
+        @Deprecated("Only used on database versions 3 or less")
         fun insertGamesRaw(n: Int, db: SupportSQLiteDatabase) {
             var gameValues = ""
             repeat(n) {
@@ -83,6 +84,7 @@ class DbTestHelper {
         /**
          * Generates raw data with {@code n} users and games.
          */
+        @Suppress("DEPRECATION")
         @Deprecated("Only used on database versions 2 or less")
         fun generateDataRaw(n: Int, db: SupportSQLiteDatabase) {
             insertUsersRaw(n, db)

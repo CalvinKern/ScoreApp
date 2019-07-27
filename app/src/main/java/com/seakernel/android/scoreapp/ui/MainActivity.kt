@@ -52,9 +52,6 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
 
     override fun onGameUpdated() {
         popBackStackIfFound(GameSetupFragment::class)
-        val fragment =
-            supportFragmentManager.findFragmentByTag(GameFragment::class.java.simpleName) as GameFragment
-        fragment.updateGame()
     }
 
     // Helper Functions
