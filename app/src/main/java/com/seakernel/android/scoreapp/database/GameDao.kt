@@ -8,7 +8,7 @@ import androidx.room.*
  */
 @Dao
 interface GameDao {
-    @Query("SELECT * FROM ${GameEntity.TABLE_NAME}")
+    @Query("SELECT * FROM ${GameEntity.TABLE_NAME} ORDER BY ${GameEntity.COLUMN_LAST_PLAYED} DESC")
     fun getAll(): List<GameEntity>
 
     @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID} IN (:gameIds)")
