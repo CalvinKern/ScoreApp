@@ -217,6 +217,11 @@ private class PlayerDiffCallback : DiffUtil.ItemCallback<PlayerState>() {
 
 private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
     ListAdapter<PlayerState, PlayerViewHolder>(PlayerDiffCallback()) {
+
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.holder_game_create_player, parent, false)
         return PlayerViewHolder(view, callback)
@@ -224,6 +229,10 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).player.id
     }
 }
 
