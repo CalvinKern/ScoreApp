@@ -1,6 +1,7 @@
 package com.seakernel.android.scoreapp.game
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
@@ -80,14 +81,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     }
 
     private fun setupHeaderAndFooter(players: List<Player>) {
-        totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
-        nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
+        if ((totalsRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
+            totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
+        }
+        if ((nameRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
+            nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
+        }
 
-        // Only set the name adapter, that will never be changed. Scores need to update every score update
-        nameRow.adapter = PlayersAdapter(players)
-
-        totalsRow.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        nameRow.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        nameRow.swapAdapter(PlayersAdapter(players), false)
     }
 
     override fun onResume() {
@@ -109,10 +110,19 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 toolbar.title = model.settings.name
 
                 if (model.settings.players.isNotEmpty()) {
-                    if ((scoreRows.layoutManager as? GridLayoutManager)?.spanCount != model.settings.players.size) {
-                        scoreRows.layoutManager = GridLayoutManager(requireContext(), model.settings.players.size)
-                    }
                     setupHeaderAndFooter(model.settings.players)
+
+                    val spanCount = model.settings.players.size
+                    var manager = scoreRows.layoutManager as? GridLayoutManager
+                    if (manager?.spanCount != model.settings.players.size) {
+                        // Reset the layout manager if the number of players has changed
+                        manager = GridLayoutManager(requireContext(), spanCount)
+                        scoreRows.layoutManager = manager
+                    }
+                    manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int) =
+                            if (position == (model.rounds.size * spanCount)) spanCount else 1
+                    }
                 }
                 scoreRows.swapAdapter(GameScoreAdapter(model.settings.hasDealer, model.rounds, eventConsumer), false)
                 totalsRow.swapAdapter(TotalsAdapter(model.rounds), false)

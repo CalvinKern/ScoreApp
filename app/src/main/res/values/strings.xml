@@ -19,6 +19,9 @@
     <string name="pickPlayers">Pick Players</string>
     <string name="playerIcon">Player Icon</string>
 
+    <!--Game Screen-->
+    <string name="addRound">Add Round</string>
+
     <!--Player dialog-->
     <string name="playerName">Player Name</string>
 

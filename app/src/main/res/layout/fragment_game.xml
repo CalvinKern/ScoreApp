@@ -19,12 +19,28 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/nameRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:overScrollMode="never"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:spanCount="4"
+        tools:itemCount="4"
+        tools:listitem="@layout/holder_score_row_header"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scoreRows"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/nameRow"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/totalsRow"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintVertical_bias="0"
@@ -35,24 +51,15 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/nameRow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:spanCount="4"
-        tools:itemCount="4"
-        tools:listitem="@layout/holder_score_row_header"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/totalsRow"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/scoreRows"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:overScrollMode="never"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:spanCount="4"
         tools:itemCount="4"

@@ -1,18 +1,22 @@
 package com.seakernel.android.scoreapp.game
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
+import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.holder_score_row_data.view.*
 import kotlinx.android.synthetic.main.holder_score_row_header.view.*
+import java.security.InvalidParameterException
 
 /**
  * Created by Calvin on 12/21/18.
@@ -24,26 +28,49 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
         setHasStableIds(true)
     }
 
-    override fun getItemCount(): Int = (rounds.count() * playerCount())
+    override fun getItemCount(): Int = (rounds.count() * playerCount()) + 1 // add round button
 
-    override fun getItemId(position: Int): Long = rounds[toRoundIndex(position)].scores[toScoreIndex(position)].id
+    override fun getItemId(position: Int): Long =
+        if (isAddRoundPosition(position)) Long.MAX_VALUE else rounds[toRoundIndex(position)].scores[toScoreIndex(position)].id
+
+    override fun getItemViewType(position: Int): Int {
+        return if (isAddRoundPosition(position)) VIEW_TYPE_ROUND_ADD else VIEW_TYPE_SCORE
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ScoreViewHolder(LayoutInflater.from(parent.context).inflate(ScoreViewHolder.RESOURCE_ID, parent, false))
+        return when (viewType) {
+            VIEW_TYPE_SCORE -> ScoreViewHolder(parent)
+            VIEW_TYPE_ROUND_ADD -> AddRoundViewHolder(parent)
+            else -> throw InvalidParameterException("viewType ($viewType) is not supported in the ${GameScoreAdapter::class.java.simpleName}")
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val round = rounds[toRoundIndex(position)]
-        (holder as ScoreViewHolder).bind(hasDealer, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
+        when(getItemViewType(position)) {
+            VIEW_TYPE_SCORE -> {
+                val round = rounds[toRoundIndex(position)]
+                (holder as ScoreViewHolder).bind(hasDealer, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
+            }
+            VIEW_TYPE_ROUND_ADD -> {
+                (holder as AddRoundViewHolder).bind(eventConsumer)
+            }
+        }
     }
 
     // Helper functions
+
+    private fun isAddRoundPosition(position: Int) = position == itemCount - 1
 
     private fun playerCount() = rounds.first().scores.size
 
     private fun toScoreIndex(position: Int) = position % playerCount()
 
     private fun toRoundIndex(position: Int): Int = position / playerCount()
+
+    companion object {
+        private const val VIEW_TYPE_SCORE = 0
+        private const val VIEW_TYPE_ROUND_ADD = 1
+    }
 }
 
 class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<PlayerViewHolder>() {
@@ -85,8 +112,7 @@ class TotalsAdapter(private val rounds: List<Round>) : RecyclerView.Adapter<Scor
         return position.toLong()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder =
-        ScoreViewHolder(LayoutInflater.from(parent.context).inflate(ScoreViewHolder.RESOURCE_ID, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder = ScoreViewHolder(parent)
 
     override fun getItemCount(): Int = totalsMap.size
 
@@ -94,7 +120,6 @@ class TotalsAdapter(private val rounds: List<Round>) : RecyclerView.Adapter<Scor
         val playerId = rounds.first().scores[position].player.id
         holder.bindTotal(totalsMap[playerId] ?: 0, leadPlayerIds.contains(playerId))
     }
-
 }
 
 class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -110,7 +135,16 @@ class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 }
 
-class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holder_round_add) {
+
+    fun bind(eventConsumer: Consumer<GameEvent>?) {
+        itemView.setOnClickListener {
+            eventConsumer?.accept(GameEvent.RequestCreateRound)
+        }
+    }
+}
+
+class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holder_score_row_data) {
 
     private val scoreHolder: EditText by lazy { itemView.playerScore }
 
@@ -134,11 +168,9 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             scoreHolder.setText(score.value.toString())
         }
         scoreHolder.isEnabled = true
-        scoreHolder.isFocusableInTouchMode = true
+        scoreHolder.isFocusable = true
         scoreHolder.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                addRound(eventConsumer, rounds, round)
-            } else {
+            if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
             }
         }
@@ -147,7 +179,6 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bindTotal(score: Int, isLeader: Boolean) {
         scoreHolder.isEnabled = false
         scoreHolder.isFocusable = false
-        scoreHolder.isFocusableInTouchMode = false
 
         if (isLeader) {
             scoreHolder.setBackgroundResource(R.color.winnerGreen)
@@ -174,16 +205,5 @@ class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 score.metadata
             )
         )
-    }
-
-    private fun addRound(eventConsumer: Consumer<GameEvent>?, rounds: List<Round>, round: Round) {
-        if (rounds.indexOf(round) == rounds.size - 1) {
-            // Add a new round if they just added a new score to the last round
-            eventConsumer?.accept(GameEvent.RequestCreateRound)
-        }
-    }
-
-    companion object {
-        const val RESOURCE_ID = R.layout.holder_score_row_data
     }
 }
