@@ -1,12 +1,10 @@
 package com.seakernel.android.scoreapp.game
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
@@ -61,7 +59,7 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
 
     private fun isAddRoundPosition(position: Int) = position == itemCount - 1
 
-    private fun playerCount() = rounds.first().scores.size
+    private fun playerCount() = rounds.firstOrNull()?.scores?.size ?: 0
 
     private fun toScoreIndex(position: Int) = position % playerCount()
 

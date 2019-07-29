@@ -20,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addRoundLabel"
         app:layout_constraintHorizontal_chainStyle="packed"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_add_black"
         android:tint="@color/white"
         />

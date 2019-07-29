@@ -1,11 +1,9 @@
 package com.seakernel.android.scoreapp.game
 
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.repository.GameRepository
@@ -109,22 +107,35 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             override fun accept(model: GameModel) {
                 toolbar.title = model.settings.name
 
+                var manager = scoreRows.layoutManager as? GridLayoutManager
+                val oldSpanCount = manager?.spanCount
                 if (model.settings.players.isNotEmpty()) {
                     setupHeaderAndFooter(model.settings.players)
 
                     val spanCount = model.settings.players.size
-                    var manager = scoreRows.layoutManager as? GridLayoutManager
-                    if (manager?.spanCount != model.settings.players.size) {
+                    if (oldSpanCount != spanCount) {
                         // Reset the layout manager if the number of players has changed
                         manager = GridLayoutManager(requireContext(), spanCount)
                         scoreRows.layoutManager = manager
                     }
-                    manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    manager?.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int) =
                             if (position == (model.rounds.size * spanCount)) spanCount else 1
                     }
                 }
+
+                // If count is not empty (account for empty with add round row), and new count is greater (added a row)
+                val oldCount = scoreRows.adapter?.itemCount ?: 0
                 scoreRows.swapAdapter(GameScoreAdapter(model.settings.hasDealer, model.rounds, eventConsumer), false)
+                val newCount = scoreRows.adapter!!.itemCount
+                @Suppress("ConvertTwoComparisonsToRangeCheck") // Seems much less efficient than a range and doesn't help readability in this situation
+                if (oldCount > 1 && oldCount < newCount && oldSpanCount == model.settings.players.size) {
+                    // When a new round is being inserted, scroll to the bottom and request focus to remove focus from the text view.
+                    // This allows us to record a score when a new round is being inserted, without the user having to press the 'next' button.
+                    scoreRows.scrollToPosition(newCount - 1)
+                    totalsRow.requestFocus()
+                }
+
                 totalsRow.swapAdapter(TotalsAdapter(model.rounds), false)
             }
 
