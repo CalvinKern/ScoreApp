@@ -133,7 +133,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     // When a new round is being inserted, scroll to the bottom and request focus to remove focus from the text view.
                     // This allows us to record a score when a new round is being inserted, without the user having to press the 'next' button.
                     scoreRows.scrollToPosition(newCount - 1)
-                    totalsRow.requestFocus()
+                    scoreRows.focusedChild?.clearFocus()
                 }
 
                 totalsRow.swapAdapter(TotalsAdapter(model.rounds), false)
