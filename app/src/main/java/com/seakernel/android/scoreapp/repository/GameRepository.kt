@@ -68,7 +68,7 @@ class GameRepository(val context: Context) {
         rounds.forEach { fullRound ->
             // Update old rounds to add players
             roundRepository.insertScores(*newPlayers.map {
-                ScoreEntity(0, it.playerId, fullRound.round.id, 0, "")
+                ScoreEntity(0, it.playerId, fullRound.round.id, 0.0, "")
             }.toTypedArray())
             // Remove scores from players not in the game anymore
             removedPlayers.forEach { playerId ->

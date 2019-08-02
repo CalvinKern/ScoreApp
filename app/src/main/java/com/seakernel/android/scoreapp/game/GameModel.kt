@@ -18,7 +18,7 @@ sealed class GameEvent {
     data class RequestSaveRound(val round: Round) : GameEvent()
     data class Loaded(val game: FullGame) : GameEvent()
     data class RoundSaved(val round: Round) : GameEvent()
-    data class UpdateScore(val roundId: Long, val playerId: Long, val score: Int, val metadata: String) : GameEvent()
+    data class UpdateScore(val roundId: Long, val playerId: Long, val score: Double, val metadata: String) : GameEvent()
 }
 
 sealed class GameEffect {

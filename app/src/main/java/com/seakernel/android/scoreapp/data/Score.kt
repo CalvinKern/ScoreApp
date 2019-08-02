@@ -6,5 +6,5 @@ package com.seakernel.android.scoreapp.data
  */
 data class Score(val id: Long = 0,
                  val player: Player = Player(),
-                 val value: Int = 0,
+                 val value: Double = 0.0,
                  val metadata: String = "")

@@ -53,6 +53,57 @@ class DbTestHelper {
             return ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER)
         }
 
+        fun generateGameData(version: Int, db: SupportSQLiteDatabase) {
+            val testN = 1
+            when(version) {
+                4 -> {
+                    insertGamesV4(testN, db)
+                    insertUsersRaw(testN, db)
+                    insertGamePlayersV4(testN, db)
+                    insertScoresV4(version, testN, db)
+                }
+            }
+        }
+
+        private fun insertScoresV4(score: Int, n: Int, db: SupportSQLiteDatabase) {
+            val rounds = List(n) { "($it, $it, 0, 0)" }.joinToString(",")
+            db.execSQL("INSERT INTO ${RoundEntity.TABLE_NAME} " +
+                "(${RoundEntity.COLUMN_ID}, ${RoundEntity.COLUMN_ROUND_NUMBER}, ${RoundEntity.COLUMN_GAME_ID}, ${RoundEntity.COLUMN_DEALER_ID}) " +
+                "VALUES $rounds")
+
+            val scores = List(n) { "($it, 0, 0, $score, '')" }.joinToString(",")
+            db.execSQL("INSERT INTO ${ScoreEntity.TABLE_NAME} " +
+                "(${ScoreEntity.COLUMN_ID}, ${ScoreEntity.COLUMN_ROUND_ID}, ${ScoreEntity.COLUMN_PLAYER_ID}, ${ScoreEntity.COLUMN_SCORE}, ${ScoreEntity.COLUMN_SCORE_DATA}) " +
+                "VALUES $scores")
+        }
+
+        private fun insertGamePlayersV4(n: Int, db: SupportSQLiteDatabase) {
+            var gamePlayers = ""
+            repeat(n) {
+                gamePlayers = gamePlayers.plus("(0, $it, $it)")
+                if (it < n - 1) {
+                    gamePlayers = gamePlayers.plus(", ")
+                }
+            }
+            db.execSQL("INSERT INTO ${GamePlayerJoin.TABLE_NAME} " +
+                "(${GamePlayerJoin.COLUMN_GAME_ID}, ${GamePlayerJoin.COLUMN_PLAYER_ID}, ${GamePlayerJoin.COLUMN_PLAYER_POSITION}) " +
+                "VALUES $gamePlayers")
+        }
+
+        private fun insertGamesV4(n: Int, db: SupportSQLiteDatabase) {
+            var gameValues = ""
+            repeat(n) {
+                gameValues = gameValues.plus("($it, \"SimpleGame $it\", \"${now()}\", 1)")
+                if (it < n - 1) {
+                    gameValues = gameValues.plus(", ")
+                }
+            }
+
+            db.execSQL("INSERT INTO ${GameEntity.TABLE_NAME} " +
+                "(${GameEntity.COLUMN_ID}, ${GameEntity.COLUMN_NAME}, ${GameEntity.COLUMN_LAST_PLAYED}, ${GameEntity.COLUMN_HAS_DEALER}) " +
+                "VALUES $gameValues")
+        }
+
         fun insertUsersRaw(n: Int, db: SupportSQLiteDatabase) {
             var userValues = ""
             repeat(n) {

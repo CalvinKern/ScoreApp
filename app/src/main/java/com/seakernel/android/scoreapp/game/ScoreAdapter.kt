@@ -15,6 +15,7 @@ import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.holder_score_row_data.view.*
 import kotlinx.android.synthetic.main.holder_score_row_header.view.*
 import java.security.InvalidParameterException
+import java.text.DecimalFormat
 
 /**
  * Created by Calvin on 12/21/18.
@@ -86,18 +87,18 @@ class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<P
 
 class TotalsAdapter(private val rounds: List<Round>) : RecyclerView.Adapter<ScoreViewHolder>() {
     private val leadPlayerIds: ArrayList<Long> = arrayListOf()
-    private val totalsMap: HashMap<Long, Int> = HashMap(rounds.size) // PlayerID to total
+    private val totalsMap: HashMap<Long, Double> = HashMap(rounds.size) // PlayerID to total
 
     init {
         setHasStableIds(true)
 
         rounds.forEach { round ->
             round.scores.forEach { score ->
-                totalsMap[score.player.id] = (totalsMap[score.player.id] ?: 0) + score.value
+                totalsMap[score.player.id] = (totalsMap[score.player.id] ?: 0.0) + score.value
             }
         }
 
-        var leadScore = 0
+        var leadScore = 0.0
         totalsMap.forEach {
             if (leadScore > it.value) return@forEach
             if (leadScore < it.value) leadPlayerIds.clear()
@@ -116,7 +117,7 @@ class TotalsAdapter(private val rounds: List<Round>) : RecyclerView.Adapter<Scor
 
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
         val playerId = rounds.first().scores[position].player.id
-        holder.bindTotal(totalsMap[playerId] ?: 0, leadPlayerIds.contains(playerId))
+        holder.bindTotal(totalsMap[playerId] ?: 0.0, leadPlayerIds.contains(playerId))
     }
 }
 
@@ -163,7 +164,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         }
         if (!scoreHolder.hasFocus()) {
             // Hack to get score view to stay selected on next focus after an update occurs
-            scoreHolder.setText(score.value.toString())
+            scoreHolder.setText(formatScore(score.value))
         }
         scoreHolder.isEnabled = true
         scoreHolder.isFocusable = true
@@ -174,7 +175,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         }
     }
 
-    fun bindTotal(score: Int, isLeader: Boolean) {
+    fun bindTotal(score: Double, isLeader: Boolean) {
         scoreHolder.isEnabled = false
         scoreHolder.isFocusable = false
 
@@ -183,15 +184,17 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         } else {
             scoreHolder.setBackgroundResource(R.color.black)
         }
-        scoreHolder.setText(score.toString())
+        scoreHolder.setText(formatScore(score))
         scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.white))
     }
 
+    private fun formatScore(score: Double) = DecimalFormat("#.##").format(score)
+
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         val updatedScore = if (scoreHolder.text.isNotBlank()) {
-            scoreHolder.text.toString().toInt()
+            scoreHolder.text.toString().toDouble()
         } else {
-            0
+            0.0
         }
 
         // Update the score

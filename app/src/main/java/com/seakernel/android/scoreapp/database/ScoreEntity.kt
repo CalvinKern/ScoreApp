@@ -29,7 +29,7 @@ data class ScoreEntity(
     @ColumnInfo(name = COLUMN_ID) var id: Long,
     @ColumnInfo(name = COLUMN_PLAYER_ID) var playerId: Long,
     @ColumnInfo(name = COLUMN_ROUND_ID) var roundId: Long,
-    @ColumnInfo(name = COLUMN_SCORE) var score: Int,
+    @ColumnInfo(name = COLUMN_SCORE) var score: Double,
     @ColumnInfo(name = COLUMN_SCORE_DATA) var scoreData: String
 ) {
     companion object {
