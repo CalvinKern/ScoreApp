@@ -22,17 +22,29 @@ data class SimpleGame(
     val maxRounds: Int? = null
 ) {
 
+    constructor(settings: GameEntity, players: List<Player>) : this(
+        id = settings.uid,
+        name = settings.name,
+        lastPlayed = ZonedDateTime.parse(settings.date),
+        players = players,
+        hasDealer = settings.hasDealer,
+        showRounds = settings.showRounds,
+        reversedScoring = settings.reversedScoring,
+        maxScore = settings.maxScore,
+        maxRounds = settings.maxRounds
+    )
+
     val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
 
     fun toGameEntity() = GameEntity(
-        id ?: 0,
-        name,
-        ZonedDateTime.now().format(DATE_FORMATTER),
-        hasDealer,
-        showRounds,
-        reversedScoring,
-        maxScore,
-        maxRounds
+        uid = id ?: 0,
+        name = name,
+        date = ZonedDateTime.now().format(DATE_FORMATTER),
+        hasDealer = hasDealer,
+        showRounds = showRounds,
+        reversedScoring = reversedScoring,
+        maxScore = maxScore,
+        maxRounds = maxRounds
     )
 
     companion object {

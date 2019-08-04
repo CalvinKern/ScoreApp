@@ -88,7 +88,7 @@ class GameRepository(val context: Context) {
     }
 
     private fun convertToGame(game: GameEntity): SimpleGame {
-        return SimpleGame(game.uid, game.name, ZonedDateTime.parse(game.date), loadPlayers(game.uid), hasDealer = game.hasDealer)
+        return SimpleGame(game, loadPlayers(game.uid))
     }
 
     private fun getPlayerJoins(settings: SimpleGame) = settings.players.mapIndexed { index, player ->
