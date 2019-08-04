@@ -5,7 +5,7 @@ package com.seakernel.android.scoreapp.data
  * Copyright © 2019 SeaKernel. All rights reserved.
  */
 data class Round(
-    val id: Long = 0,
+    val id: Long? = null,
     val dealer: Player? = null,
     val number: Int = 0,
     val scores: List<Score> = emptyList()

@@ -204,7 +204,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         // Update the score
         eventConsumer?.accept(
             GameEvent.UpdateScore(
-                round.id,
+                round.id!!,
                 score.player.id,
                 updatedScore,
                 score.metadata

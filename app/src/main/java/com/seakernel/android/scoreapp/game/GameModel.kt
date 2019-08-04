@@ -49,7 +49,7 @@ data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<R
                         GameEffect.SaveRound(
                             model.settings.id!!,
                             Round(
-                                0,
+                                null,
                                 lastRound.scores[(lastRound.scores.indexOfFirst { it.player == lastRound.dealer } + 1) % lastRound.scores.size].player,
                                 lastRound.number + 1,
                                 lastRound.scores.map { Score(player = it.player) }

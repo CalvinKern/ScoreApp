@@ -40,7 +40,7 @@ class GameRepository(val context: Context) {
         val round = List(settings.players.size) {
             Score(player = Player(settings.players[it].id))
         }
-        RoundRepository(context).addOrUpdateRound(id, Round(0, dealer, 0, round))
+        RoundRepository(context).addOrUpdateRound(id, Round(null, dealer, 0, round))
         return id
     }
 

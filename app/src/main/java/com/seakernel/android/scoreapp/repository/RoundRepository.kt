@@ -14,7 +14,7 @@ class RoundRepository(val context: Context) {
     private val roundDao = AppDatabase.getInstance(context).roundDao()
 
     fun addOrUpdateRound(gameId: Long, round: Round): Round {
-        return if (round.id == 0L) { // treat 0 as not-set while inserting items
+        return if (round.id == null) {
             createRound(gameId, round)
         } else {
             updateRound(gameId, round)
@@ -25,7 +25,7 @@ class RoundRepository(val context: Context) {
     }
 
     private fun updateRound(gameId: Long, round: Round): Round {
-        roundDao.update(RoundEntity(round.id, gameId, round.dealer?.id ?: 0, round.number))
+        roundDao.update(RoundEntity(round.id!!, gameId, round.dealer?.id ?: 0, round.number))
         roundDao.update(*round.scores.map {
             ScoreEntity(it.id, it.player.id, round.id, it.value, it.metadata)
         }.toTypedArray())
