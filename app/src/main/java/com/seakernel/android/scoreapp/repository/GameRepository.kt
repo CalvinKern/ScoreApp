@@ -31,7 +31,7 @@ class GameRepository(val context: Context) {
      * @return newly created game id
      */
     fun createGame(settings: SimpleGame): Long {
-        val game = GameEntity(0, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER), settings.hasDealer)
+        val game = settings.toGameEntity()
         val id = gameDao.insertAll(game)[0]
         gamePlayerDao.insertAll(*getPlayerJoins(settings.copy(id = id)))
 
@@ -46,7 +46,7 @@ class GameRepository(val context: Context) {
 
     fun updateGame(settings: SimpleGame) {
         val originalPlayerIds = gamePlayerDao.getPlayersForGame(settings.id).map { it.uid }
-        val game = GameEntity(settings.id, settings.name, ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER), settings.hasDealer)
+        val game = settings.toGameEntity()
         gameDao.update(game)
 
         // Remove players not in the new game

@@ -14,7 +14,11 @@ data class GameEntity(
     @ColumnInfo(name = COLUMN_ID, index = true) var uid: Long,
     @ColumnInfo(name = COLUMN_NAME) var name: String,
     @ColumnInfo(name = COLUMN_LAST_PLAYED) var date: String,
-    @ColumnInfo(name = COLUMN_HAS_DEALER) var hasDealer: Boolean
+    @ColumnInfo(name = COLUMN_HAS_DEALER) var hasDealer: Boolean,
+    @ColumnInfo(name = COLUMN_SHOW_ROUNDS) var showRounds: Boolean,
+    @ColumnInfo(name = COLUMN_REVERSED_SCORING) var reversedScoring: Boolean,
+    @ColumnInfo(name = COLUMN_MAX_SCORE) var maxScore: Double?,
+    @ColumnInfo(name = COLUMN_MAX_ROUNDS) var maxRounds: Int?
 ) {
     companion object {
         const val TABLE_NAME = "games"
@@ -22,5 +26,9 @@ data class GameEntity(
         const val COLUMN_NAME = "name"
         const val COLUMN_LAST_PLAYED = "date"
         const val COLUMN_HAS_DEALER = "hasDealer"
+        const val COLUMN_SHOW_ROUNDS = "showRounds"
+        const val COLUMN_REVERSED_SCORING = "reversedScoring"
+        const val COLUMN_MAX_SCORE = "maxScore"
+        const val COLUMN_MAX_ROUNDS = "maxRounds"
     }
 }

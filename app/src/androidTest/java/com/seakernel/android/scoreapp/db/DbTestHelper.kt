@@ -55,13 +55,11 @@ class DbTestHelper {
 
         fun generateGameData(version: Int, db: SupportSQLiteDatabase) {
             val testN = 1
-            when(version) {
-                4 -> {
-                    insertGamesV4(testN, db)
-                    insertUsersRaw(testN, db)
-                    insertGamePlayersV4(testN, db)
-                    insertScoresV4(version, testN, db)
-                }
+            if (version >= 4) {
+                insertGamesV4(testN, db)
+                insertUsersRaw(testN, db)
+                insertGamePlayersV4(testN, db)
+                insertScoresV4(version, testN, db)
             }
         }
 
