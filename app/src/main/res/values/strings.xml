@@ -14,6 +14,7 @@
     <string name="gameNameHint">Game Name</string>
     <string name="playersHeader">Players</string>
     <string name="dealerLabel">Dealer</string>
+    <string name="reversedScoringLabel">Reverse Scoring (lowest score wins)</string>
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>

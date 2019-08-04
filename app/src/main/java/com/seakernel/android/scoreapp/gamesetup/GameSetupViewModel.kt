@@ -48,6 +48,11 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         gameSettings.value = gameSettings.value!!.copy(hasDealer = hasDealer)
     }
 
+    @MainThread
+    fun setReverseScoring(reverseScoring: Boolean) {
+        gameSettings.value = gameSettings.value!!.copy(reversedScoring = reverseScoring)
+    }
+
     fun saveGame() {
         val settings = gameSettings.value ?: SimpleGame()
 

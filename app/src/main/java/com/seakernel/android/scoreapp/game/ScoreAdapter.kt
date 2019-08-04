@@ -85,7 +85,7 @@ class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<P
     }
 }
 
-class TotalsAdapter(private val rounds: List<Round>) : RecyclerView.Adapter<ScoreViewHolder>() {
+class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: List<Round>) : RecyclerView.Adapter<ScoreViewHolder>() {
     private val leadPlayerIds: ArrayList<Long> = arrayListOf()
     private val totalsMap: HashMap<Long, Double> = HashMap(rounds.size) // PlayerID to total
 
@@ -98,10 +98,14 @@ class TotalsAdapter(private val rounds: List<Round>) : RecyclerView.Adapter<Scor
             }
         }
 
-        var leadScore = 0.0
+        var leadScore: Double? = null
         totalsMap.forEach {
-            if (leadScore > it.value) return@forEach
-            if (leadScore < it.value) leadPlayerIds.clear()
+            if (leadScore != null && leadScore!! > it.value) {
+                if (reversedScoring) leadPlayerIds.clear() else return@forEach
+            }
+            if (leadScore != null && leadScore!! < it.value) {
+                if (reversedScoring) return@forEach else leadPlayerIds.clear()
+            }
             leadPlayerIds.add(it.key)
             leadScore = it.value
         }

@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="@string/gameNameHint"
@@ -58,13 +59,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/gameNameEditLayout"
-                app:layout_constraintBottom_toTopOf="@id/playersHeaderEdit"
+                app:layout_constraintBottom_toTopOf="@id/reversedScoringCheckbox"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/dealerLabel"
+                />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/reversedScoringCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hasDealerCheckbox"
+                app:layout_constraintBottom_toTopOf="@id/playersHeaderEdit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/reversedScoringLabel"
                 />
 
             <TextView
@@ -82,7 +97,7 @@
                 android:id="@+id/playersHeaderEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/hasDealerCheckbox"
+                app:layout_constraintTop_toBottomOf="@id/reversedScoringCheckbox"
                 app:layout_constraintEnd_toEndOf="@id/gameNameEditLayout"
                 android:minWidth="@dimen/min_touch_size"
                 android:minHeight="@dimen/min_touch_size"

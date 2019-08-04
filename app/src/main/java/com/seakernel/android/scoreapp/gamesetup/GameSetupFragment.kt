@@ -31,6 +31,7 @@ class GameSetupFragment : Fragment() {
     private var listener: GameSetupListener? = null
     private var nameTextWatcher: TextWatcher? = null
     private var hasDealerListener: CompoundButton.OnCheckedChangeListener? = null
+    private var reversedScoringListener: CompoundButton.OnCheckedChangeListener? = null
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
@@ -59,6 +60,7 @@ class GameSetupFragment : Fragment() {
 
         playersHeaderEdit?.setOnClickListener(null)
         hasDealerCheckbox?.setOnCheckedChangeListener(null)
+        reversedScoringCheckbox?.setOnCheckedChangeListener(null)
         gameNameEdit?.removeTextChangedListener(nameTextWatcher)
 
         viewModel.getGameSettings().removeObserver(modelObserver)
@@ -108,7 +110,12 @@ class GameSetupFragment : Fragment() {
         hasDealerListener = CompoundButton.OnCheckedChangeListener { _, checked ->
             viewModel.setHasDealer(checked)
         }
+        reversedScoringListener = CompoundButton.OnCheckedChangeListener { _, checked ->
+            viewModel.setReverseScoring(checked)
+        }
+
         hasDealerCheckbox.setOnCheckedChangeListener(hasDealerListener)
+        reversedScoringCheckbox.setOnCheckedChangeListener(reversedScoringListener)
 
         // Start observing the data
         viewModel.getGameSettings().observe(this, modelObserver)
@@ -140,6 +147,7 @@ class GameSetupFragment : Fragment() {
         (playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
 
         hasDealerCheckbox.isCheckedSafe(settings.hasDealer, hasDealerListener)
+        reversedScoringCheckbox.isCheckedSafe(settings.reversedScoring, reversedScoringListener)
 
         // Update game name unless it has focus (being edited)
         if (!gameNameEdit.hasFocus()) {

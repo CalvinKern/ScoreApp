@@ -136,7 +136,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     scoreRows.focusedChild?.clearFocus()
                 }
 
-                totalsRow.swapAdapter(TotalsAdapter(model.rounds), false)
+                totalsRow.swapAdapter(TotalsAdapter(model.settings.reversedScoring, model.rounds), false)
             }
 
             override fun dispose() {}
