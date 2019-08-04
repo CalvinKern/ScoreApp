@@ -15,6 +15,7 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game.*
+import android.widget.EditText
 
 /**
  * Created by Calvin on 12/21/18.
@@ -133,7 +134,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     // When a new round is being inserted, scroll to the bottom and request focus to remove focus from the text view.
                     // This allows us to record a score when a new round is being inserted, without the user having to press the 'next' button.
                     scoreRows.scrollToPosition(newCount - 1)
-                    scoreRows.focusedChild?.clearFocus()
+
+                    scoreRows.focusedChild?.let {
+                        // Reset the focus so we save the current round TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
+                        it.clearFocus()
+                        it.requestFocus()
+                        (it as? EditText)?.setSelection(it.text.length)
+                    }
                 }
 
                 totalsRow.swapAdapter(TotalsAdapter(model.settings.reversedScoring, model.rounds), false)
