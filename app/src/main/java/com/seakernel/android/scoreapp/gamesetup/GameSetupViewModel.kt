@@ -52,7 +52,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         val settings = gameSettings.value ?: SimpleGame()
 
         scope.launch {
-            if (settings.id != 0L) {
+            if (settings.id != null) {
                 gameRepository.updateGame(settings)
                 gameUpdatedEvent.safePostValue(settings.id)
             } else {

@@ -39,7 +39,7 @@ data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<R
                 is GameEvent.RequestLoad -> Next.dispatch(Effects.effects(GameEffect.FetchData))
                 is GameEvent.RequestSaveRound -> Next.dispatch(Effects.effects(
                     GameEffect.SaveRound(
-                        model.settings.id,
+                        model.settings.id!!,
                         event.round
                     )
                 ))
@@ -47,7 +47,7 @@ data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<R
                     val lastRound = model.rounds.last()
                     Next.dispatch(Effects.effects(
                         GameEffect.SaveRound(
-                            model.settings.id,
+                            model.settings.id!!,
                             Round(
                                 0,
                                 lastRound.scores[(lastRound.scores.indexOfFirst { it.player == lastRound.dealer } + 1) % lastRound.scores.size].player,
@@ -73,7 +73,7 @@ data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<R
                     val round = rounds.first { it.id == event.roundId }
                     val scores = round.scores.map { if (it.player.id == event.playerId) it.copy(value = event.score, metadata = event.metadata) else it }
 
-                    Next.dispatch(Effects.effects(GameEffect.SaveRound(model.settings.id, round.copy(scores = scores))))
+                    Next.dispatch(Effects.effects(GameEffect.SaveRound(model.settings.id!!, round.copy(scores = scores))))
                 }
             }
         }

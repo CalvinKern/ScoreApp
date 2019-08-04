@@ -10,7 +10,7 @@ import org.threeten.bp.format.DateTimeFormatter
  */
 // TODO: Rename to GameSettings
 data class SimpleGame(
-    val id: Long = 0,
+    val id: Long? = null,
     val name: String = "",
     val lastPlayed: ZonedDateTime = ZonedDateTime.now(),
     val players: List<Player> = listOf(),
@@ -25,7 +25,7 @@ data class SimpleGame(
     val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
 
     fun toGameEntity() = GameEntity(
-        id,
+        id ?: 0,
         name,
         ZonedDateTime.now().format(DATE_FORMATTER),
         hasDealer,

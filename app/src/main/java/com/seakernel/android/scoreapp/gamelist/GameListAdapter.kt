@@ -35,7 +35,7 @@ class GameListAdapter(private val gameList: List<SimpleGame>, private val eventC
     }
 
     override fun getItemId(position: Int): Long {
-        return gameList[position].id
+        return gameList[position].id!!
     }
 }
 
@@ -50,9 +50,9 @@ class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         dateHolder.text = game.lastPlayedAt
         playersHolder.text = itemView.context.getString(R.string.playersHolder, game.players.size)
 
-        itemView.setOnClickListener { eventConsumer.accept(ListEvent.GameRowClicked(game.id)) }
+        itemView.setOnClickListener { eventConsumer.accept(ListEvent.GameRowClicked(game.id!!)) }
         itemView.setOnLongClickListener {
-            eventConsumer.accept(ListEvent.GameRowLongPressed(game.id))
+            eventConsumer.accept(ListEvent.GameRowLongPressed(game.id!!))
             return@setOnLongClickListener true
         }
     }
