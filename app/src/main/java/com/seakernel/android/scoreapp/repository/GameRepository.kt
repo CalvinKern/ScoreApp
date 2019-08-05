@@ -92,7 +92,7 @@ class GameRepository(val context: Context) {
     }
 
     private fun getPlayerJoins(settings: SimpleGame) = settings.players.mapIndexed { index, player ->
-        GamePlayerJoin(settings.id!!, player.id, index)
+        GamePlayerJoin(settings.id!!, player.id!!, index)
     }.toTypedArray()
 
     private fun convertToRounds(game: SimpleGame, rounds: List<GameDao.FulLRoundEntity>): List<Round> {

@@ -27,7 +27,7 @@ class RoundRepository(val context: Context) {
     private fun updateRound(gameId: Long, round: Round): Round {
         roundDao.update(RoundEntity(round.id!!, gameId, round.dealer?.id ?: 0, round.number))
         roundDao.update(*round.scores.map {
-            ScoreEntity(it.id, it.player.id, round.id, it.value, it.metadata)
+            ScoreEntity(it.id, it.player.id!!, round.id, it.value, it.metadata)
         }.toTypedArray())
         return round.copy()
     }
@@ -37,7 +37,7 @@ class RoundRepository(val context: Context) {
             RoundEntity(0, gameId, round.dealer?.id ?: 0, round.number)
         )[0]
         val scoreIds = roundDao.insertAll(*round.scores.map {
-            ScoreEntity(0, it.player.id, roundId, it.value, it.metadata)
+            ScoreEntity(0, it.player.id!!, roundId, it.value, it.metadata)
         }.toTypedArray())
         return round.copy(
             id = roundId,

@@ -94,7 +94,7 @@ class GameSetupFragment : Fragment() {
 
         // Setup various views
         playersHeaderEdit.setOnClickListener {
-            val ids = viewModel.getGameSettings().value?.players?.map { it.id } ?: emptyList()
+            val ids = viewModel.getGameSettings().value?.players?.mapNotNull { it.id } ?: emptyList()
             listener?.onShowPlayerSelectScreen(ids)
         }
 
@@ -141,7 +141,7 @@ class GameSetupFragment : Fragment() {
             PlayerState(
                 it,
                 it.id == settings.initialDealerId,
-                settings.hasDealer && settings.id == 0L // Don't show dealer for games that have started
+                settings.hasDealer && settings.id == null // Don't show dealer for games that have started
             )
         }
         (playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
@@ -240,7 +240,7 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).player.id
+        return getItem(position).player.id!!
     }
 }
 
@@ -253,7 +253,7 @@ private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallba
             playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE
             playerDealerBox.isChecked = state.isDealer
             playerDealerBox.setOnClickListener {
-                callback.onSelectedDealer(state.player.id)
+                callback.onSelectedDealer(state.player.id!!)
             }
         }
     }

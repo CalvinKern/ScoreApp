@@ -10,7 +10,6 @@ import com.spotify.mobius.Next
 
 sealed class PlayerEvent
 object AddPlayerClicked : PlayerEvent()
-//object StartGameClicked : PlayerEvent()
 object DoneSelectingPlayersClicked : PlayerEvent()
 data class PlayerRowLongClicked(val playerId: Long) : PlayerEvent()
 data class PlayerSelected(val playerId: Long, val selected: Boolean) : PlayerEvent()
@@ -19,13 +18,10 @@ data class PlayerNameChanged(val playerId: Long, val newName: String) : PlayerEv
 data class PlayerDeleteSuccessful(val playerId: Long) : PlayerEvent()
 data class PlayersLoaded(val players: List<Player>) : PlayerEvent()
 object RequestLoad : PlayerEvent()
-//data class GameNameChanged(val gameName: String) : PlayerEvent()
 
 sealed class PlayerEffect
-//data class ShowGameScreen(val gameId: Long) : PlayerEffect()
-//data class SaveGame(val gameId: Long, val playerIds: List<Long>) : PlayerEffect()
 data class DoneSelectingPlayers(val playerIds: List<Long>) : PlayerEffect()
-data class ShowPlayerNameDialog(val playerId: Long, val playerName: String) : PlayerEffect()
+data class ShowPlayerNameDialog(val playerId: Long?, val playerName: String) : PlayerEffect()
 data class ShowDeleteDialog(val playerId: Long, val playerName: String?) : PlayerEffect()
 data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : PlayerEffect()
 object FetchData : PlayerEffect()
@@ -54,7 +50,6 @@ data class CreateModel(
 
         fun update(model: CreateModel, event: PlayerEvent): Next<CreateModel, PlayerEffect> {
             return when (event) {
-//                is GameNameChanged -> Next.next(model.copy(gameName = event.gameName))
                 is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects(DoneSelectingPlayers(model.selectedPlayerList)))
                 is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(
                     FetchData
@@ -62,11 +57,10 @@ data class CreateModel(
                 is PlayersLoaded -> Next.next(model.copy(playerList = event.players))
                 is AddPlayerClicked -> Next.dispatch(Effects.effects(
                     ShowPlayerNameDialog(
-                        0,
+                        null,
                         ""
                     )
                 ))
-//                is StartGameClicked -> Next.dispatch(Effects.effects(SaveGame(model.gameId, model.selectedPlayerList)))
                 is PlayerRowLongClicked -> {
                     val name = model.playerName(event.playerId)
                     Next.dispatch(Effects.effects(

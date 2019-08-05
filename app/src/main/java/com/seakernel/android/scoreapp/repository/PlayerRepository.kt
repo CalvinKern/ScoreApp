@@ -21,8 +21,8 @@ class PlayerRepository(val context: Context) {
         return playerDao.loadAllByIds(ids.toLongArray()).map { Player(it.uid, it.name) }
     }
 
-    fun addOrUpdateUser(playerId: Long, playerName: String): Player {
-        return if (playerId == 0L) { // treat 0 as not-set while inserting the item
+    fun addOrUpdateUser(playerId: Long?, playerName: String): Player {
+        return if (playerId == null) {
             createUser(playerName)
         } else {
             updateUser(playerId, playerName)

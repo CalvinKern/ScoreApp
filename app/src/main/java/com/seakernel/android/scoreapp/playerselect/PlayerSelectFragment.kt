@@ -175,7 +175,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                         playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
                             eventConsumer.accept(
                                 PlayerNameChanged(
-                                    player.id,
+                                    player.id!!,
                                     player.name
                                 )
                             )

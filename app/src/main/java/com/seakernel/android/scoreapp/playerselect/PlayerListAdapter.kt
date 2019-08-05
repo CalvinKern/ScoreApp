@@ -65,7 +65,7 @@ class PlayerListAdapter(private val playerList: List<Player>, private val select
         return if (position == 0) {
             0
         } else {
-            playerList[position - 1].id
+            playerList[position - 1].id!!
         }
     }
 
@@ -89,18 +89,18 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         checkHolder.setOnCheckedChangeListener(null)
         checkHolder.isChecked = isSelected
         checkHolder.setOnCheckedChangeListener { _, selected ->
-            eventConsumer.accept(PlayerSelected(player.id, selected))
+            eventConsumer.accept(PlayerSelected(player.id!!, selected))
         }
 
         itemView.setOnClickListener { eventConsumer.accept(
             PlayerSelected(
-                player.id,
+                player.id!!,
                 !isSelected
             )
         ) }
         itemView.setOnLongClickListener { eventConsumer.accept(
             PlayerRowLongClicked(
-                player.id
+                player.id!!
             )
         ); true }
     }

@@ -94,7 +94,7 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
 
         rounds.forEach { round ->
             round.scores.forEach { score ->
-                totalsMap[score.player.id] = (totalsMap[score.player.id] ?: 0.0) + score.value
+                totalsMap[score.player.id!!] = (totalsMap[score.player.id] ?: 0.0) + score.value
             }
         }
 
@@ -205,7 +205,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         eventConsumer?.accept(
             GameEvent.UpdateScore(
                 round.id!!,
-                score.player.id,
+                score.player.id!!,
                 updatedScore,
                 score.metadata
             )
