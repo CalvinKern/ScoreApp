@@ -1,8 +1,11 @@
 package com.seakernel.android.scoreapp.game
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
@@ -16,6 +19,9 @@ import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game.*
 import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.seakernel.android.scoreapp.data.Round
+import kotlinx.android.synthetic.main.dialog_player_round.view.*
 
 /**
  * Created by Calvin on 12/21/18.
@@ -79,7 +85,10 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onSaveInstanceState(outState) // TODO: Store state
     }
 
-    private fun setupHeaderAndFooter(players: List<Player>) {
+    private fun setupHeaderAndFooter(
+        players: List<Player>,
+        gameId: Long
+    ) {
         if ((totalsRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
             totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
@@ -87,7 +96,17 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
 
-        nameRow.swapAdapter(PlayersAdapter(players), false)
+        val adapter = PlayersAdapter(players, object : PlayerViewHolder.PlayerHolderClickedListener {
+            override fun playerHolderClicked(player: Player) {
+                showRoundNotesDialog(player, gameId)
+            }
+        })
+        nameRow.swapAdapter(adapter, false)
+    }
+
+    private fun showRoundNotesDialog(player: Player, gameId: Long) {
+        val dialog = PlayerRoundNotesDialog(player, gameId)
+        dialog.show(childFragmentManager, PlayerRoundNotesDialog::class.java.simpleName)
     }
 
     override fun onResume() {
@@ -111,7 +130,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 var manager = scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
                 if (model.settings.players.isNotEmpty()) {
-                    setupHeaderAndFooter(model.settings.players)
+                    setupHeaderAndFooter(model.settings.players, model.settings.id!!)
 
                     val spanCount = model.settings.players.size
                     if (oldSpanCount != spanCount) {

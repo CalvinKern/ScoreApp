@@ -40,5 +40,7 @@ data class ScoreEntity(
         const val COLUMN_SCORE = "score"
         const val COLUMN_SCORE_DATA = "score_data"
         const val INDEX_ROUND_ID = "index_${TABLE_NAME}_$COLUMN_ROUND_ID"
+
+        const val fullyQualifiedColumns = "$TABLE_NAME.$COLUMN_ID, $TABLE_NAME.$COLUMN_PLAYER_ID, $TABLE_NAME.$COLUMN_ROUND_ID, $TABLE_NAME.$COLUMN_SCORE, $TABLE_NAME.$COLUMN_SCORE_DATA"
     }
 }

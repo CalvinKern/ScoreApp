@@ -72,7 +72,7 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
     }
 }
 
-class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<PlayerViewHolder>() {
+class PlayersAdapter(private val players: List<Player>, private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
         PlayerViewHolder(LayoutInflater.from(parent.context).inflate(PlayerViewHolder.RESOURCE_ID, parent, false))
 
@@ -81,7 +81,7 @@ class PlayersAdapter(private val players: List<Player>) : RecyclerView.Adapter<P
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        holder.bind(players[position])
+        holder.bind(players[position], playerHolderClickedListener)
     }
 }
 
@@ -127,10 +127,14 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
 
 class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    interface PlayerHolderClickedListener {
+        fun playerHolderClicked(player: Player)
+    }
     private val nameHolder: TextView by lazy { itemView.playerNameHeader }
 
-    fun bind(player: Player) {
+    fun bind(player: Player, clickListener: PlayerHolderClickedListener) {
         nameHolder.text = player.name
+        nameHolder.setOnClickListener { clickListener.playerHolderClicked(player) }
     }
 
     companion object {

@@ -23,6 +23,11 @@
     <!--Game Screen-->
     <string name="addRound">Add Round</string>
 
+    <!--Player Round Dialog-->
+    <string name="playerNotesTitle">Notes for %s</string>
+    <string name="playerRoundNumberFormat">Round %d:</string>
+    <string name="playerRoundNumberHint">Notes</string>
+
     <!--Player dialog-->
     <string name="playerName">Player Name</string>
 

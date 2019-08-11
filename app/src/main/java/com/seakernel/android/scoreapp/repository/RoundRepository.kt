@@ -1,7 +1,9 @@
 package com.seakernel.android.scoreapp.repository
 
 import android.content.Context
+import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
+import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.database.AppDatabase
 import com.seakernel.android.scoreapp.database.RoundEntity
 import com.seakernel.android.scoreapp.database.ScoreEntity
@@ -13,6 +15,33 @@ import com.seakernel.android.scoreapp.database.ScoreEntity
 class RoundRepository(val context: Context) {
     private val roundDao = AppDatabase.getInstance(context).roundDao()
 
+//    fun getNotesForPlayer(player: Player, gameId: Long): List<Round> {
+    fun getNotesForPlayer(player: Player, gameId: Long): List<RoundPlayerNote> {
+        val rounds = roundDao.getNotesForPlayer(player.id!!, gameId)
+        return rounds.map { round ->
+            RoundPlayerNote(
+                roundId = round.score.roundId,
+                roundNumber = round.round_number,
+                score = Score(id = round.score.id, player = player, value = round.score.score, metadata = round.score.scoreData)
+            )
+        }
+//        return rounds.map {
+//            Round(
+//                id = it.round.id,
+//                dealer = null,
+//                number = it.round.roundNumber,
+//                scores = listOf(it.score.let { score ->
+//                    Score(
+//                        id = score.id,
+//                        player = player,
+//                        value = score.score,
+//                        metadata = score.scoreData
+//                    )
+//                })
+//            )
+//        }
+    }
+
     fun addOrUpdateRound(gameId: Long, round: Round): Round {
         return if (round.id == null) {
             createRound(gameId, round)
@@ -22,6 +51,10 @@ class RoundRepository(val context: Context) {
     }
     fun insertScores(vararg scores: ScoreEntity) {
         roundDao.insertAll(*scores)
+    }
+
+    fun updateScores(vararg scores: ScoreEntity) {
+        roundDao.update(*scores)
     }
 
     private fun updateRound(gameId: Long, round: Round): Round {
@@ -53,3 +86,5 @@ class RoundRepository(val context: Context) {
         roundDao.deleteScoreById(id)
     }
 }
+
+data class RoundPlayerNote(val roundId: Long, val roundNumber: Int, val score: Score)
