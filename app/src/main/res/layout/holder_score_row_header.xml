@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/playerNameHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:gravity="center"
     android:background="@color/white"
-    android:maxLines="3"
-    android:ellipsize="end"
-    tools:text="@tools:sample/full_names"
-    />
+    android:gravity="center_horizontal"
+    >
+
+    <TextView
+        android:id="@+id/playerNameHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:maxLines="3"
+        android:padding="8dp"
+        tools:text="@tools:sample/full_names"
+        />
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="24dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_notes_black"
+        android:layout_gravity="center_vertical"
+        android:tint="@color/gray"
+        />
+</LinearLayout>
