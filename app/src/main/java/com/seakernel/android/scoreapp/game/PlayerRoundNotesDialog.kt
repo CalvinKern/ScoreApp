@@ -1,11 +1,11 @@
 package com.seakernel.android.scoreapp.game
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.data.Round
-import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.database.ScoreEntity
 import com.seakernel.android.scoreapp.repository.RoundPlayerNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
@@ -23,6 +21,8 @@ import kotlinx.android.synthetic.main.dialog_player_round.view.*
 import kotlinx.android.synthetic.main.holder_player_round_notes.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 
 class PlayerRoundNotesDialog(private val player: Player, private val gameId: Long) : DialogFragment() {
 
@@ -31,7 +31,8 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
         val view = inflater.inflate(R.layout.dialog_player_round, null, false)
-        view.dialogPlayerRoundRecycler.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
+        view.dialogPlayerRoundRecycler.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
         view.dialogPlayerRoundRecycler.adapter = adapter
 
         GlobalScope.launch {
@@ -49,14 +50,14 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
 
     override fun onResume() {
         super.onResume()
+        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         (dialog as? AlertDialog)?.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
             GlobalScope.launch {
                 val playerRounds = adapter.playerRounds
                 RoundRepository(requireContext()).updateScores(*playerRounds.map { round ->
                     ScoreEntity(round.score.id, player.id!!, round.roundId, round.score.value, round.score.metadata)
-//                    round.scores.map {
-//                        ScoreEntity(it.id, player.id!!, round.id!!, it.value, it.metadata)
-//                    }
                 }.toTypedArray())
                 dialog?.dismiss()
             }
@@ -64,15 +65,9 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
     }
 }
 
-private class PlayerRoundNotesAdapter: RecyclerView.Adapter<PlayerRoundNotesViewHolder>(),
+private class PlayerRoundNotesAdapter : RecyclerView.Adapter<PlayerRoundNotesViewHolder>(),
     NotesUpdatedListener {
     var playerRounds: MutableList<RoundPlayerNote> = ArrayList()
-
-    init {
-//        playerRounds = rounds.map { round ->
-//            round.copy(scores = round.scores.filter { score -> score.player.id == playerId })
-//        }.toMutableList()
-    }
 
     fun setNotes(rounds: List<RoundPlayerNote>) {
         playerRounds.clear()
@@ -80,7 +75,7 @@ private class PlayerRoundNotesAdapter: RecyclerView.Adapter<PlayerRoundNotesView
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =  PlayerRoundNotesViewHolder(parent, this)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PlayerRoundNotesViewHolder(parent, this)
 
     override fun getItemCount() = playerRounds.size
 
@@ -94,7 +89,9 @@ private class PlayerRoundNotesAdapter: RecyclerView.Adapter<PlayerRoundNotesView
     }
 }
 
-private class PlayerRoundNotesViewHolder(parent: ViewGroup, private val notesListener: NotesUpdatedListener) : BaseViewHolder(parent, R.layout.holder_player_round_notes) {
+private class PlayerRoundNotesViewHolder(parent: ViewGroup, private val notesListener: NotesUpdatedListener) :
+    BaseViewHolder(parent, R.layout.holder_player_round_notes) {
+
     init {
         itemView.playerRoundValue.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
@@ -110,7 +107,8 @@ private class PlayerRoundNotesViewHolder(parent: ViewGroup, private val notesLis
     fun onBind(round: RoundPlayerNote) {
         val notes = round.score.metadata
         // Make the round number human readable
-        itemView.playerRoundLabel.text = itemView.context.getString(R.string.playerRoundNumberFormat, round.roundNumber + 1)
+        itemView.playerRoundLabel.text =
+            itemView.context.getString(R.string.playerRoundNumberFormat, round.roundNumber + 1)
         itemView.playerRoundValue.setText(notes)
         itemView.playerRoundValue.setSelection(notes.length)
     }
