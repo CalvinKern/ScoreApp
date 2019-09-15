@@ -22,6 +22,8 @@
 
     <!--Game Screen-->
     <string name="addRound">Add Round</string>
+    <string name="makePlayerDealerMessage">Make %s dealer for this round?</string>
+    <string name="scoreHint">Score</string>
 
     <!--Player Round Dialog-->
     <string name="playerNotesTitle">Notes for %s</string>

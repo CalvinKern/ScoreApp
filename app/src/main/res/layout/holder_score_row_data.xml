@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<EditText
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/playerScore"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:inputType="number|numberSigned|numberDecimal"
-    android:lines="1"
-    android:imeOptions="actionNext"
-    android:selectAllOnFocus="true"
-    tools:text="@tools:sample/us_zipcodes"
-    />
+    >
+
+    <EditText
+        android:id="@+id/playerScore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:imeOptions="actionNext"
+        android:inputType="number|numberSigned|numberDecimal"
+        android:lines="1"
+        android:selectAllOnFocus="true"
+        android:hint="@string/scoreHint"
+        tools:text="@tools:sample/us_zipcodes"
+        android:importantForAutofill="no"
+        />
+</FrameLayout>

@@ -1,11 +1,9 @@
 package com.seakernel.android.scoreapp.game
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
@@ -18,10 +16,6 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game.*
-import android.widget.EditText
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.seakernel.android.scoreapp.data.Round
-import kotlinx.android.synthetic.main.dialog_player_round.view.*
 
 /**
  * Created by Calvin on 12/21/18.

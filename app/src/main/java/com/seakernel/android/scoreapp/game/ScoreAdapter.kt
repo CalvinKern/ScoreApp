@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.game
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -130,11 +131,13 @@ class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     interface PlayerHolderClickedListener {
         fun playerHolderClicked(player: Player)
     }
+
     private val nameHolder: TextView by lazy { itemView.playerNameHeader }
 
     fun bind(player: Player, clickListener: PlayerHolderClickedListener) {
         nameHolder.text = player.name
         nameHolder.setOnClickListener { clickListener.playerHolderClicked(player) }
+        nameHolder.setOnLongClickListener { clickListener.playerHolderClicked(player); true }
     }
 
     companion object {
@@ -158,16 +161,16 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
     fun bind(hasDealer: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
         if (hasDealer && score.player == round.dealer) {
             if (rounds.last().id == round.id) {
-                scoreHolder.setBackgroundResource(R.color.dealer)
+                itemView.setBackgroundResource(R.color.dealer)
             } else {
-                scoreHolder.setBackgroundResource(R.color.dealerSoft)
+                itemView.setBackgroundResource(R.color.dealerSoft)
             }
         } else {
             // Make odd rows with a slight gray background to look a little better
             if (round.number % 2 == 0) {
-                scoreHolder.setBackgroundResource(R.color.slightGray)
+                itemView.setBackgroundResource(R.color.slightGray)
             } else {
-                scoreHolder.setBackgroundResource(R.color.white)
+                itemView.setBackgroundResource(R.color.white)
             }
         }
         if (!scoreHolder.hasFocus()) {
@@ -181,6 +184,10 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
                 updateScore(eventConsumer, round, score)
             }
         }
+        scoreHolder.setOnLongClickListener {
+            showPlayerDealerDialog(score.player, round, eventConsumer)
+            true
+        }
     }
 
     fun bindTotal(score: Double, isLeader: Boolean) {
@@ -188,9 +195,9 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         scoreHolder.isFocusable = false
 
         if (isLeader) {
-            scoreHolder.setBackgroundResource(R.color.winnerGreen)
+            itemView.setBackgroundResource(R.color.winnerGreen)
         } else {
-            scoreHolder.setBackgroundResource(R.color.black)
+            itemView.setBackgroundResource(R.color.black)
         }
         scoreHolder.setText(formatScore(score))
         scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.white))
@@ -214,5 +221,16 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
                 score.metadata
             )
         )
+    }
+
+    private fun showPlayerDealerDialog(player: Player, round: Round, eventConsumer: Consumer<GameEvent>?) {
+        val dialog = AlertDialog.Builder(itemView.context)
+            .setMessage(itemView.context.getString(R.string.makePlayerDealerMessage, player.name))
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.dealerLabel) { _, _ ->
+                eventConsumer?.accept(GameEvent.RequestSaveRound(round.copy(dealer = player)))
+            }
+            .create()
+        dialog.show()
     }
 }
