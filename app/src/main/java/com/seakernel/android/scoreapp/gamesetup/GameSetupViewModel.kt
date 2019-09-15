@@ -76,9 +76,8 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
         scope.launch {
             val dealerId = if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
-            val players = settings.players.filter { playerIds.contains(it.id) }
-            val newPlayers = playerRepository.loadUsers(playerIds.filterNot { id -> players.any { player -> player.id == id} })
-            gameSettings.safePostValue(settings.copy(players = players + newPlayers, initialDealerId = dealerId))
+            val newPlayers = playerRepository.loadUsers(playerIds)
+            gameSettings.safePostValue(settings.copy(players = newPlayers, initialDealerId = dealerId))
         }
     }
 
