@@ -21,61 +21,20 @@ class PlayerListAdapter(private val playerList: List<Player>, private val select
         setHasStableIds(true)
     }
 
-    private val TYPE_HEADER = 1
-    private val TYPE_PLAYER = 2
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            TYPE_HEADER -> PlayerListHeaderViewHolder(
-                LayoutInflater.from(
-                    parent.context
-                ).inflate(
-                    PlayerListHeaderViewHolder.RESOURCE_ID,
-                    parent,
-                    false
-                )
-            )
-            TYPE_PLAYER -> PlayerListViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    PlayerListViewHolder.RESOURCE_ID,
-                    parent,
-                    false
-                )
-            )
-            else -> {
-                throw RuntimeException("Unhandled view type in ${this::class.java.simpleName} - $viewType")
-            }
-        }
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PlayerListViewHolder(
+        LayoutInflater.from(parent.context).inflate(PlayerListViewHolder.RESOURCE_ID, parent, false)
+    )
 
     override fun getItemCount(): Int {
-        return playerList.count() + 1
+        return playerList.count()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (getItemViewType(position)) {
-            TYPE_PLAYER -> {
-                val player = playerList[position - 1]
-                (holder as PlayerListViewHolder).bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
-            }
-        }
+        val player = playerList[position]
+        (holder as PlayerListViewHolder).bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
     }
 
-    override fun getItemId(position: Int): Long {
-        return if (position == 0) {
-            0
-        } else {
-            playerList[position - 1].id!!
-        }
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return if (position == 0) {
-            TYPE_HEADER
-        } else {
-            TYPE_PLAYER
-        }
-    }
+    override fun getItemId(position: Int) = playerList[position].id ?: 0
 }
 
 class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -107,11 +66,5 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     companion object {
         const val RESOURCE_ID = R.layout.holder_player_select_list
-    }
-}
-
-class PlayerListHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    companion object {
-        const val RESOURCE_ID = R.layout.holder_player_header
     }
 }
