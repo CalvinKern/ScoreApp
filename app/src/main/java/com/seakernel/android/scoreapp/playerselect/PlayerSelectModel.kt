@@ -17,6 +17,7 @@ data class PlayerDeleteClicked(val playerId: Long) : PlayerEvent()
 data class PlayerNameChanged(val playerId: Long, val newName: String) : PlayerEvent()
 data class PlayerDeleteSuccessful(val playerId: Long) : PlayerEvent()
 data class PlayersLoaded(val players: List<Player>) : PlayerEvent()
+data class PlayerSearchRequest(val playerName: String?) : PlayerEvent()
 object RequestLoad : PlayerEvent()
 
 sealed class PlayerEffect
@@ -28,13 +29,14 @@ object FetchData : PlayerEffect()
 
 data class CreateModel(
     val gameId:Long = 0,
-    val playerList: List<Player> = listOf(),
+    val allPlayers: List<Player> = listOf(),
+    val filteredPlayerList: List<Player> = listOf(),
     val gameName: String = "",
     val selectedPlayerList: List<Long> = listOf(),
     val loading: Boolean = false) {
 
     fun player(playerId: Long): Player? {
-        return playerList.find { it.id == playerId }
+        return allPlayers.find { it.id == playerId }
     }
 
     fun playerName(playerId: Long): String? {
@@ -54,7 +56,7 @@ data class CreateModel(
                 is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(
                     FetchData
                 ))
-                is PlayersLoaded -> Next.next(model.copy(playerList = event.players))
+                is PlayersLoaded -> Next.next(model.copy(allPlayers = event.players, filteredPlayerList = event.players))
                 is AddPlayerClicked -> Next.dispatch(Effects.effects(
                     ShowPlayerNameDialog(
                         null,
@@ -94,7 +96,7 @@ data class CreateModel(
                     ))
                 }
                 is PlayerNameChanged -> {
-                    val list = model.playerList.toMutableList()
+                    val list = model.allPlayers.toMutableList()
                     val selected = model.selectedPlayerList.toMutableList()
                     val index = list.indexOfFirst { it.id == event.playerId }
 
@@ -109,18 +111,29 @@ data class CreateModel(
                         selected.add(event.playerId)
                     }
 
-                    Next.next(model.copy(playerList = list, selectedPlayerList = selected))
+                    // TODO: Add to filteredPlayerList
+                    Next.next(model.copy(allPlayers = list, selectedPlayerList = selected))
                 }
                 is PlayerDeleteSuccessful -> {
                     model.player(event.playerId)?.let { player ->
-                        val list = model.playerList.toMutableList().also { it.remove(player) }
-                        Next.next<CreateModel, PlayerEffect>(model.copy(playerList = list), Effects.effects(
+                        val list = model.allPlayers.toMutableList().also { it.remove(player) }
+                        Next.next<CreateModel, PlayerEffect>(
+                            model.copy(
+                                allPlayers = list,
+                                filteredPlayerList = model.filteredPlayerList.toMutableList().also { it.remove(player) },
+                                selectedPlayerList = model.selectedPlayerList.toMutableList().also { it.remove(player.id) }
+                            ), Effects.effects(
                             ShowDeletePlayerSnackbar(
                                 event.playerId,
                                 player.name
                             )
                         ))
                     } ?: Next.noChange()
+                }
+                is PlayerSearchRequest -> {
+                    Next.next<CreateModel, PlayerEffect>(model.copy(filteredPlayerList = model.allPlayers.toMutableList().let { list ->
+                        list.filter { player -> player.name.contains(event.playerName ?: "", ignoreCase = true) }
+                    }))
                 }
             }
         }

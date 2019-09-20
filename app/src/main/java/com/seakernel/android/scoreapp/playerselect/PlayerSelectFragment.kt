@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
@@ -100,6 +101,16 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         toolbarItemClickListener = Toolbar.OnMenuItemClickListener { item ->
             when(item.itemId) {
                 R.id.actionSave -> eventConsumer.accept(DoneSelectingPlayersClicked)
+                R.id.actionSearch -> {
+                    (item.actionView as SearchView).setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(query: String?): Boolean = false
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            eventConsumer.accept(PlayerSearchRequest(newText))
+                            return true
+                        }
+                    })
+                }
             }
             false
         }
@@ -114,7 +125,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                 // This will be called whenever there is a new model
                 playerRecycler.swapAdapter(
                     PlayerListAdapter(
-                        model.playerList,
+                        model.filteredPlayerList,
                         model.selectedPlayerList,
                         eventConsumer
                     ), false)
