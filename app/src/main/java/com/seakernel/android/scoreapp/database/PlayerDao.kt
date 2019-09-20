@@ -11,7 +11,7 @@ import androidx.room.Update
  */
 @Dao
 interface PlayerDao {
-    @Query("SELECT * FROM ${PlayerEntity.TABLE_NAME}")
+    @Query("SELECT * FROM ${PlayerEntity.TABLE_NAME} ORDER BY ${PlayerEntity.COLUMN_NAME}")
     fun getAll(): List<PlayerEntity>
 
     @Query("SELECT * FROM ${PlayerEntity.TABLE_NAME} WHERE ${PlayerEntity.COLUMN_ID} IN (:playerIds)")

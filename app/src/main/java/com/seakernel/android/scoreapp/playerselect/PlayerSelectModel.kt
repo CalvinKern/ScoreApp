@@ -98,11 +98,14 @@ data class CreateModel(
                     val selected = model.selectedPlayerList.toMutableList()
                     val index = list.indexOfFirst { it.id == event.playerId }
 
+                    val insertIndex = list.indexOfFirst { player -> player.name > event.newName }.let {
+                        if (it > 0) it else list.size
+                    }
                     if (index >= 0) {
-                        val oldPlayer = list[index]
-                        list[index] = oldPlayer.copy(name = event.newName)
+                        val oldPlayer = list.removeAt(index)
+                        list.add(insertIndex, oldPlayer.copy(name = event.newName))
                     } else {
-                        list.add(Player(event.playerId, event.newName))
+                        list.add(insertIndex, Player(event.playerId, event.newName))
                         selected.add(event.playerId)
                     }
 
