@@ -102,7 +102,7 @@ data class CreateModel(
                     val index = list.indexOfFirst { it.id == event.playerId }
 
                     val insertIndex = list.indexOfFirst { player -> player.name > event.newName }.let {
-                        if (it > 0) it else list.size
+                        if (it >= 0) it else list.size
                     }
                     if (index >= 0) {
                         val oldPlayer = list.removeAt(index)
@@ -115,7 +115,7 @@ data class CreateModel(
                     val filteredList = if (event.newName.contains(model.searchTerm)) {
                         model.filteredPlayerList.toMutableList().also {
                             it.add(it.indexOfFirst { player -> player.name > event.newName }.let { index ->
-                                if (index > 0) index else it.size
+                                if (index >= 0) index else it.size
                             }, Player(event.playerId, event.newName))
                         }
                     } else {
