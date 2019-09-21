@@ -33,7 +33,8 @@ data class CreateModel(
     val filteredPlayerList: List<Player> = listOf(),
     val gameName: String = "",
     val selectedPlayerList: List<Long> = listOf(),
-    val loading: Boolean = false) {
+    val loading: Boolean = false,
+    val searchTerm: String = "") {
 
     fun player(playerId: Long): Player? {
         return allPlayers.find { it.id == playerId }
@@ -111,8 +112,16 @@ data class CreateModel(
                         selected.add(event.playerId)
                     }
 
-                    // TODO: Add to filteredPlayerList
-                    Next.next(model.copy(allPlayers = list, selectedPlayerList = selected))
+                    val filteredList = if (event.newName.contains(model.searchTerm)) {
+                        model.filteredPlayerList.toMutableList().also {
+                            it.add(it.indexOfFirst { player -> player.name > event.newName }.let { index ->
+                                if (index > 0) index else it.size
+                            }, Player(event.playerId, event.newName))
+                        }
+                    } else {
+                        model.filteredPlayerList
+                    }
+                    Next.next(model.copy(allPlayers = list, selectedPlayerList = selected, filteredPlayerList = filteredList))
                 }
                 is PlayerDeleteSuccessful -> {
                     model.player(event.playerId)?.let { player ->
@@ -131,7 +140,9 @@ data class CreateModel(
                     } ?: Next.noChange()
                 }
                 is PlayerSearchRequest -> {
-                    Next.next<CreateModel, PlayerEffect>(model.copy(filteredPlayerList = model.allPlayers.toMutableList().let { list ->
+                    Next.next<CreateModel, PlayerEffect>(model.copy(
+                        searchTerm = event.playerName ?: "",
+                        filteredPlayerList = model.allPlayers.toMutableList().let { list ->
                         list.filter { player -> player.name.contains(event.playerName ?: "", ignoreCase = true) }
                     }))
                 }
