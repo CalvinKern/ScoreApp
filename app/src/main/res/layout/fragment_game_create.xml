@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:lines="1"
                     android:imeOptions="actionDone"
-                    android:inputType="text|textCapWords|textAutoComplete"
+                    android:inputType="text|textCapWords|textNoSuggestions"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
