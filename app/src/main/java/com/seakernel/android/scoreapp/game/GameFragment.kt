@@ -25,6 +25,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     interface GameListener {
         fun onGameSettingsSelected(gameId: Long)
+        fun onGraphSelected(gameId: Long)
     }
 
     override val layoutId = R.layout.fragment_game
@@ -62,6 +63,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 R.id.actionEdit -> {
                     arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
                         listener?.onGameSettingsSelected(gameId)
+                    }
+                    true
+                }
+                R.id.actionGraph -> {
+                    arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
+                        listener?.onGraphSelected(gameId)
                     }
                     true
                 }

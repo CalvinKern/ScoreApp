@@ -10,4 +10,16 @@
     <color name="winnerGreen">#087f23</color>
     <color name="dealer">#ff9800</color>
     <color name="dealerSoft">#ffe0b2</color>
+
+<!--    Graph Colors-->
+    <color name="graphRed">#f44336</color>
+    <color name="graphPurple">#9c27b0</color>
+    <color name="graphBlue">#2196f3</color>
+    <color name="graphCyan">#00bcd4</color>
+    <color name="graphTeal">#009688</color>
+    <color name="graphGreen">#4caf50</color>
+    <color name="graphYellow">#ffeb3b</color>
+    <color name="graphOrange">#ff9800</color>
+    <color name="graphBrown">#795548</color>
+    <color name="graphGray">#607d8b</color>
 </resources>

@@ -9,6 +9,7 @@
     <string name="actionSave">Save</string>
     <string name="actionEdit">Edit</string>
     <string name="actionSearch">Search</string>
+    <string name="actionGraph">Show Graph</string>
 
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.game.GameFragment
+import com.seakernel.android.scoreapp.game.GraphFragment
 import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import com.seakernel.android.scoreapp.gamelist.GameListFragment
@@ -52,6 +53,10 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
 
     override fun onGameUpdated() {
         popBackStackIfFound(GameSetupFragment::class)
+    }
+
+    override fun onGraphSelected(gameId: Long) {
+        showFragment(GraphFragment.newInstance(gameId), GraphFragment::class.java.simpleName)
     }
 
     // Helper Functions
