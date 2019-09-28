@@ -82,30 +82,25 @@ class GraphFragment : Fragment() {
             mapOf(*game.rounds.first().scores.map { Pair(it.player.id!!, mutableListOf<Entry>()) }.toTypedArray())
         game.rounds.forEach { round ->
             round.scores.forEach { score ->
-                val playerList = scoreMap.getValue(score.player.id!!)
-                playerList.add(Entry(round.number.toFloat() + 1, (playerList.lastOrNull()?.y ?: 0f) + score.value.toFloat()))
+                scoreMap.getValue(score.player.id!!).also { playerList ->
+                    playerList.add(
+                        Entry(
+                            round.number.toFloat() + 1,
+                            (playerList.lastOrNull()?.y ?: 0f) + score.value.toFloat()
+                        )
+                    )
+                }
             }
         }
 
         // Convert the entries to line sets (with all that wonderful color info)
-        val scaleFactor = 1.05f
         val scoreSets = scoreMap.map { scores ->
-            val playerColor = ContextCompat.getColor(requireContext(), graphColors[scores.key.toInt() % graphColors.size])
             val playerName = game.settings.players.find { it.id == scores.key }?.name
             LineDataSet(scores.value, playerName).also {
-                it.color = playerColor
-                it.setCircleColor(playerColor)
-                it.setDrawCircles(true)
-                it.axisDependency = YAxis.AxisDependency.LEFT
-                it.lineWidth = it.lineWidth * scaleFactor
-                it.circleRadius = it.circleRadius * scaleFactor
-                it.circleHoleRadius = it.circleHoleRadius * scaleFactor
-                it.valueTextSize = 12f
-                it.valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return DecimalFormat("#.##").format(value)
-                    }
-                }
+                setDataSetStyle(
+                    it,
+                    ContextCompat.getColor(requireContext(), graphColors[scores.key.toInt() % graphColors.size])
+                )
             }
         }
 
@@ -115,8 +110,29 @@ class GraphFragment : Fragment() {
         gameChart.invalidate()
     }
 
+    private fun setDataSetStyle(dataSet: LineDataSet, playerColor: Int) {
+        dataSet.apply {
+            color = playerColor
+            setCircleColor(playerColor)
+            setDrawCircles(true)
+            axisDependency = YAxis.AxisDependency.LEFT
+            lineWidth = 4f // Values are defined by dp
+            circleRadius = 4f
+            circleHoleRadius = 4f
+            valueTextSize = 12f
+            valueFormatter = graphValueFormatter
+        }
+    }
+
     companion object {
         private const val ARG_GAME_ID = "game_id"
+
+        private val decimalFormat = DecimalFormat("#.##")
+        private val graphValueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return decimalFormat.format(value)
+            }
+        }
 
         fun newInstance(gameId: Long): GraphFragment {
             return GraphFragment().also { fragment ->
