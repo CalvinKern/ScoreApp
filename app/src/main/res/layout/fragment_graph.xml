@@ -15,11 +15,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/gameChart"
+        app:layout_constraintBottom_toTopOf="@+id/graphByRoundsLabel"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:navigationIcon="?attr/homeAsUpIndicator"
         android:background="?attr/colorPrimary"
         app:title="@string/gameCreateTitle"
+        />
+
+    <TextView
+        android:id="@+id/graphByRoundsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:text="@string/graphByRoundsLabel"
+        android:textColor="@color/textBlack"
+        app:layout_constraintBottom_toTopOf="@id/gameChart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/gameChart"
+        app:layout_constraintTop_toBottomOf="@+id/graphToolbar"
         />
 
     <com.github.mikephil.charting.charts.LineChart
@@ -27,24 +42,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_constraintTop_toBottomOf="@+id/graphToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/graphByRoundsLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/graphByRoundsLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <TextView
-        android:id="@+id/graphByRoundsLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:text="@string/graphByRoundsLabel"
-        android:textColor="@color/textBlack"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/gameChart"
-        app:layout_constraintTop_toBottomOf="@+id/gameChart"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>
