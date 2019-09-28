@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,6 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/gameChart"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:navigationIcon="?attr/homeAsUpIndicator"
         android:background="?attr/colorPrimary"
@@ -19,9 +24,27 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/gameChart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintTop_toBottomOf="@+id/graphToolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/graphByRoundsLabel"
         />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/graphByRoundsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:text="@string/graphByRoundsLabel"
+        android:textColor="@color/textBlack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/gameChart"
+        app:layout_constraintTop_toBottomOf="@+id/gameChart"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

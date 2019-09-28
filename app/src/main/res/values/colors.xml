@@ -11,6 +11,9 @@
     <color name="dealer">#ff9800</color>
     <color name="dealerSoft">#ffe0b2</color>
 
+<!--    Text Colors-->
+    <color name="textBlack">@color/black</color>
+
 <!--    Graph Colors-->
     <color name="graphRed">#f44336</color>
     <color name="graphPurple">#9c27b0</color>

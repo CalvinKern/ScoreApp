@@ -27,6 +27,9 @@
     <string name="makePlayerDealerMessage">Make %s dealer for this round?</string>
     <string name="scoreHint">Score</string>
 
+    <!--Graph Screen-->
+    <string name="graphByRoundsLabel">Score by rounds</string>
+
     <!--Player Round Dialog-->
     <string name="playerNotesTitle">Notes for %s</string>
     <string name="playerRoundNumberFormat">Round %d:</string>
