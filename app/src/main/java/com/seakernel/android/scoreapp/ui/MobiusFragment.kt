@@ -46,8 +46,8 @@ abstract class MobiusFragment<M, E, F> : Fragment() {
         controller.start()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         controller.stop()
     }
 
