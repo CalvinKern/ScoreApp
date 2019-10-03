@@ -16,6 +16,7 @@ import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
@@ -94,7 +95,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     // Mobius functions
 
     override fun initMobius(model: CreateModel): First<CreateModel, PlayerEffect> {
-        return First.first(model, setOf(FetchData))
+        return First.first(model.copy(isLoading = true), setOf(FetchData))
     }
 
     override fun connectViews(eventConsumer: Consumer<PlayerEvent>): Connection<CreateModel> {
@@ -122,7 +123,11 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
         return object : Connection<CreateModel> {
             override fun accept(model: CreateModel) {
-                // This will be called whenever there is a new model
+                playerLoading.setVisible(model.isLoading)
+                playerEmptyGroup.setVisible(!model.isLoading && model.allPlayers.isEmpty())
+                playerRecycler.setVisible(!model.isLoading && model.filteredPlayerList.isNotEmpty())
+                playerEmptySearchGroup.setVisible(!model.isLoading && model.allPlayers.isNotEmpty() && model.filteredPlayerList.isEmpty())
+
                 playerRecycler.swapAdapter(
                     PlayerListAdapter(
                         model.filteredPlayerList,

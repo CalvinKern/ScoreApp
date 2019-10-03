@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity"
@@ -12,21 +11,132 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:title="@string/pickPlayers"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
         android:background="?attr/colorPrimary"
-        app:navigationIcon="?attr/homeAsUpIndicator"
+        android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:title="@string/pickPlayers"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playerRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:listitem="@layout/holder_player_select_list"
+        />
+
+    <ImageView
+        android:id="@+id/playerEmptyImage"
+        android:layout_width="@dimen/image_size"
+        android:layout_height="@dimen/image_size"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_person_add_outline"
+        android:tint="@color/gray"
+        app:layout_constraintBottom_toTopOf="@+id/playerEmptyTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/playerEmptyTitle"
+        style="@style/AppTheme.TextHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/playerEmptyTitle"
+        app:layout_constraintBottom_toTopOf="@id/playerEmptyMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerEmptyImage"
+        />
+
+    <TextView
+        android:id="@+id/playerEmptyMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/playerEmptyMessage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerEmptyTitle"
+        app:layout_constraintWidth_percent=".75"
+        />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/playerEmptyGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="playerEmptyImage,playerEmptyTitle,playerEmptyMessage"
+        tools:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/playerEmptySearchImage"
+        android:layout_width="@dimen/image_size"
+        android:layout_height="@dimen/image_size"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_person_pin"
+        android:tint="@color/gray"
+        app:layout_constraintBottom_toTopOf="@+id/playerEmptySearchTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/playerEmptySearchTitle"
+        style="@style/AppTheme.TextHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/playerEmptySearchTitle"
+        app:layout_constraintBottom_toTopOf="@id/playerEmptySearchMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerEmptySearchImage"
+        />
+
+    <TextView
+        android:id="@+id/playerEmptySearchMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/playerEmptySearchMessage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerEmptySearchTitle"
+        app:layout_constraintWidth_percent=".75"
+        />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/playerEmptySearchGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="playerEmptySearchImage,playerEmptySearchTitle,playerEmptySearchMessage"
+        />
+
+    <ProgressBar
+        android:id="@+id/playerLoading"
+        android:layout_width="@dimen/image_size"
+        android:layout_height="@dimen/image_size"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,10 +144,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_add_black"
         android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_black"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

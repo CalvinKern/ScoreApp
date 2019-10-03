@@ -39,6 +39,7 @@
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_dice_black"
+        android:tint="@color/gray"
         app:layout_constraintBottom_toTopOf="@+id/gameListEmptyTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +78,7 @@
         android:layout_height="0dp"
         android:visibility="gone"
         app:constraint_referenced_ids="gameListEmptyImage,gameListEmptyTitle,gameListEmptyMessage"
+        tools:visibility="visible"
         />
 
     <ProgressBar

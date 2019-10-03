@@ -33,7 +33,7 @@ data class CreateModel(
     val filteredPlayerList: List<Player> = listOf(),
     val gameName: String = "",
     val selectedPlayerList: List<Long> = listOf(),
-    val loading: Boolean = false,
+    val isLoading: Boolean = false,
     val searchTerm: String = "") {
 
     fun player(playerId: Long): Player? {
@@ -54,10 +54,10 @@ data class CreateModel(
         fun update(model: CreateModel, event: PlayerEvent): Next<CreateModel, PlayerEffect> {
             return when (event) {
                 is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects(DoneSelectingPlayers(model.selectedPlayerList)))
-                is RequestLoad -> Next.next(model.copy(loading = true), Effects.effects(
+                is RequestLoad -> Next.next(model.copy(isLoading = true), Effects.effects(
                     FetchData
                 ))
-                is PlayersLoaded -> Next.next(model.copy(allPlayers = event.players, filteredPlayerList = event.players))
+                is PlayersLoaded -> Next.next(model.copy(isLoading = false, allPlayers = event.players, filteredPlayerList = event.players))
                 is AddPlayerClicked -> Next.dispatch(Effects.effects(
                     ShowPlayerNameDialog(
                         null,

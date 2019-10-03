@@ -6,7 +6,7 @@
     <string name="gameListTitle">Games</string>
     <string name="playersHolder">%d Players</string>
     <string name="gameListEmptyTitle">No games created</string>
-    <string name="gameListEmptyMessage">Start by clicking the "+" button down below to create a new game!</string>
+    <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
 
     <!--Common Actions-->
     <string name="actionSave">Save</string>
@@ -24,6 +24,10 @@
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>
     <string name="playerIcon">Player Icon</string>
+    <string name="playerEmptyTitle">No players added</string>
+    <string name="playerEmptyMessage">Start by clicking the + button down below to add a new player!</string>
+    <string name="playerEmptySearchTitle">No players match</string>
+    <string name="playerEmptySearchMessage">No players match the current search criteria. You can add a new player by clicking the + button down below!</string>
 
     <!--Game Screen-->
     <string name="addRound">Add Round</string>
