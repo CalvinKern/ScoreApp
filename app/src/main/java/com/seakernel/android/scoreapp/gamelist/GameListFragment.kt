@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
@@ -67,7 +68,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     // Mobius functions
 
     override fun initMobius(model: ListModel): First<ListModel, ListEffect> {
-        return First.first(model, setOf(ListEffect.FetchData))
+        return First.first(model.copy(isLoading = true), setOf(ListEffect.FetchData))
     }
 
     override fun connectViews(eventConsumer: Consumer<ListEvent>): Connection<ListModel> {
@@ -78,7 +79,10 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
         return object : Connection<ListModel> {
             override fun accept(model: ListModel) {
-                // This will be called whenever there is a new model
+                gameListLoading.setVisible(model.isLoading)
+                gameRecycler.setVisible(!model.isLoading && model.gameList.isNotEmpty())
+                gameListEmptyGroup.setVisible(!model.isLoading && model.gameList.isEmpty())
+
                 gameRecycler.swapAdapter(GameListAdapter(model.gameList, eventConsumer), true)
             }
 

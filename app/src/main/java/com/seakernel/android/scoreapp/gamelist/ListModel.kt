@@ -26,7 +26,10 @@ sealed class ListEffect {
     object FetchData : ListEffect()
 }
 
-data class ListModel(val gameList: List<SimpleGame> = listOf()) {
+data class ListModel(
+    val gameList: List<SimpleGame> = listOf(),
+    val isLoading: Boolean = false
+) {
 
     companion object {
         fun createDefault(): ListModel {
@@ -35,8 +38,8 @@ data class ListModel(val gameList: List<SimpleGame> = listOf()) {
 
         fun update(model: ListModel, event: ListEvent): Next<ListModel, ListEffect> {
             return when (event) {
-                is ListEvent.Loaded -> Next.next(model.copy(gameList = event.games))
-                is ListEvent.LoadData -> Next.dispatch(Effects.effects(ListEffect.FetchData))
+                is ListEvent.Loaded -> Next.next(model.copy(gameList = event.games, isLoading = false))
+                is ListEvent.LoadData -> Next.next(model.copy(isLoading = true), Effects.effects(ListEffect.FetchData))
                 is ListEvent.AddGameClicked -> Next.dispatch(Effects.effects(ListEffect.ShowCreateGameScreen))
                 is ListEvent.GameRowClicked -> Next.dispatch(Effects.effects(ListEffect.ShowGameScreen(event.gameId)))
                 is ListEvent.GameRowLongPressed -> Next.dispatch(Effects.effects(ListEffect.ShowGameRowDialog(event.gameId)))
