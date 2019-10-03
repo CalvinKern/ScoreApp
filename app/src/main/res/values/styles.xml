@@ -18,4 +18,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="AppTheme.TextHeader">
+        <item name="android:textSize">@dimen/text_header</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textBlack</item>
+    </style>
 </resources>
