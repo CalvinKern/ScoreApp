@@ -17,7 +17,10 @@ import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.SimpleGame
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
+import com.seakernel.android.scoreapp.utility.setVisible
 import kotlinx.android.synthetic.main.fragment_game_create.*
+import kotlinx.android.synthetic.main.fragment_game_create.playerRecycler
+import kotlinx.android.synthetic.main.fragment_game_create.toolbar
 import kotlinx.android.synthetic.main.holder_game_create_player.view.*
 
 class GameSetupFragment : Fragment() {
@@ -136,6 +139,8 @@ class GameSetupFragment : Fragment() {
             return // TODO: Show loading spinner
         }
         toolbar.menu.findItem(R.id.actionSave).isEnabled = settings.name.isNotBlank() && settings.players.isNotEmpty()
+        playerRecycler.setVisible(settings.players.isNotEmpty())
+        gamePlayerEmptyGroup.setVisible(settings.players.isEmpty())
 
         val players = settings.players.map {
             PlayerState(

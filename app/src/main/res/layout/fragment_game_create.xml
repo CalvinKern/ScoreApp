@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,11 +11,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:navigationIcon="?attr/homeAsUpIndicator"
         android:background="?attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
         app:title="@string/gameCreateTitle"
         />
 
@@ -26,21 +25,21 @@
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             >
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/gameNameEditLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="@string/gameNameHint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 >
 
@@ -48,9 +47,9 @@
                     android:id="@+id/gameNameEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:imeOptions="actionDone"
                     android:inputType="text|textCapWords|textNoSuggestions"
+                    android:lines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,57 +57,57 @@
                 android:id="@+id/hasDealerCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/gameNameEditLayout"
-                app:layout_constraintBottom_toTopOf="@id/reversedScoringCheckbox"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/dealerLabel"
+                app:layout_constraintBottom_toTopOf="@id/reversedScoringCheckbox"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gameNameEditLayout"
                 />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/reversedScoringCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/hasDealerCheckbox"
-                app:layout_constraintBottom_toTopOf="@id/playersHeaderEdit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/reversedScoringLabel"
+                app:layout_constraintBottom_toTopOf="@id/playersHeaderEdit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hasDealerCheckbox"
                 />
 
             <TextView
                 android:id="@+id/playersHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/playersHeaderEdit"
-                app:layout_constraintStart_toStartOf="@id/gameNameEditLayout"
-                app:layout_constraintBottom_toBottomOf="@id/playersHeaderEdit"
-                android:text="@string/playersHeader"
+                android:text="@string/gamePlayersHeader"
                 android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/playersHeaderEdit"
+                app:layout_constraintStart_toStartOf="@id/gameNameEditLayout"
+                app:layout_constraintTop_toTopOf="@id/playersHeaderEdit"
                 />
 
             <TextView
                 android:id="@+id/playersHeaderEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/reversedScoringCheckbox"
-                app:layout_constraintEnd_toEndOf="@id/gameNameEditLayout"
-                android:minWidth="@dimen/min_touch_size"
-                android:minHeight="@dimen/min_touch_size"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
                 android:gravity="center"
+                android:minWidth="@dimen/min_touch_size"
+                android:minHeight="@dimen/min_touch_size"
                 android:text="@string/actionEdit"
-                android:textSize="14sp"
                 android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
-                android:background="?attr/selectableItemBackground"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/gameNameEditLayout"
+                app:layout_constraintTop_toBottomOf="@id/reversedScoringCheckbox"
                 />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -116,9 +115,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/playersHeaderEdit"
                 tools:listitem="@layout/holder_game_create_player"
                 />
+
+            <ImageView
+                android:id="@+id/gamePlayersEmptyImage"
+                android:layout_width="@dimen/image_size"
+                android:layout_height="@dimen/image_size"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_marginBottom="@dimen/fab_margin"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person_add"
+                android:tint="@color/gray"
+                app:layout_constraintBottom_toTopOf="@+id/gamePlayersEmptyTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/playersHeaderEdit"
+                app:layout_constraintVertical_chainStyle="packed"
+                />
+
+            <TextView
+                android:id="@+id/gamePlayersEmptyTitle"
+                style="@style/AppTheme.TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gamePlayersEmptyTitle"
+                app:layout_constraintBottom_toTopOf="@id/gamePlayersEmptyMessage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gamePlayersEmptyImage"
+                />
+
+            <TextView
+                android:id="@+id/gamePlayersEmptyMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/fab_margin"
+                android:gravity="center"
+                android:text="@string/gamePlayersEmptyMessage"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gamePlayersEmptyTitle"
+                app:layout_constraintWidth_percent=".75"
+                />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/gamePlayerEmptyGroup"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:constraint_referenced_ids="gamePlayersEmptyImage,gamePlayersEmptyTitle,gamePlayersEmptyMessage"
+                tools:visibility="visible"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

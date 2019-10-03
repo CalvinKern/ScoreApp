@@ -17,7 +17,9 @@
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>
     <string name="gameNameHint">Game Name</string>
-    <string name="playersHeader">Players</string>
+    <string name="gamePlayersHeader">Players</string>
+    <string name="gamePlayersEmptyTitle">No players added</string>
+    <string name="gamePlayersEmptyMessage">To start a game, add some players with the \"EDIT\" button.</string>
     <string name="dealerLabel">Dealer</string>
     <string name="reversedScoringLabel">Reverse Scoring (lowest score wins)</string>
 

@@ -36,7 +36,7 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
-        android:src="@drawable/ic_person_add_outline"
+        android:src="@drawable/ic_person_add"
         android:tint="@color/gray"
         app:layout_constraintBottom_toTopOf="@+id/playerEmptyTitle"
         app:layout_constraintEnd_toEndOf="parent"
