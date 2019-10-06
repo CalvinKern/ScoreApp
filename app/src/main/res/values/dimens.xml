@@ -2,6 +2,8 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="min_touch_size">48dp</dimen>
     <dimen name="image_size">60dp</dimen>
+    <dimen name="description_width">300dp</dimen>
+    <dimen name="empty_margin_vertical">50dp</dimen>
 
     <!--Text Size-->
     <dimen name="text_detail">12sp</dimen>

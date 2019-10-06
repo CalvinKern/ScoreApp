@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/fragment_game_create"
+    >
+
+    <LinearLayout
+        android:id="@+id/hasDealerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackground"
+        android:paddingTop="8dp"
+        android:gravity="end"
+        android:minHeight="@dimen/min_touch_size"
+        android:orientation="horizontal"
+        >
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/hasDealerCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            />
+
+        <TextView
+            style="@style/AppTheme.TextHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/dealerLabel"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reversedScoringContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        >
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/reversedScoringCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/AppTheme.TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reversedScoringLabel"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/reversedScoringDescription"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</merge>

@@ -13,6 +13,7 @@
 
 <!--    Text Colors-->
     <color name="textBlack">@color/black</color>
+    <color name="textWhite">@color/white</color>
 
 <!--    Graph Colors-->
     <color name="graphRed">#f44336</color>
