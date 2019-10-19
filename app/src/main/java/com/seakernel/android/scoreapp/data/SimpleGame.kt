@@ -19,7 +19,8 @@ data class SimpleGame(
     val showRounds: Boolean = false,
     val reversedScoring: Boolean = false,
     val maxScore: Double? = null,
-    val maxRounds: Int? = null
+    val maxRounds: Int? = null,
+    val showRoundNotes: Boolean = false
 ) {
 
     constructor(settings: GameEntity, players: List<Player>) : this(
@@ -31,7 +32,8 @@ data class SimpleGame(
         showRounds = settings.showRounds,
         reversedScoring = settings.reversedScoring,
         maxScore = settings.maxScore,
-        maxRounds = settings.maxRounds
+        maxRounds = settings.maxRounds,
+        showRoundNotes = settings.showRoundNotes
     )
 
     val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
@@ -44,7 +46,8 @@ data class SimpleGame(
         showRounds = showRounds,
         reversedScoring = reversedScoring,
         maxScore = maxScore,
-        maxRounds = maxRounds
+        maxRounds = maxRounds,
+        showRoundNotes = showRoundNotes
     )
 
     companion object {
