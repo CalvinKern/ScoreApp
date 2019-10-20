@@ -39,6 +39,7 @@
 
     <!--Graph Screen-->
     <string name="graphByRoundsLabel">Score by rounds</string>
+    <string name="graphSubtitle">Statistics</string>
 
     <!--Player Round Dialog-->
     <string name="playerNotesTitle">Notes for %s</string>

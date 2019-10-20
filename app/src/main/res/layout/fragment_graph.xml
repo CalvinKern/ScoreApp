@@ -20,6 +20,7 @@
         app:navigationIcon="?attr/homeAsUpIndicator"
         android:background="?attr/colorPrimary"
         app:title="@string/gameCreateTitle"
+        app:subtitle="@string/graphSubtitle"
         />
 
     <TextView
