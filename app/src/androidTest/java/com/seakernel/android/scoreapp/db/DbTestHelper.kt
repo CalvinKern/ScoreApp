@@ -79,9 +79,7 @@ class DbTestHelper {
 
             // MigrationTestHelper automatically verifies the schema changes,
             // but you need to validate that the data was migrated properly.
-            return getAppDatabaseWithMigrations().also {
-                helper.closeWhenFinished(it)
-            }
+            return getAppDatabaseWithMigrations()
         }
 
         fun now(): String {
@@ -168,42 +166,6 @@ class DbTestHelper {
             db.execSQL("INSERT INTO ${PlayerEntity.TABLE_NAME} " +
                     "(${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}) " +
                     "VALUES $userValues")
-        }
-
-        @Deprecated("Only used on database versions 3 or less")
-        fun insertGamesRaw(n: Int, db: SupportSQLiteDatabase) {
-            var gameValues = ""
-            repeat(n) {
-                gameValues = gameValues.plus("($it, \"SimpleGame $it\", \"${now()}\")")
-                if (it < n - 1) {
-                    gameValues = gameValues.plus(", ")
-                }
-            }
-
-            db.execSQL("INSERT INTO ${GameEntity.TABLE_NAME} " +
-                    "(${GameEntity.COLUMN_ID}, ${GameEntity.COLUMN_NAME}, ${GameEntity.COLUMN_LAST_PLAYED}) " +
-                    "VALUES $gameValues")
-        }
-
-        /**
-         * Generates raw data with {@code n} users and games.
-         */
-        @Suppress("DEPRECATION")
-        @Deprecated("Only used on database versions 2 or less")
-        fun generateDataRaw(n: Int, db: SupportSQLiteDatabase) {
-            insertUsersRaw(n, db)
-            insertGamesRaw(n, db)
-
-            var gamePlayers = ""
-            repeat(n) {
-                gamePlayers = gamePlayers.plus("($it, $it)")
-                if (it < n - 1) {
-                    gamePlayers = gamePlayers.plus(", ")
-                }
-            }
-            db.execSQL("INSERT INTO ${GamePlayerJoin.TABLE_NAME} " +
-                    "(${GamePlayerJoin.COLUMN_GAME_ID}, ${GamePlayerJoin.COLUMN_PLAYER_ID}) " +
-                    "VALUES $gamePlayers")
         }
     }
 }
