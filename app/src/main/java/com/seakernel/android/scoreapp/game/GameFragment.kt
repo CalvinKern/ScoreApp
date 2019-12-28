@@ -7,6 +7,7 @@ import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.data.SimpleGame
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -86,10 +87,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onSaveInstanceState(outState) // TODO: Store state
     }
 
-    private fun setupHeaderAndFooter(
-        players: List<Player>,
-        gameId: Long
-    ) {
+    private fun setupHeaderAndFooter(settings: SimpleGame) {
+        val players = settings.players
+
         if ((totalsRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
             totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
@@ -97,9 +97,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
 
-        val adapter = PlayersAdapter(players, object : PlayerViewHolder.PlayerHolderClickedListener {
+        val adapter = PlayersAdapter(settings.showRoundNotes, players, object : PlayerViewHolder.PlayerHolderClickedListener {
             override fun playerHolderClicked(player: Player) {
-                showRoundNotesDialog(player, gameId)
+                showRoundNotesDialog(player, settings.id!!)
             }
         })
         nameRow.swapAdapter(adapter, false)
@@ -131,7 +131,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 var manager = scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
                 if (model.settings.players.isNotEmpty()) {
-                    setupHeaderAndFooter(model.settings.players, model.settings.id!!)
+                    setupHeaderAndFooter(model.settings)
 
                     val spanCount = model.settings.players.size
                     if (oldSpanCount != spanCount) {

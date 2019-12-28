@@ -12,6 +12,7 @@ import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
+import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.holder_score_row_data.view.*
 import kotlinx.android.synthetic.main.holder_score_row_header.view.*
@@ -73,7 +74,7 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
     }
 }
 
-class PlayersAdapter(private val players: List<Player>, private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener) : RecyclerView.Adapter<PlayerViewHolder>() {
+class PlayersAdapter(private val showNotes: Boolean, private val players: List<Player>, private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
         PlayerViewHolder(LayoutInflater.from(parent.context).inflate(PlayerViewHolder.RESOURCE_ID, parent, false))
 
@@ -82,7 +83,7 @@ class PlayersAdapter(private val players: List<Player>, private val playerHolder
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        holder.bind(players[position], playerHolderClickedListener)
+        holder.bind(showNotes, players[position], playerHolderClickedListener)
     }
 }
 
@@ -133,11 +134,13 @@ class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private val nameHolder: TextView by lazy { itemView.playerNameHeader }
+    private val playerNameNoteIcon: View by lazy { itemView.playerNameNoteIcon }
 
-    fun bind(player: Player, clickListener: PlayerHolderClickedListener) {
+    fun bind(showNotes: Boolean, player: Player, clickListener: PlayerHolderClickedListener) {
         nameHolder.text = player.name
         nameHolder.setOnClickListener { clickListener.playerHolderClicked(player) }
         nameHolder.setOnLongClickListener { clickListener.playerHolderClicked(player); true }
+        playerNameNoteIcon.setVisible(showNotes)
     }
 
     companion object {

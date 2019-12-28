@@ -22,6 +22,7 @@
         />
 
     <ImageView
+        android:id="@+id/playerNameNoteIcon"
         android:layout_width="18dp"
         android:layout_height="24dp"
         android:adjustViewBounds="true"
