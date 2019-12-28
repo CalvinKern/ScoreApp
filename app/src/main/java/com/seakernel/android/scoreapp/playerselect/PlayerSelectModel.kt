@@ -100,12 +100,13 @@ data class CreateModel(
                     val list = model.allPlayers.toMutableList()
                     val selected = model.selectedPlayerList.toMutableList()
                     val index = list.indexOfFirst { it.id == event.playerId }
+                    var oldPlayer: Player? = null
 
                     val insertIndex = list.indexOfFirst { player -> player.name > event.newName }.let {
-                        if (it >= 0) it else list.size
+                        if (it >= 0) it else list.size - 1
                     }
                     if (index >= 0) {
-                        val oldPlayer = list.removeAt(index)
+                        oldPlayer = list.removeAt(index)
                         list.add(insertIndex, oldPlayer.copy(name = event.newName))
                     } else {
                         list.add(insertIndex, Player(event.playerId, event.newName))
@@ -114,13 +115,17 @@ data class CreateModel(
 
                     val filteredList = if (event.newName.contains(model.searchTerm)) {
                         model.filteredPlayerList.toMutableList().also {
-                            it.add(it.indexOfFirst { player -> player.name > event.newName }.let { index ->
-                                if (index >= 0) index else it.size
-                            }, Player(event.playerId, event.newName))
+                            val filteredIndex =
+                                it.indexOfFirst { player -> player.name > event.newName }
+                                    .let { index ->
+                                        if (index >= 0) index else it.size
+                                    }
+                            it.add(filteredIndex, Player(event.playerId, event.newName))
                         }
                     } else {
-                        model.filteredPlayerList
+                        model.filteredPlayerList.toMutableList()
                     }
+                    if (oldPlayer != null) filteredList.remove(oldPlayer)
                     Next.next(model.copy(allPlayers = list, selectedPlayerList = selected, filteredPlayerList = filteredList))
                 }
                 is PlayerDeleteSuccessful -> {

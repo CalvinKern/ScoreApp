@@ -34,7 +34,7 @@ class PlayerListAdapter(private val playerList: List<Player>, private val select
         (holder as PlayerListViewHolder).bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
     }
 
-    override fun getItemId(position: Int) = playerList[position].id ?: 0
+    override fun getItemId(position: Int) = playerList[position].id ?: Long.MAX_VALUE
 }
 
 class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
