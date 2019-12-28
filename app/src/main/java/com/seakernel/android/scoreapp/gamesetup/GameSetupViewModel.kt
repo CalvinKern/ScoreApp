@@ -53,6 +53,11 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         gameSettings.value = gameSettings.value!!.copy(reversedScoring = reverseScoring)
     }
 
+    @MainThread
+    fun setShowNotes(showNotes: Boolean) {
+        gameSettings.value = gameSettings.value!!.copy(showRoundNotes = showNotes)
+    }
+
     fun saveGame() {
         val settings = gameSettings.value ?: SimpleGame()
 

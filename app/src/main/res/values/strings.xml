@@ -21,8 +21,10 @@
     <string name="gamePlayersEmptyTitle">No players added</string>
     <string name="gamePlayersEmptyMessage">To start a game, add some players with the \"EDIT\" button.</string>
     <string name="dealerLabel">Dealer</string>
-    <string name="reversedScoringLabel">Reverse Scoring</string>
+    <string name="reversedScoringTitle">Reverse Scoring</string>
     <string name="reversedScoringDescription">The player with the lowest score wins, instead of having the highest score</string>
+    <string name="showRoundNotesTitle">Show Round Notes</string>
+    <string name="showRoundNotesDescription">Click on a player\'s name to view and edit notes for each round</string>
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>

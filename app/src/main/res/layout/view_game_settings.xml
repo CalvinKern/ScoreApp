@@ -17,7 +17,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/hasDealerCheckbox"
+            android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -44,7 +44,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/reversedScoringCheckbox"
+            android:id="@id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -63,7 +63,7 @@
                 style="@style/AppTheme.TextHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/reversedScoringLabel"
+                android:text="@string/reversedScoringTitle"
                 />
 
             <TextView
@@ -75,4 +75,44 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/showNotesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        >
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/AppTheme.TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/showRoundNotesTitle"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/showRoundNotesDescription"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </merge>

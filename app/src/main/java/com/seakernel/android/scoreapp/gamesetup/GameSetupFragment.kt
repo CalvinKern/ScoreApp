@@ -19,10 +19,9 @@ import com.seakernel.android.scoreapp.data.SimpleGame
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
 import com.seakernel.android.scoreapp.utility.setVisible
 import kotlinx.android.synthetic.main.fragment_game_create.*
-import kotlinx.android.synthetic.main.fragment_game_create.playerRecycler
-import kotlinx.android.synthetic.main.fragment_game_create.toolbar
 import kotlinx.android.synthetic.main.holder_game_create_player.view.*
 import kotlinx.android.synthetic.main.view_game_settings.*
+import kotlinx.android.synthetic.main.view_game_settings.view.*
 
 class GameSetupFragment : Fragment() {
 
@@ -36,6 +35,7 @@ class GameSetupFragment : Fragment() {
     private var nameTextWatcher: TextWatcher? = null
     private var hasDealerListener: OnCheckedChangeListener? = null
     private var reversedScoringListener: OnCheckedChangeListener? = null
+    private var showNotesListener: OnCheckedChangeListener? = null
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
@@ -63,12 +63,18 @@ class GameSetupFragment : Fragment() {
         super.onDestroyView()
 
         playersHeaderEdit?.setOnClickListener(null)
-        hasDealerCheckbox?.setOnCheckedChangeListener(null)
-        reversedScoringCheckbox?.setOnCheckedChangeListener(null)
+        hasDealerContainer?.checkbox?.setOnCheckedChangeListener(null)
+        hasDealerContainer?.setOnClickListener(null)
+        reversedScoringContainer?.checkbox?.setOnCheckedChangeListener(null)
+        reversedScoringContainer?.setOnClickListener(null)
+        showNotesContainer?.checkbox?.setOnCheckedChangeListener(null)
+        showNotesContainer?.setOnClickListener(null)
+
         gameNameEdit?.removeTextChangedListener(nameTextWatcher)
 
         hasDealerListener = null
         reversedScoringListener = null
+        showNotesListener = null
 
         viewModel.getGameSettings().removeObserver(modelObserver)
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
@@ -109,24 +115,7 @@ class GameSetupFragment : Fragment() {
     }
 
     private fun initSettings() {
-        // Setup various views
-        nameTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(text: Editable?) {
-                viewModel.updateGameName(text.toString())
-            }
-        }
-        gameNameEdit.addTextChangedListener(nameTextWatcher)
-
-        hasDealerListener = OnCheckedChangeListener { _, checked -> viewModel.setHasDealer(checked) }
-        reversedScoringListener = OnCheckedChangeListener { _, checked -> viewModel.setReverseScoring(checked) }
-
-        hasDealerCheckbox.setOnCheckedChangeListener(hasDealerListener)
-        hasDealerContainer.setOnClickListener { viewModel.setHasDealer(!hasDealerCheckbox.isChecked) }
-
-        reversedScoringCheckbox.setOnCheckedChangeListener(reversedScoringListener)
-        reversedScoringContainer.setOnClickListener { viewModel.setReverseScoring(!reversedScoringCheckbox.isChecked)}
+        initListeners()
 
         // Setup player recycler
         playersHeaderEdit.setOnClickListener {
@@ -142,6 +131,30 @@ class GameSetupFragment : Fragment() {
         playerRecycler.layoutManager = LinearLayoutManager(requireContext())
         playerRecycler.adapter = adapter
         ItemTouchHelper(createItemTouchHelperCallback()).attachToRecyclerView(playerRecycler)
+    }
+
+    private fun initListeners() {
+        nameTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(text: Editable?) {
+                viewModel.updateGameName(text.toString())
+            }
+        }
+        gameNameEdit.addTextChangedListener(nameTextWatcher)
+
+        hasDealerListener = OnCheckedChangeListener { _, checked -> viewModel.setHasDealer(checked) }
+        reversedScoringListener = OnCheckedChangeListener { _, checked -> viewModel.setReverseScoring(checked) }
+        showNotesListener = OnCheckedChangeListener { _, checked -> viewModel.setShowNotes(checked) }
+
+        setListenerRow(hasDealerContainer, showNotesListener)
+        setListenerRow(reversedScoringContainer, showNotesListener)
+        setListenerRow(showNotesContainer, showNotesListener)
+    }
+
+    private fun setListenerRow(container: View, listener: OnCheckedChangeListener?) {
+        container.checkbox.setOnCheckedChangeListener(listener)
+        container.setOnClickListener { container.checkbox.performClick() }
     }
 
     private fun renderSettings(settings: SimpleGame?) {
@@ -161,8 +174,9 @@ class GameSetupFragment : Fragment() {
         }
         (playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
 
-        hasDealerCheckbox.isCheckedSafe(settings.hasDealer, hasDealerListener)
-        reversedScoringCheckbox.isCheckedSafe(settings.reversedScoring, reversedScoringListener)
+        hasDealerContainer.checkbox.isCheckedSafe(settings.hasDealer, hasDealerListener)
+        reversedScoringContainer.checkbox.isCheckedSafe(settings.reversedScoring, reversedScoringListener)
+        showNotesContainer.checkbox.isCheckedSafe(settings.showRoundNotes, showNotesListener)
 
         // Update game name unless it has focus (being edited)
         if (!gameNameEdit.hasFocus()) {

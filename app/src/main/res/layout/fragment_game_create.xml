@@ -83,8 +83,6 @@
                     android:textAllCaps="true"
                     android:textColor="@color/textWhite"
                     android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@id/gameNameEditLayout"
-                    app:layout_constraintTop_toBottomOf="@id/reversedScoringCheckbox"
                     />
 
             </LinearLayout>
