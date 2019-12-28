@@ -3,7 +3,10 @@ package com.seakernel.android.scoreapp.repository
 import android.content.Context
 import com.seakernel.android.scoreapp.data.*
 import com.seakernel.android.scoreapp.database.*
-import org.threeten.bp.ZonedDateTime
+import com.seakernel.android.scoreapp.database.daos.GameDao
+import com.seakernel.android.scoreapp.database.entities.GameEntity
+import com.seakernel.android.scoreapp.database.entities.GamePlayerJoin
+import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 
 /**
  * Created by Calvin on 12/21/18.
@@ -13,24 +16,24 @@ class GameRepository(val context: Context) {
     private val gameDao = AppDatabase.getInstance(context).gameDao()
     private val gamePlayerDao = AppDatabase.getInstance(context).gamePlayerDao()
 
-    fun loadAllGames(): List<SimpleGame> {
+    fun loadAllGames(): List<GameSettings> {
         return gameDao.getAll().map { convertToGame(it) }
     }
 
-    fun loadGame(gameId: Long): SimpleGame? {
+    fun loadGame(gameId: Long): GameSettings? {
         return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
 
-    fun loadFullGame(gameId: Long): FullGame {
+    fun loadFullGame(gameId: Long): Game {
         val fullGame = gameDao.getFullGame(gameId)
         val game = convertToGame(fullGame.game)
-        return FullGame(game, convertToRounds(game, fullGame.rounds))
+        return Game(game, convertToRounds(game, fullGame.rounds))
     }
 
     /**
      * @return newly created game id
      */
-    fun createGame(settings: SimpleGame): Long {
+    fun createGame(settings: GameSettings): Long {
         val game = settings.toGameEntity()
         val id = gameDao.insertAll(game)[0]
         gamePlayerDao.insertAll(*getPlayerJoins(settings.copy(id = id)))
@@ -44,7 +47,7 @@ class GameRepository(val context: Context) {
         return id
     }
 
-    fun updateGame(settings: SimpleGame) {
+    fun updateGame(settings: GameSettings) {
         val originalPlayerIds = gamePlayerDao.getPlayersForGame(settings.id!!).map { it.uid }
         val game = settings.toGameEntity()
         gameDao.update(game)
@@ -68,7 +71,13 @@ class GameRepository(val context: Context) {
         rounds.forEach { fullRound ->
             // Update old rounds to add players
             roundRepository.insertScores(*newPlayers.map {
-                ScoreEntity(0, it.playerId, fullRound.round.id, 0.0, "")
+                ScoreEntity(
+                    0,
+                    it.playerId,
+                    fullRound.round.id,
+                    0.0,
+                    ""
+                )
             }.toTypedArray())
             // Remove scores from players not in the game anymore
             removedPlayers.forEach { playerId ->
@@ -87,32 +96,36 @@ class GameRepository(val context: Context) {
         return gamePlayerDao.getPlayersForGame(gameId).map { player -> Player(player.uid, player.name) }
     }
 
-    private fun convertToGame(game: GameEntity): SimpleGame {
-        return SimpleGame(game, loadPlayers(game.uid))
+    private fun convertToGame(game: GameEntity): GameSettings {
+        return GameSettings(game, loadPlayers(game.uid))
     }
 
-    private fun getPlayerJoins(settings: SimpleGame) = settings.players.mapIndexed { index, player ->
-        GamePlayerJoin(settings.id!!, player.id!!, index)
+    private fun getPlayerJoins(settings: GameSettings) = settings.players.mapIndexed { index, player ->
+        GamePlayerJoin(
+            settings.id!!,
+            player.id!!,
+            index
+        )
     }.toTypedArray()
 
-    private fun convertToRounds(game: SimpleGame, rounds: List<GameDao.FulLRoundEntity>): List<Round> {
+    private fun convertToRounds(settings: GameSettings, rounds: List<GameDao.FulLRoundEntity>): List<Round> {
         return rounds.map {
             Round(
                 it.round.id,
-                game.players.find { player -> player.id == it.round.dealerId },
+                settings.players.find { player -> player.id == it.round.dealerId },
                 it.round.roundNumber,
-                convertToScores(game, it.scores)
+                convertToScores(settings, it.scores)
             )
         }
     }
 
-    private fun convertToScores(game: SimpleGame, scores: List<ScoreEntity>): List<Score> {
+    private fun convertToScores(settings: GameSettings, scores: List<ScoreEntity>): List<Score> {
         // TODO: Could clean up this logic by removing the embedded objects in `GameDao.kt`, and instead using a bigger SQL query
-        val playerIds = game.players.map { it.id }
+        val playerIds = settings.players.map { it.id }
         return scores.sortedBy { playerIds.indexOf(it.playerId) }.map { score ->
             Score(
                 score.id,
-                game.players.find { player -> player.id == score.playerId }!!,
+                settings.players.find { player -> player.id == score.playerId }!!,
                 score.score,
                 score.scoreData
             )

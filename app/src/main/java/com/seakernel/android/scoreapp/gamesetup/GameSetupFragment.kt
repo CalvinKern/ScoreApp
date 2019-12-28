@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.*
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
 import com.seakernel.android.scoreapp.utility.setVisible
 import kotlinx.android.synthetic.main.fragment_game_create.*
@@ -39,7 +39,7 @@ class GameSetupFragment : Fragment() {
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
-    private val modelObserver = Observer<SimpleGame?> { settings -> renderSettings(settings) }
+    private val modelObserver = Observer<GameSettings?> { settings -> renderSettings(settings) }
 
     private val viewModel: GameSetupViewModel by lazy {
         ViewModelProviders.of(this).get(GameSetupViewModel::class.java)
@@ -157,7 +157,7 @@ class GameSetupFragment : Fragment() {
         container.setOnClickListener { container.checkbox.performClick() }
     }
 
-    private fun renderSettings(settings: SimpleGame?) {
+    private fun renderSettings(settings: GameSettings?) {
         if (settings == null) {
             return // TODO: Show loading spinner
         }

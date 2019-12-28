@@ -5,8 +5,8 @@ import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.database.AppDatabase
-import com.seakernel.android.scoreapp.database.RoundEntity
-import com.seakernel.android.scoreapp.database.ScoreEntity
+import com.seakernel.android.scoreapp.database.entities.RoundEntity
+import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 
 /**
  * Created by Calvin on 12/23/18.
@@ -58,19 +58,43 @@ class RoundRepository(val context: Context) {
     }
 
     private fun updateRound(gameId: Long, round: Round): Round {
-        roundDao.update(RoundEntity(round.id!!, gameId, round.dealer?.id ?: 0, round.number))
+        roundDao.update(
+            RoundEntity(
+                round.id!!,
+                gameId,
+                round.dealer?.id ?: 0,
+                round.number
+            )
+        )
         roundDao.update(*round.scores.map {
-            ScoreEntity(it.id, it.player.id!!, round.id, it.value, it.metadata)
+            ScoreEntity(
+                it.id,
+                it.player.id!!,
+                round.id,
+                it.value,
+                it.metadata
+            )
         }.toTypedArray())
         return round.copy()
     }
 
     private fun createRound(gameId: Long, round: Round): Round {
         val roundId = roundDao.insertAll(
-            RoundEntity(0, gameId, round.dealer?.id ?: 0, round.number)
+            RoundEntity(
+                0,
+                gameId,
+                round.dealer?.id ?: 0,
+                round.number
+            )
         )[0]
         val scoreIds = roundDao.insertAll(*round.scores.map {
-            ScoreEntity(0, it.player.id!!, roundId, it.value, it.metadata)
+            ScoreEntity(
+                0,
+                it.player.id!!,
+                roundId,
+                it.value,
+                it.metadata
+            )
         }.toTypedArray())
         return round.copy(
             id = roundId,

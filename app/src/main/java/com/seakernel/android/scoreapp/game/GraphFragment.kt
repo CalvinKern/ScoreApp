@@ -20,7 +20,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.FullGame
+import com.seakernel.android.scoreapp.data.Game
 import kotlinx.android.synthetic.main.fragment_graph.*
 import java.text.DecimalFormat
 
@@ -39,7 +39,7 @@ class GraphFragment : Fragment() {
         R.color.graphGray
     )
 
-    private val modelObserver = Observer<FullGame?> { game -> game?.let { updateGraphData(it) } }
+    private val modelObserver = Observer<Game?> { game -> game?.let { updateGraphData(it) } }
 
     private val viewModel: GameViewModel by lazy {
         ViewModelProviders.of(this).get(GameViewModel::class.java)
@@ -65,7 +65,7 @@ class GraphFragment : Fragment() {
         initChartStyle()
     }
 
-    private fun updateGraphData(game: FullGame) {
+    private fun updateGraphData(game: Game) {
         graphToolbar.title = game.settings.name
 
         // Get scores as a list of entries, separated by players

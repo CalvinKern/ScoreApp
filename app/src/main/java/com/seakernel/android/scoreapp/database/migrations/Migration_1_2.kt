@@ -2,10 +2,10 @@ package com.seakernel.android.scoreapp.database.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.seakernel.android.scoreapp.database.GameEntity
-import com.seakernel.android.scoreapp.database.PlayerEntity
-import com.seakernel.android.scoreapp.database.RoundEntity
-import com.seakernel.android.scoreapp.database.ScoreEntity
+import com.seakernel.android.scoreapp.database.entities.GameEntity
+import com.seakernel.android.scoreapp.database.entities.PlayerEntity
+import com.seakernel.android.scoreapp.database.entities.RoundEntity
+import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 
 /**
  * Created by Calvin on 12/23/18.

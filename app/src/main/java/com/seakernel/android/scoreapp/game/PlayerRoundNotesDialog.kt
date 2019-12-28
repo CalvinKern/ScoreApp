@@ -1,7 +1,6 @@
 package com.seakernel.android.scoreapp.game
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.database.ScoreEntity
+import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 import com.seakernel.android.scoreapp.repository.RoundPlayerNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
@@ -22,7 +21,6 @@ import kotlinx.android.synthetic.main.holder_player_round_notes.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 
 class PlayerRoundNotesDialog(private val player: Player, private val gameId: Long) : DialogFragment() {
 
@@ -57,7 +55,13 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
             GlobalScope.launch {
                 val playerRounds = adapter.playerRounds
                 RoundRepository(requireContext()).updateScores(*playerRounds.map { round ->
-                    ScoreEntity(round.score.id, player.id!!, round.roundId, round.score.value, round.score.metadata)
+                    ScoreEntity(
+                        round.score.id,
+                        player.id!!,
+                        round.roundId,
+                        round.score.value,
+                        round.score.metadata
+                    )
                 }.toTypedArray())
                 dialog?.dismiss()
             }

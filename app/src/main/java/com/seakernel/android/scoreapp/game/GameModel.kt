@@ -1,9 +1,9 @@
 package com.seakernel.android.scoreapp.game
 
-import com.seakernel.android.scoreapp.data.FullGame
+import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
-import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
 
@@ -16,7 +16,7 @@ sealed class GameEvent {
     object RequestLoad : GameEvent()
     object RequestCreateRound : GameEvent()
     data class RequestSaveRound(val round: Round) : GameEvent()
-    data class Loaded(val game: FullGame) : GameEvent()
+    data class Loaded(val game: Game) : GameEvent()
     data class RoundSaved(val round: Round) : GameEvent()
     data class UpdateScore(val roundId: Long, val playerId: Long, val score: Double, val metadata: String) : GameEvent()
 }
@@ -26,7 +26,7 @@ sealed class GameEffect {
     data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
 }
 
-data class GameModel(val settings: SimpleGame = SimpleGame(), val rounds: List<Round> = emptyList()) {
+data class GameModel(val settings: GameSettings = GameSettings(), val rounds: List<Round> = emptyList()) {
 
     companion object {
         fun createDefault(): GameModel {

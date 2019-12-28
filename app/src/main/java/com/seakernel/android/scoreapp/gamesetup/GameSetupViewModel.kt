@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hadilq.liveevent.LiveEvent
-import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.utility.safePostValue
@@ -23,7 +23,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     private var gameRepository: GameRepository = GameRepository(application)
     private var playerRepository: PlayerRepository = PlayerRepository(application)
-    private val gameSettings = MutableLiveData<SimpleGame?>().apply { value = null }
+    private val gameSettings = MutableLiveData<GameSettings?>().apply { value = null }
     private val gameCreatedEvent = LiveEvent<Long>()
     private val gameUpdatedEvent = LiveEvent<Long>()
 
@@ -32,7 +32,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         job.cancel()
     }
 
-    fun getGameSettings(): LiveData<SimpleGame?> = gameSettings
+    fun getGameSettings(): LiveData<GameSettings?> = gameSettings
 
     fun getGameCreatedEvent(): LiveData<Long> = gameCreatedEvent
 
@@ -59,7 +59,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun saveGame() {
-        val settings = gameSettings.value ?: SimpleGame()
+        val settings = gameSettings.value ?: GameSettings()
 
         scope.launch {
             if (settings.id != null) {
@@ -77,7 +77,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
      * Also need to remove any players that were in the old list but not in the given IDs.
      */
     fun updateForNewPlayers(playerIds: List<Long>) {
-        val settings = gameSettings.value ?: SimpleGame()
+        val settings = gameSettings.value ?: GameSettings()
 
         scope.launch {
             val dealerId = if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
@@ -114,7 +114,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     @MainThread
     fun initializeGame() {
         if (gameSettings.value == null) {
-            gameSettings.value = SimpleGame()
+            gameSettings.value = GameSettings()
         }
     }
 }

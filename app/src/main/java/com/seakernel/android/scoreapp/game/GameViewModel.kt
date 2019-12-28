@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.seakernel.android.scoreapp.data.FullGame
+import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.utility.safePostValue
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +16,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.Default + job)
 
-    private val gameData = MutableLiveData<FullGame>()
+    private val gameData = MutableLiveData<Game>()
 
     private var gameRepository: GameRepository = GameRepository(application)
 
@@ -25,7 +25,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         job.cancel()
     }
 
-    fun getGame(): LiveData<FullGame> = gameData
+    fun getGame(): LiveData<Game> = gameData
 
     fun loadGame(gameId: Long, forceRefresh: Boolean = false) {
         // Return early if it is the same game

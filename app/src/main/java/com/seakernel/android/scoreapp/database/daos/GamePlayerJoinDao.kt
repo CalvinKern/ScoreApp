@@ -1,9 +1,12 @@
-package com.seakernel.android.scoreapp.database
+package com.seakernel.android.scoreapp.database.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.seakernel.android.scoreapp.database.entities.GameEntity
+import com.seakernel.android.scoreapp.database.entities.GamePlayerJoin
+import com.seakernel.android.scoreapp.database.entities.PlayerEntity
 
 /**
  * Created by Calvin on 12/21/18.

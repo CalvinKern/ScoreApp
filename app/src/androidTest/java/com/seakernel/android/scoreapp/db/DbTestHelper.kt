@@ -8,8 +8,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
-import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.database.*
+import com.seakernel.android.scoreapp.database.daos.PlayerDao
+import com.seakernel.android.scoreapp.database.entities.*
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -83,7 +85,7 @@ class DbTestHelper {
         }
 
         fun now(): String {
-            return ZonedDateTime.now().format(SimpleGame.DATE_FORMATTER)
+            return ZonedDateTime.now().format(GameSettings.DATE_FORMATTER)
         }
 
         fun generateGameData(version: Int, db: SupportSQLiteDatabase) {

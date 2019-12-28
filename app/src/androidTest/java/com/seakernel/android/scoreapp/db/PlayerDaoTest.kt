@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.seakernel.android.scoreapp.database.AppDatabase
-import com.seakernel.android.scoreapp.database.PlayerDao
-import com.seakernel.android.scoreapp.database.PlayerEntity
+import com.seakernel.android.scoreapp.database.daos.PlayerDao
+import com.seakernel.android.scoreapp.database.entities.PlayerEntity
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -40,7 +40,11 @@ class PlayerDaoTest {
 
     @Test
     fun writePlayerAndReadAll() {
-        val player = PlayerEntity(0, "User 1")
+        val player =
+            PlayerEntity(
+                0,
+                "User 1"
+            )
         val playerIds = playerDao.insertAll(player)
         val allPlayers = playerDao.getAll()
 
@@ -50,7 +54,11 @@ class PlayerDaoTest {
 
     @Test
     fun writePlayerAndFindId() {
-        val player = PlayerEntity(0, "User 1")
+        val player =
+            PlayerEntity(
+                0,
+                "User 1"
+            )
         val playerIds = playerDao.insertAll(player)
         val playerList = playerDao.loadAllByIds(longArrayOf(playerIds[0]))
 
@@ -59,10 +67,19 @@ class PlayerDaoTest {
 
     @Test
     fun updatePlayer() {
-        val player = PlayerEntity(0, "User 1")
+        val player =
+            PlayerEntity(
+                0,
+                "User 1"
+            )
         val playerIds = playerDao.insertAll(player)
 
-        playerDao.update(PlayerEntity(playerIds[0], "User one"))
+        playerDao.update(
+            PlayerEntity(
+                playerIds[0],
+                "User one"
+            )
+        )
 
         val playerList = playerDao.loadAllByIds(longArrayOf(playerIds[0]))
         assertEquals(playerList[0].name, "User one")
@@ -70,7 +87,11 @@ class PlayerDaoTest {
 
     @Test
     fun deletePlayer() {
-        val player = PlayerEntity(0, "User 1")
+        val player =
+            PlayerEntity(
+                0,
+                "User 1"
+            )
         val playerIds = playerDao.insertAll(player)
 
         playerDao.deleteById(playerIds[0])
@@ -83,7 +104,12 @@ class PlayerDaoTest {
     fun insertMultiplePlayers() {
         val n = 5
         val players = mutableListOf<PlayerEntity>()
-        repeat(n) { players.add(PlayerEntity(0, "User $it")) }
+        repeat(n) { players.add(
+            PlayerEntity(
+                0,
+                "User $it"
+            )
+        ) }
 
         playerDao.insertAll(*players.toTypedArray())
 

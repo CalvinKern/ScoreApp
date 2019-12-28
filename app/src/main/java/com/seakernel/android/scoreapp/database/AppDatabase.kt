@@ -5,6 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
+import com.seakernel.android.scoreapp.database.daos.GameDao
+import com.seakernel.android.scoreapp.database.daos.GamePlayerJoinDao
+import com.seakernel.android.scoreapp.database.daos.PlayerDao
+import com.seakernel.android.scoreapp.database.daos.RoundDao
+import com.seakernel.android.scoreapp.database.entities.*
 import com.seakernel.android.scoreapp.database.migrations.*
 
 /**

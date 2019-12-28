@@ -1,6 +1,8 @@
-package com.seakernel.android.scoreapp.database
+package com.seakernel.android.scoreapp.database.daos
 
 import androidx.room.*
+import com.seakernel.android.scoreapp.database.entities.RoundEntity
+import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 
 /**
  * Created by Calvin on 12/23/18.

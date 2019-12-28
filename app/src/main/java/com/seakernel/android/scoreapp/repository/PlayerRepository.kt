@@ -3,8 +3,8 @@ package com.seakernel.android.scoreapp.repository
 import android.content.Context
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.database.AppDatabase
-import com.seakernel.android.scoreapp.database.PlayerDao
-import com.seakernel.android.scoreapp.database.PlayerEntity
+import com.seakernel.android.scoreapp.database.daos.PlayerDao
+import com.seakernel.android.scoreapp.database.entities.PlayerEntity
 
 /**
  * Created by Calvin on 12/20/18.
@@ -32,12 +32,21 @@ class PlayerRepository(val context: Context) {
     }
 
     private fun updateUser(playerId: Long, playerName: String): Player {
-        playerDao.update(PlayerEntity(playerId, playerName))
+        playerDao.update(
+            PlayerEntity(
+                playerId,
+                playerName
+            )
+        )
         return Player(playerId, playerName)
     }
 
     private fun createUser(name: String): Player {
-        val player = PlayerEntity(0, name)
+        val player =
+            PlayerEntity(
+                0,
+                name
+            )
         val id = playerDao.insertAll(player)[0]
         return Player(id, name)
     }

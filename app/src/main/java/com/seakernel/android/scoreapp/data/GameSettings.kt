@@ -1,6 +1,6 @@
 package com.seakernel.android.scoreapp.data
 
-import com.seakernel.android.scoreapp.database.GameEntity
+import com.seakernel.android.scoreapp.database.entities.GameEntity
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -8,8 +8,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * Created by Calvin on 12/16/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-// TODO: Rename to GameSettings
-data class SimpleGame(
+data class GameSettings(
     val id: Long? = null,
     val name: String = "",
     val lastPlayed: ZonedDateTime = ZonedDateTime.now(),
@@ -38,17 +37,18 @@ data class SimpleGame(
 
     val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
 
-    fun toGameEntity() = GameEntity(
-        uid = id ?: 0,
-        name = name,
-        date = ZonedDateTime.now().format(DATE_FORMATTER),
-        hasDealer = hasDealer,
-        showRounds = showRounds,
-        reversedScoring = reversedScoring,
-        maxScore = maxScore,
-        maxRounds = maxRounds,
-        showRoundNotes = showRoundNotes
-    )
+    fun toGameEntity() =
+        GameEntity(
+            uid = id ?: 0,
+            name = name,
+            date = ZonedDateTime.now().format(DATE_FORMATTER),
+            hasDealer = hasDealer,
+            showRounds = showRounds,
+            reversedScoring = reversedScoring,
+            maxScore = maxScore,
+            maxRounds = maxRounds,
+            showRoundNotes = showRoundNotes
+        )
 
     companion object {
         private const val DATE_FORMAT = "MMM dd, YYYY"

@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.database
+package com.seakernel.android.scoreapp.database.entities
 
 import androidx.room.*
 

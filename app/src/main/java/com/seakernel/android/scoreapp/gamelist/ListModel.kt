@@ -1,6 +1,6 @@
 package com.seakernel.android.scoreapp.gamelist
 
-import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
 
@@ -15,7 +15,7 @@ sealed class ListEvent {
     data class GameRowLongPressed(val gameId: Long) : ListEvent()
     data class GameDeleteSuccessful(val gameId: Long) : ListEvent()
     object LoadData : ListEvent()
-    data class Loaded(val games: List<SimpleGame>) : ListEvent()
+    data class Loaded(val games: List<GameSettings>) : ListEvent()
 }
 
 sealed class ListEffect {
@@ -27,7 +27,7 @@ sealed class ListEffect {
 }
 
 data class ListModel(
-    val gameList: List<SimpleGame> = listOf(),
+    val gameList: List<GameSettings> = listOf(),
     val isLoading: Boolean = false
 ) {
 

@@ -7,7 +7,7 @@ import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -87,7 +87,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onSaveInstanceState(outState) // TODO: Store state
     }
 
-    private fun setupHeaderAndFooter(settings: SimpleGame) {
+    private fun setupHeaderAndFooter(settings: GameSettings) {
         val players = settings.players
 
         if ((totalsRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {

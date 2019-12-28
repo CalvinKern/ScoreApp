@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.SimpleGame
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.holder_game_list.view.*
 
@@ -15,7 +14,7 @@ import kotlinx.android.synthetic.main.holder_game_list.view.*
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameListAdapter(private val gameList: List<SimpleGame>, private val eventConsumer: Consumer<ListEvent>) : RecyclerView.Adapter<GameListViewHolder>() {
+class GameListAdapter(private val gameList: List<GameSettings>, private val eventConsumer: Consumer<ListEvent>) : RecyclerView.Adapter<GameListViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -45,14 +44,14 @@ class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val dateHolder: TextView by lazy { itemView.gameDateHolder }
     private val playersHolder: TextView by lazy { itemView.gamePlayersHolder }
 
-    fun bind(game: SimpleGame, eventConsumer: Consumer<ListEvent>) {
-        nameHolder.text = game.name
-        dateHolder.text = game.lastPlayedAt
-        playersHolder.text = itemView.context.getString(R.string.playersHolder, game.players.size)
+    fun bind(settings: GameSettings, eventConsumer: Consumer<ListEvent>) {
+        nameHolder.text = settings.name
+        dateHolder.text = settings.lastPlayedAt
+        playersHolder.text = itemView.context.getString(R.string.playersHolder, settings.players.size)
 
-        itemView.setOnClickListener { eventConsumer.accept(ListEvent.GameRowClicked(game.id!!)) }
+        itemView.setOnClickListener { eventConsumer.accept(ListEvent.GameRowClicked(settings.id!!)) }
         itemView.setOnLongClickListener {
-            eventConsumer.accept(ListEvent.GameRowLongPressed(game.id!!))
+            eventConsumer.accept(ListEvent.GameRowLongPressed(settings.id!!))
             return@setOnLongClickListener true
         }
     }
