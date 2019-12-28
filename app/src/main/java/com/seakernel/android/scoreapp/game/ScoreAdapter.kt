@@ -138,9 +138,10 @@ class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(showNotes: Boolean, player: Player, clickListener: PlayerHolderClickedListener) {
         nameHolder.text = player.name
-        nameHolder.setOnClickListener { clickListener.playerHolderClicked(player) }
-        nameHolder.setOnLongClickListener { clickListener.playerHolderClicked(player); true }
         playerNameNoteIcon.setVisible(showNotes)
+
+        itemView.setOnClickListener { clickListener.playerHolderClicked(player) }
+        itemView.setOnLongClickListener { clickListener.playerHolderClicked(player); true }
     }
 
     companion object {
