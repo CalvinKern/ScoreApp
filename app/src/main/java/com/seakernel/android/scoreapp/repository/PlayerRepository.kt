@@ -17,8 +17,10 @@ class PlayerRepository(val context: Context) {
         return playerDao.getAll().map { Player(it.uid, it.name) }
     }
 
-    fun loadUsers(ids: List<Long>) : List<Player> {
-        return playerDao.loadAllByIds(ids.toLongArray()).map { Player(it.uid, it.name) }
+    fun loadUsers(ids: List<Long>): List<Player> {
+        return playerDao.loadAllByIds(ids.toLongArray())
+            .map { Player(it.uid, it.name) }
+            .sortedBy { p -> ids.indexOf(p.id) }
     }
 
     fun addOrUpdateUser(playerId: Long?, playerName: String): Player {
