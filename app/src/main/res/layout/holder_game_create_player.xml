@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:foreground="?attr/selectableItemBackground"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     >
@@ -21,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playerNameHolder"
         android:src="@drawable/ic_drag_indicator"
+        android:tint="@color/gray"
         />
 
     <TextView
@@ -48,7 +48,6 @@
         app:layout_constraintStart_toEndOf="@id/playerNameHolder"
         android:labelFor="@id/playerDealerBox"
         android:text="@string/dealerLabel"
-        android:textColor="@color/colorAccent"
         android:visibility="gone"
         tools:visibility="visible"
         />

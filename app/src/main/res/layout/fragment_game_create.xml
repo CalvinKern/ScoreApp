@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:backgroundTint="@color/colorAccent"
+                    android:backgroundTint="@color/colorSecondary"
                     android:gravity="center"
                     android:minWidth="@dimen/min_touch_size"
                     android:minHeight="@dimen/min_touch_size"

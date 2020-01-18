@@ -174,7 +174,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
             if (round.number % 2 == 0) {
                 itemView.setBackgroundResource(R.color.slightGray)
             } else {
-                itemView.setBackgroundResource(R.color.white)
+                itemView.setBackgroundResource(R.color.colorBackground)
             }
         }
         if (!scoreHolder.hasFocus()) {

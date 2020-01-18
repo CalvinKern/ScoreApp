@@ -1,10 +1,10 @@
 package com.seakernel.android.scoreapp.gamelist
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.repository.GameRepository
