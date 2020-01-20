@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/addRoundButton"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/min_touch_size"
     android:background="@color/colorSecondary"
     android:foreground="?attr/selectableItemBackground"
     android:focusable="true"

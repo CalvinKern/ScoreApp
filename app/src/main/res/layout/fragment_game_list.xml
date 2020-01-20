@@ -101,6 +101,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black"
+        android:contentDescription="@string/gameCreateTitle"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

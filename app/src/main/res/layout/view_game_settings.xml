@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/dealerLabel"
+            android:labelFor="@id/checkbox"
             />
 
     </LinearLayout>
@@ -64,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reversedScoringTitle"
+                android:labelFor="@id/checkbox"
                 />
 
             <TextView
@@ -105,6 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/showRoundNotesTitle"
+                android:labelFor="@id/checkbox"
                 />
 
             <TextView

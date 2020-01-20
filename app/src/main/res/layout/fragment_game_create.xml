@@ -17,6 +17,7 @@
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:title="@string/gameCreateTitle"
+        app:navigationContentDescription="@string/navigate_up"
         />
 
     <androidx.core.widget.NestedScrollView
@@ -38,6 +39,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="@string/gameNameHint"
+                app:hintTextColor="@color/gray"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText

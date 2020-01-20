@@ -32,6 +32,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="@dimen/text_title"
         tools:text="Player Name"
+        android:labelFor="@+id/playerCheckHolder"
+        tools:ignore="LabelFor"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

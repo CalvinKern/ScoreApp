@@ -17,6 +17,7 @@
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:title="@string/pickPlayers"
+        app:navigationContentDescription="@string/navigate_up"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -148,6 +149,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black"
+        android:contentDescription="@string/playerCreateTitle"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

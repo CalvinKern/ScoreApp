@@ -183,7 +183,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         var name = ""
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_player_name, null, false)
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle(R.string.playerName)
+            .setTitle(R.string.playerCreateTitle)
             .setView(view)
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
