@@ -1,11 +1,11 @@
 package com.seakernel.android.scoreapp.game
 
-import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
@@ -183,6 +183,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         }
         scoreHolder.isEnabled = true
         scoreHolder.isFocusable = true
+        scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textBlack))
         scoreHolder.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
@@ -204,7 +205,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
             itemView.setBackgroundResource(R.color.black)
         }
         scoreHolder.setText(formatScore(score))
-        scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.white))
+        scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textWhite))
     }
 
     private fun formatScore(score: Double) = DecimalFormat("#.##").format(score)

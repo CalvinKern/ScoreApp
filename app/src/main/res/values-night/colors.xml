@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="slightGray">#121212</color>
+    <color name="dealerSoft">@color/colorPrimaryDark</color>
+    <color name="colorSelected">#252525</color>
+
     <color name="colorOnPrimary">@color/white</color>
     <color name="colorSecondary">#757de8</color>
     <color name="colorOnSecondary">@color/black</color>
     <color name="colorBackground">@color/black</color>
-    <color name="slightGray">#424242</color>
-    <color name="dealerSoft">#c66900</color> <!--Orange-500-Dark-->
 
-    <color name="textBlack">@color/textWhite</color>
+    <color name="textWhite">#BFFFFFFF</color>
+    <color name="textBlack">#BFFFFFFF</color>
 </resources>

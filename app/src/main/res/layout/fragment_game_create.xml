@@ -81,7 +81,7 @@
                     android:minHeight="@dimen/min_touch_size"
                     android:text="@string/actionEdit"
                     android:textAllCaps="true"
-                    android:textColor="@color/textWhite"
+                    android:textColor="@color/colorOnSecondary"
                     android:textSize="14sp"
                     />
 

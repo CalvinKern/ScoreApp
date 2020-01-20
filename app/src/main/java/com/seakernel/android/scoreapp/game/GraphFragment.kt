@@ -1,11 +1,10 @@
 package com.seakernel.android.scoreapp.game
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,6 +24,8 @@ import kotlinx.android.synthetic.main.fragment_graph.*
 import java.text.DecimalFormat
 
 class GraphFragment : Fragment() {
+
+    private val colorTextBlack by lazy { getColor(requireContext(), R.color.textBlack) }
 
     private val graphColors = intArrayOf(
         R.color.graphRed,
@@ -89,7 +90,7 @@ class GraphFragment : Fragment() {
             val playerName = game.settings.players.find { it.id == scores.key }?.name
             val playerColor = graphColors[scores.key.toInt() % graphColors.size]
             LineDataSet(scores.value, playerName).also {
-                setDataSetStyle(it, ContextCompat.getColor(requireContext(), playerColor))
+                setDataSetStyle(it, getColor(requireContext(), playerColor))
             }
         }
 
@@ -107,13 +108,18 @@ class GraphFragment : Fragment() {
             description = Description().also {
                 it.text = ""
             }
+            legend.also {
+                it.textColor = colorTextBlack
+            }
             xAxis.also {
                 it.granularity = 1f
                 it.position = XAxis.XAxisPosition.BOTTOM
+                it.textColor = colorTextBlack
             }
             axisLeft.also {
                 it.granularity = 1f
                 it.axisMinimum = 0f
+                it.textColor = colorTextBlack
             }
             setDrawBorders(true)
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -140,7 +146,7 @@ class GraphFragment : Fragment() {
             lineWidth = 4f
             valueTextSize = 14f
             axisDependency = YAxis.AxisDependency.LEFT
-            valueTextColor = ColorUtils.blendARGB(playerColor, Color.BLACK, 0.3f)
+            valueTextColor = ColorUtils.blendARGB(playerColor, colorTextBlack, 0.3f)
             setDrawHighlightIndicators(false)
 
             // Set circle data
