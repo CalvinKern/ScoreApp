@@ -1,7 +1,6 @@
 package com.seakernel.android.scoreapp.gamesetup
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,14 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton.OnCheckedChangeListener
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.*
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
+import com.seakernel.android.scoreapp.utility.setBackgroundRipple
 import com.seakernel.android.scoreapp.utility.setVisible
 import kotlinx.android.synthetic.main.fragment_game_create.*
 import kotlinx.android.synthetic.main.holder_game_create_player.view.*
@@ -292,10 +293,10 @@ private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallba
     }
 
     override fun onSelected() {
-        itemView.setBackgroundColor(Color.LTGRAY)
+        itemView.setBackgroundColor(getColor(itemView.context, R.color.colorSelected))
     }
 
     override fun onCleared() {
-        itemView.setBackgroundColor(Color.WHITE)
+        itemView.setBackgroundRipple()
     }
 }

@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="slightGray">#F5F5F5</color>
     <color name="gray">#707070</color>
     <color name="winnerGreen">#087f23</color>
-    <color name="dealer">#ff9800</color>
-    <color name="dealerSoft">#ffe0b2</color>
+    <color name="dealer">@color/colorPrimary</color>
+    <color name="dealerSoft">@color/colorPrimaryLight</color>
+    <color name="transparent">#00000000</color>
+    <color name="colorSelected">#DADADA</color>
 
-<!--    Text Colors-->
+    <!-- Material colors -->
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryLight">#4cb5a6</color>
+    <color name="colorOnPrimary">@color/white</color>
+    <color name="colorSecondary">#3f51b5</color> <!--Indigo-500-->
+    <color name="colorOnSecondary">@color/white</color>
+    <color name="colorBackground">@color/white</color>
+
+    <!-- Text Colors-->
     <color name="textBlack">@color/black</color>
     <color name="textWhite">@color/white</color>
 
-<!--    Graph Colors-->
+    <!-- Graph Colors-->
     <color name="graphRed">#f44336</color>
     <color name="graphPurple">#9c27b0</color>
     <color name="graphBlue">#2196f3</color>

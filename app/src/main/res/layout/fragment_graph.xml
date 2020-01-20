@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay"
+        app:navigationContentDescription="@string/navigate_up"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,6 +22,7 @@
         android:background="?attr/colorPrimary"
         app:title="@string/gameCreateTitle"
         app:subtitle="@string/graphSubtitle"
+        app:subtitleTextColor="@color/colorOnPrimary"
         />
 
     <TextView

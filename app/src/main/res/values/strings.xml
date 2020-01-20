@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Score Pad</string>
     <string name="action_settings">Settings</string>
+    <string name="navigate_up">Navigate Up</string>
 
     <!--Game List Screen-->
     <string name="gameListTitle">Games</string>
@@ -28,6 +29,7 @@
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>
+    <string name="playerCreateTitle">New Player</string>
     <string name="playerIcon">Player Icon</string>
     <string name="playerEmptyTitle">No players added</string>
     <string name="playerEmptyMessage">Start by clicking the + button down below to add a new player!</string>
