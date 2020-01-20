@@ -103,7 +103,7 @@ data class CreateModel(
                     var oldPlayer: Player? = null
 
                     val insertIndex = list.indexOfFirst { player -> player.name > event.newName }.let {
-                        if (it >= 0) it else list.size - 1
+                        if (it >= 0) it else if (list.size > 0) list.size - 1 else 0
                     }
                     if (index >= 0) {
                         oldPlayer = list.removeAt(index)
