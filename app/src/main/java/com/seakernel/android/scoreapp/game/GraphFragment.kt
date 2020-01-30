@@ -57,8 +57,9 @@ class GraphFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        graphToolbar.setSubtitle(R.string.graphSubtitle)
 
-        viewModel.getGame().observe(this, modelObserver)
+        viewModel.getGame().observe(viewLifecycleOwner, modelObserver)
         viewModel.loadGame(
             arguments?.getLong(ARG_GAME_ID) ?: throw RuntimeException("No game ID provided to GraphFragment")
         )
