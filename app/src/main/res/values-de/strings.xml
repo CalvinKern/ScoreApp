@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionEdit">Bearbeiten</string>
+    <string name="actionGraph">Grafik anzeigen</string>
+    <string name="actionSave">speichern</string>
+    <string name="actionSearch">Suche</string>
+    <string name="action_settings">die Einstellungen</string>
+    <string name="addRound">Runde hinzufügen</string>
+    <string name="dealerLabel">Händler</string>
+    <string name="delete">Löschen</string>
+    <string name="deleteGameConfirmation">Möchten Sie dieses Spiel löschen?</string>
+    <string name="deleteSuccessful">Gelöscht</string>
+    <string name="gameCreateTitle">Neues Spiel</string>
+    <string name="gameListEmptyMessage">Beginnen Sie mit einem Klick auf die Schaltfläche + unten, um ein neues Spiel zu erstellen!</string>
+    <string name="gameListEmptyTitle">Keine Spiele erstellt</string>
+    <string name="gameListTitle">Spiele</string>
+    <string name="gameNameHint">Spielname</string>
+    <string name="gamePlayersEmptyMessage">Um ein Spiel zu starten, fügen Sie einige Spieler mit der Schaltfläche \"BEARBEITEN\" hinzu.</string>
+    <string name="gamePlayersEmptyTitle">Keine Spieler hinzugefügt</string>
+    <string name="gamePlayersHeader">Spieler</string>
+    <string name="gameSettingsTitle">Spieleinstellungen</string>
+    <string name="graphByRoundsLabel">Ergebnis nach Runden</string>
+    <string name="graphSubtitle">Statistiken</string>
+    <string name="makePlayerDealerMessage">%s-Händler für diese Runde machen?</string>
+    <string name="pickPlayers">Spieler auswählen</string>
+    <string name="playerCreateTitle">Neuer Spieler</string>
+    <string name="playerEmptyMessage">Beginnen Sie, indem Sie auf das + unten klicken, um einen neuen Spieler hinzuzufügen!</string>
+    <string name="playerEmptySearchMessage">Kein Spieler entspricht den aktuellen Suchkriterien. Sie können einen neuen Spieler hinzufügen, indem Sie auf das + unten klicken!</string>
+    <string name="playerEmptySearchTitle">Keine Spieler passen zusammen</string>
+    <string name="playerEmptyTitle">Keine Spieler hinzugefügt</string>
+    <string name="playerIcon">Spieler-Symbol</string>
+    <string name="playerName">Spielername</string>
+    <string name="playerNotesTitle">Notizen für %s</string>
+    <string name="playerRoundNumberFormat">Runde %d:</string>
+    <string name="playerRoundNumberHint">Anmerkungen</string>
+    <string name="playersHolder">%d Spieler</string>
+    <string name="reversedScoringDescription">Der Spieler mit der niedrigsten Punktzahl gewinnt, anstatt die höchste Punktzahl zu erzielen</string>
+    <string name="reversedScoringTitle">Reverse Scoring</string>
+    <string name="scoreHint">Ergebnis</string>
+    <string name="showRoundNotesDescription">Klicken Sie auf den Namen eines Spielers, um Notizen für jede Runde anzuzeigen und zu bearbeiten</string>
+    <string name="showRoundNotesTitle">Runde Noten anzeigen</string>
+</resources>

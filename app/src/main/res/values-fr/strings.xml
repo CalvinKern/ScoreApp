@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionEdit">Éditer</string>
+    <string name="actionGraph">Afficher le graphique</string>
+    <string name="actionSave">sauvegarder</string>
+    <string name="actionSearch">Chercher</string>
+    <string name="action_settings">Réglages</string>
+    <string name="addRound">Ajouter un tour</string>
+    <string name="dealerLabel">Marchand</string>
+    <string name="delete">Supprimer</string>
+    <string name="deleteGameConfirmation">Voulez-vous supprimer ce jeu?</string>
+    <string name="deleteSuccessful">Effacé</string>
+    <string name="gameCreateTitle">Nouveau jeu</string>
+    <string name="gameListEmptyMessage">Commencez par cliquer sur le bouton + ci-dessous pour créer un nouveau jeu!</string>
+    <string name="gameListEmptyTitle">Aucun jeu créé</string>
+    <string name="gameListTitle">Jeux</string>
+    <string name="gameNameHint">Nom du jeu</string>
+    <string name="gamePlayersEmptyMessage">Pour commencer une partie, ajoutez quelques joueurs avec le bouton \"EDIT\".</string>
+    <string name="gamePlayersEmptyTitle">Aucun joueur ajouté</string>
+    <string name="gamePlayersHeader">Joueurs</string>
+    <string name="gameSettingsTitle">Paramètres de jeu</string>
+    <string name="graphByRoundsLabel">Score par rounds</string>
+    <string name="graphSubtitle">Statistiques</string>
+    <string name="makePlayerDealerMessage">Faire un revendeur %s pour ce tour?</string>
+    <string name="pickPlayers">Choisir des joueurs</string>
+    <string name="playerCreateTitle">Nouveau joueur</string>
+    <string name="playerEmptyMessage">Commencez par cliquer sur le bouton + ci-dessous pour ajouter un nouveau joueur!</string>
+    <string name="playerEmptySearchMessage">Aucun joueur ne correspond aux critères de recherche actuels. Vous pouvez ajouter un nouveau joueur en cliquant sur le bouton + ci-dessous!</string>
+    <string name="playerEmptySearchTitle">Aucun joueur ne correspond</string>
+    <string name="playerEmptyTitle">Aucun joueur ajouté</string>
+    <string name="playerIcon">Icône de joueur</string>
+    <string name="playerName">Nom de joueur</string>
+    <string name="playerNotesTitle">Remarques pour %s</string>
+    <string name="playerRoundNumberFormat">Tour %d:</string>
+    <string name="playerRoundNumberHint">Remarques</string>
+    <string name="playersHolder">%d joueurs</string>
+    <string name="reversedScoringDescription">Le joueur avec le score le plus bas gagne, au lieu d\'avoir le score le plus élevé</string>
+    <string name="reversedScoringTitle">Score inversé</string>
+    <string name="scoreHint">Score</string>
+    <string name="showRoundNotesDescription">Cliquez sur le nom d\'un joueur pour afficher et modifier les notes de chaque manche</string>
+    <string name="showRoundNotesTitle">Afficher les notes rondes</string>
+</resources>

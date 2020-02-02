@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionEdit">संपादित करें</string>
+    <string name="actionGraph">ग्राफ दिखाएं</string>
+    <string name="actionSave">सहेजें</string>
+    <string name="actionSearch">खोज</string>
+    <string name="action_settings">समायोजन</string>
+    <string name="addRound">राउंड जोड़ें</string>
+    <string name="dealerLabel">विक्रेता</string>
+    <string name="delete">हटाएं</string>
+    <string name="deleteGameConfirmation">क्या आप इस गेम को हटाना चाहते हैं?</string>
+    <string name="deleteSuccessful">हटाए गए</string>
+    <string name="gameCreateTitle">नया खेल</string>
+    <string name="gameListEmptyMessage">एक नया गेम बनाने के लिए नीचे दिए गए + बटन पर क्लिक करके शुरू करें!</string>
+    <string name="gameListEmptyTitle">कोई गेम नहीं बनाया गया</string>
+    <string name="gameListTitle">खेल</string>
+    <string name="gameNameHint">खेल का नाम</string>
+    <string name="gamePlayersEmptyMessage">गेम शुरू करने के लिए, \"संपादित करें\" बटन के साथ कुछ खिलाड़ी जोड़ें।</string>
+    <string name="gamePlayersEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
+    <string name="gamePlayersHeader">खिलाड़ियों</string>
+    <string name="gameSettingsTitle">खेल व्यवस्था</string>
+    <string name="graphByRoundsLabel">गोल करके स्कोर करें</string>
+    <string name="graphSubtitle">आंकड़े</string>
+    <string name="makePlayerDealerMessage">इस दौर के लिए %s डीलर बनाएं?</string>
+    <string name="pickPlayers">खिलाड़ियों को चुनें</string>
+    <string name="playerCreateTitle">नया खिलाडी</string>
+    <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन नीचे क्लिक करके शुरू करें!</string>
+    <string name="playerEmptySearchMessage">कोई भी खिलाड़ी वर्तमान खोज मापदंड से मेल नहीं खाता है। आप नीचे दिए गए + बटन पर क्लिक करके एक नया खिलाड़ी जोड़ सकते हैं!</string>
+    <string name="playerEmptySearchTitle">कोई भी खिलाड़ी मैच नहीं करता</string>
+    <string name="playerEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
+    <string name="playerIcon">प्लेयर आइकन</string>
+    <string name="playerName">खिलाडि का नाम</string>
+    <string name="playerNotesTitle">%s के लिए नोट्स</string>
+    <string name="playerRoundNumberFormat">दौर %d:</string>
+    <string name="playerRoundNumberHint">टिप्पणियाँ</string>
+    <string name="playersHolder">%d खिलाड़ी</string>
+    <string name="reversedScoringDescription">उच्चतम स्कोर होने के बजाय सबसे कम स्कोर वाला खिलाड़ी जीतता है</string>
+    <string name="reversedScoringTitle">रिवर्स स्कोरिंग</string>
+    <string name="scoreHint">स्कोर</string>
+    <string name="showRoundNotesDescription">प्रत्येक दौर के लिए नोट्स देखने और संपादित करने के लिए एक खिलाड़ी के नाम पर क्लिक करें</string>
+    <string name="showRoundNotesTitle">राउंड नोट्स दिखाएं</string>
+</resources>

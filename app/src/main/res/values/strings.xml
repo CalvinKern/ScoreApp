@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Score Pad</string>
+    <string name="app_name" translatable="false">Score Pad</string>
     <string name="action_settings">Settings</string>
 
     <!--Game List Screen-->

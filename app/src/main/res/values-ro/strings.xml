@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionEdit">Editați</string>
+    <string name="actionGraph">Afișare grafic</string>
+    <string name="actionSave">salva</string>
+    <string name="actionSearch">Căutare</string>
+    <string name="action_settings">Setări</string>
+    <string name="addRound">Adaugă runda</string>
+    <string name="dealerLabel">comerciant</string>
+    <string name="delete">Șterge</string>
+    <string name="deleteGameConfirmation">Doriți să ștergeți acest joc?</string>
+    <string name="deleteSuccessful">şters</string>
+    <string name="gameCreateTitle">Joc nou</string>
+    <string name="gameListEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a crea un joc nou!</string>
+    <string name="gameListEmptyTitle">Nu au fost create jocuri</string>
+    <string name="gameListTitle">Jocuri</string>
+    <string name="gameNameHint">Numele jocului</string>
+    <string name="gamePlayersEmptyMessage">Pentru a începe un joc, adăugați câțiva jucători cu butonul „EDITĂ”.</string>
+    <string name="gamePlayersEmptyTitle">Nu s-au adăugat jucători</string>
+    <string name="gamePlayersHeader">Jucători</string>
+    <string name="gameSettingsTitle">Setările jocului</string>
+    <string name="graphByRoundsLabel">Scor după runde</string>
+    <string name="graphSubtitle">Statistici</string>
+    <string name="makePlayerDealerMessage">Faceți %s dealer pentru această rundă?</string>
+    <string name="pickPlayers">Alegeți jucători</string>
+    <string name="playerCreateTitle">Jucator nou</string>
+    <string name="playerEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a adăuga un jucător nou!</string>
+    <string name="playerEmptySearchMessage">Niciun jucător nu corespunde criteriilor de căutare actuale. Puteți adăuga un jucător nou, făcând clic pe butonul + de mai jos!</string>
+    <string name="playerEmptySearchTitle">Nu se potrivesc jucători</string>
+    <string name="playerEmptyTitle">Nu s-au adăugat jucători</string>
+    <string name="playerIcon">Pictograma jucătorului</string>
+    <string name="playerName">Numele jucatorului</string>
+    <string name="playerNotesTitle">Note pentru %s</string>
+    <string name="playerRoundNumberFormat">Runda %d:</string>
+    <string name="playerRoundNumberHint">notițe</string>
+    <string name="playersHolder">%d jucători</string>
+    <string name="reversedScoringDescription">Jucătorul cu cel mai mic scor câștigă, în loc să obțină cel mai mare scor</string>
+    <string name="reversedScoringTitle">Scoring invers</string>
+    <string name="scoreHint">Scor</string>
+    <string name="showRoundNotesDescription">Faceți clic pe numele unui jucător pentru a vizualiza și edita notele pentru fiecare rundă</string>
+    <string name="showRoundNotesTitle">Afișează note rotunde</string>
+</resources>

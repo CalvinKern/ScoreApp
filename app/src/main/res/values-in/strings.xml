@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionEdit">Edit</string>
+    <string name="actionGraph">Tampilkan Grafik</string>
+    <string name="actionSave">Menyimpan</string>
+    <string name="actionSearch">Cari</string>
+    <string name="action_settings">Pengaturan</string>
+    <string name="addRound">Tambahkan Round</string>
+    <string name="dealerLabel">Pedagang</string>
+    <string name="delete">Menghapus</string>
+    <string name="deleteGameConfirmation">Apakah Anda ingin menghapus game ini?</string>
+    <string name="deleteSuccessful">Dihapus</string>
+    <string name="gameCreateTitle">Permainan baru</string>
+    <string name="gameListEmptyMessage">Mulailah dengan mengklik tombol + di bawah untuk membuat game baru!</string>
+    <string name="gameListEmptyTitle">Tidak ada permainan yang dibuat</string>
+    <string name="gameListTitle">permainan</string>
+    <string name="gameNameHint">Nama permainan</string>
+    <string name="gamePlayersEmptyMessage">Untuk memulai permainan, tambahkan beberapa pemain dengan tombol \"EDIT\".</string>
+    <string name="gamePlayersEmptyTitle">Tidak ada pemain yang ditambahkan</string>
+    <string name="gamePlayersHeader">Pemain</string>
+    <string name="gameSettingsTitle">Pengaturan permainan</string>
+    <string name="graphByRoundsLabel">Skor dengan putaran</string>
+    <string name="graphSubtitle">Statistik</string>
+    <string name="makePlayerDealerMessage">Buat %s dealer untuk putaran ini?</string>
+    <string name="pickPlayers">Pilih Pemain</string>
+    <string name="playerCreateTitle">Pemain baru</string>
+    <string name="playerEmptyMessage">Mulailah dengan mengklik tombol + di bawah untuk menambah pemain baru!</string>
+    <string name="playerEmptySearchMessage">Tidak ada pemain yang cocok dengan kriteria pencarian saat ini. Anda dapat menambahkan pemain baru dengan mengeklik tombol + di bawah!</string>
+    <string name="playerEmptySearchTitle">Tidak ada pemain yang cocok</string>
+    <string name="playerEmptyTitle">Tidak ada pemain yang ditambahkan</string>
+    <string name="playerIcon">Ikon Pemain</string>
+    <string name="playerName">Nama pemain</string>
+    <string name="playerNotesTitle">Catatan untuk %s</string>
+    <string name="playerRoundNumberFormat">Babak %d:</string>
+    <string name="playerRoundNumberHint">Catatan</string>
+    <string name="playersHolder">%d Pemain</string>
+    <string name="reversedScoringDescription">Pemain dengan skor terendah menang, alih-alih memiliki skor tertinggi</string>
+    <string name="reversedScoringTitle">Membalikkan Skor</string>
+    <string name="scoreHint">Skor</string>
+    <string name="showRoundNotesDescription">Klik pada nama pemain untuk melihat dan mengedit catatan untuk setiap putaran</string>
+    <string name="showRoundNotesTitle">Tampilkan Catatan Bulat</string>
+</resources>

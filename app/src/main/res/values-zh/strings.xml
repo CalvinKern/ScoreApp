@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionEdit">编辑</string>
+    <string name="actionSave">保存</string>
+    <string name="actionGraph">显示图</string>
+    <string name="actionSearch">搜索</string>
+    <string name="action_settings">设定值</string>
+    <string name="addRound">添加回合</string>
+    <string name="dealerLabel">经销商</string>
+    <string name="delete">删除</string>
+    <string name="deleteGameConfirmation">您要删除此游戏吗？</string>
+    <string name="deleteSuccessful">已删除</string>
+    <string name="gameCreateTitle">新游戏</string>
+    <string name="gameListEmptyMessage">首先点击下面的+按钮创建一个新游戏！</string>
+    <string name="gameListEmptyTitle">未创建游戏</string>
+    <string name="gameListTitle">游戏类</string>
+    <string name="gameNameHint">游戏名称</string>
+    <string name="gamePlayersEmptyMessage">要开始游戏，请使用“编辑”按钮添加一些玩家。</string>
+    <string name="gamePlayersEmptyTitle">未添加玩家</string>
+    <string name="gamePlayersHeader">玩家们</string>
+    <string name="gameSettingsTitle">游戏设置</string>
+    <string name="graphByRoundsLabel">逐轮得分</string>
+    <string name="graphSubtitle">统计</string>
+    <string name="makePlayerDealerMessage">成为%s经销商吗？</string>
+    <string name="pickPlayers">选择玩家</string>
+    <string name="playerCreateTitle">新玩家</string>
+    <string name="playerEmptyMessage">首先点击下面的+按钮以添加新播放器！</string>
+    <string name="playerEmptySearchMessage">没有玩家符合当前的搜索条件。 您可以点击下面的+按钮来添加新的播放器！</string>
+    <string name="playerEmptySearchTitle">没有球员比赛</string>
+    <string name="playerEmptyTitle">未添加玩家</string>
+    <string name="playerIcon">播放器图标</string>
+    <string name="playerName">选手姓名</string>
+    <string name="playerNotesTitle">%s的注释</string>
+    <string name="playerRoundNumberHint">笔记</string>
+    <string name="playersHolder">%d人</string>
+    <string name="playerRoundNumberFormat">第%d回合</string>
+    <string name="reversedScoringDescription">得分最低的玩家获胜，而不是得分最高的</string>
+    <string name="reversedScoringTitle">反向计分</string>
+    <string name="scoreHint">得分了</string>
+    <string name="showRoundNotesDescription">单击玩家的姓名以查看和编辑每一回合的备忘</string>
+    <string name="showRoundNotesTitle">显示回合笔记</string>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="showRoundNotesTitle">Mostrar notas redondas</string>
+    <string name="showRoundNotesDescription">Clique no nome de um jogador para ver e editar notas para cada rodada</string>
+    <string name="scoreHint">Ponto</string>
+    <string name="reversedScoringTitle">Pontuação Reversa</string>
+    <string name="reversedScoringDescription">O jogador com a menor pontuação vence, em vez de ter a maior pontuação</string>
+    <string name="playersHolder">%d jogadores</string>
+    <string name="playerRoundNumberHint">notas</string>
+    <string name="playerRoundNumberFormat">rodada %d:</string>
+    <string name="playerNotesTitle">Notas para %s</string>
+    <string name="playerName">Nome do jogador</string>
+    <string name="playerIcon">Ícone do jogador</string>
+    <string name="playerEmptyTitle">Nenhum jogador adicionado</string>
+    <string name="playerEmptySearchTitle">Nenhum jogador corresponde</string>
+    <string name="playerEmptySearchMessage">Nenhum jogador corresponde aos critérios de pesquisa atuais. Você pode adicionar um novo jogador clicando no botão + abaixo!</string>
+    <string name="playerEmptyMessage">Comece clicando no botão + abaixo para adicionar um novo player!</string>
+    <string name="playerCreateTitle">Novo jogador</string>
+    <string name="pickPlayers">Escolha jogadores</string>
+    <string name="makePlayerDealerMessage">Fazer revendedor %s para esta rodada?</string>
+    <string name="graphSubtitle">Estatisticas</string>
+    <string name="graphByRoundsLabel">Pontuação por rodadas</string>
+    <string name="gameSettingsTitle">Configurações do jogo</string>
+    <string name="gamePlayersHeader">Jogadoras</string>
+    <string name="gamePlayersEmptyTitle">Nenhum jogador adicionado</string>
+    <string name="gamePlayersEmptyMessage">Para iniciar um jogo, adicione alguns jogadores com o botão \"EDITAR\".</string>
+    <string name="gameNameHint">Nome do jogo</string>
+    <string name="gameListTitle">Jogos</string>
+    <string name="gameListEmptyTitle">Nenhum jogo criado</string>
+    <string name="gameListEmptyMessage">Comece clicando no botão + abaixo para criar um novo jogo!</string>
+    <string name="gameCreateTitle">Novo jogo</string>
+    <string name="deleteSuccessful">Excluído</string>
+    <string name="deleteGameConfirmation">Deseja excluir este jogo?</string>
+    <string name="delete">Excluir</string>
+    <string name="dealerLabel">Revendedor</string>
+    <string name="addRound">Adicionar rodada</string>
+    <string name="action_settings">Configurações</string>
+    <string name="actionSearch">Procurar</string>
+    <string name="actionSave">Salve</string>
+    <string name="actionGraph">Mostrar gráfico</string>
+    <string name="actionEdit">Editar</string>
+</resources>
