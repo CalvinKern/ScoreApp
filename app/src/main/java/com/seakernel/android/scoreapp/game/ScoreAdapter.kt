@@ -233,7 +233,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
     private fun showPlayerDealerDialog(player: Player, round: Round, eventConsumer: Consumer<GameEvent>?) {
         val dialog = AlertDialog.Builder(itemView.context)
             .setMessage(itemView.context.getString(R.string.makePlayerDealerMessage, player.name))
-            .setNegativeButton(R.string.cancel, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.dealerLabel) { _, _ ->
                 eventConsumer?.accept(GameEvent.RequestSaveRound(round.copy(dealer = player)))
             }

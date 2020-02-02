@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +21,6 @@ import kotlinx.android.synthetic.main.dialog_player_round.view.*
 import kotlinx.android.synthetic.main.holder_player_round_notes.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import android.view.WindowManager
 
 class PlayerRoundNotesDialog(private val player: Player, private val gameId: Long) : DialogFragment() {
 
@@ -41,7 +41,7 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
         return AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.playerNotesTitle, player.name))
             .setView(view)
-            .setNegativeButton(R.string.cancel, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.actionSave, null)
             .create()
     }

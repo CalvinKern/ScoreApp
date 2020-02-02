@@ -15,7 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:navigationContentDescription="@string/navigate_up"
         tools:title="@string/gameCreateTitle"
         />
 

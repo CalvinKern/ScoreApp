@@ -124,7 +124,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 .setPositiveButton(R.string.delete) { _, _ ->
                     deleteGameAsync(eventConsumer, gameId)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
             builder.create().show()
         }
     }
