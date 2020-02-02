@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
@@ -167,7 +168,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
             if (rounds.last().id == round.id) {
                 itemView.setBackgroundResource(R.color.dealer)
             } else {
-                itemView.setBackgroundResource(R.color.dealerSoft)
+                itemView.setBackgroundResource(R.color.dealerPast)
             }
         } else {
             // Make odd rows with a slight gray background to look a little better
@@ -200,12 +201,13 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         scoreHolder.isFocusable = false
 
         if (isLeader) {
-            itemView.setBackgroundResource(R.color.winnerGreen)
+            itemView.setBackgroundResource(R.color.winnerBackground)
+            scoreHolder.setTextColor(ContextCompat.getColor(itemView.context, R.color.winnerText))
         } else {
             itemView.setBackgroundResource(R.color.black)
+            scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textWhite))
         }
         scoreHolder.setText(formatScore(score))
-        scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textWhite))
     }
 
     private fun formatScore(score: Double) = DecimalFormat("#.##").format(score)

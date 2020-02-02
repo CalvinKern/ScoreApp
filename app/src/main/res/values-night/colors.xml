@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="slightGray">#121212</color>
-    <color name="dealerSoft">@color/colorPrimaryDark</color>
+    <color name="dealerPast">@color/colorPrimaryDark</color>
     <color name="colorSelected">#252525</color>
 
     <color name="colorOnPrimary">@color/white</color>
