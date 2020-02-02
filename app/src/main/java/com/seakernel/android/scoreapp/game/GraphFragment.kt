@@ -57,7 +57,6 @@ class GraphFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
-        graphToolbar.setSubtitle(R.string.graphSubtitle)
 
         viewModel.getGame().observe(viewLifecycleOwner, modelObserver)
         viewModel.loadGame(
@@ -69,6 +68,7 @@ class GraphFragment : Fragment() {
 
     private fun updateGraphData(game: Game) {
         graphToolbar.title = game.settings.name
+        graphToolbar.setSubtitle(R.string.graphSubtitle) // Update the subtitle with the title to avoid subtitle flashing in first
 
         // Get scores as a list of entries, separated by players
         val scoreMap =
