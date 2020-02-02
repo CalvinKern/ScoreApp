@@ -15,8 +15,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:title="@string/gameCreateTitle"
         app:navigationContentDescription="@string/navigate_up"
+        tools:title="@string/gameCreateTitle"
         />
 
     <androidx.core.widget.NestedScrollView

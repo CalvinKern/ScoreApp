@@ -88,9 +88,9 @@ class GameSetupFragment : Fragment() {
         initSettings()
 
         // Start observing the data
-        viewModel.getGameSettings().observe(this, modelObserver)
-        viewModel.getGameCreatedEvent().observe(this, gameCreatedObserver)
-        viewModel.getGameUpdatedEvent().observe(this, gameUpdatedObserver)
+        viewModel.getGameSettings().observe(viewLifecycleOwner, modelObserver)
+        viewModel.getGameCreatedEvent().observe(viewLifecycleOwner, gameCreatedObserver)
+        viewModel.getGameUpdatedEvent().observe(viewLifecycleOwner, gameUpdatedObserver)
 
         arguments?.getLong(ARG_GAME_ID)?.let {
             viewModel.loadGame(it)
@@ -113,6 +113,7 @@ class GameSetupFragment : Fragment() {
                 else -> super.onOptionsItemSelected(item)
             }
         }
+        toolbar.setTitle(if (arguments?.containsKey(ARG_GAME_ID) == true) R.string.gameSettingsTitle else R.string.gameCreateTitle)
     }
 
     private fun initSettings() {

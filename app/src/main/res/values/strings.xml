@@ -17,6 +17,7 @@
 
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>
+    <string name="gameSettingsTitle">Game Settings</string>
     <string name="gameNameHint">Game Name</string>
     <string name="gamePlayersHeader">Players</string>
     <string name="gamePlayersEmptyTitle">No players added</string>
