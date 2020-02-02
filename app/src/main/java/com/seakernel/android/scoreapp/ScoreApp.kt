@@ -16,7 +16,7 @@ class ScoreApp : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {
-//            Timber.plant(Timber.asTree()) // No production logging yet
+            Timber.plant(Timber.DebugTree()) // Just use the debug tree as the production one for now
         }
     }
 }

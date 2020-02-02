@@ -6,9 +6,10 @@ import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.game.GameFragment
 import com.seakernel.android.scoreapp.game.GraphFragment
+import com.seakernel.android.scoreapp.gamelist.GameListFragment
 import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
-import com.seakernel.android.scoreapp.gamelist.GameListFragment
+import timber.log.Timber
 import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, PlayerSelectFragment.PlayerSelectListener,
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
 
     // TODO: make first param generic (inheriting from fragment) so that it can be used to generate the tag without resolving the super classes name
     private fun showFragment(fragment: Fragment, tag: String) {
+        Timber.i("Showing fragment: $tag")
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragmentContainer, fragment, tag)
