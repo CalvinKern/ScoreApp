@@ -39,6 +39,7 @@ captures/
 
 *.iml
 .idea/
+app/release/*
 
 # Mac file
 .DS_Store

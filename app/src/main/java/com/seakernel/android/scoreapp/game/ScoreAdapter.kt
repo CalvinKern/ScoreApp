@@ -214,7 +214,7 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
 
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         val updatedScore = if (scoreHolder.text.isNotBlank()) {
-            scoreHolder.text.toString().toDouble()
+            scoreHolder.text.toString().toDoubleOrNull() ?: 0.0
         } else {
             0.0
         }
