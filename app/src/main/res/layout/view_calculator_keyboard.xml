@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alignmentMode="alignMargins"
+    android:background="@color/gray"
+    android:columnCount="5"
+    >
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/one"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/two"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/three"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/plus"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/del"
+        android:contentDescription="@string/delete"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/four"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/five"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/six"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/minus"
+        />
+
+    <Space android:layout_columnWeight="1" />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/seven"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/eight"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/nine"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/multiply"
+        android:textAllCaps="false"
+        />
+
+    <Space android:layout_columnWeight="1" />
+
+    <Space android:layout_columnWeight="1" />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/zero"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/decimal"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/divide"
+        />
+
+    <Button
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/equals"
+        />
+
+</GridLayout>
