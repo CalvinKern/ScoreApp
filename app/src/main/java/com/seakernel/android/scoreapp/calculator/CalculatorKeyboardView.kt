@@ -99,15 +99,16 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     // Compute the string, replacing any localized values with static strings for ease of parsing
     private fun computeString(): String? {
-        return CalculatorUtils.computeString(
+        return CalculatorUtils.eval(
             calculatorString
-                .replace(resources.getString(R.string.plus), CalculatorUtils.PLUS)
-                .replace(resources.getString(R.string.minus), CalculatorUtils.MINUS)
-                .replace(resources.getString(R.string.multiply), CalculatorUtils.MULTIPLY)
-                .replace(resources.getString(R.string.divide), CalculatorUtils.DIVIDE)
-                .replace(resources.getString(R.string.close_paren), CalculatorUtils.CLOSE_PAREN)
-                .replace(resources.getString(R.string.open_paren), CalculatorUtils.OPEN_PAREN)
-                .replace(resources.getString(R.string.decimal), CalculatorUtils.DECIMAL)
+                .replace(resources.getString(R.string.plus), CalculatorUtils.PLUS.toString())
+                .replace(resources.getString(R.string.minus), CalculatorUtils.MINUS.toString())
+                .replace(resources.getString(R.string.multiply), CalculatorUtils.MULTIPLY.toString())
+                .replace(resources.getString(R.string.divide), CalculatorUtils.DIVIDE.toString())
+                .replace(resources.getString(R.string.close_paren), CalculatorUtils.CLOSE_PAREN.toString())
+                .replace(resources.getString(R.string.open_paren), CalculatorUtils.OPEN_PAREN.toString())
+                .replace(resources.getString(R.string.decimal), CalculatorUtils.DECIMAL.toString())
+                .replace(resources.getString(R.string.exponent), CalculatorUtils.EXPONENT.toString())
         )
     }
 }
