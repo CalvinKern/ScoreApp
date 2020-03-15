@@ -83,4 +83,6 @@
     <string name="equals">=</string>
     <string name="decimal">.</string>
     <string name="del">DEL</string>
+    <string name="open_paren">(</string>
+    <string name="close_paren">)</string>
 </resources>

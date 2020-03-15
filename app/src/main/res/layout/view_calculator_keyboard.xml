@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:alignmentMode="alignMargins"
-    android:background="@color/gray"
-    android:columnCount="5"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_calculator"
     >
 
     <Button
+        android:id="@+id/calculatorKeyOne"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/one"
         />
 
     <Button
+        android:id="@+id/calculatorKeyTwo"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/two"
         />
 
     <Button
+        android:id="@+id/calculatorKeyThree"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/three"
         />
 
     <Button
+        android:id="@+id/calculatorKeyPlus"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/plus"
         />
 
     <Button
+        android:id="@+id/calculatorKeyDelete"
         style="@style/AppTheme.CalculatorButton"
-        android:text="@string/del"
         android:contentDescription="@string/delete"
+        android:text="@string/del"
         />
 
     <Button
+        android:id="@+id/calculatorKeyFour"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/four"
         />
 
     <Button
+        android:id="@+id/calculatorKeyFive"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/five"
         />
 
     <Button
+        android:id="@+id/calculatorKeySix"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/six"
         />
 
     <Button
+        android:id="@+id/calculatorKeyMinus"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/minus"
         />
@@ -56,21 +62,25 @@
     <Space android:layout_columnWeight="1" />
 
     <Button
+        android:id="@+id/calculatorKeySeven"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/seven"
         />
 
     <Button
+        android:id="@+id/calculatorKeyEight"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/eight"
         />
 
     <Button
+        android:id="@+id/calculatorKeyNine"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/nine"
         />
 
     <Button
+        android:id="@+id/calculatorKeyMultiply"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/multiply"
         android:textAllCaps="false"
@@ -81,23 +91,26 @@
     <Space android:layout_columnWeight="1" />
 
     <Button
+        android:id="@+id/calculatorKeyZero"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/zero"
         />
 
     <Button
+        android:id="@+id/calculatorKeyDecimal"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/decimal"
         />
 
     <Button
+        android:id="@+id/calculatorKeyDivide"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/divide"
         />
 
     <Button
+        android:id="@+id/calculatorKeyEquals"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/equals"
         />
-
-</GridLayout>
+</merge>
