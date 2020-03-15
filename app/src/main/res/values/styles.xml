@@ -38,11 +38,23 @@
         <item name="android:textColor">@color/textBlack</item>
     </style>
 
-    <style name="AppTheme.CalculatorButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+    <style name="AppTheme.CalculatorButton" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_columnWeight">1</item>
         <item name="android:textColor">@color/textWhite</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="cornerRadius">0dp</item>
         <item name="rippleColor">@color/textWhite</item>
+        <item name="backgroundTint">@color/gray</item>
+    </style>
+
+    <style name="AppTheme.CalculatorButton.Operator">
+        <item name="backgroundTint">@color/darkGray</item>
+    </style>
+
+    <style name="AppTheme.CalculatorButton.Equals">
+        <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 </resources>

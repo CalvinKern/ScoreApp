@@ -63,7 +63,8 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorKeyEquals.setOnClickListener(listener)
         calculatorKeyDelete.setOnClickListener(listener)
         calculatorKeyDecimal.setOnClickListener(listener)
-        //TODO: Add parens
+        calculatorKeyOpenParen.setOnClickListener(listener)
+        calculatorKeyCloseParen.setOnClickListener(listener)
     }
 
     private fun onButtonClicked(key: String) {

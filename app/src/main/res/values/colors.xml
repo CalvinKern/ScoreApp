@@ -4,6 +4,7 @@
     <color name="black">#000</color>
     <color name="slightGray">#F5F5F5</color>
     <color name="gray">#707070</color>
+    <color name="darkGray">#353535</color>
     <color name="winnerBackground">@color/colorSecondary</color>
     <color name="winnerText">@color/colorOnSecondary</color>
     <color name="dealer">@color/colorPrimary</color>

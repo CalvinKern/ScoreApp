@@ -23,16 +23,15 @@
         />
 
     <Button
-        android:id="@+id/calculatorKeyPlus"
-        style="@style/AppTheme.CalculatorButton"
-        android:text="@string/plus"
+        android:id="@+id/calculatorKeyOpenParen"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/open_paren"
         />
 
     <Button
-        android:id="@+id/calculatorKeyDelete"
-        style="@style/AppTheme.CalculatorButton"
-        android:contentDescription="@string/delete"
-        android:text="@string/del"
+        android:id="@+id/calculatorKeyCloseParen"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/close_paren"
         />
 
     <Button
@@ -54,12 +53,16 @@
         />
 
     <Button
-        android:id="@+id/calculatorKeyMinus"
-        style="@style/AppTheme.CalculatorButton"
-        android:text="@string/minus"
+        android:id="@+id/calculatorKeyPlus"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/plus"
         />
 
-    <Space android:layout_columnWeight="1" />
+    <Button
+        android:id="@+id/calculatorKeyMinus"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/minus"
+        />
 
     <Button
         android:id="@+id/calculatorKeySeven"
@@ -81,14 +84,23 @@
 
     <Button
         android:id="@+id/calculatorKeyMultiply"
-        style="@style/AppTheme.CalculatorButton"
+        style="@style/AppTheme.CalculatorButton.Operator"
         android:text="@string/multiply"
         android:textAllCaps="false"
         />
 
-    <Space android:layout_columnWeight="1" />
+    <Button
+        android:id="@+id/calculatorKeyDivide"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/divide"
+        />
 
-    <Space android:layout_columnWeight="1" />
+    <Button
+        android:id="@+id/calculatorKeyDelete"
+        style="@style/AppTheme.CalculatorButton"
+        android:contentDescription="@string/delete"
+        android:text="@string/del"
+        />
 
     <Button
         android:id="@+id/calculatorKeyZero"
@@ -103,14 +115,14 @@
         />
 
     <Button
-        android:id="@+id/calculatorKeyDivide"
-        style="@style/AppTheme.CalculatorButton"
-        android:text="@string/divide"
+        android:id="@+id/calculatorKeyEquals"
+        style="@style/AppTheme.CalculatorButton.Equals"
+        android:text="@string/equals"
         />
 
     <Button
-        android:id="@+id/calculatorKeyEquals"
-        style="@style/AppTheme.CalculatorButton"
-        android:text="@string/equals"
+        android:id="@+id/calculatorKeyNext"
+        style="@style/AppTheme.CalculatorButton.Equals"
+        android:text="@string/next"
         />
 </merge>
