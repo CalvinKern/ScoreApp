@@ -18,12 +18,14 @@ sealed class GameEvent {
     data class RequestSaveRound(val round: Round) : GameEvent()
     data class Loaded(val game: Game) : GameEvent()
     data class RoundSaved(val round: Round) : GameEvent()
+    data class ScoreSaved(val roundId: Long, val score: Score) : GameEvent()
     data class UpdateScore(val roundId: Long, val playerId: Long, val score: Double, val metadata: String) : GameEvent()
 }
 
 sealed class GameEffect {
     object FetchData : GameEffect()
     data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
+    data class SaveScore(val roundId: Long, val score: Score) : GameEffect()
 }
 
 data class GameModel(val settings: GameSettings = GameSettings(), val rounds: List<Round> = emptyList()) {
@@ -68,12 +70,27 @@ data class GameModel(val settings: GameSettings = GameSettings(), val rounds: Li
                     }
                     Next.next(model.copy(rounds = rounds))
                 }
-                is GameEvent.UpdateScore -> {
+                is GameEvent.ScoreSaved -> {
                     val rounds = model.rounds.toMutableList()
-                    val round = rounds.first { it.id == event.roundId }
-                    val scores = round.scores.map { if (it.player.id == event.playerId) it.copy(value = event.score, metadata = event.metadata) else it }
+                    val index = rounds.indexOfFirst { it.id == event.roundId }
+                    val round = rounds[index].let {
+                        val scores = it.scores.toMutableList()
+                        val scoreIndex = scores.indexOfFirst { score -> score.id == event.score.id }
 
-                    Next.dispatch(Effects.effects(GameEffect.SaveRound(model.settings.id!!, round.copy(scores = scores))))
+                        scores.removeAt(scoreIndex)
+                        scores.add(scoreIndex, event.score)
+                        it.copy(scores = scores)
+                    }
+
+                    rounds.removeAt(index)
+                    rounds.add(index, round)
+                    Next.next(model.copy(rounds = rounds))
+                }
+                is GameEvent.UpdateScore -> {
+                    val round = model.rounds.first { it.id == event.roundId }
+                    val score = round.scores.first { it.player.id == event.playerId }.copy(value = event.score)
+
+                    Next.dispatch(Effects.effects(GameEffect.SaveScore(event.roundId, score)))
                 }
             }
         }

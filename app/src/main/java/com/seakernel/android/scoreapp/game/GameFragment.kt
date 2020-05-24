@@ -149,6 +149,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 val oldCount = scoreRows.adapter?.itemCount ?: 0
                 scoreRows.swapAdapter(GameScoreAdapter(model.settings.hasDealer, model.rounds, eventConsumer), false)
                 val newCount = scoreRows.adapter!!.itemCount
+
                 @Suppress("ConvertTwoComparisonsToRangeCheck") // Seems much less efficient than a range and doesn't help readability in this situation
                 if (oldCount > 1 && oldCount < newCount && oldSpanCount == model.settings.players.size) {
                     // When a new round is being inserted, scroll to the bottom and request focus to remove focus from the text view.
@@ -182,6 +183,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     is GameEffect.SaveRound -> {
                         roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {
                             eventConsumer.accept(GameEvent.RoundSaved(it))
+                        }
+                    }
+                    is GameEffect.SaveScore -> {
+                        roundRepository?.updateScore(effect.score)?.let {
+                            eventConsumer.accept(GameEvent.ScoreSaved(effect.roundId, it))
                         }
                     }
                 }.hashCode() // Exhaustive call

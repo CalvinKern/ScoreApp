@@ -28,6 +28,21 @@ interface RoundDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(vararg score: ScoreEntity)
 
+    @Query("""
+        UPDATE ${ScoreEntity.TABLE_NAME}
+        SET ${ScoreEntity.COLUMN_SCORE} = :score
+        WHERE ${ScoreEntity.COLUMN_ID} = :id
+        
+    """)
+    fun updateScore(id: Long, score: Double)
+
+    @Query("""
+        UPDATE ${ScoreEntity.TABLE_NAME}
+        SET ${ScoreEntity.COLUMN_SCORE_DATA} = :notes
+        WHERE ${ScoreEntity.COLUMN_ID} = :id
+    """)
+    fun updateScoreNote(id: Long, notes: String)
+
     @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} = :id")
     fun deleteRoundById(id: Long)
 
@@ -41,14 +56,4 @@ interface RoundDao {
         var round_number: Int = 0
     }
 
-    data class RoundNotes(val round: RoundEntity, val scores: List<ScoreEntity>)
-    class RoundNoteEntity {
-        @Embedded(prefix = ScoreEntity.TABLE_NAME)
-        lateinit var score: ScoreEntity
-//        @Relation(parentColumn = RoundEntity.COLUMN_ID, entityColumn = ScoreEntity.COLUMN_ROUND_ID)
-//        lateinit var scores: List<ScoreEntity>
-
-        @Embedded(prefix = RoundEntity.TABLE_NAME)
-        lateinit var round: RoundEntity
-    }
 }

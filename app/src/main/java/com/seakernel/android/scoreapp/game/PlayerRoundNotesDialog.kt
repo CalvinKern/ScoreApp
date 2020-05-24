@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
-import com.seakernel.android.scoreapp.repository.RoundPlayerNote
+import com.seakernel.android.scoreapp.repository.PlayerRoundNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import kotlinx.android.synthetic.main.dialog_player_round.view.*
@@ -41,6 +41,7 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
         return AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.playerNotesTitle, player.name))
             .setView(view)
+            .setCancelable(false)
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.actionSave, null)
             .create()
@@ -54,15 +55,7 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
         (dialog as? AlertDialog)?.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
             GlobalScope.launch {
                 val playerRounds = adapter.playerRounds
-                RoundRepository(requireContext()).updateScores(*playerRounds.map { round ->
-                    ScoreEntity(
-                        round.score.id,
-                        player.id!!,
-                        round.roundId,
-                        round.score.value,
-                        round.score.metadata
-                    )
-                }.toTypedArray())
+                RoundRepository(requireContext()).updatePlayerNotes(playerRounds)
                 dialog?.dismiss()
             }
         }
@@ -71,9 +64,9 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
 
 private class PlayerRoundNotesAdapter : RecyclerView.Adapter<PlayerRoundNotesViewHolder>(),
     NotesUpdatedListener {
-    var playerRounds: MutableList<RoundPlayerNote> = ArrayList()
+    var playerRounds: MutableList<PlayerRoundNote> = ArrayList()
 
-    fun setNotes(rounds: List<RoundPlayerNote>) {
+    fun setNotes(rounds: List<PlayerRoundNote>) {
         playerRounds.clear()
         playerRounds.addAll(rounds)
         notifyDataSetChanged()
@@ -108,7 +101,7 @@ private class PlayerRoundNotesViewHolder(parent: ViewGroup, private val notesLis
         })
     }
 
-    fun onBind(round: RoundPlayerNote) {
+    fun onBind(round: PlayerRoundNote) {
         val notes = round.score.metadata
         // Make the round number human readable
         itemView.playerRoundLabel.text =
