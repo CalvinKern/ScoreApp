@@ -18,9 +18,13 @@ typealias InputChangedListener = (input: String, failure: Boolean) -> Unit
  */
 class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout(context, attrs) {
 
-    // TODO: Take input position
-    private var calculatorString = ""
     private var inputChangedListener: InputChangedListener? = null
+
+    private var calculatorString = ""
+    private var calculatorEditIndex = 0
+        set(value) {
+            field = if (value < 0) 0 else value
+        }
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -30,11 +34,11 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         setKeyboardListeners()
     }
 
-    fun setInputChangedListener(listener: InputChangedListener?) {
+    fun setInputChangedListener(listener: InputChangedListener?, calculator: String? = null) {
         inputChangedListener = listener
 
         // Reset state for new listener
-        calculatorString = ""
+        calculatorString = calculator ?: ""
     }
 
     private fun setupView() {
@@ -82,8 +86,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                 if (calculatorString.isEmpty()) {
                     calculatorString
                 } else {
+                    calculatorEditIndex--
                     calculatorString.run {
-                        removeRange(IntRange(length - 1, length - 1))
+                        removeRange(IntRange(calculatorEditIndex, calculatorEditIndex + 1))
                     }
                 }
             }
@@ -91,7 +96,14 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                 computeString() ?: calculatorString
             }
             else -> {
-                calculatorString.plus(key)
+                calculatorEditIndex++ // Increment the index
+                if (calculatorEditIndex > calculatorString.length) {
+                    calculatorString.substring(0, calculatorEditIndex - 1)
+                        .plus(key)
+                        .plus(calculatorString.substring(calculatorEditIndex - 1))
+                } else {
+                    calculatorString.plus(key)
+                }
             }
         }
 
