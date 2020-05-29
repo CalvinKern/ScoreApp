@@ -16,10 +16,10 @@ class RoundRepository(val context: Context) {
     private val roundDao = AppDatabase.getInstance(context).roundDao()
 
 //    fun getNotesForPlayer(player: Player, gameId: Long): List<Round> {
-    fun getNotesForPlayer(player: Player, gameId: Long): List<RoundPlayerNote> {
+    fun getNotesForPlayer(player: Player, gameId: Long): List<PlayerRoundNote> {
         val rounds = roundDao.getNotesForPlayer(player.id!!, gameId)
         return rounds.map { round ->
-            RoundPlayerNote(
+            PlayerRoundNote(
                 roundId = round.score.roundId,
                 roundNumber = round.round_number,
                 score = Score(id = round.score.id, player = player, value = round.score.score, metadata = round.score.scoreData)
@@ -53,8 +53,15 @@ class RoundRepository(val context: Context) {
         roundDao.insertAll(*scores)
     }
 
-    fun updateScores(vararg scores: ScoreEntity) {
-        roundDao.update(*scores)
+    fun updateScore(score: Score): Score {
+        roundDao.updateScore(score.id, score.value)
+        return score.copy()
+    }
+
+    fun updatePlayerNotes(roundNotes: List<PlayerRoundNote>) {
+        roundNotes.forEach { round ->
+            roundDao.updateScoreNote(round.score.id, round.score.metadata)
+        }
     }
 
     private fun updateRound(gameId: Long, round: Round): Round {
@@ -111,4 +118,4 @@ class RoundRepository(val context: Context) {
     }
 }
 
-data class RoundPlayerNote(val roundId: Long, val roundNumber: Int, val score: Score)
+data class PlayerRoundNote(val roundId: Long, val roundNumber: Int, val score: Score)
