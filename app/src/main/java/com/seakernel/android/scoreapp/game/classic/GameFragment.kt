@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.classic
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.game.*
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -38,7 +39,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
-        controller = MobiusAndroid.controller(loop, GameModel.createDefault())
+        controller = MobiusAndroid.controller(loop,
+            GameModel.createDefault()
+        )
     }
 
     override fun onAttach(context: Context) {
@@ -97,11 +100,15 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
 
-        val adapter = PlayersAdapter(settings.showRoundNotes, players, object : PlayerViewHolder.PlayerHolderClickedListener {
-            override fun playerHolderClicked(player: Player) {
-                showRoundNotesDialog(player, settings.id!!)
-            }
-        })
+        val adapter = PlayersAdapter(
+            settings.showRoundNotes,
+            players,
+            object :
+                PlayerViewHolder.PlayerHolderClickedListener {
+                override fun playerHolderClicked(player: Player) {
+                    showRoundNotesDialog(player, settings.id!!)
+                }
+            })
         nameRow.swapAdapter(adapter, false)
     }
 
@@ -147,7 +154,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                 // If count is not empty (account for empty with add round row), and new count is greater (added a row)
                 val oldCount = scoreRows.adapter?.itemCount ?: 0
-                scoreRows.swapAdapter(GameScoreAdapter(model.settings.hasDealer, model.rounds, eventConsumer), false)
+                scoreRows.swapAdapter(
+                    GameScoreAdapter(
+                        model.settings.hasDealer,
+                        model.rounds,
+                        eventConsumer
+                    ), false)
                 val newCount = scoreRows.adapter!!.itemCount
 
                 @Suppress("ConvertTwoComparisonsToRangeCheck") // Seems much less efficient than a range and doesn't help readability in this situation
@@ -164,7 +176,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     }
                 }
 
-                totalsRow.swapAdapter(TotalsAdapter(model.settings.reversedScoring, model.rounds), false)
+                totalsRow.swapAdapter(
+                    TotalsAdapter(
+                        model.settings.reversedScoring,
+                        model.rounds
+                    ), false)
             }
 
             override fun dispose() {}
@@ -177,17 +193,30 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 when (effect) {
                     is GameEffect.FetchData -> {
                         gameRepository?.loadFullGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
-                            eventConsumer.accept(GameEvent.Loaded(it))
+                            eventConsumer.accept(
+                                GameEvent.Loaded(
+                                    it
+                                )
+                            )
                         } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
                     is GameEffect.SaveRound -> {
                         roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {
-                            eventConsumer.accept(GameEvent.RoundSaved(it))
+                            eventConsumer.accept(
+                                GameEvent.RoundSaved(
+                                    it
+                                )
+                            )
                         }
                     }
                     is GameEffect.SaveScore -> {
                         roundRepository?.updateScore(effect.score)?.let {
-                            eventConsumer.accept(GameEvent.ScoreSaved(effect.roundId, it))
+                            eventConsumer.accept(
+                                GameEvent.ScoreSaved(
+                                    effect.roundId,
+                                    it
+                                )
+                            )
                         }
                     }
                 }.hashCode() // Exhaustive call

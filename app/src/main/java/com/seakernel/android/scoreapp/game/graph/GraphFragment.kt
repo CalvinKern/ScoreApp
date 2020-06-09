@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.graph
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,8 +42,8 @@ class GraphFragment : Fragment() {
 
     private val modelObserver = Observer<Game?> { game -> game?.let { updateGraphData(it) } }
 
-    private val viewModel: GameViewModel by lazy {
-        ViewModelProviders.of(this).get(GameViewModel::class.java)
+    private val viewModel: GraphViewModel by lazy {
+        ViewModelProviders.of(this).get(GraphViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -132,7 +132,8 @@ class GraphFragment : Fragment() {
                     e?.let {
                         gameChart.data.getDataSetForEntry(it).apply {
                             gameChart.data.setValueFormatter(graphEmptyFormatter)
-                            valueFormatter = graphValueFormatter
+                            valueFormatter =
+                                graphValueFormatter
                         }
                     }
                 }

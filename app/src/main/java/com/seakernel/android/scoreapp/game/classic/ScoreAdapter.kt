@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.classic
 
 import android.view.LayoutInflater
 import android.view.View
@@ -41,8 +41,12 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_SCORE -> ScoreViewHolder(parent)
-            VIEW_TYPE_ROUND_ADD -> AddRoundViewHolder(parent)
+            VIEW_TYPE_SCORE -> ScoreViewHolder(
+                parent
+            )
+            VIEW_TYPE_ROUND_ADD -> AddRoundViewHolder(
+                parent
+            )
             else -> throw InvalidParameterException("viewType ($viewType) is not supported in the ${GameScoreAdapter::class.java.simpleName}")
         }
     }
@@ -77,7 +81,13 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
 
 class PlayersAdapter(private val showNotes: Boolean, private val players: List<Player>, private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
-        PlayerViewHolder(LayoutInflater.from(parent.context).inflate(PlayerViewHolder.RESOURCE_ID, parent, false))
+        PlayerViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                PlayerViewHolder.RESOURCE_ID,
+                parent,
+                false
+            )
+        )
 
     override fun getItemCount(): Int {
         return players.count()
@@ -118,7 +128,8 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
         return position.toLong()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder = ScoreViewHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder =
+        ScoreViewHolder(parent)
 
     override fun getItemCount(): Int = totalsMap.size
 

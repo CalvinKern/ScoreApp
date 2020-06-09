@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.game.GameFragment
-import com.seakernel.android.scoreapp.game.GraphFragment
+import com.seakernel.android.scoreapp.game.classic.GameFragment
+import com.seakernel.android.scoreapp.game.graph.GraphFragment
 import com.seakernel.android.scoreapp.gamelist.GameListFragment
 import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
