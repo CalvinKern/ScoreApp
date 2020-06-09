@@ -51,11 +51,10 @@ dependencies {
 
     // Androidx
     implementation "androidx.appcompat:appcompat:1.1.0"
-    implementation "androidx.fragment:fragment:1.2.0"
-    implementation "androidx.fragment:fragment-ktx:1.2.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha2"
-    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    implementation "com.google.android.material:material:1.1.0-beta02"
+    implementation "androidx.fragment:fragment:1.2.4"
+    implementation "androidx.fragment:fragment-ktx:1.2.4"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
+    implementation "com.google.android.material:material:1.1.0"
 
     // Firebase
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
@@ -66,7 +65,6 @@ dependencies {
     androidTestImplementation "androidx.test:runner:1.1.1"
     androidTestImplementation "androidx.test.ext:junit:1.1.0"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.1.1"
-    androidTestImplementation "androidx.room:room-testing:2.0.0"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -77,6 +75,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$ROOM_VERSION"
     kapt "androidx.room:room-compiler:$ROOM_VERSION"
     testImplementation "androidx.room:room-testing:$ROOM_VERSION"
+    androidTestImplementation "androidx.room:room-testing:$ROOM_VERSION"
 
     // Mobius
     implementation "com.spotify.mobius:mobius-core:$MOBIUS_VERSION"
