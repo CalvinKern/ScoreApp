@@ -9,10 +9,12 @@
     <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
 
     <!--Common Actions-->
+    <string name="actionClose">Close</string>
     <string name="actionSave">Save</string>
     <string name="actionEdit">Edit</string>
     <string name="actionSearch">Search</string>
     <string name="actionGraph">Show Graph</string>
+    <string name="actionPlayerStanding">Standings</string>
 
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>
@@ -49,6 +51,10 @@
     <string name="playerNotesTitle">Notes for %s</string>
     <string name="playerRoundNumberFormat">Round %d:</string>
     <string name="playerRoundNumberHint">Notes</string>
+
+    <!--Player Standing Dialog-->
+    <string name="playerStandingTitle">Player Standings</string>
+    <string name="playerStanding">#%d</string>
 
     <!--Player dialog-->
     <string name="playerName">Player Name</string>

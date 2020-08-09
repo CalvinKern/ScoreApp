@@ -19,6 +19,7 @@
     <color name="colorSecondary">#3f51b5</color> <!--Indigo-500-->
     <color name="colorOnSecondary">@color/white</color>
     <color name="colorBackground">@color/white</color>
+    <color name="colorBackgroundPopup">@color/white</color>
 
     <!-- Text Colors-->
     <color name="textBlack">@color/black</color>

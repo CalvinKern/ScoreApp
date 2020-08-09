@@ -39,4 +39,8 @@
     <string name="scoreHint">スコア</string>
     <string name="showRoundNotesDescription">選手の名前を押して、各ラウンドのノートを表示および編集します</string>
     <string name="showRoundNotesTitle">ラウンドのノート見せる</string>
+    <string name="playerStanding">#%d</string>
+    <string name="playerStandingTitle">プレーヤーの順位</string>
+    <string name="actionPlayerStanding">順位</string>
+    <string name="actionClose">閉じる</string>
 </resources>

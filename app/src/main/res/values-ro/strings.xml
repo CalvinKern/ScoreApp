@@ -39,4 +39,8 @@
     <string name="scoreHint">Scor</string>
     <string name="showRoundNotesDescription">Faceți clic pe numele unui jucător pentru a vizualiza și edita notele pentru fiecare rundă</string>
     <string name="showRoundNotesTitle">Afișează note rotunde</string>
+    <string name="playerStanding">#%d</string>
+    <string name="playerStandingTitle">Clasamentul jucătorilor</string>
+    <string name="actionPlayerStanding">Clasamente</string>
+    <string name="actionClose">Închide</string>
 </resources>

@@ -28,7 +28,10 @@
         <item name="android:background">?attr/colorPrimarySurface</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay">
+        <item name="android:background">@color/colorBackgroundPopup</item>
+        <item name="android:textColor">@color/textBlack</item>
+    </style>
 
     <style name="AppTheme.TextHeader">
         <item name="android:textSize">@dimen/text_header</item>

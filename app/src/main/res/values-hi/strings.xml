@@ -39,4 +39,8 @@
     <string name="scoreHint">स्कोर</string>
     <string name="showRoundNotesDescription">प्रत्येक दौर के लिए नोट्स देखने और संपादित करने के लिए एक खिलाड़ी के नाम पर क्लिक करें</string>
     <string name="showRoundNotesTitle">राउंड नोट्स दिखाएं</string>
+    <string name="playerStanding">#%d</string>
+    <string name="playerStandingTitle">खिलाड़ी स्थान</string>
+    <string name="actionPlayerStanding">स्थान</string>
+    <string name="actionClose">बंद करे</string>
 </resources>

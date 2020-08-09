@@ -39,4 +39,8 @@
     <string name="scoreHint">Puntuación</string>
     <string name="showRoundNotesDescription">Haga clic en el nombre de un jugador para ver y editar notas para cada ronda</string>
     <string name="showRoundNotesTitle">Mostrar notas redondas</string>
+    <string name="actionClose">Cerca</string>
+    <string name="actionPlayerStanding">Posiciones</string>
+    <string name="playerStandingTitle">Posiciones de los jugadores</string>
+    <string name="playerStanding">#%d</string>
 </resources>

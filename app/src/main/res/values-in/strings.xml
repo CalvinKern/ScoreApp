@@ -39,4 +39,8 @@
     <string name="scoreHint">Skor</string>
     <string name="showRoundNotesDescription">Klik pada nama pemain untuk melihat dan mengedit catatan untuk setiap putaran</string>
     <string name="showRoundNotesTitle">Tampilkan Catatan Bulat</string>
+    <string name="actionClose">Menutup</string>
+    <string name="actionPlayerStanding">Klasemen</string>
+    <string name="playerStandingTitle">Klasemen Pemain</string>
+    <string name="playerStanding">#%d</string>
 </resources>

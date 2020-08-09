@@ -76,6 +76,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     }
                     true
                 }
+                R.id.actionStanding -> {
+                    arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
+                        showStandingDialog(gameId)
+                    }
+                    true
+                }
                 else -> false
             }
         }
@@ -110,6 +116,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 }
             })
         nameRow.swapAdapter(adapter, false)
+    }
+
+    private fun showStandingDialog(gameId: Long) {
+        val dialog = PlayerStandingDialog(gameId)
+        dialog.show(childFragmentManager, PlayerStandingDialog::class.java.simpleName)
     }
 
     private fun showRoundNotesDialog(player: Player, gameId: Long) {

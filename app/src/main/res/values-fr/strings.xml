@@ -39,4 +39,8 @@
     <string name="scoreHint">Score</string>
     <string name="showRoundNotesDescription">Cliquez sur le nom d\'un joueur pour afficher et modifier les notes de chaque manche</string>
     <string name="showRoundNotesTitle">Afficher les notes rondes</string>
+    <string name="playerStanding">#%d</string>
+    <string name="playerStandingTitle">Classement des joueurs</string>
+    <string name="actionPlayerStanding">Classement</string>
+    <string name="actionClose">Fermer</string>
 </resources>

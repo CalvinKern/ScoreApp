@@ -39,4 +39,8 @@
     <string name="scoreHint">得分了</string>
     <string name="showRoundNotesDescription">單擊玩家的姓名以查看和編輯每一回合的備忘</string>
     <string name="showRoundNotesTitle">顯示回合筆記</string>
+    <string name="actionClose">關</string>
+    <string name="actionPlayerStanding">站立</string>
+    <string name="playerStandingTitle">球員站立</string>
+    <string name="playerStanding">#%d</string>
 </resources>
