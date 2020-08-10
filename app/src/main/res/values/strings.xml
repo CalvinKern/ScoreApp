@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Score Pad</string>
-    <string name="action_settings">Settings</string>
 
     <!--Game List Screen-->
     <string name="gameListTitle">Games</string>
@@ -15,6 +14,8 @@
     <string name="actionSearch">Search</string>
     <string name="actionGraph">Show Graph</string>
     <string name="actionPlayerStanding">Standings</string>
+    <string name="actionRateApp">Rate App</string>
+    <string name="actionChangelog">Changelog</string>
 
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>

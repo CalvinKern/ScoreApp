@@ -4,7 +4,6 @@
     <string name="actionGraph">Afficher le graphique</string>
     <string name="actionSave">sauvegarder</string>
     <string name="actionSearch">Chercher</string>
-    <string name="action_settings">Réglages</string>
     <string name="addRound">Ajouter un tour</string>
     <string name="dealerLabel">Marchand</string>
     <string name="delete">Supprimer</string>

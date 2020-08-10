@@ -1,12 +1,15 @@
 package com.seakernel.android.scoreapp.gamelist
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.setVisible
@@ -15,7 +18,9 @@ import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
+import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game_list.*
+import kotlinx.android.synthetic.main.fragment_game_list.toolbar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -59,6 +64,22 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
         // Setup views
         gameRecycler.layoutManager = LinearLayoutManager(requireContext())
+
+        // Setup Toolbar
+        toolbar.inflateMenu(R.menu.menu_game_list)
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.actionRate -> {
+                    openPlayStore()
+                    true
+                }
+                R.id.actionChangelog -> {
+                    openChangelog()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -106,7 +127,11 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                     is ListEffect.ShowDeleteSnackbar -> {
                     }
                     is ListEffect.FetchData -> {
-                        eventConsumer.accept(ListEvent.Loaded(gameRepository?.loadAllGames() ?: listOf()))
+                        eventConsumer.accept(
+                            ListEvent.Loaded(
+                                gameRepository?.loadAllGames() ?: listOf()
+                            )
+                        )
                     }
                 }
             }
@@ -138,6 +163,21 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 Toast.makeText(requireContext(), R.string.delete, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun openPlayStore() {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://play.google.com/store/apps/details?id=com.seakernel.scorepad")
+            setPackage("com.android.vending")
+        }
+        startActivity(intent)
+    }
+
+    private fun openChangelog() {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://github.com/CalvinKern/ScoreApp/releases")
+        }
+        startActivity(intent)
     }
 
     // End Mobius functions

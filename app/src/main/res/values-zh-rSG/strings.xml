@@ -4,7 +4,6 @@
     <string name="actionSave">保存</string>
     <string name="actionGraph">显示图</string>
     <string name="actionSearch">搜索</string>
-    <string name="action_settings">设定值</string>
     <string name="addRound">添加回合</string>
     <string name="dealerLabel">经销商</string>
     <string name="delete">删除</string>
