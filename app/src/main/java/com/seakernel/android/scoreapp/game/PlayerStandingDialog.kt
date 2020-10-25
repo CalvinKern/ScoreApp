@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.holder_player_round_notes.view.*
 import kotlinx.android.synthetic.main.holder_player_standing.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 class PlayerStandingDialog(val gameId: Long) : DialogFragment() {
 
@@ -90,7 +91,7 @@ private class PlayerStandingViewHolder(parent: ViewGroup) :
 
     fun onBind(playerScore: PlayerScore) {
         itemView.playerNameHolder.text = playerScore.name
-        itemView.playerScoreHolder.text = playerScore.score.toString()
+        itemView.playerScoreHolder.text = DecimalFormat("##.###").format(playerScore.score)
         itemView.playerStandingHolder.text =
             itemView.context.getString(R.string.playerStanding, adapterPosition + 1)
     }
