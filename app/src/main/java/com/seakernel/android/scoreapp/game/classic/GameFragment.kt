@@ -3,12 +3,12 @@ package com.seakernel.android.scoreapp.game.classic
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.GameSettings
-import com.seakernel.android.scoreapp.game.*
+import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.game.PlayerRoundNotesDialog
+import com.seakernel.android.scoreapp.game.PlayerStandingDialog
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -173,18 +173,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     ), false)
                 val newCount = scoreRows.adapter!!.itemCount
 
-                @Suppress("ConvertTwoComparisonsToRangeCheck") // Seems much less efficient than a range and doesn't help readability in this situation
-                if (oldCount > 1 && oldCount < newCount && oldSpanCount == model.settings.players.size) {
-                    // When a new round is being inserted, scroll to the bottom and request focus to remove focus from the text view.
-                    // This allows us to record a score when a new round is being inserted, without the user having to press the 'next' button.
+                if (oldCount in 2 until newCount && oldSpanCount == model.settings.players.size) {
+                    // When a new round is being inserted, scroll to the bottom so the it's visible
                     scoreRows.scrollToPosition(newCount - 1)
-
-                    scoreRows.focusedChild?.let {
-                        // Reset the focus so we save the current round TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
-                        it.clearFocus()
-                        it.requestFocus()
-                        (it as? EditText)?.setSelection(it.text.length)
-                    }
                 }
 
                 totalsRow.swapAdapter(

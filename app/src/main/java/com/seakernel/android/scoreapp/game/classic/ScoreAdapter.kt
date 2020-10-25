@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.game.classic
 
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -172,6 +173,7 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.ho
 
 class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holder_score_row_data) {
 
+    var shouldFocus: Boolean = true
     private val scoreHolder: EditText by lazy { itemView.playerScore }
 
     fun bind(hasDealer: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
@@ -193,9 +195,27 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
             // Hack to get score view to stay selected on next focus after an update occurs
             scoreHolder.setText(formatScore(score.value))
         }
+        // If it's the first score in the last round, request focus (to save the previous rounds score)
+        // TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
+        if (score.id == rounds.last().scores.first().id && shouldFocus) {
+            scoreHolder.requestFocus()
+            shouldFocus = false // Reset the focus flag so we don't constantly gain focus
+        }
         scoreHolder.isEnabled = true
         scoreHolder.isFocusable = true
         scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textBlack))
+        scoreHolder.setOnEditorActionListener { _, code, _ ->
+            // If we're not the last score in the last round, return without handling
+            rounds.last().let {
+                if (score.id != it.scores.last().id)
+                    return@setOnEditorActionListener false
+            }
+            // Add a new round when we're the last round and enter "Call" gets pressed
+            when (code) {
+                KeyEvent.KEYCODE_CALL -> eventConsumer?.accept(GameEvent.RequestCreateRound)
+            }
+            true
+        }
         scoreHolder.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
