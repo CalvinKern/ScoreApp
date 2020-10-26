@@ -2,13 +2,16 @@ package com.seakernel.android.scoreapp.calculator
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import kotlinx.android.synthetic.main.view_calculator_keyboard.view.*
+import kotlin.math.min
 
 typealias InputChangedListener = (input: String, failure: Boolean) -> Unit
 
@@ -18,6 +21,7 @@ typealias InputChangedListener = (input: String, failure: Boolean) -> Unit
  */
 class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout(context, attrs) {
 
+    private var inputView: EditText? = null
     private var inputChangedListener: InputChangedListener? = null
 
     private var calculatorString = ""
@@ -34,11 +38,40 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         setKeyboardListeners()
     }
 
-    fun setInputChangedListener(listener: InputChangedListener?, calculator: String? = null) {
-        inputChangedListener = listener
+    fun setInputChangedListener(
+        calculator: String? = null,
+        inputListener: InputChangedListener? = null,
+    ) {
+        inputChangedListener = inputListener
 
         // Reset state for new listener
         calculatorString = calculator ?: ""
+        calculatorEditIndex = calculatorString.length
+    }
+
+    /**
+     * @param calculatorInput the calculator input for the current query
+     */
+    fun setInput(calculatorInput: EditText) {
+        calculatorEditIndex = calculatorString.length
+
+        inputView = calculatorInput
+
+        val inputString = calculatorInput.text.toString().let {
+            if (it.toDoubleOrNull() == 0.0) {
+                "" // Replace 0 with an empty string because it's not important enough
+            } else {
+                it
+            }
+        }
+        setInputChangedListener(
+            inputString, // Reset the string
+            inputListener = { input, _ ->
+                calculatorInput.setText(input)
+                // Set the selection to our edit index (or the length if editing the end)
+                calculatorInput.setSelection(min(calculatorEditIndex, input.length))
+            }
+        )
     }
 
     private fun setupView() {
@@ -69,11 +102,19 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorKeyDecimal.setOnClickListener(listener)
         calculatorKeyOpenParen.setOnClickListener(listener)
         calculatorKeyCloseParen.setOnClickListener(listener)
+
+        calculatorKeyNext.setOnClickListener{ onNextClicked() }
     }
 
     private fun onButtonClicked(key: String) {
+        calculatorEditIndex = inputView?.selectionStart ?: calculatorEditIndex
+
         val failure = !appendToString(key)
         inputChangedListener?.invoke(calculatorString, failure)
+    }
+
+    private fun onNextClicked() {
+        inputView?.onEditorAction(KeyEvent.KEYCODE_CALL)
     }
 
     /**
@@ -87,8 +128,14 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                     calculatorString
                 } else {
                     calculatorEditIndex--
-                    calculatorString.run {
-                        removeRange(IntRange(calculatorEditIndex, calculatorEditIndex + 1))
+                    try {
+                        calculatorString.run {
+                            removeRange(calculatorEditIndex, calculatorEditIndex + 1)
+                        }
+                    } catch (e: Throwable) {
+                        // Default to empty string if error removing anything?
+                        // This has been observed in weird selection cases (shouldn't be able to select though)
+                        ""
                     }
                 }
             }
@@ -97,7 +144,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
             }
             else -> {
                 calculatorEditIndex++ // Increment the index
-                if (calculatorEditIndex > calculatorString.length) {
+                if (calculatorEditIndex - 1 < calculatorString.length) {
                     calculatorString.substring(0, calculatorEditIndex - 1)
                         .plus(key)
                         .plus(calculatorString.substring(calculatorEditIndex - 1))
@@ -110,18 +157,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         return computeString() != null
     }
 
-    // Compute the string, replacing any localized values with static strings for ease of parsing
     private fun computeString(): String? {
-        return CalculatorUtils.eval(
-            calculatorString
-                .replace(resources.getString(R.string.plus), CalculatorUtils.PLUS.toString())
-                .replace(resources.getString(R.string.minus), CalculatorUtils.MINUS.toString())
-                .replace(resources.getString(R.string.multiply), CalculatorUtils.MULTIPLY.toString())
-                .replace(resources.getString(R.string.divide), CalculatorUtils.DIVIDE.toString())
-                .replace(resources.getString(R.string.close_paren), CalculatorUtils.CLOSE_PAREN.toString())
-                .replace(resources.getString(R.string.open_paren), CalculatorUtils.OPEN_PAREN.toString())
-                .replace(resources.getString(R.string.decimal), CalculatorUtils.DECIMAL.toString())
-                .replace(resources.getString(R.string.exponent), CalculatorUtils.EXPONENT.toString())
-        )
+        return CalculatorUtils.eval(calculatorString, context)
     }
 }

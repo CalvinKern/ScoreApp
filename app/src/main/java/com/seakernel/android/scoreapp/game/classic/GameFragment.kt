@@ -169,7 +169,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     GameScoreAdapter(
                         model.settings.hasDealer,
                         model.rounds,
-                        eventConsumer
+                        eventConsumer,
+                        { score -> calculatorKeyboard.setInput(score) }
                     ), false)
                 val newCount = scoreRows.adapter!!.itemCount
 

@@ -37,6 +37,9 @@ class CalculatorTest {
     @Test
     fun multiplication() {
         assertEquals("6", CalculatorUtils.eval("2 x 3"))
+        assertEquals("9", CalculatorUtils.eval("3 x 3"))
+        assertEquals("16", CalculatorUtils.eval("4 x 4"))
+//        assertEquals("16", CalculatorUtils.eval("4 (4)"))
     }
 
     @Test

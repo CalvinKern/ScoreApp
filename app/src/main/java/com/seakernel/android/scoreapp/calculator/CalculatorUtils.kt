@@ -1,5 +1,7 @@
 package com.seakernel.android.scoreapp.calculator
 
+import android.content.Context
+import com.seakernel.android.scoreapp.R
 import kotlin.math.pow
 
 /**
@@ -23,8 +25,21 @@ object CalculatorUtils {
     private val VALIDATOR_REGEX =
         Regex("(${CALCULATOR_REGEX.pattern})+") // Doesn't handle double operators, nor right paren matching
 
+    // Compute the string, replacing any localized values with static strings for ease of parsing
+    private fun sanitize(input: String, context: Context): String = with(context) {
+        input.replace(resources.getString(R.string.plus), PLUS.toString())
+            .replace(resources.getString(R.string.minus), MINUS.toString())
+            .replace(resources.getString(R.string.multiply), MULTIPLY.toString())
+            .replace(resources.getString(R.string.divide), DIVIDE.toString())
+            .replace(resources.getString(R.string.close_paren), CLOSE_PAREN.toString())
+            .replace(resources.getString(R.string.open_paren), OPEN_PAREN.toString())
+            .replace(resources.getString(R.string.decimal), DECIMAL.toString())
+            .replace(resources.getString(R.string.exponent), EXPONENT.toString())
+    }
+
     // Answer snagged from this post: https://stackoverflow.com/a/26227947/4472135
-    fun eval(str: String): String? {
+    fun eval(input: String, context: Context? = null): String? {
+        val str = if (context != null) sanitize(input, context) else input
         if (!VALIDATOR_REGEX.matches(str)) return null
 
         val output = object : Any() {
