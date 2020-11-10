@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import kotlinx.android.synthetic.main.view_calculator_keyboard.view.*
+import java.lang.ref.WeakReference
 import kotlin.math.min
 
 typealias InputChangedListener = (input: String, failure: Boolean) -> Unit
@@ -50,26 +51,30 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     }
 
     /**
-     * @param calculatorInput the calculator input for the current query
+     * @param inputText the calculator input for the current query
      */
-    fun setInput(calculatorInput: EditText) {
+    fun setInput(inputText: EditText) {
         calculatorEditIndex = calculatorString.length
 
-        inputView = calculatorInput
+        inputView = inputText
 
-        val inputString = calculatorInput.text.toString().let {
+        val inputString = inputText.text.toString().let {
             if (it.toDoubleOrNull() == 0.0) {
                 "" // Replace 0 with an empty string because it's not important enough
             } else {
                 it
             }
         }
+
+        // Set the listener to update our input text, safely letting it be collected
+        val weakInputText = WeakReference(inputText)
         setInputChangedListener(
             inputString, // Reset the string
             inputListener = { input, _ ->
-                calculatorInput.setText(input)
+                val editText = weakInputText.get() ?: return@setInputChangedListener
+                editText.setText(input)
                 // Set the selection to our edit index (or the length if editing the end)
-                calculatorInput.setSelection(min(calculatorEditIndex, input.length))
+                editText.setSelection(min(calculatorEditIndex, input.length))
             }
         )
     }
