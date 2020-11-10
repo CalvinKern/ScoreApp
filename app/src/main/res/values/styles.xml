@@ -45,6 +45,8 @@
         <item name="android:textColor">@color/textWhite</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetTop">0dp</item>
+        <item name="android:paddingTop">@dimen/fab_margin</item>
+        <item name="android:paddingBottom">@dimen/fab_margin</item>
         <item name="cornerRadius">0dp</item>
         <item name="rippleColor">@color/textWhite</item>
         <item name="backgroundTint">@color/gray</item>
