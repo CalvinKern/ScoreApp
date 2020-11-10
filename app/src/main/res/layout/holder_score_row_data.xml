@@ -14,7 +14,7 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center"
         android:imeOptions="actionNext|flagNoExtractUi"
-        android:inputType="number|numberSigned|numberDecimal"
+        android:inputType="none"
         android:textIsSelectable="false"
         android:lines="1"
         android:hint="@string/scoreHint"
