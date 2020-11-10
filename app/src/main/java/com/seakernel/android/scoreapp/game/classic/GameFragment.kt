@@ -12,6 +12,7 @@ import com.seakernel.android.scoreapp.game.PlayerStandingDialog
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.logScreenView
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
@@ -131,6 +132,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     override fun onResume() {
         super.onResume()
         eventConsumer?.accept(GameEvent.RequestLoad)
+        logScreenView(GameFragment::class.java.name)
     }
 
     // Mobius functions

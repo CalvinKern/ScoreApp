@@ -9,16 +9,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
-import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game_list.*
 import kotlinx.android.synthetic.main.fragment_game_list.toolbar
 import kotlinx.coroutines.GlobalScope
@@ -86,6 +85,12 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         super.onActivityCreated(savedInstanceState)
         activity?.setTitle(R.string.gameListTitle)
     }
+
+    override fun onResume() {
+        super.onResume()
+        logScreenView(GameListFragment::class.java.name)
+    }
+
     // Mobius functions
 
     override fun initMobius(model: ListModel): First<ListModel, ListEffect> {

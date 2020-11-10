@@ -17,6 +17,7 @@ import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -91,6 +92,11 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLongArray(ARG_SELECTED_IDS, controller.model.selectedPlayerList.toLongArray())
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        logScreenView(PlayerSelectFragment::class.java.name)
     }
 
     // Mobius functions

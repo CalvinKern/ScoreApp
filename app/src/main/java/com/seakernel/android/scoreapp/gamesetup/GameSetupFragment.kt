@@ -17,6 +17,7 @@ import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
+import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setBackgroundRipple
 import com.seakernel.android.scoreapp.utility.setVisible
 import kotlinx.android.synthetic.main.fragment_game_create.*
@@ -95,6 +96,11 @@ class GameSetupFragment : Fragment() {
         arguments?.getLong(ARG_GAME_ID)?.let {
             viewModel.loadGame(it)
         } ?: viewModel.initializeGame()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        logScreenView(GameSetupFragment::class.java.name)
     }
 
     fun updateForNewPlayers(playerIds: List<Long>) {

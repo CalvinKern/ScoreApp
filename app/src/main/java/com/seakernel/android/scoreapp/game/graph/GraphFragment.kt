@@ -20,6 +20,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.utility.logScreenView
 import kotlinx.android.synthetic.main.fragment_graph.*
 import java.text.DecimalFormat
 
@@ -64,6 +65,11 @@ class GraphFragment : Fragment() {
         )
 
         initChartStyle()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        logScreenView(GraphFragment::class.java.name)
     }
 
     private fun updateGraphData(game: Game) {
