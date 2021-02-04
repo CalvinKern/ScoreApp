@@ -19,7 +19,8 @@ data class GameSettings(
     val reversedScoring: Boolean = false,
     val maxScore: Double? = null,
     val maxRounds: Int? = null,
-    val showRoundNotes: Boolean = false
+    val showRoundNotes: Boolean = false,
+    val useCalculator: Boolean = true,
 ) {
 
     constructor(settings: GameEntity, players: List<Player>) : this(
@@ -32,7 +33,8 @@ data class GameSettings(
         reversedScoring = settings.reversedScoring,
         maxScore = settings.maxScore,
         maxRounds = settings.maxRounds,
-        showRoundNotes = settings.showRoundNotes
+        showRoundNotes = settings.showRoundNotes,
+        useCalculator = settings.useCalculator,
     )
 
     val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
@@ -47,7 +49,8 @@ data class GameSettings(
             reversedScoring = reversedScoring,
             maxScore = maxScore,
             maxRounds = maxRounds,
-            showRoundNotes = showRoundNotes
+            showRoundNotes = showRoundNotes,
+            useCalculator = useCalculator,
         )
 
     companion object {

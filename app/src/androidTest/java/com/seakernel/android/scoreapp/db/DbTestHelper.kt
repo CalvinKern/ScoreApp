@@ -98,6 +98,7 @@ class DbTestHelper {
             val testN = 1
             if (version >= 4) {
                 when {
+                    version >= 8 -> insertGamesV8(testN, db)
                     version >= 7 -> insertGamesV7(testN, db)
                     version >= 6 -> insertGamesV6(testN, db)
                     else -> insertGamesV4(testN, db)
@@ -131,6 +132,14 @@ class DbTestHelper {
             db.execSQL("INSERT INTO ${GamePlayerJoin.TABLE_NAME} " +
                 "(${GamePlayerJoin.COLUMN_GAME_ID}, ${GamePlayerJoin.COLUMN_PLAYER_ID}, ${GamePlayerJoin.COLUMN_PLAYER_POSITION}) " +
                 "VALUES $gamePlayers")
+        }
+
+        private fun insertGamesV8(n: Int, db: SupportSQLiteDatabase) {
+            val gameValues = List(n) { "($it, \"SimpleGame $it\", \"${now()}\", 0, 0, 0, 0, 0, 0, 0)" }
+            val gameEntityColumnsV8 =
+                "(${GameEntity.COLUMN_ID}, ${GameEntity.COLUMN_NAME}, ${GameEntity.COLUMN_LAST_PLAYED}, ${GameEntity.COLUMN_HAS_DEALER}, ${GameEntity.COLUMN_SHOW_ROUNDS}, ${GameEntity.COLUMN_REVERSED_SCORING}, ${GameEntity.COLUMN_MAX_SCORE}, ${GameEntity.COLUMN_MAX_ROUNDS}, ${GameEntity.COLUMN_SHOW_ROUND_NOTES}, ${GameEntity.COLUMN_USE_CALCULATOR})"
+
+            db.execSQL("INSERT INTO ${GameEntity.TABLE_NAME} $gameEntityColumnsV8 VALUES ${gameValues.joinToString()}")
         }
 
         private fun insertGamesV7(n: Int, db: SupportSQLiteDatabase) {
