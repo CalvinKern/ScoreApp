@@ -228,7 +228,11 @@ class ScoreViewHolder(
                 showCalculatorKeyboardCallback?.invoke(scoreHolder)
 
                 // Set the selection to the end of the score (makes quick edits/additions easier)
-                scoreHolder.setSelection(scoreHolder.text.length)
+                if (score.value == 0.0) {
+                    scoreHolder.setText("")
+                } else {
+                    scoreHolder.setSelection(scoreHolder.text.length)
+                }
             }
         }
         scoreHolder.setOnLongClickListener {
