@@ -17,7 +17,7 @@
                 android:name=".ui.MainActivity"
                 android:label="${appName}"
                 android:configChanges="keyboard|keyboardHidden|screenSize"
-                android:windowSoftInputMode="adjustResize">
+                android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>

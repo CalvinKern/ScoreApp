@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.game.classic
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
@@ -133,6 +134,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onResume()
         eventConsumer?.accept(GameEvent.RequestLoad)
         logScreenView(GameFragment::class.java.name)
+
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     // Mobius functions
