@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
@@ -17,10 +18,19 @@ import kotlin.math.min
 typealias InputChangedListener = (input: String, failure: Boolean) -> Unit
 
 /**
+ * When the system is allowed to handle the editor action [KEYCODE_NEXT], it will propagate and move focus to the next
+ * view.
+ *
  * Created by Calvin on 2020-03-09.
  * Copyright © 2020 SeaKernel. All rights reserved.
  */
 class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout(context, attrs) {
+
+    /** See [CalculatorKeyboardView] documentation for behavior */
+    companion object {
+        const val KEYCODE_EQUALS = KeyEvent.KEYCODE_EQUALS
+        const val KEYCODE_NEXT = EditorInfo.IME_ACTION_NEXT
+    }
 
     private var inputView: EditText? = null
     private var inputChangedListener: InputChangedListener? = null
@@ -119,7 +129,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     }
 
     private fun onNextClicked() {
-        inputView?.onEditorAction(KeyEvent.KEYCODE_CALL)
+        inputView?.onEditorAction(KEYCODE_NEXT)
     }
 
     /**
@@ -145,6 +155,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                 }
             }
             resources.getString(R.string.equals) -> {
+                inputView?.onEditorAction(KEYCODE_EQUALS)
                 computeString() ?: calculatorString
             }
             else -> {

@@ -1,6 +1,5 @@
 package com.seakernel.android.scoreapp.game.classic
 
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
 import com.seakernel.android.scoreapp.calculator.CalculatorUtils
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
@@ -209,15 +209,16 @@ class ScoreViewHolder(
         scoreHolder.isFocusable = true
         scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textBlack))
         scoreHolder.setOnEditorActionListener { _, code, _ ->
-            // If we're not the last score in the last round, return without handling
-            rounds.last().let {
-                if (score.id != it.scores.last().id)
-                    return@setOnEditorActionListener false
-            }
-            // Add a new round when we're the last round and enter "Call" gets pressed
             when (code) {
-                KeyEvent.KEYCODE_CALL -> eventConsumer?.accept(GameEvent.RequestCreateRound)
+                CalculatorKeyboardView.KEYCODE_EQUALS -> updateScore(eventConsumer, round, score)
+                CalculatorKeyboardView.KEYCODE_NEXT -> {
+                    // Add a new round only when we're the last round, otherwise let the action propagate to the system
+                    if (score.id != rounds.last().scores.last().id) return@setOnEditorActionListener false
+
+                    eventConsumer?.accept(GameEvent.RequestCreateRound)
+                }
             }
+
             true
         }
         scoreHolder.setOnFocusChangeListener { _, hasFocus ->
