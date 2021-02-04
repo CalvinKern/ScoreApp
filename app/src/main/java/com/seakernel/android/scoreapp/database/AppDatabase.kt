@@ -41,6 +41,10 @@ abstract class AppDatabase : RoomDatabase() {
             return db!!
         }
 
+        fun clean() {
+            db = null
+        }
+
         private fun migrations(): Array<Migration> {
             return arrayOf(Migration_1_2(), Migration_2_3(), Migration_3_4(), Migration_4_5(), Migration_5_6(), Migration_6_7())
         }

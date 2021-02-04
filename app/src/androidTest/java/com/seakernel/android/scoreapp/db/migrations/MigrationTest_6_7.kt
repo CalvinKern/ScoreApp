@@ -6,6 +6,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
+import kotlin.jvm.Throws
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -22,11 +23,10 @@ class MigrationTest_6_7 {
     @Test
     @Throws(IOException::class)
     fun migrate6To7() {
-        val db = DbTestHelper.createDatabaseAndMigrate(helper, 6, 7, Migration_6_7())
-
-        db.gameDao().getFullGame(0).apply {
-            assertFalse(game.showRoundNotes)
+        DbTestHelper.createDatabaseAndMigrate(helper, 6, 7, Migration_6_7()) { db ->
+            db.gameDao().getFullGame(0).apply {
+                assertFalse(game.showRoundNotes)
+            }
         }
-        db.close()
     }
 }

@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.ZonedDateTime
 import java.io.IOException
+import kotlin.jvm.Throws
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -69,7 +70,7 @@ class DbTestHelper {
             return AppDatabase.getInstance(getAppContext(), databaseName)
         }
 
-        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration): AppDatabase {
+        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration, block: (db: AppDatabase) -> Unit) {
             helper.createDatabase(databaseName, startDbVersion).apply {
                 generateGameData(startDbVersion, this)
                 // Prepare for the next version.
@@ -81,7 +82,12 @@ class DbTestHelper {
 
             // MigrationTestHelper automatically verifies the schema changes,
             // but you need to validate that the data was migrated properly.
-            return getAppDatabaseWithMigrations()
+            val db = getAppDatabaseWithMigrations()
+            block(db)
+            db.close()
+
+            // Clean the app database, allows the next test to create the db at the version that it needs
+            AppDatabase.clean()
         }
 
         fun now(): String {
