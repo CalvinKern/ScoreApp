@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
@@ -19,7 +21,6 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game_list.*
-import kotlinx.android.synthetic.main.fragment_game_list.toolbar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -100,6 +101,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     override fun connectViews(eventConsumer: Consumer<ListEvent>): Connection<ListModel> {
         // Send events to the consumer when the button is pressed
         fab.setOnClickListener {
+            logEvent(AnalyticsConstants.Event.CREATE_GAME)
             eventConsumer.accept(ListEvent.AddGameClicked)
         }
 
@@ -160,6 +162,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private fun deleteGameAsync(eventConsumer: Consumer<ListEvent>, gameId: Long) {
+        logEvent(AnalyticsConstants.Event.DELETE_GAME)
         GlobalScope.launch {
             if (gameRepository?.deleteGame(gameId) == true) {
                 eventConsumer.accept(ListEvent.GameDeleteSuccessful(gameId))
@@ -179,6 +182,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private fun openChangelog() {
+        logEvent(AnalyticsConstants.Event.SHOW_CHANGELOG)
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse("https://github.com/CalvinKern/ScoreApp/releases")
         }

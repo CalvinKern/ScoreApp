@@ -36,8 +36,6 @@ val Int.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 // Analytics helpers
-// Key:
-//
 
 private typealias BundleBlock = Bundle.() -> Unit
 private fun logEvent(context: Context, eventName: String, bundleBlock: BundleBlock) {

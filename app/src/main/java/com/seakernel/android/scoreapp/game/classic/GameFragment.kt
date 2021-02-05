@@ -13,6 +13,8 @@ import com.seakernel.android.scoreapp.game.PlayerStandingDialog
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -121,11 +123,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     }
 
     private fun showStandingDialog(gameId: Long) {
+        logEvent(AnalyticsConstants.Event.SHOW_PLAYER_STANDING_DIALOG)
         val dialog = PlayerStandingDialog(gameId)
         dialog.show(childFragmentManager, PlayerStandingDialog::class.java.simpleName)
     }
 
     private fun showRoundNotesDialog(player: Player, gameId: Long) {
+        logEvent(AnalyticsConstants.Event.SHOW_ROUND_NOTES_DIALOG)
         val dialog = PlayerRoundNotesDialog(player, gameId)
         dialog.show(childFragmentManager, PlayerRoundNotesDialog::class.java.simpleName)
     }

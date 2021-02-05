@@ -16,10 +16,7 @@ import androidx.recyclerview.widget.*
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.utility.isCheckedSafe
-import com.seakernel.android.scoreapp.utility.logScreenView
-import com.seakernel.android.scoreapp.utility.setBackgroundRipple
-import com.seakernel.android.scoreapp.utility.setVisible
+import com.seakernel.android.scoreapp.utility.*
 import kotlinx.android.synthetic.main.fragment_game_create.*
 import kotlinx.android.synthetic.main.holder_game_create_player.view.*
 import kotlinx.android.synthetic.main.view_game_settings.*
@@ -296,6 +293,7 @@ private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallba
             playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE
             playerDealerBox.isChecked = state.isDealer
             playerDealerBox.setOnClickListener {
+                logEvent(AnalyticsConstants.Event.NEW_DEALER_SELECTED)
                 callback.onSelectedDealer(state.player.id!!)
             }
         }

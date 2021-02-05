@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.logEvent
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.holder_game_list.view.*
 
@@ -49,7 +51,13 @@ class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         dateHolder.text = settings.lastPlayedAt
         playersHolder.text = itemView.context.getString(R.string.playersHolder, settings.players.size)
 
-        itemView.setOnClickListener { eventConsumer.accept(ListEvent.GameRowClicked(settings.id!!)) }
+        itemView.setOnClickListener {
+            logEvent(AnalyticsConstants.Event.LOAD_GAME) {
+                putString(AnalyticsConstants.Param.GAME_NAME, settings.name)
+                putString(AnalyticsConstants.Param.GAME_PLAYER_COUNT, settings.players.count().toString())
+            }
+            eventConsumer.accept(ListEvent.GameRowClicked(settings.id!!))
+        }
         itemView.setOnLongClickListener {
             eventConsumer.accept(ListEvent.GameRowLongPressed(settings.id!!))
             return@setOnLongClickListener true
