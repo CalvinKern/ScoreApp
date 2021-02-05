@@ -32,10 +32,6 @@ class GameSetupFragment : Fragment() {
 
     private var listener: GameSetupListener? = null
     private var nameTextWatcher: TextWatcher? = null
-    private var hasDealerListener: OnCheckedChangeListener? = null
-    private var reversedScoringListener: OnCheckedChangeListener? = null
-    private var showNotesListener: OnCheckedChangeListener? = null
-    private var useCalculatorListener: OnCheckedChangeListener? = null
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
@@ -69,12 +65,10 @@ class GameSetupFragment : Fragment() {
         reversedScoringContainer?.setOnClickListener(null)
         showNotesContainer?.checkbox?.setOnCheckedChangeListener(null)
         showNotesContainer?.setOnClickListener(null)
+        useCalculatorContainer?.checkbox?.setOnCheckedChangeListener(null)
+        useCalculatorContainer?.setOnClickListener(null)
 
         gameNameEdit?.removeTextChangedListener(nameTextWatcher)
-
-        hasDealerListener = null
-        reversedScoringListener = null
-        showNotesListener = null
 
         viewModel.getGameSettings().removeObserver(modelObserver)
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
@@ -148,11 +142,6 @@ class GameSetupFragment : Fragment() {
             }
         }
 
-        hasDealerListener = OnCheckedChangeListener { _, checked -> viewModel.setHasDealer(checked) }
-        reversedScoringListener = OnCheckedChangeListener { _, checked -> viewModel.setReverseScoring(checked) }
-        showNotesListener = OnCheckedChangeListener { _, checked -> viewModel.setShowNotes(checked) }
-        useCalculatorListener = OnCheckedChangeListener { _, checked -> viewModel.setUseCalculator(checked) }
-
         setListenerRow(hasDealerContainer)
         setListenerRow(reversedScoringContainer)
         setListenerRow(showNotesContainer)
@@ -180,10 +169,24 @@ class GameSetupFragment : Fragment() {
         }
         (playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
 
-        hasDealerContainer.checkbox.isCheckedSafe(settings.hasDealer, hasDealerListener)
-        reversedScoringContainer.checkbox.isCheckedSafe(settings.reversedScoring, reversedScoringListener)
-        showNotesContainer.checkbox.isCheckedSafe(settings.showRoundNotes, showNotesListener)
-        useCalculatorContainer.checkbox.isCheckedSafe(settings.useCalculator, useCalculatorListener)
+
+        val checkedListener = OnCheckedChangeListener { checkbox: View, checked: Boolean ->
+            logEvent(AnalyticsConstants.Event.TOGGLE_GAME_SETTING) {
+                putString(AnalyticsConstants.Param.ITEM_NAME, checkbox.resources.getResourceEntryName((checkbox.parent as View).id))
+                putBoolean(AnalyticsConstants.Param.MESSAGE, checked)
+            }
+            when (checkbox) {
+                hasDealerContainer.checkbox -> viewModel.setHasDealer(checked)
+                reversedScoringContainer.checkbox -> viewModel.setReverseScoring(checked)
+                showNotesContainer.checkbox -> viewModel.setShowNotes(checked)
+                useCalculatorContainer.checkbox -> viewModel.setUseCalculator(checked)
+            }
+        }
+
+        hasDealerContainer.checkbox.isCheckedSafe(settings.hasDealer, checkedListener)
+        reversedScoringContainer.checkbox.isCheckedSafe(settings.reversedScoring, checkedListener)
+        showNotesContainer.checkbox.isCheckedSafe(settings.showRoundNotes, checkedListener)
+        useCalculatorContainer.checkbox.isCheckedSafe(settings.useCalculator, checkedListener)
 
         // Update game name unless it has focus (being edited)
         if (!gameNameEdit.hasFocus()) {

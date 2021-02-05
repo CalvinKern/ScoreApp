@@ -19,12 +19,13 @@ object AnalyticsConstants {
         const val SHOW_RATING_DIALOG = FirebaseAnalytics.Event.POST_SCORE
         const val SHOW_PLAYER_STANDING_DIALOG = FirebaseAnalytics.Event.VIEW_PROMOTION
         const val SHOW_ROUND_NOTES_DIALOG = FirebaseAnalytics.Event.CAMPAIGN_DETAILS
+        const val TOGGLE_GAME_SETTING = FirebaseAnalytics.Event.SELECT_CONTENT
     }
 
 
     object Param {
-        const val GAME_NAME = FirebaseAnalytics.Param.ITEM_NAME
         const val GAME_PLAYER_COUNT = FirebaseAnalytics.Param.NUMBER_OF_PASSENGERS
+        const val ITEM_NAME = FirebaseAnalytics.Param.ITEM_NAME
         const val MESSAGE = FirebaseAnalytics.Param.CONTENT
     }
 }

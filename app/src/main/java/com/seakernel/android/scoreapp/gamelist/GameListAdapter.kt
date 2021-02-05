@@ -53,7 +53,7 @@ class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         itemView.setOnClickListener {
             logEvent(AnalyticsConstants.Event.LOAD_GAME) {
-                putString(AnalyticsConstants.Param.GAME_NAME, settings.name)
+                putString(AnalyticsConstants.Param.ITEM_NAME, settings.name)
                 putString(AnalyticsConstants.Param.GAME_PLAYER_COUNT, settings.players.count().toString())
             }
             eventConsumer.accept(ListEvent.GameRowClicked(settings.id!!))
