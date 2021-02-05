@@ -20,7 +20,7 @@ data class GameSettings(
     val maxScore: Double? = null,
     val maxRounds: Int? = null,
     val showRoundNotes: Boolean = false,
-    val useCalculator: Boolean = true,
+    val useCalculator: Boolean = false,
 ) {
 
     constructor(settings: GameEntity, players: List<Player>) : this(

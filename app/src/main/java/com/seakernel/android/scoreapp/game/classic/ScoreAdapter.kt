@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.game.classic
 
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ private typealias CalculatorKeyboardCallback = (scoreView: EditText) -> Unit
  */
 class GameScoreAdapter(
     private val hasDealer: Boolean,
+    private val useCalculator: Boolean,
     private val rounds: List<Round>,
     private val eventConsumer: Consumer<GameEvent>? = null,
     private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback
@@ -59,7 +61,7 @@ class GameScoreAdapter(
         when(getItemViewType(position)) {
             VIEW_TYPE_SCORE -> {
                 val round = rounds[toRoundIndex(position)]
-                (holder as ScoreViewHolder).bind(hasDealer, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
+                (holder as ScoreViewHolder).bind(hasDealer, useCalculator, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
             }
             VIEW_TYPE_ROUND_ADD -> {
                 (holder as AddRoundViewHolder).bind(eventConsumer)
@@ -181,12 +183,12 @@ class ScoreViewHolder(
 
     var shouldFocus: Boolean = true
     private val scoreHolder: EditText by lazy {
-        itemView.playerScore.apply {
-            showSoftInputOnFocus = false
-        }
+        itemView.playerScore
     }
 
-    fun bind(hasDealer: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
+    fun bind(hasDealer: Boolean, useCalculator: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
+        scoreHolder.showSoftInputOnFocus = !useCalculator
+
         if (hasDealer && score.player == round.dealer) {
             if (rounds.last().id == round.id) {
                 itemView.setBackgroundResource(R.color.dealer)
@@ -226,7 +228,7 @@ class ScoreViewHolder(
                 updateScore(eventConsumer, round, score)
             } else {
                 // Newly gained focus = open calculator
-                showCalculatorKeyboardCallback?.invoke(scoreHolder)
+                if (useCalculator) showCalculatorKeyboardCallback?.invoke(scoreHolder)
 
                 // Set the selection to the end of the score (makes quick edits/additions easier)
                 if (score.value == 0.0) {

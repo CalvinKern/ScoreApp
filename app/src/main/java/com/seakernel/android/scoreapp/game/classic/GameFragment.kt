@@ -132,7 +132,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     override fun onResume() {
         super.onResume()
-        eventConsumer?.accept(GameEvent.RequestLoad)
         logScreenView(GameFragment::class.java.name)
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
@@ -150,6 +149,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
                 toolbar.title = model.settings.name
+                calculatorKeyboard.visibility = if (model.settings.useCalculator) View.VISIBLE else View.GONE
 
                 var manager = scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
@@ -173,6 +173,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 scoreRows.swapAdapter(
                     GameScoreAdapter(
                         model.settings.hasDealer,
+                        model.settings.useCalculator,
                         model.rounds,
                         eventConsumer,
                         { score -> calculatorKeyboard.setInput(score) }
