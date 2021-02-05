@@ -58,6 +58,11 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         gameSettings.value = gameSettings.value!!.copy(showRoundNotes = showNotes)
     }
 
+    @MainThread
+    fun setUseCalculator(useCalculator: Boolean) {
+        gameSettings.value = gameSettings.value!!.copy(useCalculator = useCalculator)
+    }
+
     fun saveGame() {
         val settings = gameSettings.value ?: GameSettings()
 

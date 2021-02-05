@@ -38,6 +38,7 @@ class GameSetupFragment : Fragment() {
     private var hasDealerListener: OnCheckedChangeListener? = null
     private var reversedScoringListener: OnCheckedChangeListener? = null
     private var showNotesListener: OnCheckedChangeListener? = null
+    private var useCalculatorListener: OnCheckedChangeListener? = null
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
@@ -149,19 +150,19 @@ class GameSetupFragment : Fragment() {
                 viewModel.updateGameName(text.toString())
             }
         }
-        gameNameEdit.addTextChangedListener(nameTextWatcher)
 
         hasDealerListener = OnCheckedChangeListener { _, checked -> viewModel.setHasDealer(checked) }
         reversedScoringListener = OnCheckedChangeListener { _, checked -> viewModel.setReverseScoring(checked) }
         showNotesListener = OnCheckedChangeListener { _, checked -> viewModel.setShowNotes(checked) }
+        useCalculatorListener = OnCheckedChangeListener { _, checked -> viewModel.setUseCalculator(checked) }
 
-        setListenerRow(hasDealerContainer, showNotesListener)
-        setListenerRow(reversedScoringContainer, showNotesListener)
-        setListenerRow(showNotesContainer, showNotesListener)
+        setListenerRow(hasDealerContainer)
+        setListenerRow(reversedScoringContainer)
+        setListenerRow(showNotesContainer)
+        setListenerRow(useCalculatorContainer)
     }
 
-    private fun setListenerRow(container: View, listener: OnCheckedChangeListener?) {
-        container.checkbox.setOnCheckedChangeListener(listener)
+    private fun setListenerRow(container: View) {
         container.setOnClickListener { container.checkbox.performClick() }
     }
 
@@ -185,6 +186,7 @@ class GameSetupFragment : Fragment() {
         hasDealerContainer.checkbox.isCheckedSafe(settings.hasDealer, hasDealerListener)
         reversedScoringContainer.checkbox.isCheckedSafe(settings.reversedScoring, reversedScoringListener)
         showNotesContainer.checkbox.isCheckedSafe(settings.showRoundNotes, showNotesListener)
+        useCalculatorContainer.checkbox.isCheckedSafe(settings.useCalculator, useCalculatorListener)
 
         // Update game name unless it has focus (being edited)
         if (!gameNameEdit.hasFocus()) {

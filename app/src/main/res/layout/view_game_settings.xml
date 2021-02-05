@@ -118,4 +118,45 @@
                 />
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/useCalculatorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        >
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/AppTheme.TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/useCalculatorTitle"
+                android:labelFor="@id/checkbox"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/useCalculatorDescription"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </merge>

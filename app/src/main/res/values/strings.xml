@@ -29,6 +29,8 @@
     <string name="reversedScoringDescription">The player with the lowest score wins, instead of having the highest score</string>
     <string name="showRoundNotesTitle">Show Round Notes</string>
     <string name="showRoundNotesDescription">Click on a player\'s name to view and edit notes for each round</string>
+    <string name="useCalculatorTitle">Calculator Keyboard</string>
+    <string name="useCalculatorDescription">Use the custom calculator keyboard. Not checked will use system keyboard.</string>
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>
