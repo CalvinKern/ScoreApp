@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -70,7 +71,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.actionRate -> {
-                    openPlayStore()
+                    rateApp()
                     true
                 }
                 R.id.actionChangelog -> {
@@ -169,6 +170,30 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
             } else {
                 // TODO: Show error, shouldn't happen, but why not catch it?
                 Toast.makeText(requireContext(), R.string.delete, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun rateApp() {
+        logEvent(AnalyticsConstants.Event.SHOW_RATING_DIALOG)
+        val manager = ReviewManagerFactory.create(requireContext())
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { request ->
+            if (request.isSuccessful) {
+                // We got the ReviewInfo object
+                val reviewInfo = request.result
+                val flow = manager.launchReviewFlow(requireActivity(), reviewInfo)
+                flow.addOnCompleteListener { _ ->
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                }
+            } else {
+                // There was some problem, continue regardless of the result.
+                openPlayStore()
+                logEvent(AnalyticsConstants.Event.FAILED_RATING_DIALOG) {
+                    putString(AnalyticsConstants.Param.MESSAGE, request.exception?.message)
+                }
             }
         }
     }
