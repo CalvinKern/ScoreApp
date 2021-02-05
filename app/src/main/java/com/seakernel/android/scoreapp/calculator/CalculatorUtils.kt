@@ -34,7 +34,6 @@ object CalculatorUtils {
             .replace(resources.getString(R.string.close_paren), CLOSE_PAREN.toString())
             .replace(resources.getString(R.string.open_paren), OPEN_PAREN.toString())
             .replace(resources.getString(R.string.decimal), DECIMAL.toString())
-            .replace(resources.getString(R.string.exponent), EXPONENT.toString())
     }
 
     // Answer snagged from this post: https://stackoverflow.com/a/26227947/4472135

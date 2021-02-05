@@ -42,4 +42,8 @@
     <string name="actionPlayerStanding">Posiciones</string>
     <string name="playerStandingTitle">Posiciones de los jugadores</string>
     <string name="playerStanding">#%d</string>
+    <string name="actionRateApp">Calificar aplicacion</string>
+    <string name="actionChangelog">Registro de cambios</string>
+    <string name="useCalculatorTitle">Teclado calculadora</string>
+    <string name="useCalculatorDescription">Utilice el teclado de la calculadora personalizado. Utilizará el teclado del sistema si no está habilitado.</string>
 </resources>

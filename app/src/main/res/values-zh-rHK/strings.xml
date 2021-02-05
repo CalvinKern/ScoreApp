@@ -42,4 +42,8 @@
     <string name="actionPlayerStanding">站立</string>
     <string name="playerStandingTitle">球員站立</string>
     <string name="playerStanding">#%d</string>
+    <string name="actionRateApp">評價應用</string>
+    <string name="actionChangelog">變更日誌</string>
+    <string name="useCalculatorTitle">計算器鍵盤</string>
+    <string name="useCalculatorDescription">使用自定義計算器鍵盤。 如果未啟用，將使用系統鍵盤。</string>
 </resources>

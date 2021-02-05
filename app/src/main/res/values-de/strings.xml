@@ -42,4 +42,8 @@
     <string name="actionPlayerStanding">Stehen</string>
     <string name="playerStandingTitle">Spielerwertung</string>
     <string name="playerStanding">#%d</string>
+    <string name="actionRateApp">Bewertungs App</string>
+    <string name="actionChangelog">Änderungsprotokoll</string>
+    <string name="useCalculatorTitle">Rechner Tastatur</string>
+    <string name="useCalculatorDescription">Verwenden Sie die benutzerdefinierte Taschenrechner-Tastatur. Verwendet die Systemtastatur, wenn sie nicht aktiviert ist.</string>
 </resources>

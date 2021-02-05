@@ -42,4 +42,8 @@
     <string name="playerStandingTitle">球员站立</string>
     <string name="actionPlayerStanding">站立</string>
     <string name="actionClose">关</string>
+    <string name="useCalculatorDescription">使用自定义计算器键盘。 如果未启用，将使用系统键盘。</string>
+    <string name="useCalculatorTitle">计算器键盘</string>
+    <string name="actionChangelog">变更日志</string>
+    <string name="actionRateApp">评价应用</string>
 </resources>

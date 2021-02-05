@@ -42,4 +42,8 @@
     <string name="playerStandingTitle">Classement des joueurs</string>
     <string name="actionPlayerStanding">Classement</string>
     <string name="actionClose">Fermer</string>
+    <string name="useCalculatorDescription">Utilisez le clavier personnalisé de la calculatrice. Utilisera le clavier système s\'il n\'est pas activé.</string>
+    <string name="useCalculatorTitle">Clavier de la calculatrice</string>
+    <string name="actionChangelog">Changelog</string>
+    <string name="actionRateApp">Application de taux</string>
 </resources>

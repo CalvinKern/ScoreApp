@@ -42,4 +42,8 @@
     <string name="actionPlayerStanding">Klasemen</string>
     <string name="playerStandingTitle">Klasemen Pemain</string>
     <string name="playerStanding">#%d</string>
+    <string name="actionRateApp">Beri Nilai Aplikasi</string>
+    <string name="actionChangelog">Changelog</string>
+    <string name="useCalculatorTitle">Keyboard Kalkulator</string>
+    <string name="useCalculatorDescription">Gunakan keyboard kalkulator khusus. Akan menggunakan keyboard sistem jika tidak diaktifkan.</string>
 </resources>

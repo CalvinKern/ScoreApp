@@ -42,4 +42,8 @@
     <string name="playerStandingTitle">プレーヤーの順位</string>
     <string name="actionPlayerStanding">順位</string>
     <string name="actionClose">閉じる</string>
+    <string name="useCalculatorDescription">カスタム電卓キーボードを使用します。 有効になっていない場合は、システムキーボードを使用します。</string>
+    <string name="useCalculatorTitle">電卓キーボード</string>
+    <string name="actionChangelog">変更ログ</string>
+    <string name="actionRateApp">アプリを評価</string>
 </resources>

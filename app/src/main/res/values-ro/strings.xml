@@ -42,4 +42,8 @@
     <string name="playerStandingTitle">Clasamentul jucătorilor</string>
     <string name="actionPlayerStanding">Clasamente</string>
     <string name="actionClose">Închide</string>
+    <string name="useCalculatorDescription">Utilizați tastatura calculatorului personalizată. Va folosi tastatura de sistem dacă nu este activată.</string>
+    <string name="useCalculatorTitle">Tastatură Calculator</string>
+    <string name="actionChangelog">Jurnal de schimbări</string>
+    <string name="actionRateApp">Evaluează aplicația</string>
 </resources>
