@@ -1,8 +1,8 @@
 package com.seakernel.android.scoreapp.db.migrations
 
-import com.seakernel.android.scoreapp.database.migrations.Migration_6_7
+import com.seakernel.android.scoreapp.database.migrations.Migration_7_8
 import com.seakernel.android.scoreapp.db.DbTestHelper
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
@@ -14,7 +14,7 @@ import kotlin.jvm.Throws
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @Suppress("ClassName")
-class MigrationTest_6_7 {
+class MigrationTest_7_8 {
 
     @Rule
     @JvmField
@@ -22,10 +22,10 @@ class MigrationTest_6_7 {
 
     @Test
     @Throws(IOException::class)
-    fun migrate6To7() {
-        DbTestHelper.createDatabaseAndMigrate(helper, 6, 7, Migration_6_7()) { db ->
+    fun migrate7To8() {
+        DbTestHelper.createDatabaseAndMigrate(helper, 7, 8, Migration_7_8()) { db ->
             db.gameDao().getFullGame(0).apply {
-                assertFalse(game.showRoundNotes)
+                assertTrue(game.useCalculator)
             }
         }
     }

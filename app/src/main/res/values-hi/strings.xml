@@ -4,7 +4,6 @@
     <string name="actionGraph">ग्राफ दिखाएं</string>
     <string name="actionSave">सहेजें</string>
     <string name="actionSearch">खोज</string>
-    <string name="action_settings">समायोजन</string>
     <string name="addRound">राउंड जोड़ें</string>
     <string name="dealerLabel">विक्रेता</string>
     <string name="delete">हटाएं</string>
@@ -39,4 +38,12 @@
     <string name="scoreHint">स्कोर</string>
     <string name="showRoundNotesDescription">प्रत्येक दौर के लिए नोट्स देखने और संपादित करने के लिए एक खिलाड़ी के नाम पर क्लिक करें</string>
     <string name="showRoundNotesTitle">राउंड नोट्स दिखाएं</string>
+    <string name="playerStanding">#%d</string>
+    <string name="playerStandingTitle">खिलाड़ी स्थान</string>
+    <string name="actionPlayerStanding">स्थान</string>
+    <string name="actionClose">बंद करे</string>
+    <string name="useCalculatorDescription">कस्टम कैलकुलेटर कीबोर्ड का उपयोग करें। सक्षम नहीं होने पर सिस्टम कीबोर्ड का उपयोग करेगा।</string>
+    <string name="useCalculatorTitle">कैलकुलेटर कीबोर्ड</string>
+    <string name="actionChangelog">चंगेलोग</string>
+    <string name="actionRateApp">एप्प का मूल्यांकन</string>
 </resources>

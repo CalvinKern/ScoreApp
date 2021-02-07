@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Score Pad</string>
-    <string name="action_settings">Settings</string>
 
     <!--Game List Screen-->
     <string name="gameListTitle">Games</string>
@@ -9,10 +8,14 @@
     <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
 
     <!--Common Actions-->
+    <string name="actionClose">Close</string>
     <string name="actionSave">Save</string>
     <string name="actionEdit">Edit</string>
     <string name="actionSearch">Search</string>
     <string name="actionGraph">Show Graph</string>
+    <string name="actionPlayerStanding">Standings</string>
+    <string name="actionRateApp">Rate App</string>
+    <string name="actionChangelog">Changelog</string>
 
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>
@@ -26,6 +29,8 @@
     <string name="reversedScoringDescription">The player with the lowest score wins, instead of having the highest score</string>
     <string name="showRoundNotesTitle">Show Round Notes</string>
     <string name="showRoundNotesDescription">Click on a player\'s name to view and edit notes for each round</string>
+    <string name="useCalculatorTitle">Calculator Keyboard</string>
+    <string name="useCalculatorDescription">Use the custom calculator keyboard. Will use the system keyboard if not enabled.</string>
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>
@@ -50,6 +55,10 @@
     <string name="playerRoundNumberFormat">Round %d:</string>
     <string name="playerRoundNumberHint">Notes</string>
 
+    <!--Player Standing Dialog-->
+    <string name="playerStandingTitle">Player Standings</string>
+    <string name="playerStanding">#%d</string>
+
     <!--Player dialog-->
     <string name="playerName">Player Name</string>
 
@@ -57,4 +66,27 @@
     <string name="deleteGameConfirmation">Do you want to delete this game?</string>
     <string name="delete">Delete</string>
     <string name="deleteSuccessful">Deleted</string>
+
+    <!--Calculator-->
+    <!--TODO: Translate or reconfigure to allow for better calculator in different languages-->
+    <string name="zero" translatable="false">0</string>
+    <string name="one" translatable="false">1</string>
+    <string name="two" translatable="false">2</string>
+    <string name="three" translatable="false">3</string>
+    <string name="four" translatable="false">4</string>
+    <string name="five" translatable="false">5</string>
+    <string name="six" translatable="false">6</string>
+    <string name="seven" translatable="false">7</string>
+    <string name="eight" translatable="false">8</string>
+    <string name="nine" translatable="false">9</string>
+    <string name="plus" translatable="false">+</string>
+    <string name="minus" translatable="false">-</string>
+    <string name="multiply" translatable="false">×</string>
+    <string name="divide" translatable="false">/</string>
+    <string name="equals" translatable="false">=</string>
+    <string name="open_paren" translatable="false">(</string>
+    <string name="close_paren" translatable="false">)</string>
+    <string name="next" translatable="false">-></string>
+    <string name="decimal" translatable="false">.</string>
+    <string name="del" translatable="false">DEL</string>
 </resources>

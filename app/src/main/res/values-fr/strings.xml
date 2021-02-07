@@ -4,7 +4,6 @@
     <string name="actionGraph">Afficher le graphique</string>
     <string name="actionSave">sauvegarder</string>
     <string name="actionSearch">Chercher</string>
-    <string name="action_settings">Réglages</string>
     <string name="addRound">Ajouter un tour</string>
     <string name="dealerLabel">Marchand</string>
     <string name="delete">Supprimer</string>
@@ -39,4 +38,12 @@
     <string name="scoreHint">Score</string>
     <string name="showRoundNotesDescription">Cliquez sur le nom d\'un joueur pour afficher et modifier les notes de chaque manche</string>
     <string name="showRoundNotesTitle">Afficher les notes rondes</string>
+    <string name="playerStanding">#%d</string>
+    <string name="playerStandingTitle">Classement des joueurs</string>
+    <string name="actionPlayerStanding">Classement</string>
+    <string name="actionClose">Fermer</string>
+    <string name="useCalculatorDescription">Utilisez le clavier personnalisé de la calculatrice. Utilisera le clavier système s\'il n\'est pas activé.</string>
+    <string name="useCalculatorTitle">Clavier de la calculatrice</string>
+    <string name="actionChangelog">Changelog</string>
+    <string name="actionRateApp">Application de taux</string>
 </resources>

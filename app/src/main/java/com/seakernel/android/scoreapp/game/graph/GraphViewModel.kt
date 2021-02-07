@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.graph
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-class GameViewModel(application: Application) : AndroidViewModel(application) {
+class GraphViewModel(application: Application) : AndroidViewModel(application) {
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.Default + job)
 

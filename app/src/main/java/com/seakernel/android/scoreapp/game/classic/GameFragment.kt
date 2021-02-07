@@ -1,16 +1,21 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.classic
 
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
+import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.game.PlayerRoundNotesDialog
+import com.seakernel.android.scoreapp.game.PlayerStandingDialog
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.logEvent
+import com.seakernel.android.scoreapp.utility.logScreenView
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
@@ -38,7 +43,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
-        controller = MobiusAndroid.controller(loop, GameModel.createDefault())
+        controller = MobiusAndroid.controller(loop,
+            GameModel.createDefault()
+        )
     }
 
     override fun onAttach(context: Context) {
@@ -73,6 +80,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     }
                     true
                 }
+                R.id.actionStanding -> {
+                    arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
+                        showStandingDialog(gameId)
+                    }
+                    true
+                }
                 else -> false
             }
         }
@@ -97,22 +110,35 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
 
-        val adapter = PlayersAdapter(settings.showRoundNotes, players, object : PlayerViewHolder.PlayerHolderClickedListener {
-            override fun playerHolderClicked(player: Player) {
-                showRoundNotesDialog(player, settings.id!!)
-            }
-        })
+        val adapter = PlayersAdapter(
+            settings.showRoundNotes,
+            players,
+            object :
+                PlayerViewHolder.PlayerHolderClickedListener {
+                override fun playerHolderClicked(player: Player) {
+                    showRoundNotesDialog(player, settings.id!!)
+                }
+            })
         nameRow.swapAdapter(adapter, false)
     }
 
+    private fun showStandingDialog(gameId: Long) {
+        logEvent(AnalyticsConstants.Event.SHOW_PLAYER_STANDING_DIALOG)
+        val dialog = PlayerStandingDialog(gameId)
+        dialog.show(childFragmentManager, PlayerStandingDialog::class.java.simpleName)
+    }
+
     private fun showRoundNotesDialog(player: Player, gameId: Long) {
+        logEvent(AnalyticsConstants.Event.SHOW_ROUND_NOTES_DIALOG)
         val dialog = PlayerRoundNotesDialog(player, gameId)
         dialog.show(childFragmentManager, PlayerRoundNotesDialog::class.java.simpleName)
     }
 
     override fun onResume() {
         super.onResume()
-        eventConsumer?.accept(GameEvent.RequestLoad)
+        logScreenView(GameFragment::class.java.name)
+
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     // Mobius functions
@@ -127,6 +153,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
                 toolbar.title = model.settings.name
+                calculatorKeyboard.visibility = if (model.settings.useCalculator) View.VISIBLE else View.GONE
 
                 var manager = scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
@@ -147,24 +174,26 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                 // If count is not empty (account for empty with add round row), and new count is greater (added a row)
                 val oldCount = scoreRows.adapter?.itemCount ?: 0
-                scoreRows.swapAdapter(GameScoreAdapter(model.settings.hasDealer, model.rounds, eventConsumer), false)
+                scoreRows.swapAdapter(
+                    GameScoreAdapter(
+                        model.settings.hasDealer,
+                        model.settings.useCalculator,
+                        model.rounds,
+                        eventConsumer,
+                        { score -> calculatorKeyboard.setInput(score) }
+                    ), false)
                 val newCount = scoreRows.adapter!!.itemCount
 
-                @Suppress("ConvertTwoComparisonsToRangeCheck") // Seems much less efficient than a range and doesn't help readability in this situation
-                if (oldCount > 1 && oldCount < newCount && oldSpanCount == model.settings.players.size) {
-                    // When a new round is being inserted, scroll to the bottom and request focus to remove focus from the text view.
-                    // This allows us to record a score when a new round is being inserted, without the user having to press the 'next' button.
+                if (oldCount in 2 until newCount && oldSpanCount == model.settings.players.size) {
+                    // When a new round is being inserted, scroll to the bottom so the it's visible
                     scoreRows.scrollToPosition(newCount - 1)
-
-                    scoreRows.focusedChild?.let {
-                        // Reset the focus so we save the current round TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
-                        it.clearFocus()
-                        it.requestFocus()
-                        (it as? EditText)?.setSelection(it.text.length)
-                    }
                 }
 
-                totalsRow.swapAdapter(TotalsAdapter(model.settings.reversedScoring, model.rounds), false)
+                totalsRow.swapAdapter(
+                    TotalsAdapter(
+                        model.settings.reversedScoring,
+                        model.rounds
+                    ), false)
             }
 
             override fun dispose() {}
@@ -177,17 +206,30 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 when (effect) {
                     is GameEffect.FetchData -> {
                         gameRepository?.loadFullGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
-                            eventConsumer.accept(GameEvent.Loaded(it))
+                            eventConsumer.accept(
+                                GameEvent.Loaded(
+                                    it
+                                )
+                            )
                         } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
                     is GameEffect.SaveRound -> {
                         roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {
-                            eventConsumer.accept(GameEvent.RoundSaved(it))
+                            eventConsumer.accept(
+                                GameEvent.RoundSaved(
+                                    it
+                                )
+                            )
                         }
                     }
                     is GameEffect.SaveScore -> {
                         roundRepository?.updateScore(effect.score)?.let {
-                            eventConsumer.accept(GameEvent.ScoreSaved(effect.roundId, it))
+                            eventConsumer.accept(
+                                GameEvent.ScoreSaved(
+                                    effect.roundId,
+                                    it
+                                )
+                            )
                         }
                     }
                 }.hashCode() // Exhaustive call

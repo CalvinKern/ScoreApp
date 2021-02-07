@@ -4,9 +4,17 @@
     >
 
     <item
+        android:id="@+id/actionStanding"
+        android:title="@string/actionPlayerStanding"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_trophy"
+        app:iconTint="@color/white"
+        />
+
+    <item
         android:id="@+id/actionGraph"
         android:title="@string/actionGraph"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:icon="@drawable/ic_timeline_black"
         app:iconTint="@color/white"
         />
@@ -14,7 +22,7 @@
     <item
         android:id="@+id/actionEdit"
         android:title="@string/actionEdit"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:icon="@drawable/ic_settings"
         app:iconTint="@color/white"
         />

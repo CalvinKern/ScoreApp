@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.logEvent
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.holder_player_select_list.view.*
 
@@ -48,15 +50,11 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         checkHolder.setOnCheckedChangeListener(null)
         checkHolder.isChecked = isSelected
         checkHolder.setOnCheckedChangeListener { _, selected ->
+            logEvent(AnalyticsConstants.Event.ADD_PLAYER_TO_GAME)
             eventConsumer.accept(PlayerSelected(player.id!!, selected))
         }
 
-        itemView.setOnClickListener { eventConsumer.accept(
-            PlayerSelected(
-                player.id!!,
-                !isSelected
-            )
-        ) }
+        itemView.setOnClickListener { checkHolder.performClick() }
         itemView.setOnLongClickListener { eventConsumer.accept(
             PlayerRowLongClicked(
                 player.id!!

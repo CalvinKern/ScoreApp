@@ -19,7 +19,8 @@ data class GameEntity(
     @ColumnInfo(name = COLUMN_REVERSED_SCORING) var reversedScoring: Boolean,
     @ColumnInfo(name = COLUMN_MAX_SCORE) var maxScore: Double?,
     @ColumnInfo(name = COLUMN_MAX_ROUNDS) var maxRounds: Int?,
-    @ColumnInfo(name = COLUMN_SHOW_ROUND_NOTES) var showRoundNotes: Boolean
+    @ColumnInfo(name = COLUMN_SHOW_ROUND_NOTES) var showRoundNotes: Boolean,
+    @ColumnInfo(name = COLUMN_USE_CALCULATOR) var useCalculator: Boolean,
 ) {
     companion object {
         const val TABLE_NAME = "games"
@@ -32,8 +33,9 @@ data class GameEntity(
         const val COLUMN_MAX_SCORE = "maxScore"
         const val COLUMN_MAX_ROUNDS = "maxRounds"
         const val COLUMN_SHOW_ROUND_NOTES = "showRoundNotes"
+        const val COLUMN_USE_CALCULATOR = "useCalculator"
 
         const val columnNames =
-            "$COLUMN_ID, $COLUMN_NAME, $COLUMN_LAST_PLAYED, $COLUMN_HAS_DEALER, $COLUMN_SHOW_ROUNDS, $COLUMN_REVERSED_SCORING, $COLUMN_MAX_SCORE, $COLUMN_MAX_ROUNDS, $COLUMN_SHOW_ROUND_NOTES"
+            "$COLUMN_ID, $COLUMN_NAME, $COLUMN_LAST_PLAYED, $COLUMN_HAS_DEALER, $COLUMN_SHOW_ROUNDS, $COLUMN_REVERSED_SCORING, $COLUMN_MAX_SCORE, $COLUMN_MAX_ROUNDS, $COLUMN_SHOW_ROUND_NOTES, $COLUMN_USE_CALCULATOR"
     }
 }

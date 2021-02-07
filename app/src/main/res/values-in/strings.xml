@@ -4,7 +4,6 @@
     <string name="actionGraph">Tampilkan Grafik</string>
     <string name="actionSave">Menyimpan</string>
     <string name="actionSearch">Cari</string>
-    <string name="action_settings">Pengaturan</string>
     <string name="addRound">Tambahkan Round</string>
     <string name="dealerLabel">Pedagang</string>
     <string name="delete">Menghapus</string>
@@ -39,4 +38,12 @@
     <string name="scoreHint">Skor</string>
     <string name="showRoundNotesDescription">Klik pada nama pemain untuk melihat dan mengedit catatan untuk setiap putaran</string>
     <string name="showRoundNotesTitle">Tampilkan Catatan Bulat</string>
+    <string name="actionClose">Menutup</string>
+    <string name="actionPlayerStanding">Klasemen</string>
+    <string name="playerStandingTitle">Klasemen Pemain</string>
+    <string name="playerStanding">#%d</string>
+    <string name="actionRateApp">Beri Nilai Aplikasi</string>
+    <string name="actionChangelog">Changelog</string>
+    <string name="useCalculatorTitle">Keyboard Kalkulator</string>
+    <string name="useCalculatorDescription">Gunakan keyboard kalkulator khusus. Akan menggunakan keyboard sistem jika tidak diaktifkan.</string>
 </resources>

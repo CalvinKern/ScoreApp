@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.ZonedDateTime
 import java.io.IOException
+import kotlin.jvm.Throws
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -69,7 +70,7 @@ class DbTestHelper {
             return AppDatabase.getInstance(getAppContext(), databaseName)
         }
 
-        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration): AppDatabase {
+        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration, block: (db: AppDatabase) -> Unit) {
             helper.createDatabase(databaseName, startDbVersion).apply {
                 generateGameData(startDbVersion, this)
                 // Prepare for the next version.
@@ -81,7 +82,12 @@ class DbTestHelper {
 
             // MigrationTestHelper automatically verifies the schema changes,
             // but you need to validate that the data was migrated properly.
-            return getAppDatabaseWithMigrations()
+            val db = getAppDatabaseWithMigrations()
+            block(db)
+            db.close()
+
+            // Clean the app database, allows the next test to create the db at the version that it needs
+            AppDatabase.clean()
         }
 
         fun now(): String {
@@ -92,6 +98,7 @@ class DbTestHelper {
             val testN = 1
             if (version >= 4) {
                 when {
+                    version >= 8 -> insertGamesV8(testN, db)
                     version >= 7 -> insertGamesV7(testN, db)
                     version >= 6 -> insertGamesV6(testN, db)
                     else -> insertGamesV4(testN, db)
@@ -125,6 +132,14 @@ class DbTestHelper {
             db.execSQL("INSERT INTO ${GamePlayerJoin.TABLE_NAME} " +
                 "(${GamePlayerJoin.COLUMN_GAME_ID}, ${GamePlayerJoin.COLUMN_PLAYER_ID}, ${GamePlayerJoin.COLUMN_PLAYER_POSITION}) " +
                 "VALUES $gamePlayers")
+        }
+
+        private fun insertGamesV8(n: Int, db: SupportSQLiteDatabase) {
+            val gameValues = List(n) { "($it, \"SimpleGame $it\", \"${now()}\", 0, 0, 0, 0, 0, 0, 0)" }
+            val gameEntityColumnsV8 =
+                "(${GameEntity.COLUMN_ID}, ${GameEntity.COLUMN_NAME}, ${GameEntity.COLUMN_LAST_PLAYED}, ${GameEntity.COLUMN_HAS_DEALER}, ${GameEntity.COLUMN_SHOW_ROUNDS}, ${GameEntity.COLUMN_REVERSED_SCORING}, ${GameEntity.COLUMN_MAX_SCORE}, ${GameEntity.COLUMN_MAX_ROUNDS}, ${GameEntity.COLUMN_SHOW_ROUND_NOTES}, ${GameEntity.COLUMN_USE_CALCULATOR})"
+
+            db.execSQL("INSERT INTO ${GameEntity.TABLE_NAME} $gameEntityColumnsV8 VALUES ${gameValues.joinToString()}")
         }
 
         private fun insertGamesV7(n: Int, db: SupportSQLiteDatabase) {

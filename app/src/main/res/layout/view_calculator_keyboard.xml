@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <Button
+        android:id="@+id/calculatorKeyOne"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/one"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyTwo"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/two"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyThree"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/three"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyOpenParen"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/open_paren"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyCloseParen"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/close_paren"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyFour"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/four"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyFive"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/five"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeySix"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/six"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyPlus"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/plus"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyMinus"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/minus"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeySeven"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/seven"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyEight"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/eight"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyNine"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/nine"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyMultiply"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/multiply"
+        android:textAllCaps="false"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyDivide"
+        style="@style/AppTheme.CalculatorButton.Operator"
+        android:text="@string/divide"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyDelete"
+        style="@style/AppTheme.CalculatorButton"
+        android:contentDescription="@string/delete"
+        android:text="@string/del"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyZero"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/zero"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyDecimal"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/decimal"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyEquals"
+        style="@style/AppTheme.CalculatorButton.Equals"
+        android:text="@string/equals"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyNext"
+        style="@style/AppTheme.CalculatorButton.Equals"
+        android:text="@string/next"
+        />
+</merge>

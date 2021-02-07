@@ -4,7 +4,6 @@
     <string name="actionSave">保存</string>
     <string name="actionGraph">显示图</string>
     <string name="actionSearch">搜索</string>
-    <string name="action_settings">设定值</string>
     <string name="addRound">添加回合</string>
     <string name="dealerLabel">经销商</string>
     <string name="delete">删除</string>
@@ -39,4 +38,12 @@
     <string name="scoreHint">得分了</string>
     <string name="showRoundNotesDescription">单击玩家的姓名以查看和编辑每一回合的备忘</string>
     <string name="showRoundNotesTitle">显示回合笔记</string>
+    <string name="playerStanding">#%d</string>
+    <string name="playerStandingTitle">球员站立</string>
+    <string name="actionPlayerStanding">站立</string>
+    <string name="actionClose">关</string>
+    <string name="useCalculatorDescription">使用自定义计算器键盘。 如果未启用，将使用系统键盘。</string>
+    <string name="useCalculatorTitle">计算器键盘</string>
+    <string name="actionChangelog">变更日志</string>
+    <string name="actionRateApp">评价应用</string>
 </resources>

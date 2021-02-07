@@ -17,6 +17,9 @@ import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
+import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.logEvent
+import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -93,6 +96,11 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         super.onSaveInstanceState(outState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        logScreenView(PlayerSelectFragment::class.java.name)
+    }
+
     // Mobius functions
 
     override fun initMobius(model: CreateModel): First<CreateModel, PlayerEffect> {
@@ -118,6 +126,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         }
 
         fab.setOnClickListener {
+            logEvent(AnalyticsConstants.Event.CREATE_PLAYER)
             eventConsumer.accept(AddPlayerClicked)
         }
         toolbar.setOnMenuItemClickListener(toolbarItemClickListener)

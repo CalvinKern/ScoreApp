@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.graph
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,6 +20,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.utility.logScreenView
 import kotlinx.android.synthetic.main.fragment_graph.*
 import java.text.DecimalFormat
 
@@ -42,8 +43,8 @@ class GraphFragment : Fragment() {
 
     private val modelObserver = Observer<Game?> { game -> game?.let { updateGraphData(it) } }
 
-    private val viewModel: GameViewModel by lazy {
-        ViewModelProviders.of(this).get(GameViewModel::class.java)
+    private val viewModel: GraphViewModel by lazy {
+        ViewModelProviders.of(this).get(GraphViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,6 +65,11 @@ class GraphFragment : Fragment() {
         )
 
         initChartStyle()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        logScreenView(GraphFragment::class.java.name)
     }
 
     private fun updateGraphData(game: Game) {
@@ -132,7 +138,8 @@ class GraphFragment : Fragment() {
                     e?.let {
                         gameChart.data.getDataSetForEntry(it).apply {
                             gameChart.data.setValueFormatter(graphEmptyFormatter)
-                            valueFormatter = graphValueFormatter
+                            valueFormatter =
+                                graphValueFormatter
                         }
                     }
                 }

@@ -17,7 +17,7 @@ import com.seakernel.android.scoreapp.database.migrations.*
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 @Database(
-    version = 7,
+    version = 8,
     entities = [PlayerEntity::class, GameEntity::class, GamePlayerJoin::class, RoundEntity::class, ScoreEntity::class]
     )
 abstract class AppDatabase : RoomDatabase() {
@@ -41,8 +41,12 @@ abstract class AppDatabase : RoomDatabase() {
             return db!!
         }
 
+        fun clean() {
+            db = null
+        }
+
         private fun migrations(): Array<Migration> {
-            return arrayOf(Migration_1_2(), Migration_2_3(), Migration_3_4(), Migration_4_5(), Migration_5_6(), Migration_6_7())
+            return arrayOf(Migration_1_2(), Migration_2_3(), Migration_3_4(), Migration_4_5(), Migration_5_6(), Migration_6_7(), Migration_7_8())
         }
     }
 }

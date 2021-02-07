@@ -1,5 +1,6 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.classic
 
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
+import com.seakernel.android.scoreapp.calculator.CalculatorUtils
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
@@ -20,11 +23,18 @@ import kotlinx.android.synthetic.main.holder_score_row_header.view.*
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
 
+private typealias CalculatorKeyboardCallback = (scoreView: EditText) -> Unit
 /**
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<Round>, private val eventConsumer: Consumer<GameEvent>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GameScoreAdapter(
+    private val hasDealer: Boolean,
+    private val useCalculator: Boolean,
+    private val rounds: List<Round>,
+    private val eventConsumer: Consumer<GameEvent>? = null,
+    private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -41,7 +51,7 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_SCORE -> ScoreViewHolder(parent)
+            VIEW_TYPE_SCORE -> ScoreViewHolder(parent, showCalculatorKeyboardCallback)
             VIEW_TYPE_ROUND_ADD -> AddRoundViewHolder(parent)
             else -> throw InvalidParameterException("viewType ($viewType) is not supported in the ${GameScoreAdapter::class.java.simpleName}")
         }
@@ -51,7 +61,7 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
         when(getItemViewType(position)) {
             VIEW_TYPE_SCORE -> {
                 val round = rounds[toRoundIndex(position)]
-                (holder as ScoreViewHolder).bind(hasDealer, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
+                (holder as ScoreViewHolder).bind(hasDealer, useCalculator, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
             }
             VIEW_TYPE_ROUND_ADD -> {
                 (holder as AddRoundViewHolder).bind(eventConsumer)
@@ -77,7 +87,13 @@ class GameScoreAdapter(private val hasDealer: Boolean, private val rounds: List<
 
 class PlayersAdapter(private val showNotes: Boolean, private val players: List<Player>, private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
-        PlayerViewHolder(LayoutInflater.from(parent.context).inflate(PlayerViewHolder.RESOURCE_ID, parent, false))
+        PlayerViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                PlayerViewHolder.RESOURCE_ID,
+                parent,
+                false
+            )
+        )
 
     override fun getItemCount(): Int {
         return players.count()
@@ -118,7 +134,8 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
         return position.toLong()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder = ScoreViewHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder =
+        ScoreViewHolder(parent)
 
     override fun getItemCount(): Int = totalsMap.size
 
@@ -159,11 +176,19 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.ho
     }
 }
 
-class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holder_score_row_data) {
+class ScoreViewHolder(
+    parent: ViewGroup,
+    private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback? = null
+) : BaseViewHolder(parent, R.layout.holder_score_row_data) {
 
-    private val scoreHolder: EditText by lazy { itemView.playerScore }
+    var shouldFocus: Boolean = true
+    private val scoreHolder: EditText by lazy {
+        itemView.playerScore
+    }
 
-    fun bind(hasDealer: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
+    fun bind(hasDealer: Boolean, useCalculator: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
+        scoreHolder.showSoftInputOnFocus = !useCalculator
+
         if (hasDealer && score.player == round.dealer) {
             if (rounds.last().id == round.id) {
                 itemView.setBackgroundResource(R.color.dealer)
@@ -185,14 +210,45 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
         scoreHolder.isEnabled = true
         scoreHolder.isFocusable = true
         scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textBlack))
+        scoreHolder.setOnEditorActionListener { _, code, _ ->
+            when (code) {
+                CalculatorKeyboardView.KEYCODE_EQUALS -> updateScore(eventConsumer, round, score)
+                CalculatorKeyboardView.KEYCODE_NEXT -> {
+                    // Add a new round only when we're the last round, otherwise let the action propagate to the system
+                    if (score.id != rounds.last().scores.last().id) return@setOnEditorActionListener false
+
+                    eventConsumer?.accept(GameEvent.RequestCreateRound)
+                }
+            }
+
+            true
+        }
         scoreHolder.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
+            } else {
+                // Newly gained focus = open calculator
+                if (useCalculator) showCalculatorKeyboardCallback?.invoke(scoreHolder)
+
+                // Set the selection to the end of the score (makes quick edits/additions easier)
+                if (score.value == 0.0) {
+                    scoreHolder.setText("")
+                } else {
+                    scoreHolder.setSelection(scoreHolder.text.length)
+                }
             }
         }
         scoreHolder.setOnLongClickListener {
             showPlayerDealerDialog(score.player, round, eventConsumer)
             true
+        }
+
+        // Moved to the end so we don't muck too much with other focus logic
+        // If it's the first score in the last round, request focus (to save the previous rounds score)
+        // TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
+        if (score.id == rounds.last().scores.first().id && shouldFocus) {
+            scoreHolder.requestFocus()
+            shouldFocus = false // Reset the focus flag so we don't constantly gain focus
         }
     }
 
@@ -214,7 +270,8 @@ class ScoreViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holde
 
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         val updatedScore = if (scoreHolder.text.isNotBlank()) {
-            scoreHolder.text.toString().toDoubleOrNull() ?: 0.0
+            CalculatorUtils.eval(scoreHolder.text.toString(), itemView.context)?.toDoubleOrNull()
+                ?: 0.0
         } else {
             0.0
         }

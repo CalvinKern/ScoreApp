@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="CalculatorKeyView">
+        <attr name="keyText" format="string" />
+        <attr name="textSize" format="dimension" />
+        <attr name="keyColor" format="color" />
+        <attr name="valueColor" format="color" />
+        <attr name="keyDrawable" format="color|reference" />
+    </declare-styleable>
+</resources>

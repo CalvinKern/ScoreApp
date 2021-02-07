@@ -1,4 +1,4 @@
-package com.seakernel.android.scoreapp.game
+package com.seakernel.android.scoreapp.game.classic
 
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.data.Round
@@ -38,7 +38,9 @@ data class GameModel(val settings: GameSettings = GameSettings(), val rounds: Li
         fun update(model: GameModel, event: GameEvent): Next<GameModel, GameEffect> {
             return when (event) {
                 is GameEvent.Loaded -> Next.next(model.copy(settings = event.game.settings, rounds = event.game.rounds))
-                is GameEvent.RequestLoad -> Next.dispatch(Effects.effects(GameEffect.FetchData))
+                is GameEvent.RequestLoad -> Next.dispatch(Effects.effects(
+                    GameEffect.FetchData
+                ))
                 is GameEvent.RequestSaveRound -> Next.dispatch(Effects.effects(
                     GameEffect.SaveRound(
                         model.settings.id!!,
@@ -90,7 +92,12 @@ data class GameModel(val settings: GameSettings = GameSettings(), val rounds: Li
                     val round = model.rounds.first { it.id == event.roundId }
                     val score = round.scores.first { it.player.id == event.playerId }.copy(value = event.score)
 
-                    Next.dispatch(Effects.effects(GameEffect.SaveScore(event.roundId, score)))
+                    Next.dispatch(Effects.effects(
+                        GameEffect.SaveScore(
+                            event.roundId,
+                            score
+                        )
+                    ))
                 }
             }
         }

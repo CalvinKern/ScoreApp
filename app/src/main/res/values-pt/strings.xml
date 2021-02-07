@@ -34,9 +34,16 @@
     <string name="delete">Excluir</string>
     <string name="dealerLabel">Revendedor</string>
     <string name="addRound">Adicionar rodada</string>
-    <string name="action_settings">Configurações</string>
     <string name="actionSearch">Procurar</string>
     <string name="actionSave">Salve</string>
     <string name="actionGraph">Mostrar gráfico</string>
     <string name="actionEdit">Editar</string>
+    <string name="actionClose">Perto</string>
+    <string name="actionPlayerStanding">Classificação</string>
+    <string name="playerStandingTitle">Classificação dos jogadores</string>
+    <string name="playerStanding">#%d</string>
+    <string name="actionRateApp">Avaliar aplicativo</string>
+    <string name="actionChangelog">Changelog</string>
+    <string name="useCalculatorTitle">Teclado da Calculadora</string>
+    <string name="useCalculatorDescription">Use o teclado da calculadora personalizada. Usará o teclado do sistema se não estiver ativado.</string>
 </resources>
