@@ -28,4 +28,13 @@ object AnalyticsConstants {
         const val ITEM_NAME = FirebaseAnalytics.Param.ITEM_NAME
         const val MESSAGE = FirebaseAnalytics.Param.CONTENT
     }
+
+    sealed class ScreenName(val value: String) {
+        object MainActivity : ScreenName("MainActivity")
+        object GraphFragment : ScreenName("GraphFragment")
+        object GameFragment : ScreenName("GameFragment")
+        object GameListFragment : ScreenName("GameListFragment")
+        object GameSetupFragment : ScreenName("GameSetupFragment")
+        object PlayerSelectFragment : ScreenName("PlayerSelectFragment")
+    }
 }

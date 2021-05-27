@@ -96,9 +96,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         toolbar.setNavigationOnClickListener(null)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState) // TODO: Store state
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState) // TODO: Store state
+//    }
 
     private fun setupHeaderAndFooter(settings: GameSettings) {
         val players = settings.players
@@ -136,7 +136,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     override fun onResume() {
         super.onResume()
-        logScreenView(GameFragment::class.java.name)
+        logScreenView(AnalyticsConstants.ScreenName.GameFragment)
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }

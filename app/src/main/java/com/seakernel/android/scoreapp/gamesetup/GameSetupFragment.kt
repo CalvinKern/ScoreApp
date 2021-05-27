@@ -92,7 +92,7 @@ class GameSetupFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        logScreenView(GameSetupFragment::class.java.name)
+        logScreenView(AnalyticsConstants.ScreenName.GameSetupFragment)
     }
 
     fun updateForNewPlayers(playerIds: List<Long>) {

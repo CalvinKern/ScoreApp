@@ -98,7 +98,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
     override fun onResume() {
         super.onResume()
-        logScreenView(PlayerSelectFragment::class.java.name)
+        logScreenView(AnalyticsConstants.ScreenName.PlayerSelectFragment)
     }
 
     // Mobius functions

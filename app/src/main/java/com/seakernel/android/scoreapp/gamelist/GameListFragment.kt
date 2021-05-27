@@ -90,7 +90,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     override fun onResume() {
         super.onResume()
-        logScreenView(GameListFragment::class.java.name)
+        logScreenView(AnalyticsConstants.ScreenName.GameListFragment)
     }
 
     // Mobius functions
