@@ -125,7 +125,6 @@ class GraphFragment : Fragment() {
             }
             axisLeft.also {
                 it.granularity = 1f
-                it.axisMinimum = 0f
                 it.textColor = colorTextBlack
             }
             setDrawBorders(true)
