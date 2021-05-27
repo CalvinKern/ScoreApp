@@ -165,8 +165,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     }
                     is ShowDeleteDialog -> {
                         // TODO: Show dialog for confirm delete
-//                        playerRepository?.deleteUser(effect.playerId)
-//                        eventConsumer.accept(PlayerDeleteSuccessful(effect.playerId))
+                        playerRepository?.deleteUser(effect.playerId)
+                        eventConsumer.accept(PlayerDeleteSuccessful(effect.playerId))
                     }
                     is ShowDeletePlayerSnackbar -> { /* TODO: Show snackbar to undo? or show a toast? */ }
                     is FetchData -> {
@@ -207,6 +207,11 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                             )
                         }
                     }
+                }
+            }
+            .setNeutralButton(R.string.delete) { _, _ ->
+                effect.playerId?.let { playerId ->
+                    eventConsumer.accept(PlayerDeleteClicked(playerId))
                 }
             }
             .setNegativeButton(android.R.string.cancel, null)

@@ -70,9 +70,9 @@ class DbTestHelper {
             return AppDatabase.getInstance(getAppContext(), databaseName)
         }
 
-        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration, block: (db: AppDatabase) -> Unit) {
+        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration, playerCount: Int = 2, block: (db: AppDatabase) -> Unit) {
             helper.createDatabase(databaseName, startDbVersion).apply {
-                generateGameData(startDbVersion, this)
+                generateGameData(startDbVersion, this, playerCount)
                 // Prepare for the next version.
                 close()
             }
@@ -94,7 +94,7 @@ class DbTestHelper {
             return ZonedDateTime.now().format(GameSettings.DATE_FORMATTER)
         }
 
-        fun generateGameData(version: Int, db: SupportSQLiteDatabase) {
+        fun generateGameData(version: Int, db: SupportSQLiteDatabase, playerCount: Int) {
             val testN = 1
             if (version >= 4) {
                 when {
@@ -103,9 +103,9 @@ class DbTestHelper {
                     version >= 6 -> insertGamesV6(testN, db)
                     else -> insertGamesV4(testN, db)
                 }
-                insertUsersRaw(testN, db)
-                insertGamePlayersV4(testN, db)
-                insertScoresV4(version, testN, db)
+                insertUsersRaw(testN * playerCount, db)
+                insertGamePlayersV4(testN * playerCount, db)
+                insertScoresV4(version, testN * playerCount, db)
             }
         }
 
