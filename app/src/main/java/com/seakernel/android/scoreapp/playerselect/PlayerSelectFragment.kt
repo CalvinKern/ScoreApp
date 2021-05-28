@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
@@ -163,12 +164,15 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                             showPlayerNameDialog(eventConsumer, effect)
                         }
                     }
-                    is ShowDeleteDialog -> {
-                        // TODO: Show dialog for confirm delete
+                    is ShowDeletePlayerSnackbar -> {
                         playerRepository?.deleteUser(effect.playerId)
                         eventConsumer.accept(PlayerDeleteSuccessful(effect.playerId))
+                        showDeletePlayerSnackbar(eventConsumer, effect)
                     }
-                    is ShowDeletePlayerSnackbar -> { /* TODO: Show snackbar to undo? or show a toast? */ }
+                    is UndoDeletePlayer -> {
+                        playerRepository?.undoDelete(effect.playerId)
+                        eventConsumer.accept(PlayersLoaded(playerRepository?.loadAllUsers() ?: listOf()))
+                    }
                     is FetchData -> {
                         eventConsumer.accept(
                             PlayersLoaded(
@@ -187,6 +191,18 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     }
 
     // End Mobius functions
+
+    private fun showDeletePlayerSnackbar(eventConsumer: Consumer<PlayerEvent>, effect: ShowDeletePlayerSnackbar) {
+        Snackbar.make(
+            requireView(),
+            getString(R.string.deleteSuccessful, effect.playerName ?: ""),
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(R.string.undo) {
+                eventConsumer.accept(PlayerDeleteUndo(effect.playerId))
+            }
+            .show()
+    }
 
     private fun showPlayerNameDialog(eventConsumer: Consumer<PlayerEvent>, effect: ShowPlayerNameDialog) {
         var name = ""
@@ -209,12 +225,14 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     }
                 }
             }
-            .setNeutralButton(R.string.delete) { _, _ ->
-                effect.playerId?.let { playerId ->
-                    eventConsumer.accept(PlayerDeleteClicked(playerId))
+            .setNegativeButton(android.R.string.cancel, null)
+            .also {
+                if (effect.playerId == null) return@also
+
+                it.setNeutralButton(R.string.delete) { _, _ ->
+                    eventConsumer.accept(PlayerDeleteClicked(effect.playerId))
                 }
             }
-            .setNegativeButton(android.R.string.cancel, null)
             .create()
 
         view.playerNameEdit.apply {

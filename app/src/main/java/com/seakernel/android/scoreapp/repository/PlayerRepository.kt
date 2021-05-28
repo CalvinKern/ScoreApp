@@ -50,4 +50,8 @@ class PlayerRepository(val context: Context) {
     fun deleteUser(id: Long) {
         playerDao.setArchived(id, true)
     }
+
+    fun undoDelete(id: Long) {
+        playerDao.setArchived(id, false)
+    }
 }

@@ -8,7 +8,7 @@
     <string name="dealerLabel">विक्रेता</string>
     <string name="delete">हटाएं</string>
     <string name="deleteGameConfirmation">क्या आप इस गेम को हटाना चाहते हैं?</string>
-    <string name="deleteSuccessful">हटाए गए</string>
+    <string name="deleteSuccessful">हटाए गए %s</string>
     <string name="gameCreateTitle">नया खेल</string>
     <string name="gameListEmptyMessage">एक नया गेम बनाने के लिए नीचे दिए गए + बटन पर क्लिक करके शुरू करें!</string>
     <string name="gameListEmptyTitle">कोई गेम नहीं बनाया गया</string>
@@ -46,4 +46,5 @@
     <string name="useCalculatorTitle">कैलकुलेटर कीबोर्ड</string>
     <string name="actionChangelog">चंगेलोग</string>
     <string name="actionRateApp">एप्प का मूल्यांकन</string>
+    <string name="undo">पूर्ववत</string>
 </resources>

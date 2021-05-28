@@ -65,7 +65,8 @@
     <!--Game List Delete Dialog-->
     <string name="deleteGameConfirmation">Do you want to delete this game?</string>
     <string name="delete">Delete</string>
-    <string name="deleteSuccessful">Deleted</string>
+    <string name="deleteSuccessful">Deleted %s</string>
+    <string name="undo">Undo</string>
 
     <!--Calculator-->
     <!--TODO: Translate or reconfigure to allow for better calculator in different languages-->

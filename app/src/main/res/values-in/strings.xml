@@ -8,7 +8,7 @@
     <string name="dealerLabel">Pedagang</string>
     <string name="delete">Menghapus</string>
     <string name="deleteGameConfirmation">Apakah Anda ingin menghapus game ini?</string>
-    <string name="deleteSuccessful">Dihapus</string>
+    <string name="deleteSuccessful">Dihapus %s</string>
     <string name="gameCreateTitle">Permainan baru</string>
     <string name="gameListEmptyMessage">Mulailah dengan mengklik tombol + di bawah untuk membuat game baru!</string>
     <string name="gameListEmptyTitle">Tidak ada permainan yang dibuat</string>
@@ -46,4 +46,5 @@
     <string name="actionChangelog">Changelog</string>
     <string name="useCalculatorTitle">Keyboard Kalkulator</string>
     <string name="useCalculatorDescription">Gunakan keyboard kalkulator khusus. Akan menggunakan keyboard sistem jika tidak diaktifkan.</string>
+    <string name="undo">Membuka</string>
 </resources>

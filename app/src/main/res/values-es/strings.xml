@@ -8,7 +8,7 @@
     <string name="dealerLabel">Comerciante</string>
     <string name="delete">Eliminar</string>
     <string name="deleteGameConfirmation">¿Quieres eliminar este juego?</string>
-    <string name="deleteSuccessful">Eliminado</string>
+    <string name="deleteSuccessful">Eliminado %s</string>
     <string name="gameCreateTitle">Nuevo juego</string>
     <string name="gameListEmptyMessage">¡Comienza haciendo clic en el botón + a continuación para crear un nuevo juego!</string>
     <string name="gameListEmptyTitle">No se crearon juegos</string>
@@ -46,4 +46,5 @@
     <string name="actionChangelog">Registro de cambios</string>
     <string name="useCalculatorTitle">Teclado calculadora</string>
     <string name="useCalculatorDescription">Utilice el teclado de la calculadora personalizado. Utilizará el teclado del sistema si no está habilitado.</string>
+    <string name="undo">Deshacer</string>
 </resources>

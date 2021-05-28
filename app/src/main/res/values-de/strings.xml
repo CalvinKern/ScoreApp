@@ -8,7 +8,7 @@
     <string name="dealerLabel">Händler</string>
     <string name="delete">Löschen</string>
     <string name="deleteGameConfirmation">Möchten Sie dieses Spiel löschen?</string>
-    <string name="deleteSuccessful">Gelöscht</string>
+    <string name="deleteSuccessful">Gelöscht %s</string>
     <string name="gameCreateTitle">Neues Spiel</string>
     <string name="gameListEmptyMessage">Beginnen Sie mit einem Klick auf die Schaltfläche + unten, um ein neues Spiel zu erstellen!</string>
     <string name="gameListEmptyTitle">Keine Spiele erstellt</string>
@@ -46,4 +46,5 @@
     <string name="actionChangelog">Änderungsprotokoll</string>
     <string name="useCalculatorTitle">Rechner Tastatur</string>
     <string name="useCalculatorDescription">Verwenden Sie die benutzerdefinierte Taschenrechner-Tastatur. Verwendet die Systemtastatur, wenn sie nicht aktiviert ist.</string>
+    <string name="undo">cancel</string>
 </resources>

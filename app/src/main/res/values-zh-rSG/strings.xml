@@ -8,7 +8,7 @@
     <string name="dealerLabel">经销商</string>
     <string name="delete">删除</string>
     <string name="deleteGameConfirmation">您要删除此游戏吗？</string>
-    <string name="deleteSuccessful">已删除</string>
+    <string name="deleteSuccessful">已删除%s</string>
     <string name="gameCreateTitle">新游戏</string>
     <string name="gameListEmptyMessage">首先点击下面的+按钮创建一个新游戏！</string>
     <string name="gameListEmptyTitle">未创建游戏</string>
@@ -46,4 +46,5 @@
     <string name="useCalculatorTitle">计算器键盘</string>
     <string name="actionChangelog">变更日志</string>
     <string name="actionRateApp">评价应用</string>
+    <string name="undo">撤消</string>
 </resources>
