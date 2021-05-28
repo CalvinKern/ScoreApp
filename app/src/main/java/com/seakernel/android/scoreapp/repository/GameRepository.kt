@@ -122,10 +122,11 @@ class GameRepository(val context: Context) {
     private fun convertToScores(settings: GameSettings, scores: List<ScoreEntity>): List<Score> {
         // TODO: Could clean up this logic by removing the embedded objects in `GameDao.kt`, and instead using a bigger SQL query
         val playerIds = settings.players.map { it.id }
-        return scores.sortedBy { playerIds.indexOf(it.playerId) }.map { score ->
+        return scores.sortedBy { playerIds.indexOf(it.playerId) }.mapNotNull { score ->
+            val player = settings.players.find { player -> player.id == score.playerId } ?: return@mapNotNull null
             Score(
                 score.id,
-                settings.players.find { player -> player.id == score.playerId }!!,
+                player,
                 score.score,
                 score.scoreData
             )

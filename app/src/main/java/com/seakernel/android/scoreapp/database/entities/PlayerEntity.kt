@@ -12,11 +12,13 @@ import androidx.room.PrimaryKey
 data class PlayerEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID, index = true) var uid: Long,
-    @ColumnInfo(name = COLUMN_NAME) var name: String
+    @ColumnInfo(name = COLUMN_NAME) var name: String,
+    @ColumnInfo(name = COLUMN_ARCHIVED) var archived: Boolean,
 ) {
     companion object {
         const val TABLE_NAME = "players"
         const val COLUMN_ID = "uid"
         const val COLUMN_NAME = "name"
+        const val COLUMN_ARCHIVED = "archived"
     }
 }

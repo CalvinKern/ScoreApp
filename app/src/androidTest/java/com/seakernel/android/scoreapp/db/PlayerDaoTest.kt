@@ -43,7 +43,8 @@ class PlayerDaoTest {
         val player =
             PlayerEntity(
                 0,
-                "User 1"
+                "User 1",
+                false,
             )
         val playerIds = playerDao.insertAll(player)
         val allPlayers = playerDao.getAll()
@@ -57,7 +58,8 @@ class PlayerDaoTest {
         val player =
             PlayerEntity(
                 0,
-                "User 1"
+                "User 1",
+                false,
             )
         val playerIds = playerDao.insertAll(player)
         val playerList = playerDao.loadAllByIds(longArrayOf(playerIds[0]))
@@ -70,15 +72,14 @@ class PlayerDaoTest {
         val player =
             PlayerEntity(
                 0,
-                "User 1"
+                "User 1",
+                false
             )
         val playerIds = playerDao.insertAll(player)
 
-        playerDao.update(
-            PlayerEntity(
-                playerIds[0],
-                "User one"
-            )
+        playerDao.updateName(
+            playerIds[0],
+            "User one",
         )
 
         val playerList = playerDao.loadAllByIds(longArrayOf(playerIds[0]))
@@ -90,7 +91,8 @@ class PlayerDaoTest {
         val player =
             PlayerEntity(
                 0,
-                "User 1"
+                "User 1",
+                false
             )
         val playerIds = playerDao.insertAll(player)
 
@@ -107,7 +109,8 @@ class PlayerDaoTest {
         repeat(n) { players.add(
             PlayerEntity(
                 0,
-                "User $it"
+                "User $it",
+                false,
             )
         ) }
 
@@ -115,5 +118,24 @@ class PlayerDaoTest {
 
         val allPlayers = playerDao.getAll()
         assertEquals(n, allPlayers.size)
+    }
+
+    @Test
+    fun archivePlayer() {
+        val player =
+            PlayerEntity(
+                0,
+                "User 1",
+                false
+            )
+
+        val playerIds = playerDao.insertAll(player)
+        assertEquals(playerDao.getAll().first().archived, false)
+
+        playerDao.setArchived(playerIds.first(), true)
+        assertEquals(playerDao.getAll().first().archived, true)
+
+        playerDao.setArchived(playerIds.first(), false)
+        assertEquals(playerDao.getAll().first().archived, false)
     }
 }
