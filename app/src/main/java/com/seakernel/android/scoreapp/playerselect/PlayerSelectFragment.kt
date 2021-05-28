@@ -11,6 +11,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.seakernel.android.scoreapp.R
@@ -201,6 +202,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             .setAction(R.string.undo) {
                 eventConsumer.accept(PlayerDeleteUndo(effect.playerId))
             }
+            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorSecondary))
             .show()
     }
 
