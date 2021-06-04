@@ -42,6 +42,10 @@ class RoundRepository(val context: Context) {
 //        }
     }
 
+    fun getRoundIds(gameId: Long): List<Long> {
+        return roundDao.getRoundIds(gameId)
+    }
+
     fun addOrUpdateRound(gameId: Long, round: Round): Round {
         return if (round.id == null) {
             createRound(gameId, round)
@@ -109,8 +113,8 @@ class RoundRepository(val context: Context) {
         )
     }
 
-    fun deleteRound(id: Long) {
-        roundDao.deleteRoundById(id)
+    fun deleteRounds(vararg roundIds: Long) {
+        roundDao.deleteRoundsById(*roundIds)
     }
 
     fun deleteScore(id: Long) {

@@ -1,6 +1,7 @@
 package com.seakernel.android.scoreapp.game.classic
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.game.DeleteRoundDialog
 import com.seakernel.android.scoreapp.game.PlayerRoundNotesDialog
 import com.seakernel.android.scoreapp.game.PlayerStandingDialog
 import com.seakernel.android.scoreapp.repository.GameRepository
@@ -22,6 +24,9 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Created by Calvin on 12/21/18.
@@ -40,6 +45,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private var gameRepository: GameRepository? = null
     private var roundRepository: RoundRepository? = null
     private var eventConsumer: Consumer<GameEvent>? = null
+
+    private val REQUEST_DELETE_ROUND = 101
 
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
@@ -83,6 +90,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 R.id.actionStanding -> {
                     arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
                         showStandingDialog(gameId)
+                    }
+                    true
+                }
+                R.id.actionDeleteRounds -> {
+                    arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
+                        showRoundDeleteDialog(gameId)
                     }
                     true
                 }
@@ -134,11 +147,31 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         dialog.show(childFragmentManager, PlayerRoundNotesDialog::class.java.simpleName)
     }
 
+    private fun showRoundDeleteDialog(gameId: Long) {
+        logEvent(AnalyticsConstants.Event.SHOW_ROUND_DELETE_DIALOG)
+        GlobalScope.launch {
+            val ids = RoundRepository(requireContext()).getRoundIds(gameId)
+            val dialog = DeleteRoundDialog(ids)
+            dialog.setTargetFragment(this@GameFragment, REQUEST_DELETE_ROUND)
+            dialog.show(parentFragmentManager, DeleteRoundDialog::class.java.simpleName)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         logScreenView(AnalyticsConstants.ScreenName.GameFragment)
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_DELETE_ROUND -> {
+                eventConsumer?.accept(GameEvent.RequestLoad)
+            }
+        }
     }
 
     // Mobius functions

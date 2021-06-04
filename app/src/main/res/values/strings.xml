@@ -68,6 +68,10 @@
     <string name="deleteSuccessful">Deleted %s</string>
     <string name="undo">Undo</string>
 
+    <!--Delete Round Dialog-->
+    <string name="deleteRounds">Delete Rounds</string>
+    <string name="deleteRoundItem">Round %d</string>
+
     <!--Calculator-->
     <!--TODO: Translate or reconfigure to allow for better calculator in different languages-->
     <string name="zero" translatable="false">0</string>

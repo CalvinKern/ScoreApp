@@ -89,15 +89,21 @@ data class GameModel(val settings: GameSettings = GameSettings(), val rounds: Li
                     Next.next(model.copy(rounds = rounds))
                 }
                 is GameEvent.UpdateScore -> {
-                    val round = model.rounds.first { it.id == event.roundId }
-                    val score = round.scores.first { it.player.id == event.playerId }.copy(value = event.score)
+                    val round = model.rounds.firstOrNull { it.id == event.roundId }
+                    val score = round?.scores?.firstOrNull { it.player.id == event.playerId }?.copy(value = event.score)
 
-                    Next.dispatch(Effects.effects(
-                        GameEffect.SaveScore(
-                            event.roundId,
-                            score
+                    if (score != null) {
+                        Next.dispatch(
+                            Effects.effects(
+                                GameEffect.SaveScore(
+                                    event.roundId,
+                                    score
+                                )
+                            )
                         )
-                    ))
+                    } else {
+                        Next.noChange()
+                    }
                 }
             }
         }
