@@ -200,7 +200,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             Snackbar.LENGTH_LONG
         )
             .setAction(R.string.undo) {
-                eventConsumer.accept(PlayerDeleteUndo(effect.playerId))
+                eventConsumer.accept(PlayerDeleteUndo(effect.playerId, effect.playerSelected))
             }
             .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorSecondary))
             .show()

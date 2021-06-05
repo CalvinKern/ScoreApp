@@ -14,7 +14,7 @@ object DoneSelectingPlayersClicked : PlayerEvent()
 data class PlayerRowLongClicked(val playerId: Long) : PlayerEvent()
 data class PlayerSelected(val playerId: Long, val selected: Boolean) : PlayerEvent()
 data class PlayerDeleteClicked(val playerId: Long) : PlayerEvent()
-data class PlayerDeleteUndo(val playerId: Long) : PlayerEvent()
+data class PlayerDeleteUndo(val playerId: Long, val playerSelected: Boolean) : PlayerEvent()
 data class PlayerNameChanged(val playerId: Long, val newName: String) : PlayerEvent()
 data class PlayerDeleteSuccessful(val playerId: Long) : PlayerEvent()
 data class PlayersLoaded(val players: List<Player>) : PlayerEvent()
@@ -24,7 +24,7 @@ object RequestLoad : PlayerEvent()
 sealed class PlayerEffect
 data class DoneSelectingPlayers(val playerIds: List<Long>) : PlayerEffect()
 data class ShowPlayerNameDialog(val playerId: Long?, val playerName: String) : PlayerEffect()
-data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?) : PlayerEffect()
+data class ShowDeletePlayerSnackbar(val playerId: Long, val playerName: String?, val playerSelected: Boolean) : PlayerEffect()
 data class UndoDeletePlayer(val playerId: Long) : PlayerEffect()
 object FetchData : PlayerEffect()
 
@@ -93,12 +93,19 @@ data class CreateModel(
                     Next.dispatch(Effects.effects(
                         ShowDeletePlayerSnackbar(
                             event.playerId,
-                            name
+                            name,
+                            model.selectedPlayerList.contains(event.playerId)
                         )
                     ))
                 }
                 is PlayerDeleteUndo -> {
-                    Next.dispatch(Effects.effects(UndoDeletePlayer(event.playerId)))
+                    val nextModel = if (event.playerSelected) {
+                        model.copy(selectedPlayerList = model.selectedPlayerList + event.playerId)
+                    } else {
+                        model
+                    }
+
+                    Next.next(nextModel, Effects.effects(UndoDeletePlayer(event.playerId)))
                 }
                 is PlayerNameChanged -> {
                     val list = model.allPlayers.toMutableList()
