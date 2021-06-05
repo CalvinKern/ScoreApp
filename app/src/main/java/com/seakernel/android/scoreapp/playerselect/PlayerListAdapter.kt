@@ -50,7 +50,7 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         checkHolder.setOnCheckedChangeListener(null)
         checkHolder.isChecked = isSelected
         checkHolder.setOnCheckedChangeListener { _, selected ->
-            logEvent(AnalyticsConstants.Event.ADD_PLAYER_TO_GAME)
+            logEvent(AnalyticsConstants.Event.GAME_PLAYER_ADDED)
             eventConsumer.accept(PlayerSelected(player.id!!, selected))
         }
 

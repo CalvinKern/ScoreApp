@@ -128,7 +128,6 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         }
 
         fab.setOnClickListener {
-            logEvent(AnalyticsConstants.Event.CREATE_PLAYER)
             eventConsumer.accept(AddPlayerClicked)
         }
         toolbar.setOnMenuItemClickListener(toolbarItemClickListener)
@@ -210,11 +209,14 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         var name = ""
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_player_name, null, false)
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle(R.string.playerCreateTitle)
+            .setTitle(if (effect.playerId == null) R.string.playerCreateTitle else R.string.playerName)
             .setView(view)
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 if (name.isNotEmpty()) {
+                    logEvent(if (effect.playerId == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED) {
+                        putString(AnalyticsConstants.Param.ITEM_NAME, name)
+                    }
                     addPlayerJob = GlobalScope.launch {
                         playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
                             eventConsumer.accept(
@@ -232,6 +234,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                 if (effect.playerId == null) return@also
 
                 it.setNeutralButton(R.string.delete) { _, _ ->
+                    logEvent(AnalyticsConstants.Event.PLAYER_DELETED)
                     eventConsumer.accept(PlayerDeleteClicked(effect.playerId))
                 }
             }

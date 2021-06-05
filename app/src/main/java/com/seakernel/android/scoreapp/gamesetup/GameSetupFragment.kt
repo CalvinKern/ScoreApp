@@ -296,7 +296,7 @@ private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallba
             playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE
             playerDealerBox.isChecked = state.isDealer
             playerDealerBox.setOnClickListener {
-                logEvent(AnalyticsConstants.Event.NEW_DEALER_SELECTED)
+                logEvent(AnalyticsConstants.Event.DEALER_REPLACED)
                 callback.onSelectedDealer(state.player.id!!)
             }
         }
