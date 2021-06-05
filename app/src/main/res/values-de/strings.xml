@@ -47,4 +47,6 @@
     <string name="useCalculatorTitle">Rechner Tastatur</string>
     <string name="useCalculatorDescription">Verwenden Sie die benutzerdefinierte Taschenrechner-Tastatur. Verwendet die Systemtastatur, wenn sie nicht aktiviert ist.</string>
     <string name="undo">cancel</string>
+    <string name="deleteRounds">Runden löschen</string>
+    <string name="deleteRoundItem">Runde %d</string>
 </resources>

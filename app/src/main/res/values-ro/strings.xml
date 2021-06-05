@@ -47,4 +47,6 @@
     <string name="actionChangelog">Jurnal de schimbări</string>
     <string name="actionRateApp">Evaluează aplicația</string>
     <string name="undo">Anula</string>
+    <string name="deleteRounds">Ștergeți rundele</string>
+    <string name="deleteRoundItem">Runda %d</string>
 </resources>

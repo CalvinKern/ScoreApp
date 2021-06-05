@@ -47,4 +47,6 @@
     <string name="actionChangelog">Changelog</string>
     <string name="actionRateApp">Application de taux</string>
     <string name="undo">annuler</string>
+    <string name="deleteRounds">Supprimer les rondes</string>
+    <string name="deleteRoundItem">Tour %d</string>
 </resources>

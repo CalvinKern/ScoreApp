@@ -47,4 +47,6 @@
     <string name="actionChangelog">变更日志</string>
     <string name="actionRateApp">评价应用</string>
     <string name="undo">撤消</string>
+    <string name="deleteRounds">删除回合</string>
+    <string name="deleteRoundItem">第 %d 轮</string>
 </resources>

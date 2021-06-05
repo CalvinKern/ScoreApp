@@ -47,4 +47,6 @@
     <string name="actionChangelog">変更ログ</string>
     <string name="actionRateApp">アプリを評価</string>
     <string name="undo">元に戻す</string>
+    <string name="deleteRounds">ラウンドを削除</string>
+    <string name="deleteRoundItem">ラウンド%d</string>
 </resources>

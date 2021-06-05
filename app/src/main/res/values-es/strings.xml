@@ -47,4 +47,6 @@
     <string name="useCalculatorTitle">Teclado calculadora</string>
     <string name="useCalculatorDescription">Utilice el teclado de la calculadora personalizado. Utilizará el teclado del sistema si no está habilitado.</string>
     <string name="undo">Deshacer</string>
+    <string name="deleteRounds">Eliminar rondas</string>
+    <string name="deleteRoundItem">Ronda %d</string>
 </resources>

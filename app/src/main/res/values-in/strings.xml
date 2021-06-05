@@ -47,4 +47,6 @@
     <string name="useCalculatorTitle">Keyboard Kalkulator</string>
     <string name="useCalculatorDescription">Gunakan keyboard kalkulator khusus. Akan menggunakan keyboard sistem jika tidak diaktifkan.</string>
     <string name="undo">Membuka</string>
+    <string name="deleteRounds">Hapus Putaran</string>
+    <string name="deleteRoundItem">Putaran %d</string>
 </resources>

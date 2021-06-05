@@ -47,4 +47,6 @@
     <string name="actionChangelog">चंगेलोग</string>
     <string name="actionRateApp">एप्प का मूल्यांकन</string>
     <string name="undo">पूर्ववत</string>
+    <string name="deleteRounds">राउंड हटाएं</string>
+    <string name="deleteRoundItem">राउंड %d</string>
 </resources>

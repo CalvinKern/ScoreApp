@@ -47,4 +47,6 @@
     <string name="useCalculatorTitle">計算器鍵盤</string>
     <string name="useCalculatorDescription">使用自定義計算器鍵盤。 如果未啟用，將使用系統鍵盤。</string>
     <string name="undo">撤消</string>
+    <string name="deleteRounds">刪除回合</string>
+    <string name="deleteRoundItem">第 %d 輪</string>
 </resources>
