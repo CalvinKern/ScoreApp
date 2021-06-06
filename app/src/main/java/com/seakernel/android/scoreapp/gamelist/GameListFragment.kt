@@ -90,7 +90,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     override fun onResume() {
         super.onResume()
-        logScreenView(GameListFragment::class.java.name)
+        logScreenView(AnalyticsConstants.ScreenName.GameListFragment)
     }
 
     // Mobius functions
@@ -102,7 +102,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     override fun connectViews(eventConsumer: Consumer<ListEvent>): Connection<ListModel> {
         // Send events to the consumer when the button is pressed
         fab.setOnClickListener {
-            logEvent(AnalyticsConstants.Event.CREATE_GAME)
+            logEvent(AnalyticsConstants.Event.GAME_CREATED)
             eventConsumer.accept(ListEvent.AddGameClicked)
         }
 
@@ -163,7 +163,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private fun deleteGameAsync(eventConsumer: Consumer<ListEvent>, gameId: Long) {
-        logEvent(AnalyticsConstants.Event.DELETE_GAME)
+        logEvent(AnalyticsConstants.Event.GAME_DELETED)
         GlobalScope.launch {
             if (gameRepository?.deleteGame(gameId) == true) {
                 eventConsumer.accept(ListEvent.GameDeleteSuccessful(gameId))

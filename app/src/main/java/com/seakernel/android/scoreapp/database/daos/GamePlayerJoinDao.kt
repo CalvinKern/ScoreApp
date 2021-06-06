@@ -18,11 +18,12 @@ interface GamePlayerJoinDao {
     fun insertAll(vararg joins: GamePlayerJoin)
 
     @Query("""
-        SELECT ${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}
+        SELECT ${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}, ${PlayerEntity.COLUMN_ARCHIVED}
         FROM ${PlayerEntity.TABLE_NAME}
         INNER JOIN ${GamePlayerJoin.TABLE_NAME}
         ON ${PlayerEntity.COLUMN_ID}=${GamePlayerJoin.COLUMN_PLAYER_ID}
         WHERE ${GamePlayerJoin.COLUMN_GAME_ID}=:gameId
+        AND ${PlayerEntity.COLUMN_ARCHIVED}=0
         ORDER BY ${GamePlayerJoin.COLUMN_PLAYER_POSITION}
     """)
     fun getPlayersForGame(gameId: Long): List<PlayerEntity>

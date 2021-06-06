@@ -29,7 +29,7 @@
     <string name="gameListEmptyTitle">Nenhum jogo criado</string>
     <string name="gameListEmptyMessage">Comece clicando no botão + abaixo para criar um novo jogo!</string>
     <string name="gameCreateTitle">Novo jogo</string>
-    <string name="deleteSuccessful">Excluído</string>
+    <string name="deleteSuccessful">Excluído %s</string>
     <string name="deleteGameConfirmation">Deseja excluir este jogo?</string>
     <string name="delete">Excluir</string>
     <string name="dealerLabel">Revendedor</string>
@@ -46,4 +46,7 @@
     <string name="actionChangelog">Changelog</string>
     <string name="useCalculatorTitle">Teclado da Calculadora</string>
     <string name="useCalculatorDescription">Use o teclado da calculadora personalizada. Usará o teclado do sistema se não estiver ativado.</string>
+    <string name="undo">Desfazer</string>
+    <string name="deleteRounds">Excluir rodadas</string>
+    <string name="deleteRoundItem">Rodada %d</string>
 </resources>

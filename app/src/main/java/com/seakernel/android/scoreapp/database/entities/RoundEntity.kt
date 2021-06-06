@@ -20,7 +20,7 @@ import androidx.room.*
             entity = PlayerEntity::class,
             parentColumns = [PlayerEntity.COLUMN_ID],
             childColumns = [RoundEntity.COLUMN_DEALER_ID],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.SET_NULL
         )
     ]
 )

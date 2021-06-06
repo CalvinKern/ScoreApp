@@ -8,7 +8,7 @@
     <string name="dealerLabel">comerciant</string>
     <string name="delete">Șterge</string>
     <string name="deleteGameConfirmation">Doriți să ștergeți acest joc?</string>
-    <string name="deleteSuccessful">şters</string>
+    <string name="deleteSuccessful">şters %s</string>
     <string name="gameCreateTitle">Joc nou</string>
     <string name="gameListEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a crea un joc nou!</string>
     <string name="gameListEmptyTitle">Nu au fost create jocuri</string>
@@ -46,4 +46,7 @@
     <string name="useCalculatorTitle">Tastatură Calculator</string>
     <string name="actionChangelog">Jurnal de schimbări</string>
     <string name="actionRateApp">Evaluează aplicația</string>
+    <string name="undo">Anula</string>
+    <string name="deleteRounds">Ștergeți rundele</string>
+    <string name="deleteRoundItem">Runda %d</string>
 </resources>

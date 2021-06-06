@@ -70,9 +70,9 @@ class DbTestHelper {
             return AppDatabase.getInstance(getAppContext(), databaseName)
         }
 
-        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration, block: (db: AppDatabase) -> Unit) {
+        fun createDatabaseAndMigrate(helper: MigrationTestHelper, startDbVersion: Int, endDbVersion: Int, migration: Migration, playerCount: Int = 2, block: (db: AppDatabase) -> Unit) {
             helper.createDatabase(databaseName, startDbVersion).apply {
-                generateGameData(startDbVersion, this)
+                generateGameData(startDbVersion, this, playerCount)
                 // Prepare for the next version.
                 close()
             }
@@ -94,18 +94,27 @@ class DbTestHelper {
             return ZonedDateTime.now().format(GameSettings.DATE_FORMATTER)
         }
 
-        fun generateGameData(version: Int, db: SupportSQLiteDatabase) {
+        private fun generateGameData(version: Int, db: SupportSQLiteDatabase, playerCount: Int) {
             val testN = 1
             if (version >= 4) {
+                // Insert Games
                 when {
                     version >= 8 -> insertGamesV8(testN, db)
                     version >= 7 -> insertGamesV7(testN, db)
                     version >= 6 -> insertGamesV6(testN, db)
                     else -> insertGamesV4(testN, db)
                 }
-                insertUsersRaw(testN, db)
-                insertGamePlayersV4(testN, db)
-                insertScoresV4(version, testN, db)
+
+                val players = testN * playerCount
+
+                // Insert Users
+                when {
+                    version >= 10 -> insertUsersRawV10(players, db)
+                    else -> insertUsersRawV4(players, db)
+                }
+
+                insertGamePlayersV4(players, db)
+                insertScoresV4(version, players, db)
             }
         }
 
@@ -173,6 +182,10 @@ class DbTestHelper {
         }
 
         fun insertUsersRaw(n: Int, db: SupportSQLiteDatabase) {
+            insertUsersRawV10(n, db);
+        }
+
+        private fun insertUsersRawV4(n: Int, db: SupportSQLiteDatabase) {
             var userValues = ""
             repeat(n) {
                 userValues = userValues.plus("($it, \"User $it\")")
@@ -183,6 +196,19 @@ class DbTestHelper {
             db.execSQL("INSERT INTO ${PlayerEntity.TABLE_NAME} " +
                     "(${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}) " +
                     "VALUES $userValues")
+        }
+
+        private fun insertUsersRawV10(n: Int, db: SupportSQLiteDatabase) {
+            var userValues = ""
+            repeat(n) {
+                userValues = userValues.plus("($it, \"User $it\", 0)")
+                if (it < n - 1) {
+                    userValues = userValues.plus(", ")
+                }
+            }
+            db.execSQL("INSERT INTO ${PlayerEntity.TABLE_NAME} " +
+                "(${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}, ${PlayerEntity.COLUMN_ARCHIVED}) " +
+                "VALUES $userValues")
         }
     }
 }

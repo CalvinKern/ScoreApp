@@ -12,10 +12,27 @@
         <item name="android:statusBarColor">?attr/statusBarBackground</item>
 
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="snackbarStyle">@style/SnackbarStyle</item>
+        <item name="snackbarTextViewStyle">@style/SnackbarText</item>
+        <item name="snackbarButtonStyle">@style/SnackbarButton</item>
+    </style>
+
+    <style name="SnackbarStyle" parent="@style/Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">@color/colorBackgroundPopup</item>
+    </style>
+
+    <style name="SnackbarText" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/textBlack</item>
+    </style>
+
+    <style name="SnackbarButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="actionTextColorAlpha">1</item>
+        <item name="rippleColor">@color/colorSecondary</item>
     </style>
 
     <style name="AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

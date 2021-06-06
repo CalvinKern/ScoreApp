@@ -92,7 +92,7 @@ class GameSetupFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        logScreenView(GameSetupFragment::class.java.name)
+        logScreenView(AnalyticsConstants.ScreenName.GameSetupFragment)
     }
 
     fun updateForNewPlayers(playerIds: List<Long>) {
@@ -296,7 +296,7 @@ private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallba
             playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE
             playerDealerBox.isChecked = state.isDealer
             playerDealerBox.setOnClickListener {
-                logEvent(AnalyticsConstants.Event.NEW_DEALER_SELECTED)
+                logEvent(AnalyticsConstants.Event.DEALER_REPLACED)
                 callback.onSelectedDealer(state.player.id!!)
             }
         }

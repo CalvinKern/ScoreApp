@@ -52,7 +52,7 @@ class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         playersHolder.text = itemView.context.getString(R.string.playersHolder, settings.players.size)
 
         itemView.setOnClickListener {
-            logEvent(AnalyticsConstants.Event.LOAD_GAME) {
+            logEvent(AnalyticsConstants.Event.GAME_LOADED) {
                 putString(AnalyticsConstants.Param.ITEM_NAME, settings.name)
                 putString(AnalyticsConstants.Param.GAME_PLAYER_COUNT, settings.players.count().toString())
             }

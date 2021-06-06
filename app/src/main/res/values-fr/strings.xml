@@ -8,7 +8,7 @@
     <string name="dealerLabel">Marchand</string>
     <string name="delete">Supprimer</string>
     <string name="deleteGameConfirmation">Voulez-vous supprimer ce jeu?</string>
-    <string name="deleteSuccessful">Effacé</string>
+    <string name="deleteSuccessful">Effacé %s</string>
     <string name="gameCreateTitle">Nouveau jeu</string>
     <string name="gameListEmptyMessage">Commencez par cliquer sur le bouton + ci-dessous pour créer un nouveau jeu!</string>
     <string name="gameListEmptyTitle">Aucun jeu créé</string>
@@ -46,4 +46,7 @@
     <string name="useCalculatorTitle">Clavier de la calculatrice</string>
     <string name="actionChangelog">Changelog</string>
     <string name="actionRateApp">Application de taux</string>
+    <string name="undo">annuler</string>
+    <string name="deleteRounds">Supprimer les rondes</string>
+    <string name="deleteRoundItem">Tour %d</string>
 </resources>

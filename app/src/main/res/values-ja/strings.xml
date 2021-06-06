@@ -8,7 +8,7 @@
     <string name="dealerLabel">ディーラー</string>
     <string name="delete">削除する</string>
     <string name="deleteGameConfirmation">このゲームを削除しますか？</string>
-    <string name="deleteSuccessful">削除された</string>
+    <string name="deleteSuccessful">%s 削除された</string>
     <string name="gameCreateTitle">新しいゲーム</string>
     <string name="gameListEmptyMessage">新しいゲームを作成するには、下の[+]ボタンを押して開始します。</string>
     <string name="gameListEmptyTitle">ゲームがいません</string>
@@ -46,4 +46,7 @@
     <string name="useCalculatorTitle">電卓キーボード</string>
     <string name="actionChangelog">変更ログ</string>
     <string name="actionRateApp">アプリを評価</string>
+    <string name="undo">元に戻す</string>
+    <string name="deleteRounds">ラウンドを削除</string>
+    <string name="deleteRoundItem">ラウンド%d</string>
 </resources>

@@ -32,12 +32,7 @@ class PlayerRepository(val context: Context) {
     }
 
     private fun updateUser(playerId: Long, playerName: String): Player {
-        playerDao.update(
-            PlayerEntity(
-                playerId,
-                playerName
-            )
-        )
+        playerDao.updateName(playerId, playerName)
         return Player(playerId, playerName)
     }
 
@@ -45,13 +40,18 @@ class PlayerRepository(val context: Context) {
         val player =
             PlayerEntity(
                 0,
-                name
+                name,
+                false,
             )
         val id = playerDao.insertAll(player)[0]
         return Player(id, name)
     }
 
     fun deleteUser(id: Long) {
-        playerDao.deleteById(id)
+        playerDao.setArchived(id, true)
+    }
+
+    fun undoDelete(id: Long) {
+        playerDao.setArchived(id, false)
     }
 }

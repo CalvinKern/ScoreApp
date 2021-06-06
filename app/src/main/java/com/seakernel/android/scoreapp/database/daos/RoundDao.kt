@@ -22,6 +22,9 @@ interface RoundDao {
     @Query("SELECT * FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} = :id")
     fun getRound(id: Long): RoundEntity
 
+    @Query("SELECT ${RoundEntity.COLUMN_ID} FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID} = :gameId")
+    fun getRoundIds(gameId: Long): List<Long>
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(round: RoundEntity)
 
@@ -43,8 +46,8 @@ interface RoundDao {
     """)
     fun updateScoreNote(id: Long, notes: String)
 
-    @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} = :id")
-    fun deleteRoundById(id: Long)
+    @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} IN (:ids)")
+    fun deleteRoundsById(vararg ids: Long)
 
     @Query("DELETE FROM ${ScoreEntity.TABLE_NAME} WHERE ${ScoreEntity.COLUMN_ID} = :id")
     fun deleteScoreById(id: Long)

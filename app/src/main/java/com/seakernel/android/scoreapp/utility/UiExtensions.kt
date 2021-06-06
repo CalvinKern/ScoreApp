@@ -42,10 +42,10 @@ private fun logEvent(context: Context, eventName: String, bundleBlock: BundleBlo
     FirebaseAnalytics.getInstance(context).logEvent(eventName, Bundle().apply(bundleBlock))
 }
 
-fun Fragment.logScreenView(screenName: String) {
+fun Fragment.logScreenView(screenName: AnalyticsConstants.ScreenName) {
     logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-        putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
-        putString(FirebaseAnalytics.Param.SCREEN_CLASS, MainActivity::class.java.name)
+        putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName.value)
+        putString(FirebaseAnalytics.Param.SCREEN_CLASS, AnalyticsConstants.ScreenName.MainActivity.value)
     }
 }
 
