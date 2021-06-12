@@ -50,6 +50,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     private var gameRepository: GameRepository? = null
     private var listener: PlayerSelectListener? = null
     private var addPlayerJob: Job? = null
+    private var disposed: Boolean = false
 
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
 
@@ -158,6 +159,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     override fun effectHandler(eventConsumer: Consumer<PlayerEvent>): Connection<PlayerEffect> {
         return object : Connection<PlayerEffect> {
             override fun accept(effect: PlayerEffect) {
+                disposed = false
                 when (effect) {
                     is ShowPlayerNameDialog -> {
                         view?.post {
@@ -185,7 +187,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             }
 
             override fun dispose() {
-                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                disposed = true
             }
         }
     }
@@ -219,12 +221,14 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     }
                     addPlayerJob = GlobalScope.launch {
                         playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
-                            eventConsumer.accept(
-                                PlayerNameChanged(
-                                    player.id!!,
-                                    player.name
+                            if (!disposed) {
+                                eventConsumer.accept(
+                                    PlayerNameChanged(
+                                        player.id!!,
+                                        player.name
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
@@ -235,7 +239,9 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
                 it.setNeutralButton(R.string.delete) { _, _ ->
                     logEvent(AnalyticsConstants.Event.PLAYER_DELETED)
-                    eventConsumer.accept(PlayerDeleteClicked(effect.playerId))
+                    if (!disposed) {
+                        eventConsumer.accept(PlayerDeleteClicked(effect.playerId))
+                    }
                 }
             }
             .create()
