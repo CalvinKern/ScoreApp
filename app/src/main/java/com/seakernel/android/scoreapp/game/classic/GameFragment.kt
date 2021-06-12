@@ -7,8 +7,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.GameSettings
-import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.data.*
 import com.seakernel.android.scoreapp.game.DeleteRoundDialog
 import com.seakernel.android.scoreapp.game.PlayerRoundNotesDialog
 import com.seakernel.android.scoreapp.game.PlayerStandingDialog
@@ -26,7 +25,6 @@ import com.spotify.mobius.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Created by Calvin on 12/21/18.
@@ -235,15 +233,45 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     override fun effectHandler(eventConsumer: Consumer<GameEvent>): Connection<GameEffect> {
         return object : Connection<GameEffect> {
+            private fun getFirstRoundDealer(game: Game): Player? {
+                if (game.settings.hasDealer) {
+                    if (game.settings.initialDealerId != null) {
+                        game.settings.players.firstOrNull { it.id == game.settings.initialDealerId }?.let { player ->
+                            return player
+                        }
+                    }
+                    return game.settings.players.random()
+                }
+
+                return null
+            }
+
+            private fun createFirstRound(game: Game) = Round(
+                dealer = getFirstRoundDealer(game),
+                number = 0,
+                scores = game.settings.players.map { player ->
+                    Score(player = player)
+                }
+            )
+
             override fun accept(effect: GameEffect) {
                 when (effect) {
                     is GameEffect.FetchData -> {
-                        gameRepository?.loadFullGame(arguments?.getLong(ARG_GAME_ID, 0) ?: 0)?.let {
-                            eventConsumer.accept(
-                                GameEvent.Loaded(
-                                    it
+                        val gameId = arguments?.getLong(ARG_GAME_ID, 0) ?: 0
+                        gameRepository?.loadFullGame(gameId)?.let { game ->
+                            if (game.rounds.isEmpty()) {
+                                // If we load a game and it has no rounds, we need to fix that
+                                roundRepository?.addOrUpdateRound(gameId, createFirstRound(game))?.let { round ->
+                                    eventConsumer.accept(GameEvent.Loaded(game.copy(
+                                        settings = game.settings,
+                                        rounds = listOf(round)
+                                    )))
+                                } ?: requireActivity().onBackPressed() // TODO: Handle finding game better
+                            } else {
+                                eventConsumer.accept(
+                                    GameEvent.Loaded(game)
                                 )
-                            )
+                            }
                         } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
                     is GameEffect.SaveRound -> {
