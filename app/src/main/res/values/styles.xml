@@ -73,7 +73,7 @@
         <item name="backgroundTint">@color/darkGray</item>
     </style>
 
-    <style name="AppTheme.CalculatorButton.Equals">
+    <style name="AppTheme.CalculatorButton.Action">
         <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 </resources>

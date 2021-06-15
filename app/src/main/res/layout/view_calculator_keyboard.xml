@@ -114,13 +114,13 @@
 
     <Button
         android:id="@+id/calculatorKeyEquals"
-        style="@style/AppTheme.CalculatorButton.Equals"
+        style="@style/AppTheme.CalculatorButton.Action"
         android:text="@string/equals"
         />
 
     <Button
         android:id="@+id/calculatorKeyNext"
-        style="@style/AppTheme.CalculatorButton.Equals"
+        style="@style/AppTheme.CalculatorButton.Action"
         android:text="@string/next"
         />
 </merge>

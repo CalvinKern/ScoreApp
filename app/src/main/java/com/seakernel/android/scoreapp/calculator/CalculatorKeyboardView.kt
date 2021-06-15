@@ -77,11 +77,16 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         }
 
         // Set the listener to update our input text, safely letting it be collected
+        // TODO: MEMORY LEAK HERE!!? (should release the weak reference when this view is disposed, move to member variable)
         val weakInputText = WeakReference(inputText)
         setInputChangedListener(
             inputString, // Reset the string
-            inputListener = { input, _ ->
+            inputListener = { input, failed ->
                 val editText = weakInputText.get() ?: return@setInputChangedListener
+
+                if (failed) editText.error = context.getString(R.string.incomplete)
+                else editText.error = null
+
                 editText.setText(input)
                 // Set the selection to our edit index (or the length if editing the end)
                 editText.setSelection(min(calculatorEditIndex, input.length))

@@ -226,6 +226,7 @@ class ScoreViewHolder(
         scoreHolder.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
+                scoreHolder.error = null // Clear error state when losing focus
             } else {
                 // Newly gained focus = open calculator
                 if (useCalculator) showCalculatorKeyboardCallback?.invoke(scoreHolder)
