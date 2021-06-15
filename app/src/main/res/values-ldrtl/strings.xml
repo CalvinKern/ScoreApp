@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="next">&lt;-</string>
+<!--    <string name="next" translatable="false">&lt;-</string>-->
+<!--    <string name="prev" translatable="false">-&gt;</string>-->
 </resources>

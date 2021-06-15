@@ -95,7 +95,6 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     }
 
     private fun setupView() {
-        columnCount = 5
         alignmentMode = ALIGN_MARGINS
         setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
     }
@@ -124,6 +123,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorKeyCloseParen.setOnClickListener(listener)
 
         calculatorKeyNext.setOnClickListener{ onNextClicked() }
+        calculatorKeyPrev.setOnClickListener{ onPrevClicked() }
     }
 
     private fun onButtonClicked(key: String) {
@@ -135,6 +135,14 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     private fun onNextClicked() {
         inputView?.onEditorAction(KEYCODE_NEXT)
+    }
+
+    private fun onPrevClicked() {
+        if (resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+            inputView?.focusSearch(View.FOCUS_LEFT)?.requestFocus()
+        } else {
+            inputView?.focusSearch(View.FOCUS_RIGHT)?.requestFocus()
+        }
     }
 
     /**

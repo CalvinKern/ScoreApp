@@ -2,10 +2,16 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:columnCount="5"
+    android:columnCount="7"
     >
 
-<Button
+    <Button
+        android:id="@+id/calculatorKeyDecimal"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/decimal"
+        />
+
+    <Button
         android:id="@+id/calculatorKeyOne"
         style="@style/AppTheme.CalculatorButton"
         android:text="@string/one"
@@ -24,15 +30,27 @@
         />
 
     <Button
-        android:id="@+id/calculatorKeyOpenParen"
+        android:id="@+id/calculatorKeyPlus"
         style="@style/AppTheme.CalculatorButton.Operator"
-        android:text="@string/open_paren"
+        android:text="@string/plus"
         />
 
     <Button
-        android:id="@+id/calculatorKeyCloseParen"
+        android:id="@+id/calculatorKeyMinus"
         style="@style/AppTheme.CalculatorButton.Operator"
-        android:text="@string/close_paren"
+        android:text="@string/minus"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyPrev"
+        style="@style/AppTheme.CalculatorButton.Action"
+        android:text="@string/prev"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyZero"
+        style="@style/AppTheme.CalculatorButton"
+        android:text="@string/zero"
         />
 
     <Button
@@ -54,15 +72,29 @@
         />
 
     <Button
-        android:id="@+id/calculatorKeyPlus"
+        android:id="@+id/calculatorKeyMultiply"
         style="@style/AppTheme.CalculatorButton.Operator"
-        android:text="@string/plus"
+        android:text="@string/multiply"
+        android:textAllCaps="false"
         />
 
     <Button
-        android:id="@+id/calculatorKeyMinus"
+        android:id="@+id/calculatorKeyDivide"
         style="@style/AppTheme.CalculatorButton.Operator"
-        android:text="@string/minus"
+        android:text="@string/divide"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyEquals"
+        style="@style/AppTheme.CalculatorButton.Action"
+        android:text="@string/equals"
+        />
+
+    <Button
+        android:id="@+id/calculatorKeyDelete"
+        style="@style/AppTheme.CalculatorButton"
+        android:contentDescription="@string/delete"
+        android:text="@string/del"
         />
 
     <Button
@@ -84,54 +116,21 @@
         />
 
     <Button
-        android:id="@+id/calculatorKeyMultiply"
+        android:id="@+id/calculatorKeyOpenParen"
         style="@style/AppTheme.CalculatorButton.Operator"
-        android:text="@string/multiply"
-        android:textAllCaps="false"
+        android:text="@string/open_paren"
         />
 
     <Button
-        android:id="@+id/calculatorKeyDivide"
+        android:id="@+id/calculatorKeyCloseParen"
         style="@style/AppTheme.CalculatorButton.Operator"
-        android:text="@string/divide"
-        />
-
-    <Button
-        android:id="@+id/calculatorKeyDelete"
-        style="@style/AppTheme.CalculatorButton"
-        android:contentDescription="@string/delete"
-        android:text="@string/del"
-        />
-
-    <Button
-        android:id="@+id/calculatorKeyZero"
-        style="@style/AppTheme.CalculatorButton"
-        android:text="@string/zero"
-        />
-
-    <Button
-        android:id="@+id/calculatorKeyDecimal"
-        style="@style/AppTheme.CalculatorButton"
-        android:text="@string/decimal"
-        />
-
-    <Button
-        android:id="@+id/calculatorKeyEquals"
-        style="@style/AppTheme.CalculatorButton.Action"
-        android:text="@string/equals"
+        android:text="@string/close_paren"
         />
 
     <Button
         android:id="@+id/calculatorKeyNext"
         style="@style/AppTheme.CalculatorButton.Action"
         android:text="@string/next"
-        />
-
-    <Button
-        android:id="@+id/calculatorKeyPrev"
-        style="@style/AppTheme.CalculatorButton.Action"
-        android:text="@string/prev"
-        android:visibility="gone"
         />
 
 </GridLayout>
