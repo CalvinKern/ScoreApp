@@ -271,7 +271,7 @@ class ScoreViewHolder(
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         val updatedScore = if (scoreHolder.text.isNotBlank()) {
             CalculatorUtils.eval(scoreHolder.text.toString(), itemView.context)?.toDoubleOrNull()
-                ?: 0.0
+                ?: score.value
         } else {
             0.0
         }
