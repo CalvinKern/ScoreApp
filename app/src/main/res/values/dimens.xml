@@ -1,6 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="min_touch_size">48dp</dimen>
+<!--TODO: Set button height to 48 if landscape and not a tablet OOOOOR, change the layout for calculator on landscape to just be a way better experience there-->
+    <dimen name="calculator_button_size">60dp</dimen>
     <dimen name="image_size">60dp</dimen>
     <dimen name="description_width">300dp</dimen>
     <dimen name="empty_margin_vertical">50dp</dimen>
