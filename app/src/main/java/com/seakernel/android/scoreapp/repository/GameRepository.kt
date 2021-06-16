@@ -20,6 +20,10 @@ class GameRepository(val context: Context) {
         return gameDao.getAll().map { convertToGame(it) }
     }
 
+    fun gameNameSearch(): List<String> {
+        return gameDao.getAllNames()
+    }
+
     fun loadGame(gameId: Long): GameSettings? {
         return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
