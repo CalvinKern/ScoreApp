@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import kotlinx.android.synthetic.main.view_calculator_keyboard.view.*
+import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
 import kotlin.math.min
 
@@ -28,6 +29,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     /** See [CalculatorKeyboardView] documentation for behavior */
     companion object {
+        // Delay just long enough that they stopped typing so it's not too intrusive
+        const val DELAY_VALID_COMPUTATION_MESSAGE = 1150L
+
         const val KEYCODE_EQUALS = KeyEvent.KEYCODE_EQUALS
         const val KEYCODE_NEXT = EditorInfo.IME_ACTION_NEXT
     }
@@ -35,6 +39,8 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     private var inputView: EditText? = null
     private var inputChangedListener: InputChangedListener? = null
 
+    private var delayCheckJob: Job? = null
+    private var calculatorFailed = false
     private var calculatorString = ""
     private var calculatorEditIndex = 0
         set(value) {
@@ -81,12 +87,21 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         val weakInputText = WeakReference(inputText)
         setInputChangedListener(
             inputString, // Reset the string
-            inputListener = { input, failed ->
+            inputListener = { input, _ ->
+                // Return unless we still have a reference
                 val editText = weakInputText.get() ?: return@setInputChangedListener
 
-                if (failed) editText.error = context.getString(R.string.incomplete)
-                else editText.error = null
+                delayCheckJob?.cancel()
+                delayCheckJob = GlobalScope.launch {
+                    delay(DELAY_VALID_COMPUTATION_MESSAGE)
+                    post { // Need the main thread for editText
+                        editText.error =
+                            if (calculatorFailed) resources.getString(R.string.incomplete)
+                            else null // Always need to clear here in case it's a duplicate job finishing early
+                    }
+                }
 
+                editText.error = null // Reset the error since they just typed
                 editText.setText(input)
                 // Set the selection to our edit index (or the length if editing the end)
                 editText.setSelection(min(calculatorEditIndex, input.length))
@@ -183,7 +198,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
             }
         }
 
-        return computeString() != null
+        return (computeString() != null).also { validEquation ->
+            calculatorFailed = !validEquation
+        }
     }
 
     private fun computeString(): String? {
