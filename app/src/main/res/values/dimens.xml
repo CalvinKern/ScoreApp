@@ -2,6 +2,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="min_touch_size">48dp</dimen>
     <dimen name="calculator_button_size">60dp</dimen>
+    <dimen name="image_padding">12dp</dimen>
     <dimen name="image_size">60dp</dimen>
     <dimen name="description_width">300dp</dimen>
     <dimen name="empty_margin_vertical">50dp</dimen>

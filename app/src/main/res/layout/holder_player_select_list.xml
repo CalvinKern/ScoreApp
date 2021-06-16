@@ -27,13 +27,28 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         app:layout_constraintStart_toEndOf="@id/playerCheckHolder"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/playerNameSettings"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="@dimen/text_title"
         tools:text="Player Name"
         android:labelFor="@+id/playerCheckHolder"
         tools:ignore="LabelFor"
+        />
+
+    <ImageView
+        android:id="@+id/playerNameSettings"
+        android:layout_width="@dimen/min_touch_size"
+        android:layout_height="@dimen/min_touch_size"
+        android:layout_margin="@dimen/fab_margin"
+        android:padding="@dimen/image_padding"
+        android:src="@drawable/ic_settings"
+        android:foreground="?selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playerNameHolder"
+        app:tint="@color/textBlack"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
