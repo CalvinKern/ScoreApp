@@ -49,4 +49,5 @@
     <string name="undo">Anula</string>
     <string name="deleteRounds">Ștergeți rundele</string>
     <string name="deleteRoundItem">Runda %d</string>
+    <string name="incomplete">Incomplet</string>
 </resources>
