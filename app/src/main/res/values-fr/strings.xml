@@ -49,4 +49,5 @@
     <string name="undo">annuler</string>
     <string name="deleteRounds">Supprimer les rondes</string>
     <string name="deleteRoundItem">Tour %d</string>
+    <string name="incomplete">Incomplète</string>
 </resources>

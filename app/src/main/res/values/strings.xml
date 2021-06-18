@@ -45,6 +45,7 @@
     <string name="addRound">Add Round</string>
     <string name="makePlayerDealerMessage">Make %s dealer for this round?</string>
     <string name="scoreHint">Score</string>
+    <string name="incomplete">Incomplete</string>
 
     <!--Graph Screen-->
     <string name="graphByRoundsLabel">Score by rounds</string>
@@ -94,4 +95,5 @@
     <string name="next" translatable="false">-></string>
     <string name="decimal" translatable="false">.</string>
     <string name="del" translatable="false">DEL</string>
+    <string name="prev" translatable="false">&lt;-</string>
 </resources>

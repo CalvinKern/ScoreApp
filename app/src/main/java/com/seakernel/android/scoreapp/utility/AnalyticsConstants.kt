@@ -8,21 +8,21 @@ import com.google.firebase.analytics.FirebaseAnalytics
  */
 object AnalyticsConstants {
     object Event {
-        const val FAILED_RATING_DIALOG = "FAILED_RATING"
-        const val DEALER_REPLACED = "DEALER_REPLACED"
-        const val GAME_CREATED = "GAME_CREATED"
-        const val GAME_DELETED = "GAME_DELETED"
-        const val GAME_LOADED = "GAME_LOADED"
-        const val GAME_PLAYER_ADDED = "GAME_PLAYER_ADDED"
-        const val PLAYER_CREATE = "PLAYER_CREATED"
-        const val PLAYER_DELETED = "PLAYER_DELETED"
-        const val PLAYER_RENAMED = "PLAYER_RENAMED"
-        const val SHOW_CHANGELOG = "SHOW_CHANGELOG"
-        const val SHOW_RATING_DIALOG = "SHOW_RATING"
-        const val SHOW_PLAYER_STANDING_DIALOG = "SHOW_PLAYER_STANDING"
-        const val SHOW_ROUND_NOTES_DIALOG = "SHOW_ROUND_NOTES"
-        const val SHOW_ROUND_DELETE_DIALOG = "DELETE_ROUND_DIALOG"
-        const val TOGGLE_GAME_SETTING = "GAME_SETTING_CHANGED"
+        const val FAILED_RATING_DIALOG = "failed_rating"
+        const val DEALER_REPLACED = "dealer_replaced"
+        const val GAME_CREATED = "game_created"
+        const val GAME_DELETED = "game_deleted"
+        const val GAME_LOADED = "game_loaded"
+        const val GAME_PLAYER_ADDED = "game_player_added"
+        const val PLAYER_CREATE = "player_created"
+        const val PLAYER_DELETED = "player_deleted"
+        const val PLAYER_RENAMED = "player_renamed"
+        const val SHOW_CHANGELOG = "show_changelog"
+        const val SHOW_RATING_DIALOG = "show_rating"
+        const val SHOW_PLAYER_STANDING_DIALOG = "show_player_standing"
+        const val SHOW_ROUND_NOTES_DIALOG = "show_round_notes"
+        const val SHOW_ROUND_DELETE_DIALOG = "delete_round_dialog"
+        const val TOGGLE_GAME_SETTING = "game_setting_changed"
     }
 
 

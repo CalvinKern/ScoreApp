@@ -49,4 +49,5 @@
     <string name="undo">Desfazer</string>
     <string name="deleteRounds">Excluir rodadas</string>
     <string name="deleteRoundItem">Rodada %d</string>
+    <string name="incomplete">Incompleta</string>
 </resources>

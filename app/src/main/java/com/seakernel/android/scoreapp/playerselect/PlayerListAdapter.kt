@@ -43,6 +43,7 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val nameHolder: TextView by lazy { itemView.playerNameHolder }
     private val checkHolder: MaterialCheckBox by lazy { itemView.playerCheckHolder }
+    private val settingsButton: View by lazy { itemView.playerNameSettings }
 
     fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<PlayerEvent>) {
         nameHolder.text = player.name
@@ -54,12 +55,16 @@ class PlayerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             eventConsumer.accept(PlayerSelected(player.id!!, selected))
         }
 
+        settingsButton.setOnClickListener { showPlayerDialog(player.id!!, eventConsumer) }
         itemView.setOnClickListener { checkHolder.performClick() }
-        itemView.setOnLongClickListener { eventConsumer.accept(
-            PlayerRowLongClicked(
-                player.id!!
-            )
-        ); true }
+        itemView.setOnLongClickListener {
+            showPlayerDialog(player.id!!, eventConsumer)
+            true
+        }
+    }
+
+    private fun showPlayerDialog(playerId: Long, eventConsumer: Consumer<PlayerEvent>) {
+        eventConsumer.accept(PlayerRowLongClicked(playerId))
     }
 
     companion object {

@@ -49,4 +49,5 @@
     <string name="undo">Deshacer</string>
     <string name="deleteRounds">Eliminar rondas</string>
     <string name="deleteRoundItem">Ronda %d</string>
+    <string name="incomplete">Incompleta</string>
 </resources>

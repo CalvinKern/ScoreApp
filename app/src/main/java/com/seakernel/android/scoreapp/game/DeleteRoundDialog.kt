@@ -30,7 +30,7 @@ class DeleteRoundDialog(private val roundIds: List<Long>) : DialogFragment() {
                 }
             }
             .setNegativeButton(R.string.actionClose, null)
-            .setPositiveButton(R.string.actionSave) { _, _ ->
+            .setPositiveButton(R.string.delete) { _, _ ->
                 GlobalScope.launch {
                     RoundRepository(requireContext()).deleteRounds(*selectedRoundIds.toLongArray())
                 }

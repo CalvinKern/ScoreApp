@@ -26,6 +26,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     private val gameSettings = MutableLiveData<GameSettings?>().apply { value = null }
     private val gameCreatedEvent = LiveEvent<Long>()
     private val gameUpdatedEvent = LiveEvent<Long>()
+    private val gameNamesAutocomplete = MutableLiveData<List<String>?>().apply { value = null }
 
     override fun onCleared() {
         super.onCleared()
@@ -37,6 +38,8 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     fun getGameCreatedEvent(): LiveData<Long> = gameCreatedEvent
 
     fun getGameUpdatedEvent(): LiveData<Long> = gameUpdatedEvent
+
+    fun getGameNamesForAutocomplete(): LiveData<List<String>?> = gameNamesAutocomplete
 
     @MainThread
     fun updateGameName(name: String) {
@@ -106,6 +109,8 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun loadGame(gameId: Long, forceRefresh: Boolean = false) {
+        loadGameNames()
+
         // Return early if it is the same game
         if (gameSettings.value?.id == gameId && !forceRefresh) return
 
@@ -120,6 +125,15 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     fun initializeGame() {
         if (gameSettings.value == null) {
             gameSettings.value = GameSettings()
+        }
+        loadGameNames()
+    }
+
+    private fun loadGameNames() {
+        scope.launch {
+            gameRepository.gameNameSearch().let {
+                gameNamesAutocomplete.safePostValue(it)
+            }
         }
     }
 }

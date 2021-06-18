@@ -49,4 +49,5 @@
     <string name="undo">Membuka</string>
     <string name="deleteRounds">Hapus Putaran</string>
     <string name="deleteRoundItem">Putaran %d</string>
+    <string name="incomplete">Tidak lengkap</string>
 </resources>

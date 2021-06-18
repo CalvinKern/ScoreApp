@@ -49,4 +49,5 @@
     <string name="undo">撤消</string>
     <string name="deleteRounds">刪除回合</string>
     <string name="deleteRoundItem">第 %d 輪</string>
+    <string name="incomplete">不完整</string>
 </resources>

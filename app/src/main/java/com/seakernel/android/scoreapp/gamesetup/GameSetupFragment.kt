@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
@@ -36,6 +37,9 @@ class GameSetupFragment : Fragment() {
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
     private val modelObserver = Observer<GameSettings?> { settings -> renderSettings(settings) }
+    private val autocompleteObserver = Observer<List<String>?> { names ->
+        gameNameEdit.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, names))
+    }
 
     private val viewModel: GameSetupViewModel by lazy {
         ViewModelProviders.of(this).get(GameSetupViewModel::class.java)
@@ -73,6 +77,7 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameSettings().removeObserver(modelObserver)
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
         viewModel.getGameUpdatedEvent().removeObserver(gameUpdatedObserver)
+        viewModel.getGameNamesForAutocomplete().removeObserver(autocompleteObserver)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,6 +89,7 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameSettings().observe(viewLifecycleOwner, modelObserver)
         viewModel.getGameCreatedEvent().observe(viewLifecycleOwner, gameCreatedObserver)
         viewModel.getGameUpdatedEvent().observe(viewLifecycleOwner, gameUpdatedObserver)
+        viewModel.getGameNamesForAutocomplete().observe(viewLifecycleOwner, autocompleteObserver)
 
         arguments?.getLong(ARG_GAME_ID)?.let {
             viewModel.loadGame(it)

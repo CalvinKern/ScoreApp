@@ -38,14 +38,16 @@
                 android:layout_marginEnd="16dp"
                 android:hint="@string/gameNameHint"
                 app:hintTextColor="@color/gray"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                app:endIconMode="none"
                 >
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/gameNameEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="text|textCapWords|textNoSuggestions"
+                    android:inputType="text|textCapWords"
                     android:lines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>

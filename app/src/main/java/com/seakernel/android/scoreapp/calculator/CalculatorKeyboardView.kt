@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import kotlinx.android.synthetic.main.view_calculator_keyboard.view.*
+import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
 import kotlin.math.min
 
@@ -28,6 +29,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     /** See [CalculatorKeyboardView] documentation for behavior */
     companion object {
+        // Delay just long enough that they stopped typing so it's not too intrusive
+        const val DELAY_VALID_COMPUTATION_MESSAGE = 1150L
+
         const val KEYCODE_EQUALS = KeyEvent.KEYCODE_EQUALS
         const val KEYCODE_NEXT = EditorInfo.IME_ACTION_NEXT
     }
@@ -35,6 +39,8 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     private var inputView: EditText? = null
     private var inputChangedListener: InputChangedListener? = null
 
+    private var delayCheckJob: Job? = null
+    private var calculatorFailed = false
     private var calculatorString = ""
     private var calculatorEditIndex = 0
         set(value) {
@@ -77,11 +83,25 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         }
 
         // Set the listener to update our input text, safely letting it be collected
+        // TODO: MEMORY LEAK HERE!!? (should release the weak reference when this view is disposed, move to member variable)
         val weakInputText = WeakReference(inputText)
         setInputChangedListener(
             inputString, // Reset the string
             inputListener = { input, _ ->
+                // Return unless we still have a reference
                 val editText = weakInputText.get() ?: return@setInputChangedListener
+
+                delayCheckJob?.cancel()
+                delayCheckJob = GlobalScope.launch {
+                    delay(DELAY_VALID_COMPUTATION_MESSAGE)
+                    post { // Need the main thread for editText
+                        editText.error =
+                            if (calculatorFailed) resources.getString(R.string.incomplete)
+                            else null // Always need to clear here in case it's a duplicate job finishing early
+                    }
+                }
+
+                editText.error = null // Reset the error since they just typed
                 editText.setText(input)
                 // Set the selection to our edit index (or the length if editing the end)
                 editText.setSelection(min(calculatorEditIndex, input.length))
@@ -90,7 +110,6 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     }
 
     private fun setupView() {
-        columnCount = 5
         alignmentMode = ALIGN_MARGINS
         setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
     }
@@ -119,6 +138,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorKeyCloseParen.setOnClickListener(listener)
 
         calculatorKeyNext.setOnClickListener{ onNextClicked() }
+        calculatorKeyPrev.setOnClickListener{ onPrevClicked() }
     }
 
     private fun onButtonClicked(key: String) {
@@ -130,6 +150,14 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     private fun onNextClicked() {
         inputView?.onEditorAction(KEYCODE_NEXT)
+    }
+
+    private fun onPrevClicked() {
+        if (resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+            inputView?.focusSearch(View.FOCUS_LEFT)?.requestFocus()
+        } else {
+            inputView?.focusSearch(View.FOCUS_RIGHT)?.requestFocus()
+        }
     }
 
     /**
@@ -170,7 +198,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
             }
         }
 
-        return computeString() != null
+        return (computeString() != null).also { validEquation ->
+            calculatorFailed = !validEquation
+        }
     }
 
     private fun computeString(): String? {
