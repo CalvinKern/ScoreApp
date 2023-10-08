@@ -38,7 +38,13 @@ class GameSetupFragment : Fragment() {
     private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
     private val modelObserver = Observer<GameSettings?> { settings -> renderSettings(settings) }
     private val autocompleteObserver = Observer<List<String>?> { names ->
-        gameNameEdit.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, names))
+        gameNameEdit.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                names?.distinct() ?: emptyList(),
+            )
+        )
     }
 
     private val viewModel: GameSetupViewModel by lazy {
