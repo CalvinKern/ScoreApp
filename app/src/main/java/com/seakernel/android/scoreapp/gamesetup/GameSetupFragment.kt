@@ -13,15 +13,33 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.utility.*
-import kotlinx.android.synthetic.main.fragment_game_create.*
-import kotlinx.android.synthetic.main.holder_game_create_player.view.*
-import kotlinx.android.synthetic.main.view_game_settings.*
-import kotlinx.android.synthetic.main.view_game_settings.view.*
+import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.isCheckedSafe
+import com.seakernel.android.scoreapp.utility.logEvent
+import com.seakernel.android.scoreapp.utility.logScreenView
+import com.seakernel.android.scoreapp.utility.setBackgroundRipple
+import com.seakernel.android.scoreapp.utility.setVisible
+import kotlinx.android.synthetic.main.fragment_game_create.gameNameEdit
+import kotlinx.android.synthetic.main.fragment_game_create.gamePlayerEmptyGroup
+import kotlinx.android.synthetic.main.fragment_game_create.playerRecycler
+import kotlinx.android.synthetic.main.fragment_game_create.playersHeaderEdit
+import kotlinx.android.synthetic.main.fragment_game_create.toolbar
+import kotlinx.android.synthetic.main.holder_game_create_player.view.playerDealerBox
+import kotlinx.android.synthetic.main.holder_game_create_player.view.playerDealerLabel
+import kotlinx.android.synthetic.main.holder_game_create_player.view.playerNameHolder
+import kotlinx.android.synthetic.main.view_game_settings.hasDealerContainer
+import kotlinx.android.synthetic.main.view_game_settings.reversedScoringContainer
+import kotlinx.android.synthetic.main.view_game_settings.showNotesContainer
+import kotlinx.android.synthetic.main.view_game_settings.useCalculatorContainer
+import kotlinx.android.synthetic.main.view_game_settings.view.checkbox
 
 class GameSetupFragment : Fragment() {
 
@@ -35,7 +53,8 @@ class GameSetupFragment : Fragment() {
     private var nameTextWatcher: TextWatcher? = null
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
-    private val gameCreatedObserver = Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
+    private val gameCreatedObserver =
+        Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
     private val modelObserver = Observer<GameSettings?> { settings -> renderSettings(settings) }
     private val autocompleteObserver = Observer<List<String>?> { names ->
         gameNameEdit.setAdapter(
@@ -61,7 +80,11 @@ class GameSetupFragment : Fragment() {
         listener = null
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_game_create, container, false)
     }
 
@@ -120,6 +143,7 @@ class GameSetupFragment : Fragment() {
                     viewModel.saveGame()
                     true
                 }
+
                 else -> super.onOptionsItemSelected(item)
             }
         }
@@ -131,7 +155,8 @@ class GameSetupFragment : Fragment() {
 
         // Setup player recycler
         playersHeaderEdit.setOnClickListener {
-            val ids = viewModel.getGameSettings().value?.players?.mapNotNull { it.id } ?: emptyList()
+            val ids =
+                viewModel.getGameSettings().value?.players?.mapNotNull { it.id } ?: emptyList()
             listener?.onShowPlayerSelectScreen(ids)
         }
 
@@ -168,7 +193,8 @@ class GameSetupFragment : Fragment() {
         if (settings == null) {
             return // TODO: Show loading spinner
         }
-        toolbar.menu.findItem(R.id.actionSave).isEnabled = settings.name.isNotBlank() && settings.players.isNotEmpty()
+        toolbar.menu.findItem(R.id.actionSave).isEnabled =
+            settings.name.isNotBlank() && settings.players.isNotEmpty()
         playerRecycler.setVisible(settings.players.isNotEmpty())
         gamePlayerEmptyGroup.setVisible(settings.players.isEmpty())
 
@@ -184,7 +210,10 @@ class GameSetupFragment : Fragment() {
 
         val checkedListener = OnCheckedChangeListener { checkbox: View, checked: Boolean ->
             logEvent(AnalyticsConstants.Event.TOGGLE_GAME_SETTING) {
-                putString(AnalyticsConstants.Param.ITEM_NAME, checkbox.resources.getResourceEntryName((checkbox.parent as View).id))
+                putString(
+                    AnalyticsConstants.Param.ITEM_NAME,
+                    checkbox.resources.getResourceEntryName((checkbox.parent as View).id)
+                )
                 putBoolean(AnalyticsConstants.Param.MESSAGE, checked)
             }
             when (checkbox) {
@@ -227,7 +256,10 @@ class GameSetupFragment : Fragment() {
                 }
             }
 
-            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
                 super.clearView(recyclerView, viewHolder)
 
                 (viewHolder as? PlayerSelectionListener)?.onCleared()
@@ -274,7 +306,9 @@ private data class PlayerState(
 )
 
 private class PlayerDiffCallback : DiffUtil.ItemCallback<PlayerState>() {
-    override fun areItemsTheSame(oldItem: PlayerState, newItem: PlayerState) = oldItem.player.id == newItem.player.id
+    override fun areItemsTheSame(oldItem: PlayerState, newItem: PlayerState) =
+        oldItem.player.id == newItem.player.id
+
     override fun areContentsTheSame(oldItem: PlayerState, newItem: PlayerState) = oldItem == newItem
 }
 
@@ -286,7 +320,8 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.holder_game_create_player, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.holder_game_create_player, parent, false)
         return PlayerViewHolder(view, callback)
     }
 
@@ -299,12 +334,14 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
     }
 }
 
-private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallback) : RecyclerView.ViewHolder(itemView),
+private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallback) :
+    RecyclerView.ViewHolder(itemView),
     PlayerSelectionListener {
     fun bind(state: PlayerState) {
         with(itemView) {
             playerNameHolder.text = state.player.name
-            playerDealerLabel.visibility = if (state.showDealer && state.isDealer) View.VISIBLE else View.GONE
+            playerDealerLabel.visibility =
+                if (state.showDealer && state.isDealer) View.VISIBLE else View.GONE
             playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE
             playerDealerBox.isChecked = state.isDealer
             playerDealerBox.setOnClickListener {

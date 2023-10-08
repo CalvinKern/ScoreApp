@@ -11,8 +11,32 @@ import android.widget.GridLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.*
-import kotlinx.coroutines.*
+import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView.Companion.KEYCODE_NEXT
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyCloseParen
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyDecimal
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyDelete
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyDivide
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyEight
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyEquals
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyFive
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyFour
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyMinus
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyMultiply
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyNext
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyNine
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyOne
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyOpenParen
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyPlus
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyPrev
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeySeven
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeySix
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyThree
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyTwo
+import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyZero
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import kotlin.math.min
 
@@ -137,8 +161,8 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorKeyOpenParen.setOnClickListener(listener)
         calculatorKeyCloseParen.setOnClickListener(listener)
 
-        calculatorKeyNext.setOnClickListener{ onNextClicked() }
-        calculatorKeyPrev.setOnClickListener{ onPrevClicked() }
+        calculatorKeyNext.setOnClickListener { onNextClicked() }
+        calculatorKeyPrev.setOnClickListener { onPrevClicked() }
     }
 
     private fun onButtonClicked(key: String) {
@@ -182,10 +206,12 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                     }
                 }
             }
+
             resources.getString(R.string.equals) -> {
                 inputView?.onEditorAction(KEYCODE_EQUALS)
                 computeString() ?: calculatorString
             }
+
             else -> {
                 calculatorEditIndex++ // Increment the index
                 if (calculatorEditIndex - 1 < calculatorString.length) {
