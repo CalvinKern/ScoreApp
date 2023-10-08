@@ -39,6 +39,7 @@ android {
             manifestPlaceholders = [appName:"Score Pad (Debug)"]
         }
     }
+    namespace 'com.seakernel.android.scoreapp'
 }
 
 ext {
