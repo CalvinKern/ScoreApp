@@ -120,7 +120,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                     delay(DELAY_VALID_COMPUTATION_MESSAGE)
                     post { // Need the main thread for editText
                         editText.error =
-                            if (calculatorFailed) resources.getString(R.string.incomplete)
+                            if (calculatorFailed && input.isNotEmpty()) resources.getString(R.string.incomplete)
                             else null // Always need to clear here in case it's a duplicate job finishing early
                     }
                 }
