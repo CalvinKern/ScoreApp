@@ -43,7 +43,7 @@ android {
 }
 
 ext {
-    MOBIUS_VERSION = '1.2.0'
+    MOBIUS_VERSION = '1.4.0'
     ROOM_VERSION = '2.2.5'
 }
 
