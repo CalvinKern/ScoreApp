@@ -104,6 +104,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.setTitle(R.string.gameListTitle)

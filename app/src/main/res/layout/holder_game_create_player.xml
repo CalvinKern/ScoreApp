@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playerNameHolder"
         android:src="@drawable/ic_drag_indicator"
-        android:tint="@color/gray"
+        app:tint="@color/gray"
         />
 
     <TextView
