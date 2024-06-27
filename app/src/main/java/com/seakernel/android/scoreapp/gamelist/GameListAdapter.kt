@@ -7,10 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.databinding.HolderGameListBinding
+import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.spotify.mobius.functions.Consumer
-import kotlinx.android.synthetic.main.holder_game_list.view.*
 
 /**
  * Created by Calvin on 12/21/18.
@@ -23,8 +24,7 @@ class GameListAdapter(private val gameList: List<GameSettings>, private val even
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameListViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(GameListViewHolder.RESOURCE_ID, parent, false)
-        return GameListViewHolder(view)
+        return GameListViewHolder(parent)
     }
 
     override fun getItemCount(): Int {
@@ -40,16 +40,12 @@ class GameListAdapter(private val gameList: List<GameSettings>, private val even
     }
 }
 
-class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private val nameHolder: TextView by lazy { itemView.gameNameHolder }
-    private val dateHolder: TextView by lazy { itemView.gameDateHolder }
-    private val playersHolder: TextView by lazy { itemView.gamePlayersHolder }
+class GameListViewHolder(parent: ViewGroup) : BaseViewHolder<HolderGameListBinding>(HolderGameListBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
 
     fun bind(settings: GameSettings, eventConsumer: Consumer<ListEvent>) {
-        nameHolder.text = settings.name
-        dateHolder.text = settings.lastPlayedAt
-        playersHolder.text = itemView.context.getString(R.string.playersHolder, settings.players.size)
+        binding.gameNameHolder.text = settings.name
+        binding.gameDateHolder.text = settings.lastPlayedAt
+        binding.gamePlayersHolder.text = itemView.context.getString(R.string.playersHolder, settings.players.size)
 
         itemView.setOnClickListener {
             logEvent(AnalyticsConstants.Event.GAME_LOADED) {
@@ -62,9 +58,5 @@ class GameListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             eventConsumer.accept(ListEvent.GameRowLongPressed(settings.id!!))
             return@setOnLongClickListener true
         }
-    }
-
-    companion object {
-        const val RESOURCE_ID = R.layout.holder_game_list
     }
 }

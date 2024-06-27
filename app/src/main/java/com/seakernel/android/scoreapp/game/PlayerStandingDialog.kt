@@ -2,41 +2,46 @@ package com.seakernel.android.scoreapp.game
 
 import android.app.Dialog
 import android.os.Bundle
-import android.system.Os.close
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.database.entities.ScoreEntity
+import com.seakernel.android.scoreapp.databinding.DialogPlayerRoundBinding
+import com.seakernel.android.scoreapp.databinding.HolderPlayerStandingBinding
 import com.seakernel.android.scoreapp.repository.GameRepository
-import com.seakernel.android.scoreapp.repository.PlayerRoundNote
-import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
-import kotlinx.android.synthetic.main.dialog_player_round.view.*
-import kotlinx.android.synthetic.main.holder_player_round_notes.view.*
-import kotlinx.android.synthetic.main.holder_player_standing.view.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 
 class PlayerStandingDialog(val gameId: Long) : DialogFragment() {
 
     private val adapter = PlayerStandingAdapter()
+    private var _binding: DialogPlayerRoundBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = LayoutInflater.from(requireContext())
-        val view = inflater.inflate(R.layout.dialog_player_round, null, false)
-        view.dialogPlayerRoundRecycler.layoutManager = LinearLayoutManager(requireContext())
-        view.dialogPlayerRoundRecycler.adapter = adapter
+        _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)
 
-        GlobalScope.launch {
+        binding.dialogPlayerRoundRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.dialogPlayerRoundRecycler.adapter = adapter
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.playerStandingTitle))
+            .setView(binding.root)
+            .setNegativeButton(R.string.actionClose, null)
+//            .setPositiveButton(R.string.actionSave, null) // TODO: add "New Game" button
+            .create()
+
+        lifecycleScope.launch(Dispatchers.IO) {
             val game = GameRepository(requireContext()).loadFullGame(gameId)
             val scoreMap = mutableMapOf<Long, Double>()
             game.rounds.forEach { round ->
@@ -45,34 +50,51 @@ class PlayerStandingDialog(val gameId: Long) : DialogFragment() {
                 }
             }
 
-            val playerScores = scoreMap.map { playerScore ->
-                PlayerScore(
-                    game.settings.players.find { it.id == playerScore.key }!!.name,
-                    playerScore.value
-                )
-            }.sortedBy { it.score }
+            var position = 1
+            val playerScores = scoreMap
+                .map { playerScore ->
+                    PlayerScore(
+                        game.settings.players.find { it.id == playerScore.key }!!.name,
+                        playerScore.value,
+                        -1
+                    )
+                }
+                .sortedBy { it.score }
+                // Set the scores, but we want it reversed (so highest score is first place) unless there is reversed scoring
+                .let { if (game.settings.reversedScoring) it else it.reversed() }
+                .let {
+                    it.mapIndexed { index, playerScore ->
+                        // Update position if we have a new score
+                        if (index == 0 || playerScore.score != it[index - 1].score) {
+                            position = index + 1
+                        }
+                        PlayerScore(playerScore.name, playerScore.score, position)
+                    }
+                }
 
-            // Set the scores, but we want it reversed (so highest score is first place) unless there is reversed scoring
-            adapter.setScores(if (game.settings.reversedScoring) playerScores else playerScores.reversed())
+            withContext(Dispatchers.Main) {
+                adapter.setScores(playerScores)
+            }
         }
 
-        return AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.playerStandingTitle))
-            .setView(view)
-            .setNegativeButton(R.string.actionClose, null)
-//            .setPositiveButton(R.string.actionSave, null) // TODO: add "New Game" button
-            .create()
+        return dialog
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 
 private class PlayerStandingAdapter : RecyclerView.Adapter<PlayerStandingViewHolder>() {
-    var playerScores = listOf<PlayerScore>()
+    var playerScores = mutableListOf<PlayerScore>()
 
     /**
      * @param scores a sorted list of player scores, with position 0 being first place
      */
     fun setScores(scores: List<PlayerScore>) {
-        playerScores = scores
+        playerScores.clear()
+        playerScores.addAll(scores)
         notifyDataSetChanged()
     }
 
@@ -87,14 +109,18 @@ private class PlayerStandingAdapter : RecyclerView.Adapter<PlayerStandingViewHol
 }
 
 private class PlayerStandingViewHolder(parent: ViewGroup) :
-    BaseViewHolder(parent, R.layout.holder_player_standing) {
+    BaseViewHolder<HolderPlayerStandingBinding>(
+        HolderPlayerStandingBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+    ) {
 
     fun onBind(playerScore: PlayerScore) {
-        itemView.playerNameHolder.text = playerScore.name
-        itemView.playerScoreHolder.text = DecimalFormat("##.###").format(playerScore.score)
-        itemView.playerStandingHolder.text =
-            itemView.context.getString(R.string.playerStanding, adapterPosition + 1)
+        binding.playerNameHolder.text = playerScore.name
+        binding.playerScoreHolder.text = DecimalFormat("##.###").format(playerScore.score)
+        binding.playerStandingHolder.text =
+            itemView.context.getString(R.string.playerStanding, playerScore.position)
     }
 }
 
-private data class PlayerScore(val name: String, val score: Double)
+private data class PlayerScore(val name: String, val score: Double, val position: Int)

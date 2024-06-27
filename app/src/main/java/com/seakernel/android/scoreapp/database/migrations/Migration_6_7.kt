@@ -11,8 +11,8 @@ import com.seakernel.android.scoreapp.database.entities.GameEntity
 @Suppress("ClassName")
 class Migration_6_7 : Migration(6, 7) {
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        addShowRoundNotesColumn(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        addShowRoundNotesColumn(db)
     }
 
     private fun addShowRoundNotesColumn(database: SupportSQLiteDatabase) {

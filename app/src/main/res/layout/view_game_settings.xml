@@ -17,7 +17,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/checkbox"
+            android:id="@+id/hasDealerCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/dealerLabel"
-            android:labelFor="@id/checkbox"
+            android:labelFor="@id/hasDealerCheckbox"
             />
 
     </LinearLayout>
@@ -45,7 +45,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@id/checkbox"
+            android:id="@+id/reversedScoringCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reversedScoringTitle"
-                android:labelFor="@id/checkbox"
+                android:labelFor="@id/reversedScoringCheckbox"
                 />
 
             <TextView
@@ -87,7 +87,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@id/checkbox"
+            android:id="@+id/showNotesCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/showRoundNotesTitle"
-                android:labelFor="@id/checkbox"
+                android:labelFor="@id/showNotesCheckbox"
                 />
 
             <TextView
@@ -128,7 +128,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@id/checkbox"
+            android:id="@+id/useCalculatorCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/useCalculatorTitle"
-                android:labelFor="@id/checkbox"
+                android:labelFor="@id/useCalculatorCheckbox"
                 />
 
             <TextView

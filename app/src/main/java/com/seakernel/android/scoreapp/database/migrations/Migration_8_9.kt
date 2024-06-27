@@ -16,8 +16,8 @@ class Migration_8_9 : Migration(8, 9) {
     private val tempTable = "${table}_temp"
     private val columns = listOf("uid", "game_id", "round_number", "dealer_id").joinToString(",")
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        duplicateRoundTable(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        duplicateRoundTable(db)
     }
 
     private fun duplicateRoundTable(database: SupportSQLiteDatabase) {

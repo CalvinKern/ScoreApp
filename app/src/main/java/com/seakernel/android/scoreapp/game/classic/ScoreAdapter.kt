@@ -15,11 +15,13 @@ import com.seakernel.android.scoreapp.calculator.CalculatorUtils
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
+import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
+import com.seakernel.android.scoreapp.databinding.HolderRoundAddBinding
+import com.seakernel.android.scoreapp.databinding.HolderScoreRowDataBinding
+import com.seakernel.android.scoreapp.databinding.HolderScoreRowHeaderBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.functions.Consumer
-import kotlinx.android.synthetic.main.holder_score_row_data.view.*
-import kotlinx.android.synthetic.main.holder_score_row_header.view.*
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
 
@@ -88,11 +90,7 @@ class GameScoreAdapter(
 class PlayersAdapter(private val showNotes: Boolean, private val players: List<Player>, private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
         PlayerViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                PlayerViewHolder.RESOURCE_ID,
-                parent,
-                false
-            )
+            HolderScoreRowHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
 
     override fun getItemCount(): Int {
@@ -145,30 +143,22 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
     }
 }
 
-class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
 
     interface PlayerHolderClickedListener {
         fun playerHolderClicked(player: Player)
     }
 
-    private val nameHolder: TextView by lazy { itemView.playerNameHeader }
-    private val playerNameNoteIcon: View by lazy { itemView.playerNameNoteIcon }
-
     fun bind(showNotes: Boolean, player: Player, clickListener: PlayerHolderClickedListener) {
-        nameHolder.text = player.name
-        playerNameNoteIcon.setVisible(showNotes)
+        binding.playerNameHeader.text = player.name
+        binding.playerNameNoteIcon.setVisible(showNotes)
 
         itemView.setOnClickListener { clickListener.playerHolderClicked(player) }
         itemView.setOnLongClickListener { clickListener.playerHolderClicked(player); true }
     }
-
-    companion object {
-        const val RESOURCE_ID = R.layout.holder_score_row_header
-    }
 }
 
-class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.holder_round_add) {
-
+class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBinding>(HolderRoundAddBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
     fun bind(eventConsumer: Consumer<GameEvent>?) {
         itemView.setOnClickListener {
             eventConsumer?.accept(GameEvent.RequestCreateRound)
@@ -179,15 +169,12 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.ho
 class ScoreViewHolder(
     parent: ViewGroup,
     private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback? = null
-) : BaseViewHolder(parent, R.layout.holder_score_row_data) {
+) : BaseViewHolder<HolderScoreRowDataBinding>(HolderScoreRowDataBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
 
-    var shouldFocus: Boolean = true
-    private val scoreHolder: EditText by lazy {
-        itemView.playerScore
-    }
+    private var shouldFocus: Boolean = true
 
     fun bind(hasDealer: Boolean, useCalculator: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
-        scoreHolder.showSoftInputOnFocus = !useCalculator
+        binding.playerScore.showSoftInputOnFocus = !useCalculator
 
         if (hasDealer && score.player == round.dealer) {
             if (rounds.last().id == round.id) {
@@ -203,14 +190,14 @@ class ScoreViewHolder(
                 itemView.setBackgroundResource(R.color.colorBackground)
             }
         }
-        if (!scoreHolder.hasFocus()) {
+        if (!binding.playerScore.hasFocus()) {
             // Hack to get score view to stay selected on next focus after an update occurs
-            scoreHolder.setText(formatScore(score.value))
+            binding.playerScore.setText(formatScore(score.value))
         }
-        scoreHolder.isEnabled = true
-        scoreHolder.isFocusable = true
-        scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textBlack))
-        scoreHolder.setOnEditorActionListener { _, code, _ ->
+        binding.playerScore.isEnabled = true
+        binding.playerScore.isFocusable = true
+        binding.playerScore.setTextColor(itemView.context.getColor(R.color.textBlack))
+        binding.playerScore.setOnEditorActionListener { _, code, _ ->
             when (code) {
                 CalculatorKeyboardView.KEYCODE_EQUALS -> updateScore(eventConsumer, round, score)
                 CalculatorKeyboardView.KEYCODE_NEXT -> {
@@ -223,23 +210,23 @@ class ScoreViewHolder(
 
             true
         }
-        scoreHolder.setOnFocusChangeListener { _, hasFocus ->
+        binding.playerScore.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
-                scoreHolder.error = null // Clear error state when losing focus
+                binding.playerScore.error = null // Clear error state when losing focus
             } else {
                 // Newly gained focus = open calculator
-                if (useCalculator) showCalculatorKeyboardCallback?.invoke(scoreHolder)
+                if (useCalculator) showCalculatorKeyboardCallback?.invoke(binding.playerScore)
 
                 // Set the selection to the end of the score (makes quick edits/additions easier)
                 if (score.value == 0.0) {
-                    scoreHolder.setText("")
+                    binding.playerScore.setText("")
                 } else {
-                    scoreHolder.setSelection(scoreHolder.text.length)
+                    binding.playerScore.setSelection(binding.playerScore.text.length)
                 }
             }
         }
-        scoreHolder.setOnLongClickListener {
+        binding.playerScore.setOnLongClickListener {
             showPlayerDealerDialog(score.player, round, eventConsumer)
             true
         }
@@ -248,30 +235,30 @@ class ScoreViewHolder(
         // If it's the first score in the last round, request focus (to save the previous rounds score)
         // TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
         if (score.id == rounds.last().scores.first().id && shouldFocus) {
-            scoreHolder.requestFocus()
+            binding.playerScore.requestFocus()
             shouldFocus = false // Reset the focus flag so we don't constantly gain focus
         }
     }
 
     fun bindTotal(score: Double, isLeader: Boolean) {
-        scoreHolder.isEnabled = false
-        scoreHolder.isFocusable = false
+        binding.playerScore.isEnabled = false
+        binding.playerScore.isFocusable = false
 
         if (isLeader) {
             itemView.setBackgroundResource(R.color.winnerBackground)
-            scoreHolder.setTextColor(ContextCompat.getColor(itemView.context, R.color.winnerText))
+            binding.playerScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.winnerText))
         } else {
             itemView.setBackgroundResource(R.color.black)
-            scoreHolder.setTextColor(scoreHolder.context.getColor(R.color.textWhite))
+            binding.playerScore.setTextColor(itemView.context.getColor(R.color.textWhite))
         }
-        scoreHolder.setText(formatScore(score))
+        binding.playerScore.setText(formatScore(score))
     }
 
     private fun formatScore(score: Double) = DecimalFormat("#.##").format(score)
 
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
-        val updatedScore = if (scoreHolder.text.isNotBlank()) {
-            CalculatorUtils.eval(scoreHolder.text.toString(), itemView.context)?.toDoubleOrNull()
+        val updatedScore = if (binding.playerScore.text.isNotBlank()) {
+            CalculatorUtils.eval(binding.playerScore.text.toString(), itemView.context)?.toDoubleOrNull()
                 ?: score.value
         } else {
             0.0

@@ -12,27 +12,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView.Companion.KEYCODE_NEXT
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyCloseParen
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyDecimal
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyDelete
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyDivide
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyEight
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyEquals
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyFive
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyFour
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyMinus
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyMultiply
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyNext
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyNine
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyOne
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyOpenParen
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyPlus
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyPrev
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeySeven
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeySix
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyThree
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyTwo
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.calculatorKeyZero
+import com.seakernel.android.scoreapp.databinding.ViewCalculatorKeyboardBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -70,10 +52,15 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         set(value) {
             field = if (value < 0) 0 else value
         }
+    private var _binding: ViewCalculatorKeyboardBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.view_calculator_keyboard, this, true)
+        _binding = ViewCalculatorKeyboardBinding.inflate(inflater, this, true)
 
         setupView()
         setKeyboardListeners()
@@ -93,6 +80,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     /**
      * @param inputText the calculator input for the current query
      */
+    @OptIn(DelicateCoroutinesApi::class)
     fun setInput(inputText: EditText) {
         calculatorEditIndex = calculatorString.length
 
@@ -116,7 +104,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                 val editText = weakInputText.get() ?: return@setInputChangedListener
 
                 delayCheckJob?.cancel()
-                delayCheckJob = GlobalScope.launch {
+                delayCheckJob = GlobalScope.launch(Dispatchers.IO) {
                     delay(DELAY_VALID_COMPUTATION_MESSAGE)
                     post { // Need the main thread for editText
                         editText.error =
@@ -141,28 +129,28 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     private fun setKeyboardListeners() {
         val listener = { button: View -> onButtonClicked((button as TextView).text.toString()) }
 
-        calculatorKeyOne.setOnClickListener(listener)
-        calculatorKeyTwo.setOnClickListener(listener)
-        calculatorKeyThree.setOnClickListener(listener)
-        calculatorKeyFour.setOnClickListener(listener)
-        calculatorKeyFive.setOnClickListener(listener)
-        calculatorKeySix.setOnClickListener(listener)
-        calculatorKeySeven.setOnClickListener(listener)
-        calculatorKeyEight.setOnClickListener(listener)
-        calculatorKeyNine.setOnClickListener(listener)
-        calculatorKeyZero.setOnClickListener(listener)
-        calculatorKeyPlus.setOnClickListener(listener)
-        calculatorKeyMinus.setOnClickListener(listener)
-        calculatorKeyMultiply.setOnClickListener(listener)
-        calculatorKeyDivide.setOnClickListener(listener)
-        calculatorKeyEquals.setOnClickListener(listener)
-        calculatorKeyDelete.setOnClickListener(listener)
-        calculatorKeyDecimal.setOnClickListener(listener)
-        calculatorKeyOpenParen.setOnClickListener(listener)
-        calculatorKeyCloseParen.setOnClickListener(listener)
+        binding.calculatorKeyOne.setOnClickListener(listener)
+        binding.calculatorKeyTwo.setOnClickListener(listener)
+        binding.calculatorKeyThree.setOnClickListener(listener)
+        binding.calculatorKeyFour.setOnClickListener(listener)
+        binding.calculatorKeyFive.setOnClickListener(listener)
+        binding.calculatorKeySix.setOnClickListener(listener)
+        binding.calculatorKeySeven.setOnClickListener(listener)
+        binding.calculatorKeyEight.setOnClickListener(listener)
+        binding.calculatorKeyNine.setOnClickListener(listener)
+        binding.calculatorKeyZero.setOnClickListener(listener)
+        binding.calculatorKeyPlus.setOnClickListener(listener)
+        binding.calculatorKeyMinus.setOnClickListener(listener)
+        binding.calculatorKeyMultiply.setOnClickListener(listener)
+        binding.calculatorKeyDivide.setOnClickListener(listener)
+        binding.calculatorKeyEquals.setOnClickListener(listener)
+        binding.calculatorKeyDelete.setOnClickListener(listener)
+        binding.calculatorKeyDecimal.setOnClickListener(listener)
+        binding.calculatorKeyOpenParen.setOnClickListener(listener)
+        binding.calculatorKeyCloseParen.setOnClickListener(listener)
 
-        calculatorKeyNext.setOnClickListener { onNextClicked() }
-        calculatorKeyPrev.setOnClickListener { onPrevClicked() }
+        binding.calculatorKeyNext.setOnClickListener { onNextClicked() }
+        binding.calculatorKeyPrev.setOnClickListener { onPrevClicked() }
     }
 
     private fun onButtonClicked(key: String) {

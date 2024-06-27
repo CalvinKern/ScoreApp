@@ -9,41 +9,56 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.databinding.DialogPlayerRoundBinding
+import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
 import com.seakernel.android.scoreapp.repository.PlayerRoundNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
-import kotlinx.android.synthetic.main.dialog_player_round.view.*
-import kotlinx.android.synthetic.main.holder_player_round_notes.view.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class PlayerRoundNotesDialog(private val player: Player, private val gameId: Long) : DialogFragment() {
+class PlayerRoundNotesDialog(private val player: Player, private val gameId: Long) :
+    DialogFragment() {
 
     private val adapter = PlayerRoundNotesAdapter()
+    private var _binding: DialogPlayerRoundBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = LayoutInflater.from(requireContext())
-        val view = inflater.inflate(R.layout.dialog_player_round, null, false)
-        view.dialogPlayerRoundRecycler.layoutManager =
-            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
-        view.dialogPlayerRoundRecycler.adapter = adapter
+        _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)
 
-        GlobalScope.launch {
+        binding.dialogPlayerRoundRecycler.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
+        binding.dialogPlayerRoundRecycler.adapter = adapter
+
+        lifecycleScope.launch(Dispatchers.IO) {
             val roundNotes = RoundRepository(requireContext()).getNotesForPlayer(player, gameId)
-            adapter.setNotes(roundNotes)
+            withContext(Dispatchers.Main) {
+                adapter.setNotes(roundNotes)
+            }
         }
 
         return AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.playerNotesTitle, player.name))
-            .setView(view)
+            .setView(binding.root)
             .setCancelable(false)
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.actionSave, null)
             .create()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onResume() {
@@ -52,10 +67,12 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         (dialog as? AlertDialog)?.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
-            GlobalScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 val playerRounds = adapter.playerRounds
                 RoundRepository(requireContext()).updatePlayerNotes(playerRounds)
-                dialog?.dismiss()
+                withContext(Dispatchers.Main) {
+                    dialog?.dismiss()
+                }
             }
         }
     }
@@ -71,7 +88,8 @@ private class PlayerRoundNotesAdapter : RecyclerView.Adapter<PlayerRoundNotesVie
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PlayerRoundNotesViewHolder(parent, this)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        PlayerRoundNotesViewHolder(parent, this)
 
     override fun getItemCount() = playerRounds.size
 
@@ -85,11 +103,20 @@ private class PlayerRoundNotesAdapter : RecyclerView.Adapter<PlayerRoundNotesVie
     }
 }
 
-private class PlayerRoundNotesViewHolder(parent: ViewGroup, private val notesListener: NotesUpdatedListener) :
-    BaseViewHolder(parent, R.layout.holder_player_round_notes) {
+private class PlayerRoundNotesViewHolder(
+    parent: ViewGroup,
+    private val notesListener: NotesUpdatedListener
+) :
+    BaseViewHolder<HolderPlayerRoundNotesBinding>(
+        HolderPlayerRoundNotesBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+    ) {
 
     init {
-        itemView.playerRoundValue.addTextChangedListener(object : TextWatcher {
+        binding.playerRoundValue.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -103,10 +130,10 @@ private class PlayerRoundNotesViewHolder(parent: ViewGroup, private val notesLis
     fun onBind(round: PlayerRoundNote) {
         val notes = round.score.metadata
         // Make the round number human readable
-        itemView.playerRoundLabel.text =
+        binding.playerRoundLabel.text =
             itemView.context.getString(R.string.playerRoundNumberFormat, round.roundNumber + 1)
-        itemView.playerRoundValue.setText(notes)
-        itemView.playerRoundValue.setSelection(notes.length)
+        binding.playerRoundValue.setText(notes)
+        binding.playerRoundValue.setSelection(notes.length)
     }
 }
 

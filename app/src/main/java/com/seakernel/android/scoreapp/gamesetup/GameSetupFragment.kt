@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
@@ -21,25 +22,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.databinding.FragmentGameCreateBinding
+import com.seakernel.android.scoreapp.databinding.HolderGameCreatePlayerBinding
+import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
+import com.seakernel.android.scoreapp.databinding.ViewGameSettingsBinding
+import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setBackgroundRipple
 import com.seakernel.android.scoreapp.utility.setVisible
-import kotlinx.android.synthetic.main.fragment_game_create.gameNameEdit
-import kotlinx.android.synthetic.main.fragment_game_create.gamePlayerEmptyGroup
-import kotlinx.android.synthetic.main.fragment_game_create.playerRecycler
-import kotlinx.android.synthetic.main.fragment_game_create.playersHeaderEdit
-import kotlinx.android.synthetic.main.fragment_game_create.toolbar
-import kotlinx.android.synthetic.main.holder_game_create_player.view.playerDealerBox
-import kotlinx.android.synthetic.main.holder_game_create_player.view.playerDealerLabel
-import kotlinx.android.synthetic.main.holder_game_create_player.view.playerNameHolder
-import kotlinx.android.synthetic.main.view_game_settings.hasDealerContainer
-import kotlinx.android.synthetic.main.view_game_settings.reversedScoringContainer
-import kotlinx.android.synthetic.main.view_game_settings.showNotesContainer
-import kotlinx.android.synthetic.main.view_game_settings.useCalculatorContainer
-import kotlinx.android.synthetic.main.view_game_settings.view.checkbox
 
 class GameSetupFragment : Fragment() {
 
@@ -57,7 +50,7 @@ class GameSetupFragment : Fragment() {
         Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
     private val modelObserver = Observer<GameSettings?> { settings -> renderSettings(settings) }
     private val autocompleteObserver = Observer<List<String>?> { names ->
-        gameNameEdit.setAdapter(
+        binding.gameNameEdit.setAdapter(
             ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -69,6 +62,12 @@ class GameSetupFragment : Fragment() {
     private val viewModel: GameSetupViewModel by lazy {
         ViewModelProviders.of(this).get(GameSetupViewModel::class.java)
     }
+
+    private var _binding: FragmentGameCreateBinding? = null
+    private var _settingsBinding: ViewGameSettingsBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -85,28 +84,33 @@ class GameSetupFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_game_create, container, false)
+        _binding = FragmentGameCreateBinding.inflate(layoutInflater, container,false)
+        _settingsBinding = ViewGameSettingsBinding.bind(binding.root)
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
-        playersHeaderEdit?.setOnClickListener(null)
-        hasDealerContainer?.checkbox?.setOnCheckedChangeListener(null)
-        hasDealerContainer?.setOnClickListener(null)
-        reversedScoringContainer?.checkbox?.setOnCheckedChangeListener(null)
-        reversedScoringContainer?.setOnClickListener(null)
-        showNotesContainer?.checkbox?.setOnCheckedChangeListener(null)
-        showNotesContainer?.setOnClickListener(null)
-        useCalculatorContainer?.checkbox?.setOnCheckedChangeListener(null)
-        useCalculatorContainer?.setOnClickListener(null)
+        _binding?.playersHeaderEdit?.setOnClickListener(null)
+        _settingsBinding?.hasDealerCheckbox?.setOnCheckedChangeListener(null)
+        _settingsBinding?.hasDealerContainer?.setOnClickListener(null)
+        _settingsBinding?.reversedScoringCheckbox?.setOnCheckedChangeListener(null)
+        _settingsBinding?.reversedScoringContainer?.setOnClickListener(null)
+        _settingsBinding?.showNotesCheckbox?.setOnCheckedChangeListener(null)
+        _settingsBinding?.showNotesContainer?.setOnClickListener(null)
+        _settingsBinding?.useCalculatorCheckbox?.setOnCheckedChangeListener(null)
+        _settingsBinding?.useCalculatorContainer?.setOnClickListener(null)
 
-        gameNameEdit?.removeTextChangedListener(nameTextWatcher)
+        _binding?.gameNameEdit?.removeTextChangedListener(nameTextWatcher)
 
         viewModel.getGameSettings().removeObserver(modelObserver)
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
         viewModel.getGameUpdatedEvent().removeObserver(gameUpdatedObserver)
         viewModel.getGameNamesForAutocomplete().removeObserver(autocompleteObserver)
+
+        _binding = null
+        _settingsBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -135,9 +139,9 @@ class GameSetupFragment : Fragment() {
     }
 
     private fun initToolbar() {
-        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
-        toolbar.inflateMenu(R.menu.menu_game_create)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
+        binding.toolbar.inflateMenu(R.menu.menu_game_create)
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> {
                     viewModel.saveGame()
@@ -147,14 +151,14 @@ class GameSetupFragment : Fragment() {
                 else -> super.onOptionsItemSelected(item)
             }
         }
-        toolbar.setTitle(if (arguments?.containsKey(ARG_GAME_ID) == true) R.string.gameSettingsTitle else R.string.gameCreateTitle)
+        binding.toolbar.setTitle(if (arguments?.containsKey(ARG_GAME_ID) == true) R.string.gameSettingsTitle else R.string.gameCreateTitle)
     }
 
     private fun initSettings() {
         initListeners()
 
         // Setup player recycler
-        playersHeaderEdit.setOnClickListener {
+        binding.playersHeaderEdit.setOnClickListener {
             val ids =
                 viewModel.getGameSettings().value?.players?.mapNotNull { it.id } ?: emptyList()
             listener?.onShowPlayerSelectScreen(ids)
@@ -165,9 +169,9 @@ class GameSetupFragment : Fragment() {
                 viewModel.setDealer(playerId)
             }
         })
-        playerRecycler.layoutManager = LinearLayoutManager(requireContext())
-        playerRecycler.adapter = adapter
-        ItemTouchHelper(createItemTouchHelperCallback()).attachToRecyclerView(playerRecycler)
+        binding.playerRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.playerRecycler.adapter = adapter
+        ItemTouchHelper(createItemTouchHelperCallback()).attachToRecyclerView(binding.playerRecycler)
     }
 
     private fun initListeners() {
@@ -179,24 +183,26 @@ class GameSetupFragment : Fragment() {
             }
         }
 
-        setListenerRow(hasDealerContainer)
-        setListenerRow(reversedScoringContainer)
-        setListenerRow(showNotesContainer)
-        setListenerRow(useCalculatorContainer)
+        val settingsBinding = _settingsBinding ?: return
+
+        setListenerRow(settingsBinding.hasDealerContainer, settingsBinding.hasDealerCheckbox)
+        setListenerRow(settingsBinding.reversedScoringContainer, settingsBinding.reversedScoringCheckbox)
+        setListenerRow(settingsBinding.showNotesContainer, settingsBinding.showNotesCheckbox)
+        setListenerRow(settingsBinding.useCalculatorContainer, settingsBinding.useCalculatorCheckbox)
     }
 
-    private fun setListenerRow(container: View) {
-        container.setOnClickListener { container.checkbox.performClick() }
+    private fun setListenerRow(container: View, checkbox: CheckBox) {
+        container.setOnClickListener { checkbox.performClick() }
     }
 
     private fun renderSettings(settings: GameSettings?) {
         if (settings == null) {
             return // TODO: Show loading spinner
         }
-        toolbar.menu.findItem(R.id.actionSave).isEnabled =
+        binding.toolbar.menu.findItem(R.id.actionSave).isEnabled =
             settings.name.isNotBlank() && settings.players.isNotEmpty()
-        playerRecycler.setVisible(settings.players.isNotEmpty())
-        gamePlayerEmptyGroup.setVisible(settings.players.isEmpty())
+        binding.playerRecycler.setVisible(settings.players.isNotEmpty())
+        binding.gamePlayerEmptyGroup.setVisible(settings.players.isEmpty())
 
         val players = settings.players.map {
             PlayerState(
@@ -205,7 +211,7 @@ class GameSetupFragment : Fragment() {
                 settings.hasDealer && settings.id == null // Don't show dealer for games that have started
             )
         }
-        (playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
+        (binding.playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
 
 
         val checkedListener = OnCheckedChangeListener { checkbox: View, checked: Boolean ->
@@ -217,23 +223,23 @@ class GameSetupFragment : Fragment() {
                 putBoolean(AnalyticsConstants.Param.MESSAGE, checked)
             }
             when (checkbox) {
-                hasDealerContainer.checkbox -> viewModel.setHasDealer(checked)
-                reversedScoringContainer.checkbox -> viewModel.setReverseScoring(checked)
-                showNotesContainer.checkbox -> viewModel.setShowNotes(checked)
-                useCalculatorContainer.checkbox -> viewModel.setUseCalculator(checked)
+                _settingsBinding?.hasDealerCheckbox -> viewModel.setHasDealer(checked)
+                _settingsBinding?.reversedScoringCheckbox -> viewModel.setReverseScoring(checked)
+                _settingsBinding?.showNotesCheckbox -> viewModel.setShowNotes(checked)
+                _settingsBinding?.useCalculatorCheckbox -> viewModel.setUseCalculator(checked)
             }
         }
 
-        hasDealerContainer.checkbox.isCheckedSafe(settings.hasDealer, checkedListener)
-        reversedScoringContainer.checkbox.isCheckedSafe(settings.reversedScoring, checkedListener)
-        showNotesContainer.checkbox.isCheckedSafe(settings.showRoundNotes, checkedListener)
-        useCalculatorContainer.checkbox.isCheckedSafe(settings.useCalculator, checkedListener)
+        _settingsBinding?.hasDealerCheckbox?.isCheckedSafe(settings.hasDealer, checkedListener)
+        _settingsBinding?.reversedScoringCheckbox?.isCheckedSafe(settings.reversedScoring, checkedListener)
+        _settingsBinding?.showNotesCheckbox?.isCheckedSafe(settings.showRoundNotes, checkedListener)
+        _settingsBinding?.useCalculatorCheckbox?.isCheckedSafe(settings.useCalculator, checkedListener)
 
         // Update game name unless it has focus (being edited)
-        if (!gameNameEdit.hasFocus()) {
-            gameNameEdit.removeTextChangedListener(nameTextWatcher)
-            gameNameEdit.setText(settings.name)
-            gameNameEdit.addTextChangedListener(nameTextWatcher)
+        if (!binding.gameNameEdit.hasFocus()) {
+            binding.gameNameEdit.removeTextChangedListener(nameTextWatcher)
+            binding.gameNameEdit.setText(settings.name)
+            binding.gameNameEdit.addTextChangedListener(nameTextWatcher)
         }
     }
 
@@ -320,9 +326,7 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.holder_game_create_player, parent, false)
-        return PlayerViewHolder(view, callback)
+        return PlayerViewHolder(parent, callback)
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
@@ -334,11 +338,11 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
     }
 }
 
-private class PlayerViewHolder(itemView: View, val callback: PlayerAdapterCallback) :
-    RecyclerView.ViewHolder(itemView),
+private class PlayerViewHolder(parent: ViewGroup, val callback: PlayerAdapterCallback) :
+    BaseViewHolder<HolderGameCreatePlayerBinding>(HolderGameCreatePlayerBinding.inflate(LayoutInflater.from(parent.context), parent, false)),
     PlayerSelectionListener {
     fun bind(state: PlayerState) {
-        with(itemView) {
+        with(binding) {
             playerNameHolder.text = state.player.name
             playerDealerLabel.visibility =
                 if (state.showDealer && state.isDealer) View.VISIBLE else View.GONE

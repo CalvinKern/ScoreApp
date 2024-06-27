@@ -3,11 +3,19 @@ package com.seakernel.android.scoreapp.game.classic
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.data.*
+import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.data.Round
+import com.seakernel.android.scoreapp.data.Score
+import com.seakernel.android.scoreapp.databinding.FragmentGameBinding
 import com.seakernel.android.scoreapp.game.DeleteRoundDialog
 import com.seakernel.android.scoreapp.game.PlayerRoundNotesDialog
 import com.seakernel.android.scoreapp.game.PlayerStandingDialog
@@ -22,9 +30,9 @@ import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
-import kotlinx.android.synthetic.main.fragment_game.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Created by Calvin on 12/21/18.
@@ -37,8 +45,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         fun onGraphSelected(gameId: Long)
     }
 
-    override val layoutId = R.layout.fragment_game
-
     private var listener: GameListener? = null
     private var gameRepository: GameRepository? = null
     private var roundRepository: RoundRepository? = null
@@ -46,9 +52,16 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     private val REQUEST_DELETE_ROUND = 101
 
+    private var _binding: FragmentGameBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
     init {
         loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
-        controller = MobiusAndroid.controller(loop,
+        controller = MobiusAndroid.controller(
+            loop,
             GameModel.createDefault()
         )
     }
@@ -67,11 +80,20 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         roundRepository = null
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentGameBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState) // TODO: Restore state
-        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
-        toolbar.inflateMenu(R.menu.menu_game)
-        toolbar.setOnMenuItemClickListener {
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        binding.toolbar.inflateMenu(R.menu.menu_game)
+        binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.actionEdit -> {
                     arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
@@ -104,7 +126,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        toolbar.setNavigationOnClickListener(null)
+        binding.toolbar.setNavigationOnClickListener(null)
+        _binding = null
     }
 
 //    override fun onSaveInstanceState(outState: Bundle) {
@@ -114,11 +137,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private fun setupHeaderAndFooter(settings: GameSettings) {
         val players = settings.players
 
-        if ((totalsRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
-            totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
+        if ((binding.totalsRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
+            binding.totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
-        if ((nameRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
-            nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
+        if ((binding.nameRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
+            binding.nameRow.layoutManager = GridLayoutManager(requireContext(), players.size)
         }
 
         val adapter = PlayersAdapter(
@@ -130,7 +153,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     showRoundNotesDialog(player, settings.id!!)
                 }
             })
-        nameRow.swapAdapter(adapter, false)
+        binding.nameRow.swapAdapter(adapter, false)
     }
 
     private fun showStandingDialog(gameId: Long) {
@@ -147,11 +170,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     private fun showRoundDeleteDialog(gameId: Long) {
         logEvent(AnalyticsConstants.Event.SHOW_ROUND_DELETE_DIALOG)
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val ids = RoundRepository(requireContext()).getRoundIds(gameId)
-            val dialog = DeleteRoundDialog(ids)
-            dialog.setTargetFragment(this@GameFragment, REQUEST_DELETE_ROUND)
-            dialog.show(parentFragmentManager, DeleteRoundDialog::class.java.simpleName)
+            withContext(Dispatchers.Main) {
+                val dialog = DeleteRoundDialog(ids)
+                dialog.setTargetFragment(this@GameFragment, REQUEST_DELETE_ROUND)
+                dialog.show(parentFragmentManager, DeleteRoundDialog::class.java.simpleName)
+            }
         }
     }
 
@@ -183,10 +208,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
-                toolbar.title = model.settings.name
-                calculatorKeyboard.visibility = if (model.settings.useCalculator) View.VISIBLE else View.GONE
+                binding.toolbar.title = model.settings.name
+                binding.calculatorKeyboard.visibility =
+                    if (model.settings.useCalculator) View.VISIBLE else View.GONE
 
-                var manager = scoreRows.layoutManager as? GridLayoutManager
+                var manager = binding.scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
                 if (model.settings.players.isNotEmpty()) {
                     setupHeaderAndFooter(model.settings)
@@ -195,7 +221,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     if (oldSpanCount != spanCount) {
                         // Reset the layout manager if the number of players has changed
                         manager = GridLayoutManager(requireContext(), spanCount)
-                        scoreRows.layoutManager = manager
+                        binding.scoreRows.layoutManager = manager
                     }
                     manager?.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int) =
@@ -204,27 +230,28 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 }
 
                 // If count is not empty (account for empty with add round row), and new count is greater (added a row)
-                val oldCount = scoreRows.adapter?.itemCount ?: 0
-                scoreRows.swapAdapter(
+                val oldCount = binding.scoreRows.adapter?.itemCount ?: 0
+                binding.scoreRows.swapAdapter(
                     GameScoreAdapter(
                         model.settings.hasDealer,
                         model.settings.useCalculator,
                         model.rounds,
-                        eventConsumer,
-                        { score -> calculatorKeyboard.setInput(score) }
-                    ), false)
-                val newCount = scoreRows.adapter!!.itemCount
+                        eventConsumer
+                    ) { score -> binding.calculatorKeyboard.setInput(score) }, false
+                )
+                val newCount = binding.scoreRows.adapter!!.itemCount
 
                 if (oldCount in 2 until newCount && oldSpanCount == model.settings.players.size) {
                     // When a new round is being inserted, scroll to the bottom so the it's visible
-                    scoreRows.scrollToPosition(newCount - 1)
+                    binding.scoreRows.scrollToPosition(newCount - 1)
                 }
 
-                totalsRow.swapAdapter(
+                binding.totalsRow.swapAdapter(
                     TotalsAdapter(
                         model.settings.reversedScoring,
                         model.rounds
-                    ), false)
+                    ), false
+                )
             }
 
             override fun dispose() {}
@@ -236,9 +263,10 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             private fun getFirstRoundDealer(game: Game): Player? {
                 if (game.settings.hasDealer) {
                     if (game.settings.initialDealerId != null) {
-                        game.settings.players.firstOrNull { it.id == game.settings.initialDealerId }?.let { player ->
-                            return player
-                        }
+                        game.settings.players.firstOrNull { it.id == game.settings.initialDealerId }
+                            ?.let { player ->
+                                return player
+                            }
                     }
                     return game.settings.players.random()
                 }
@@ -261,19 +289,27 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         gameRepository?.loadFullGame(gameId)?.let { game ->
                             if (game.rounds.isEmpty()) {
                                 // If we load a game and it has no rounds, we need to fix that
-                                roundRepository?.addOrUpdateRound(gameId, createFirstRound(game))?.let { round ->
-                                    eventConsumer.accept(GameEvent.Loaded(game.copy(
-                                        settings = game.settings,
-                                        rounds = listOf(round)
-                                    )))
-                                } ?: requireActivity().onBackPressed() // TODO: Handle finding game better
+                                roundRepository?.addOrUpdateRound(gameId, createFirstRound(game))
+                                    ?.let { round ->
+                                        eventConsumer.accept(
+                                            GameEvent.Loaded(
+                                                game.copy(
+                                                    settings = game.settings,
+                                                    rounds = listOf(round)
+                                                )
+                                            )
+                                        )
+                                    }
+                                    ?: requireActivity().onBackPressed() // TODO: Handle finding game better
                             } else {
                                 eventConsumer.accept(
                                     GameEvent.Loaded(game)
                                 )
                             }
-                        } ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
+                        }
+                            ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
                     }
+
                     is GameEffect.SaveRound -> {
                         roundRepository?.addOrUpdateRound(effect.gameId, effect.round)?.let {
                             eventConsumer.accept(
@@ -283,6 +319,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                             )
                         }
                     }
+
                     is GameEffect.SaveScore -> {
                         roundRepository?.updateScore(effect.score)?.let {
                             eventConsumer.accept(
@@ -297,7 +334,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             }
 
             override fun dispose() {
-                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                // TODO("not implemented")
             }
         }
     }

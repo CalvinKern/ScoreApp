@@ -10,10 +10,10 @@ import androidx.room.ForeignKey
  */
 @Entity(tableName = GamePlayerJoin.TABLE_NAME, primaryKeys = [GamePlayerJoin.COLUMN_GAME_ID, GamePlayerJoin.COLUMN_PLAYER_ID])
 data class GamePlayerJoin(
-    @ForeignKey(entity = GameEntity::class, parentColumns = [GameEntity.COLUMN_ID], childColumns = [COLUMN_GAME_ID], onDelete = ForeignKey.CASCADE)
+//    @ForeignKey(entity = GameEntity::class, parentColumns = [GameEntity.COLUMN_ID], childColumns = [COLUMN_GAME_ID], onDelete = ForeignKey.CASCADE)
     @ColumnInfo(name = COLUMN_GAME_ID, index = true) var gameId: Long,
 
-    @ForeignKey(entity = PlayerEntity::class, parentColumns = [PlayerEntity.COLUMN_ID], childColumns = [COLUMN_PLAYER_ID], onDelete = ForeignKey.CASCADE)
+//    @ForeignKey(entity = PlayerEntity::class, parentColumns = [PlayerEntity.COLUMN_ID], childColumns = [COLUMN_PLAYER_ID], onDelete = ForeignKey.CASCADE)
     @ColumnInfo(name = COLUMN_PLAYER_ID, index = true) var playerId: Long,
 
     @ColumnInfo(name = COLUMN_PLAYER_POSITION) var playerPosition: Int

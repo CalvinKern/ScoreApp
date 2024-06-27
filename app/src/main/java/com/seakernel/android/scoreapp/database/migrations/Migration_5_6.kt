@@ -11,8 +11,8 @@ import com.seakernel.android.scoreapp.database.entities.GameEntity
 @Suppress("ClassName")
 class Migration_5_6 : Migration(5, 6) {
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        duplicateScoreTable(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        duplicateScoreTable(db)
     }
 
     private fun duplicateScoreTable(database: SupportSQLiteDatabase) {

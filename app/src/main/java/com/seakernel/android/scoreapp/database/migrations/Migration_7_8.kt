@@ -11,8 +11,8 @@ import com.seakernel.android.scoreapp.database.entities.GameEntity
 @Suppress("ClassName")
 class Migration_7_8 : Migration(7, 8) {
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        addUseCalculatorColumn(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        addUseCalculatorColumn(db)
     }
 
     private fun addUseCalculatorColumn(database: SupportSQLiteDatabase) {

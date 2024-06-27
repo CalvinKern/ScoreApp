@@ -15,8 +15,8 @@ class Migration_4_5 : Migration(4, 5) {
     private val columns = listOf("uid", "player_id", "round_id", "score", "score_data").joinToString(",")
     private val columnsAndData = listOf("uid INTEGER NOT NULL", "player_id INTEGER NOT NULL", "round_id INTEGER NOT NULL", "score REAL NOT NULL", "score_data TEXT NOT NULL").joinToString(",")
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        duplicateScoreTable(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        duplicateScoreTable(db)
     }
 
     private fun duplicateScoreTable(database: SupportSQLiteDatabase) {
