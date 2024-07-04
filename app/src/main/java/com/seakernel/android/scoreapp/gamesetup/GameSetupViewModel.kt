@@ -14,7 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.util.*
+import org.threeten.bp.ZonedDateTime
+import java.util.Collections
 
 class GameSetupViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -88,9 +89,15 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         val settings = gameSettings.value ?: GameSettings()
 
         scope.launch {
-            val dealerId = if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
+            val dealerId =
+                if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
             val newPlayers = playerRepository.loadUsers(playerIds)
-            gameSettings.safePostValue(settings.copy(players = newPlayers, initialDealerId = dealerId))
+            gameSettings.safePostValue(
+                settings.copy(
+                    players = newPlayers,
+                    initialDealerId = dealerId
+                )
+            )
         }
     }
 
@@ -117,6 +124,22 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         scope.launch {
             gameRepository.loadGame(gameId)?.let {
                 gameSettings.safePostValue(it)
+            }
+        }
+    }
+
+    fun createCopy(gameId: Long, initialDealerId: Long?) {
+        loadGameNames()
+
+        scope.launch {
+            gameRepository.loadGame(gameId)?.let {
+                gameSettings.safePostValue(
+                    it.copy(
+                        id = null,
+                        lastPlayed = ZonedDateTime.now(),
+                        initialDealerId = initialDealerId,
+                    )
+                )
             }
         }
     }

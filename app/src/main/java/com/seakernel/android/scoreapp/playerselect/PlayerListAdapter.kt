@@ -14,7 +14,12 @@ import com.spotify.mobius.functions.Consumer
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class PlayerListAdapter(private val playerList: List<Player>, private val selectedPlayerIds: List<Long>, private val eventConsumer: Consumer<PlayerEvent>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PlayerListAdapter(
+    private val playerList: List<Player>,
+    private val selectedPlayerIds: List<Long>,
+    private val eventConsumer: Consumer<PlayerEvent>,
+) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -28,14 +33,24 @@ class PlayerListAdapter(private val playerList: List<Player>, private val select
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val player = playerList[position]
-        (holder as PlayerListViewHolder).bind(player, selectedPlayerIds.contains(player.id), eventConsumer)
+        (holder as PlayerListViewHolder).bind(
+            player,
+            selectedPlayerIds.contains(player.id),
+            eventConsumer
+        )
     }
 
     override fun getItemId(position: Int) = playerList[position].id ?: Long.MAX_VALUE
 }
 
 class PlayerListViewHolder(parent: ViewGroup) :
-    BaseViewHolder<HolderPlayerSelectListBinding>(HolderPlayerSelectListBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
+    BaseViewHolder<HolderPlayerSelectListBinding>(
+        HolderPlayerSelectListBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+    ) {
 
     fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<PlayerEvent>) {
         binding.playerNameHolder.text = player.name
@@ -47,7 +62,12 @@ class PlayerListViewHolder(parent: ViewGroup) :
             eventConsumer.accept(PlayerSelected(player.id!!, selected))
         }
 
-        binding.playerNameSettings.setOnClickListener { showPlayerDialog(player.id!!, eventConsumer) }
+        binding.playerNameSettings.setOnClickListener {
+            showPlayerDialog(
+                player.id!!,
+                eventConsumer
+            )
+        }
         itemView.setOnClickListener { binding.playerCheckHolder.performClick() }
         itemView.setOnLongClickListener {
             showPlayerDialog(player.id!!, eventConsumer)

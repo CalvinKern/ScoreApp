@@ -2,6 +2,7 @@ package com.seakernel.android.scoreapp.game.classic
 
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
 import com.spotify.mobius.Effects
@@ -14,6 +15,7 @@ import com.spotify.mobius.Next
 
 sealed class GameEvent {
     data object RequestLoad : GameEvent()
+    data object RequestNewGame : GameEvent()
     data object RequestCreateRound : GameEvent()
     data class RequestSaveRound(val round: Round) : GameEvent()
     data class Loaded(val game: Game) : GameEvent()
@@ -31,6 +33,7 @@ sealed class GameEffect {
     data object FetchData : GameEffect()
     data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
     data class SaveScore(val roundId: Long, val score: Score) : GameEffect()
+    data class NewGame(val gameId: Long, val initialPlayerId: Long?) : GameEffect()
 }
 
 data class GameModel(
@@ -39,6 +42,16 @@ data class GameModel(
 ) {
 
     companion object {
+
+        private fun getNextDealer(model: GameModel): Player? {
+            if (model.rounds.isEmpty()) return null
+
+            val lastRound = model.rounds.last()
+            val nextIndex =
+                (lastRound.scores.indexOfFirst { it.player == lastRound.dealer } + 1) % lastRound.scores.size
+            return lastRound.scores[nextIndex].player
+        }
+
         fun createDefault(): GameModel {
             return GameModel()
         }
@@ -56,6 +69,16 @@ data class GameModel(
                         GameEffect.FetchData
                     )
                 )
+                is GameEvent.RequestNewGame -> {
+                    Next.dispatch(
+                        Effects.effects(
+                            GameEffect.NewGame(
+                                model.settings.id!!,
+                                getNextDealer(model)?.id ?: model.settings.initialDealerId
+                            )
+                        )
+                    )
+                }
                 is GameEvent.RequestSaveRound -> Next.dispatch(
                     Effects.effects(
                         GameEffect.SaveRound(
@@ -71,7 +94,7 @@ data class GameModel(
                             model.settings.id!!,
                             Round(
                                 null,
-                                lastRound.scores[(lastRound.scores.indexOfFirst { it.player == lastRound.dealer } + 1) % lastRound.scores.size].player,
+                                getNextDealer(model),
                                 lastRound.number + 1,
                                 lastRound.scores.map { Score(player = it.player) }
                             )

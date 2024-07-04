@@ -61,7 +61,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     private val binding get() = _binding!!
 
     init {
-        loop = Mobius.loop(::update, ::effectHandler).init(::initMobius)
+        loop = Mobius.loop(::update, ::effectHandler)
     }
 
     override fun onAttach(context: Context) {
@@ -94,13 +94,14 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             CreateModel.createDefault(
                 savedInstanceState?.getLongArray(ARG_SELECTED_IDS)?.toList()
                     ?: arguments?.getLongArray(PLAYER_IDS)?.toList()
-            )
+            ),
+            ::initMobius
         )
 
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
-        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_player_select)
         binding.playerRecycler.layoutManager = LinearLayoutManager(requireContext())
     }

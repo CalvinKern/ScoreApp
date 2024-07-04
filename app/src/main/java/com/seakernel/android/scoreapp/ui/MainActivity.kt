@@ -12,7 +12,8 @@ import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import timber.log.Timber
 import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, PlayerSelectFragment.PlayerSelectListener,
+class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
+    PlayerSelectFragment.PlayerSelectListener,
     GameSetupFragment.GameSetupListener, GameFragment.GameListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +24,11 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, GameListFragment.newInstance(), GameListFragment::class.java.simpleName)
+                .add(
+                    R.id.fragmentContainer,
+                    GameListFragment.newInstance(),
+                    GameListFragment::class.java.simpleName
+                )
                 .commit()
         }
     }
@@ -36,7 +41,10 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
     }
 
     override fun onShowPlayerSelectScreen(playerIds: List<Long>) {
-        showFragment(PlayerSelectFragment.newInstance(playerIds), PlayerSelectFragment::class.java.simpleName)
+        showFragment(
+            PlayerSelectFragment.newInstance(playerIds),
+            PlayerSelectFragment::class.java.simpleName
+        )
     }
 
     override fun onShowGameScreen(gameId: Long) {
@@ -49,7 +57,10 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
     }
 
     override fun onGameSettingsSelected(gameId: Long) {
-        showFragment(GameSetupFragment.newInstance(gameId), GameSetupFragment::class.java.simpleName)
+        showFragment(
+            GameSetupFragment.newInstance(gameId),
+            GameSetupFragment::class.java.simpleName
+        )
     }
 
     override fun onGameUpdated() {
@@ -58,6 +69,14 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
 
     override fun onGraphSelected(gameId: Long) {
         showFragment(GraphFragment.newInstance(gameId), GraphFragment::class.java.simpleName)
+    }
+
+    override fun onNewGame(gameId: Long, initialDealerId: Long?) {
+        popBackStackIfFound(GameFragment::class)
+        showFragment(
+            GameSetupFragment.newInstanceCopy(gameId, initialDealerId),
+            GameSetupFragment::class.java.simpleName
+        )
     }
 
     // Helper Functions

@@ -68,7 +68,7 @@ class GraphFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        binding.graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
 
         viewModel.getGame().observe(viewLifecycleOwner, modelObserver)
         viewModel.loadGame(

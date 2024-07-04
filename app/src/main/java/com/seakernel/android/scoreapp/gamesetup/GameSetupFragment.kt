@@ -121,9 +121,15 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameUpdatedEvent().observe(viewLifecycleOwner, gameUpdatedObserver)
         viewModel.getGameNamesForAutocomplete().observe(viewLifecycleOwner, autocompleteObserver)
 
-        arguments?.getLong(ARG_GAME_ID)?.let {
-            viewModel.loadGame(it)
-        } ?: viewModel.initializeGame()
+        // Check for copy first, then opening a game
+        if (arguments?.containsKey(ARG_GAME_COPY) == true) {
+            viewModel.createCopy(
+                requireArguments().getLong(ARG_GAME_COPY),
+                requireArguments().getLong(ARG_GAME_INITIAL_DEALER_ID)
+            )
+        } else if (arguments?.containsKey(ARG_GAME_ID) == true) {
+            viewModel.loadGame(requireArguments().getLong(ARG_GAME_ID))
+        } else viewModel.initializeGame()
     }
 
     override fun onResume() {
@@ -136,7 +142,7 @@ class GameSetupFragment : Fragment() {
     }
 
     private fun initToolbar() {
-        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() /* TODO: Verify leaving the new settings? */ }
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() /* TODO: Verify leaving the new settings? */ }
         binding.toolbar.inflateMenu(R.menu.menu_game_create)
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -145,7 +151,7 @@ class GameSetupFragment : Fragment() {
                     true
                 }
 
-                else -> super.onOptionsItemSelected(item)
+                else -> false
             }
         }
         binding.toolbar.setTitle(if (arguments?.containsKey(ARG_GAME_ID) == true) R.string.gameSettingsTitle else R.string.gameCreateTitle)
@@ -286,6 +292,8 @@ class GameSetupFragment : Fragment() {
 
     companion object {
         private const val ARG_GAME_ID = "game_id"
+        private const val ARG_GAME_COPY = "game_id_copy"
+        private const val ARG_GAME_INITIAL_DEALER_ID = "initial_dealer_id"
 
         fun newInstance(gameId: Long? = null): GameSetupFragment {
             return GameSetupFragment().apply {
@@ -293,6 +301,15 @@ class GameSetupFragment : Fragment() {
                     arguments = Bundle().apply {
                         putLong(ARG_GAME_ID, it)
                     }
+                }
+            }
+        }
+
+        fun newInstanceCopy(gameId: Long, initialDealerId: Long?): GameSetupFragment {
+            return GameSetupFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ARG_GAME_COPY, gameId)
+                    initialDealerId?.let { putLong(ARG_GAME_INITIAL_DEALER_ID, it) }
                 }
             }
         }

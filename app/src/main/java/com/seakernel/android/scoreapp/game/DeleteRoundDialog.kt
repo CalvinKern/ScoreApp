@@ -1,6 +1,5 @@
 package com.seakernel.android.scoreapp.game
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -8,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,7 +39,9 @@ class DeleteRoundDialog(private val roundIds: List<Long>) : DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-
-        targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, null)
+        parentFragmentManager.setFragmentResult(
+            GameFragment.REQUEST_DELETE_ROUND,
+            Bundle().apply {}
+        )
     }
 }

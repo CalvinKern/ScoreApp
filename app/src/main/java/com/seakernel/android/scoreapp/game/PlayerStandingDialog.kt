@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.databinding.DialogPlayerRoundBinding
 import com.seakernel.android.scoreapp.databinding.HolderPlayerStandingBinding
+import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,12 @@ class PlayerStandingDialog(val gameId: Long) : DialogFragment() {
             .setTitle(getString(R.string.playerStandingTitle))
             .setView(binding.root)
             .setNegativeButton(R.string.actionClose, null)
-//            .setPositiveButton(R.string.actionSave, null) // TODO: add "New Game" button
+            .setPositiveButton(R.string.gameCreateTitle) { _, _ ->
+                parentFragmentManager.setFragmentResult(
+                    GameFragment.REQUEST_NEW_GAME,
+                    Bundle().apply { },
+                )
+            }
             .create()
 
         lifecycleScope.launch(Dispatchers.IO) {

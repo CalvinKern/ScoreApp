@@ -49,8 +49,8 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     private val binding get() = _binding!!
 
     init {
-        loop = Mobius.loop(ListModel.Companion::update, ::effectHandler).init(::initMobius)
-        controller = MobiusAndroid.controller(loop, ListModel.createDefault())
+        loop = Mobius.loop(ListModel.Companion::update, ::effectHandler)
+        controller = MobiusAndroid.controller(loop, ListModel.createDefault(), ::initMobius)
     }
 
     override fun onAttach(context: Context) {
@@ -86,6 +86,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
         // Setup views
         binding.gameRecycler.layoutManager = LinearLayoutManager(requireContext())
+        activity?.setTitle(R.string.gameListTitle)
 
         // Setup Toolbar
         binding.toolbar.inflateMenu(R.menu.menu_game_list)
@@ -102,12 +103,6 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 else -> false
             }
         }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        activity?.setTitle(R.string.gameListTitle)
     }
 
     override fun onResume() {

@@ -1,7 +1,6 @@
 package com.seakernel.android.scoreapp.game.classic
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +42,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     interface GameListener {
         fun onGameSettingsSelected(gameId: Long)
         fun onGraphSelected(gameId: Long)
+        fun onNewGame(gameId: Long, initialDealerId: Long?)
     }
 
     private var listener: GameListener? = null
@@ -57,10 +57,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private val binding get() = _binding!!
 
     init {
-        loop = Mobius.loop(GameModel.Companion::update, ::effectHandler).init(::initMobius)
+        loop = Mobius.loop(GameModel.Companion::update, ::effectHandler)
         controller = MobiusAndroid.controller(
             loop,
-            GameModel.createDefault()
+            GameModel.createDefault(),
+            ::initMobius
         )
     }
 
@@ -89,7 +90,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_game)
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -117,9 +118,36 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     }
                     true
                 }
+                R.id.actionNewGame -> {
+                    eventConsumer?.accept(GameEvent.RequestNewGame)
+                    true
+                }
                 else -> false
             }
         }
+
+        val resultListener = fun(key: String, _: Bundle) {
+            when (key) {
+                REQUEST_DELETE_ROUND -> {
+                    eventConsumer?.accept(GameEvent.RequestLoad)
+                }
+                REQUEST_NEW_GAME -> {
+                    eventConsumer?.accept(GameEvent.RequestNewGame)
+                }
+            }
+        }
+        parentFragmentManager.clearFragmentResultListener(REQUEST_DELETE_ROUND)
+        parentFragmentManager.clearFragmentResultListener(REQUEST_NEW_GAME)
+        parentFragmentManager.setFragmentResultListener(
+            REQUEST_DELETE_ROUND,
+            viewLifecycleOwner,
+            resultListener
+        )
+        parentFragmentManager.setFragmentResultListener(
+            REQUEST_NEW_GAME,
+            viewLifecycleOwner,
+            resultListener
+        )
     }
 
     override fun onDestroyView() {
@@ -153,13 +181,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private fun showStandingDialog(gameId: Long) {
         logEvent(AnalyticsConstants.Event.SHOW_PLAYER_STANDING_DIALOG)
         val dialog = PlayerStandingDialog(gameId)
-        dialog.show(childFragmentManager, PlayerStandingDialog::class.java.simpleName)
+        dialog.show(parentFragmentManager, PlayerStandingDialog::class.java.simpleName)
     }
 
     private fun showRoundNotesDialog(player: Player, gameId: Long) {
         logEvent(AnalyticsConstants.Event.SHOW_ROUND_NOTES_DIALOG)
         val dialog = PlayerRoundNotesDialog(player, gameId)
-        dialog.show(childFragmentManager, PlayerRoundNotesDialog::class.java.simpleName)
+        dialog.show(parentFragmentManager, PlayerRoundNotesDialog::class.java.simpleName)
     }
 
     private fun showRoundDeleteDialog(gameId: Long) {
@@ -168,7 +196,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             val ids = RoundRepository(requireContext()).getRoundIds(gameId)
             withContext(Dispatchers.Main) {
                 val dialog = DeleteRoundDialog(ids)
-                dialog.setTargetFragment(this@GameFragment, REQUEST_DELETE_ROUND)
                 dialog.show(parentFragmentManager, DeleteRoundDialog::class.java.simpleName)
             }
         }
@@ -179,17 +206,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         logScreenView(AnalyticsConstants.ScreenName.GameFragment)
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            REQUEST_DELETE_ROUND -> {
-                eventConsumer?.accept(GameEvent.RequestLoad)
-            }
-        }
     }
 
     // Mobius functions
@@ -295,14 +311,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                                             )
                                         )
                                     }
-                                    ?: requireActivity().onBackPressed() // TODO: Handle finding game better
+                                    ?: requireActivity().onBackPressedDispatcher.onBackPressed() // TODO: Handle finding game better
                             } else {
                                 eventConsumer.accept(
                                     GameEvent.Loaded(game)
                                 )
                             }
                         }
-                            ?: requireActivity().onBackPressed() // TODO: Handle error finding game better
+                            ?: requireActivity().onBackPressedDispatcher.onBackPressed() // TODO: Handle error finding game better
                     }
 
                     is GameEffect.SaveRound -> {
@@ -325,6 +341,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                             )
                         }
                     }
+
+                    is GameEffect.NewGame -> {
+                        listener?.onNewGame(effect.gameId, effect.initialPlayerId)
+                        logEvent(AnalyticsConstants.Event.NEW_GAME_CLICKED)
+                    }
                 }.hashCode() // Exhaustive call
             }
 
@@ -338,7 +359,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     companion object {
         private const val ARG_GAME_ID = "game_id"
-        private const val REQUEST_DELETE_ROUND = 101
+        const val REQUEST_DELETE_ROUND = "DELETE_ROUND"
+        const val REQUEST_NEW_GAME = "NEW_GAME"
 
         fun newInstance(gameId: Long): GameFragment {
             val fragment = GameFragment()
