@@ -1,11 +1,8 @@
 package com.seakernel.android.scoreapp.game.classic
 
-import android.text.InputType
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +12,6 @@ import com.seakernel.android.scoreapp.calculator.CalculatorUtils
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
-import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
 import com.seakernel.android.scoreapp.databinding.HolderRoundAddBinding
 import com.seakernel.android.scoreapp.databinding.HolderScoreRowDataBinding
 import com.seakernel.android.scoreapp.databinding.HolderScoreRowHeaderBinding
@@ -26,6 +22,7 @@ import java.security.InvalidParameterException
 import java.text.DecimalFormat
 
 private typealias CalculatorKeyboardCallback = (scoreView: EditText) -> Unit
+
 /**
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
@@ -45,7 +42,9 @@ class GameScoreAdapter(
     override fun getItemCount(): Int = (rounds.count() * playerCount()) + 1 // add round button
 
     override fun getItemId(position: Int): Long =
-        if (isAddRoundPosition(position)) Long.MAX_VALUE else rounds[toRoundIndex(position)].scores[toScoreIndex(position)].id
+        if (isAddRoundPosition(position)) Long.MAX_VALUE else rounds[toRoundIndex(position)].scores[toScoreIndex(
+            position
+        )].id
 
     override fun getItemViewType(position: Int): Int {
         return if (isAddRoundPosition(position)) VIEW_TYPE_ROUND_ADD else VIEW_TYPE_SCORE
@@ -60,10 +59,17 @@ class GameScoreAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(getItemViewType(position)) {
+        when (getItemViewType(position)) {
             VIEW_TYPE_SCORE -> {
                 val round = rounds[toRoundIndex(position)]
-                (holder as ScoreViewHolder).bind(hasDealer, useCalculator, rounds, round, round.scores[toScoreIndex(position)], eventConsumer)
+                (holder as ScoreViewHolder).bind(
+                    hasDealer,
+                    useCalculator,
+                    rounds,
+                    round,
+                    round.scores[toScoreIndex(position)],
+                    eventConsumer
+                )
             }
             VIEW_TYPE_ROUND_ADD -> {
                 (holder as AddRoundViewHolder).bind(eventConsumer)
@@ -87,7 +93,11 @@ class GameScoreAdapter(
     }
 }
 
-class PlayersAdapter(private val showNotes: Boolean, private val players: List<Player>, private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener) : RecyclerView.Adapter<PlayerViewHolder>() {
+class PlayersAdapter(
+    private val showNotes: Boolean,
+    private val players: List<Player>,
+    private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener
+) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
         PlayerViewHolder(
             HolderScoreRowHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -102,7 +112,8 @@ class PlayersAdapter(private val showNotes: Boolean, private val players: List<P
     }
 }
 
-class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: List<Round>) : RecyclerView.Adapter<ScoreViewHolder>() {
+class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: List<Round>) :
+    RecyclerView.Adapter<ScoreViewHolder>() {
     private val leadPlayerIds: ArrayList<Long> = arrayListOf()
     private val totalsMap: HashMap<Long, Double> = HashMap(rounds.size) // PlayerID to total
 
@@ -143,7 +154,8 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
     }
 }
 
-class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
+class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     interface PlayerHolderClickedListener {
         fun playerHolderClicked(player: Player)
@@ -158,7 +170,13 @@ class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) : Recyc
     }
 }
 
-class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBinding>(HolderRoundAddBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
+class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBinding>(
+    HolderRoundAddBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent,
+        false
+    )
+) {
     fun bind(eventConsumer: Consumer<GameEvent>?) {
         itemView.setOnClickListener {
             eventConsumer?.accept(GameEvent.RequestCreateRound)
@@ -169,11 +187,24 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
 class ScoreViewHolder(
     parent: ViewGroup,
     private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback? = null
-) : BaseViewHolder<HolderScoreRowDataBinding>(HolderScoreRowDataBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
+) : BaseViewHolder<HolderScoreRowDataBinding>(
+    HolderScoreRowDataBinding.inflate(
+        LayoutInflater.from(
+            parent.context
+        ), parent, false
+    )
+) {
 
     private var shouldFocus: Boolean = true
 
-    fun bind(hasDealer: Boolean, useCalculator: Boolean, rounds: List<Round>, round: Round, score: Score, eventConsumer: Consumer<GameEvent>?) {
+    fun bind(
+        hasDealer: Boolean,
+        useCalculator: Boolean,
+        rounds: List<Round>,
+        round: Round,
+        score: Score,
+        eventConsumer: Consumer<GameEvent>?
+    ) {
         binding.playerScore.showSoftInputOnFocus = !useCalculator
 
         if (hasDealer && score.player == round.dealer) {
@@ -220,7 +251,7 @@ class ScoreViewHolder(
 
                 // Set the selection to the end of the score (makes quick edits/additions easier)
                 if (score.value == 0.0) {
-                    binding.playerScore.setText("")
+                    binding.playerScore.setText(R.string.emptyString)
                 } else {
                     binding.playerScore.setSelection(binding.playerScore.text.length)
                 }
@@ -246,7 +277,12 @@ class ScoreViewHolder(
 
         if (isLeader) {
             itemView.setBackgroundResource(R.color.winnerBackground)
-            binding.playerScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.winnerText))
+            binding.playerScore.setTextColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.winnerText
+                )
+            )
         } else {
             itemView.setBackgroundResource(R.color.black)
             binding.playerScore.setTextColor(itemView.context.getColor(R.color.textWhite))
@@ -258,7 +294,8 @@ class ScoreViewHolder(
 
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         val updatedScore = if (binding.playerScore.text.isNotBlank()) {
-            CalculatorUtils.eval(binding.playerScore.text.toString(), itemView.context)?.toDoubleOrNull()
+            CalculatorUtils.eval(binding.playerScore.text.toString(), itemView.context)
+                ?.toDoubleOrNull()
                 ?: score.value
         } else {
             0.0
@@ -275,7 +312,11 @@ class ScoreViewHolder(
         )
     }
 
-    private fun showPlayerDealerDialog(player: Player, round: Round, eventConsumer: Consumer<GameEvent>?) {
+    private fun showPlayerDealerDialog(
+        player: Player,
+        round: Round,
+        eventConsumer: Consumer<GameEvent>?
+    ) {
         val dialog = AlertDialog.Builder(itemView.context)
             .setMessage(itemView.context.getString(R.string.makePlayerDealerMessage, player.name))
             .setNegativeButton(android.R.string.cancel, null)

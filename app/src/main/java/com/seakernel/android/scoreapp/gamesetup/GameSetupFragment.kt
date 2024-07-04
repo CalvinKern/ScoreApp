@@ -12,8 +12,8 @@ import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +24,6 @@ import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentGameCreateBinding
 import com.seakernel.android.scoreapp.databinding.HolderGameCreatePlayerBinding
-import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
 import com.seakernel.android.scoreapp.databinding.ViewGameSettingsBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
@@ -59,12 +58,10 @@ class GameSetupFragment : Fragment() {
         )
     }
 
-    private val viewModel: GameSetupViewModel by lazy {
-        ViewModelProviders.of(this).get(GameSetupViewModel::class.java)
-    }
-
+    private val viewModel: GameSetupViewModel by viewModels<GameSetupViewModel>()
     private var _binding: FragmentGameCreateBinding? = null
     private var _settingsBinding: ViewGameSettingsBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -83,8 +80,8 @@ class GameSetupFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentGameCreateBinding.inflate(layoutInflater, container,false)
+    ): View {
+        _binding = FragmentGameCreateBinding.inflate(layoutInflater, container, false)
         _settingsBinding = ViewGameSettingsBinding.bind(binding.root)
         return binding.root
     }
@@ -186,9 +183,15 @@ class GameSetupFragment : Fragment() {
         val settingsBinding = _settingsBinding ?: return
 
         setListenerRow(settingsBinding.hasDealerContainer, settingsBinding.hasDealerCheckbox)
-        setListenerRow(settingsBinding.reversedScoringContainer, settingsBinding.reversedScoringCheckbox)
+        setListenerRow(
+            settingsBinding.reversedScoringContainer,
+            settingsBinding.reversedScoringCheckbox
+        )
         setListenerRow(settingsBinding.showNotesContainer, settingsBinding.showNotesCheckbox)
-        setListenerRow(settingsBinding.useCalculatorContainer, settingsBinding.useCalculatorCheckbox)
+        setListenerRow(
+            settingsBinding.useCalculatorContainer,
+            settingsBinding.useCalculatorCheckbox
+        )
     }
 
     private fun setListenerRow(container: View, checkbox: CheckBox) {
@@ -231,9 +234,15 @@ class GameSetupFragment : Fragment() {
         }
 
         _settingsBinding?.hasDealerCheckbox?.isCheckedSafe(settings.hasDealer, checkedListener)
-        _settingsBinding?.reversedScoringCheckbox?.isCheckedSafe(settings.reversedScoring, checkedListener)
+        _settingsBinding?.reversedScoringCheckbox?.isCheckedSafe(
+            settings.reversedScoring,
+            checkedListener
+        )
         _settingsBinding?.showNotesCheckbox?.isCheckedSafe(settings.showRoundNotes, checkedListener)
-        _settingsBinding?.useCalculatorCheckbox?.isCheckedSafe(settings.useCalculator, checkedListener)
+        _settingsBinding?.useCalculatorCheckbox?.isCheckedSafe(
+            settings.useCalculator,
+            checkedListener
+        )
 
         // Update game name unless it has focus (being edited)
         if (!binding.gameNameEdit.hasFocus()) {
@@ -339,7 +348,13 @@ private class PlayersAdapter(private val callback: PlayerAdapterCallback) :
 }
 
 private class PlayerViewHolder(parent: ViewGroup, val callback: PlayerAdapterCallback) :
-    BaseViewHolder<HolderGameCreatePlayerBinding>(HolderGameCreatePlayerBinding.inflate(LayoutInflater.from(parent.context), parent, false)),
+    BaseViewHolder<HolderGameCreatePlayerBinding>(
+        HolderGameCreatePlayerBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+    ),
     PlayerSelectionListener {
     fun bind(state: PlayerState) {
         with(binding) {

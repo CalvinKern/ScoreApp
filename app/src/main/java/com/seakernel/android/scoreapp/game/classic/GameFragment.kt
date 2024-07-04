@@ -50,8 +50,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private var roundRepository: RoundRepository? = null
     private var eventConsumer: Consumer<GameEvent>? = null
 
-    private val REQUEST_DELETE_ROUND = 101
-
     private var _binding: FragmentGameBinding? = null
 
     // This property is only valid between onCreateView and
@@ -84,13 +82,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState) // TODO: Restore state
+        super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_game)
         binding.toolbar.setOnMenuItemClickListener {
@@ -129,10 +127,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         binding.toolbar.setNavigationOnClickListener(null)
         _binding = null
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState) // TODO: Store state
-//    }
 
     private fun setupHeaderAndFooter(settings: GameSettings) {
         val players = settings.players
@@ -344,6 +338,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     companion object {
         private const val ARG_GAME_ID = "game_id"
+        private const val REQUEST_DELETE_ROUND = 101
 
         fun newInstance(gameId: Long): GameFragment {
             val fragment = GameFragment()

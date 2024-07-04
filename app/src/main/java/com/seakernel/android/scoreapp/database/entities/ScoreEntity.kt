@@ -1,6 +1,10 @@
 package com.seakernel.android.scoreapp.database.entities
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 /**
  * Created by Calvin on 12/23/18.
@@ -41,6 +45,7 @@ data class ScoreEntity(
         const val COLUMN_SCORE_DATA = "score_data"
         const val INDEX_ROUND_ID = "index_${TABLE_NAME}_$COLUMN_ROUND_ID"
 
-        const val fullyQualifiedColumns = "$TABLE_NAME.$COLUMN_ID, $TABLE_NAME.$COLUMN_PLAYER_ID, $TABLE_NAME.$COLUMN_ROUND_ID, $TABLE_NAME.$COLUMN_SCORE, $TABLE_NAME.$COLUMN_SCORE_DATA"
+        const val QUALIFIED_COLUMNS =
+            "$TABLE_NAME.$COLUMN_ID, $TABLE_NAME.$COLUMN_PLAYER_ID, $TABLE_NAME.$COLUMN_ROUND_ID, $TABLE_NAME.$COLUMN_SCORE, $TABLE_NAME.$COLUMN_SCORE_DATA"
     }
 }

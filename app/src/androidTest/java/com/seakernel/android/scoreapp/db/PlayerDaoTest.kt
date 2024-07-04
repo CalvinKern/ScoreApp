@@ -18,7 +18,6 @@ import java.io.IOException
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@Suppress("ClassName")
 class PlayerDaoTest {
 
     private lateinit var playerDao: PlayerDao
@@ -27,8 +26,7 @@ class PlayerDaoTest {
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         playerDao = db.playerDao()
     }
 
@@ -106,13 +104,11 @@ class PlayerDaoTest {
     fun insertMultiplePlayers() {
         val n = 5
         val players = mutableListOf<PlayerEntity>()
-        repeat(n) { players.add(
-            PlayerEntity(
-                0,
-                "User $it",
-                false,
+        repeat(n) {
+            players.add(
+                PlayerEntity(0, "User $it", false)
             )
-        ) }
+        }
 
         playerDao.insertAll(*players.toTypedArray())
 

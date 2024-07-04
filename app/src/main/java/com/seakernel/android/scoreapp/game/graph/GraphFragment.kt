@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -44,16 +44,19 @@ class GraphFragment : Fragment() {
 
     private val modelObserver = Observer<Game?> { game -> game?.let { updateGraphData(it) } }
 
-    private val viewModel: GraphViewModel by lazy {
-        ViewModelProviders.of(this).get(GraphViewModel::class.java)
-    }
+    private val viewModel: GraphViewModel by viewModels<GraphViewModel>()
 
     private var _binding: FragmentGraphBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentGraphBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -69,7 +72,8 @@ class GraphFragment : Fragment() {
 
         viewModel.getGame().observe(viewLifecycleOwner, modelObserver)
         viewModel.loadGame(
-            arguments?.getLong(ARG_GAME_ID) ?: throw RuntimeException("No game ID provided to GraphFragment")
+            arguments?.getLong(ARG_GAME_ID)
+                ?: throw RuntimeException("No game ID provided to GraphFragment")
         )
 
         initChartStyle()
@@ -86,7 +90,8 @@ class GraphFragment : Fragment() {
 
         // Get scores as a list of entries, separated by players
         val scoreMap =
-            mapOf(*game.rounds.first().scores.map { Pair(it.player.id!!, mutableListOf<Entry>()) }.toTypedArray())
+            mapOf(*game.rounds.first().scores.map { Pair(it.player.id!!, mutableListOf<Entry>()) }
+                .toTypedArray())
         game.rounds.forEach { round ->
             round.scores.forEach { score ->
                 scoreMap.getValue(score.player.id!!).also { playerList ->

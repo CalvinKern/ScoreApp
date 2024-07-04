@@ -14,8 +14,9 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:inputType="textCapWords"
         android:hint="@string/playerName"
+        android:importantForAutofill="no"
         >
 
-        <requestFocus/>
+        <requestFocus />
     </EditText>
 </FrameLayout>

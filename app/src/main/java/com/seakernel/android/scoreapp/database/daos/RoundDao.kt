@@ -1,6 +1,11 @@
 package com.seakernel.android.scoreapp.database.daos
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Embedded
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import com.seakernel.android.scoreapp.database.entities.RoundEntity
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 
@@ -10,7 +15,7 @@ import com.seakernel.android.scoreapp.database.entities.ScoreEntity
  */
 @Dao
 interface RoundDao {
-    @Query("SELECT ${ScoreEntity.fullyQualifiedColumns}, ${RoundEntity.COLUMN_ROUND_NUMBER} FROM ${ScoreEntity.TABLE_NAME} INNER JOIN ${RoundEntity.TABLE_NAME} as ROUND_ ON ROUND_.${RoundEntity.COLUMN_ID}=${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} WHERE ROUND_.${RoundEntity.COLUMN_GAME_ID}=:gameId AND ${ScoreEntity.COLUMN_PLAYER_ID}=:playerId ORDER BY ${RoundEntity.COLUMN_ROUND_NUMBER} DESC")
+    @Query("SELECT ${ScoreEntity.QUALIFIED_COLUMNS}, ${RoundEntity.COLUMN_ROUND_NUMBER} FROM ${ScoreEntity.TABLE_NAME} INNER JOIN ${RoundEntity.TABLE_NAME} as ROUND_ ON ROUND_.${RoundEntity.COLUMN_ID}=${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} WHERE ROUND_.${RoundEntity.COLUMN_GAME_ID}=:gameId AND ${ScoreEntity.COLUMN_PLAYER_ID}=:playerId ORDER BY ${RoundEntity.COLUMN_ROUND_NUMBER} DESC")
     fun getNotesForPlayer(playerId: Long, gameId: Long): List<ScoreNoteEntity>
 
     @Insert
@@ -31,19 +36,23 @@ interface RoundDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(vararg score: ScoreEntity)
 
-    @Query("""
+    @Query(
+        """
         UPDATE ${ScoreEntity.TABLE_NAME}
         SET ${ScoreEntity.COLUMN_SCORE} = :score
         WHERE ${ScoreEntity.COLUMN_ID} = :id
         
-    """)
+    """
+    )
     fun updateScore(id: Long, score: Double)
 
-    @Query("""
+    @Query(
+        """
         UPDATE ${ScoreEntity.TABLE_NAME}
         SET ${ScoreEntity.COLUMN_SCORE_DATA} = :notes
         WHERE ${ScoreEntity.COLUMN_ID} = :id
-    """)
+    """
+    )
     fun updateScoreNote(id: Long, notes: String)
 
     @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} IN (:ids)")

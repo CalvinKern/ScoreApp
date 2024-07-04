@@ -10,9 +10,11 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.seakernel.android.scoreapp.ui.MainActivity
 
-fun AppCompatCheckBox.isCheckedSafe(checked: Boolean, listener: CompoundButton.OnCheckedChangeListener?) {
+fun AppCompatCheckBox.isCheckedSafe(
+    checked: Boolean,
+    listener: CompoundButton.OnCheckedChangeListener?,
+) {
     this.setOnCheckedChangeListener(null)
     isChecked = checked
     this.setOnCheckedChangeListener(listener)
@@ -38,6 +40,7 @@ val Int.dp: Int
 // Analytics helpers
 
 private typealias BundleBlock = Bundle.() -> Unit
+
 private fun logEvent(context: Context, eventName: String, bundleBlock: BundleBlock) {
     FirebaseAnalytics.getInstance(context).logEvent(eventName, Bundle().apply(bundleBlock))
 }
@@ -45,7 +48,10 @@ private fun logEvent(context: Context, eventName: String, bundleBlock: BundleBlo
 fun Fragment.logScreenView(screenName: AnalyticsConstants.ScreenName) {
     logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
         putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName.value)
-        putString(FirebaseAnalytics.Param.SCREEN_CLASS, AnalyticsConstants.ScreenName.MainActivity.value)
+        putString(
+            FirebaseAnalytics.Param.SCREEN_CLASS,
+            AnalyticsConstants.ScreenName.MainActivity.value
+        )
     }
 }
 

@@ -35,7 +35,7 @@ data class GameEntity(
         const val COLUMN_SHOW_ROUND_NOTES = "showRoundNotes"
         const val COLUMN_USE_CALCULATOR = "useCalculator"
 
-        const val columnNames =
+        const val ALL_COLUMNS =
             "$COLUMN_ID, $COLUMN_NAME, $COLUMN_LAST_PLAYED, $COLUMN_HAS_DEALER, $COLUMN_SHOW_ROUNDS, $COLUMN_REVERSED_SCORING, $COLUMN_MAX_SCORE, $COLUMN_MAX_ROUNDS, $COLUMN_SHOW_ROUND_NOTES, $COLUMN_USE_CALCULATOR"
     }
 }

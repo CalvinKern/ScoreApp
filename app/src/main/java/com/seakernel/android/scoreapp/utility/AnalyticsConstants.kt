@@ -33,11 +33,11 @@ object AnalyticsConstants {
     }
 
     sealed class ScreenName(val value: String) {
-        object MainActivity : ScreenName("MainActivity")
-        object GraphFragment : ScreenName("GraphFragment")
-        object GameFragment : ScreenName("GameFragment")
-        object GameListFragment : ScreenName("GameListFragment")
-        object GameSetupFragment : ScreenName("GameSetupFragment")
-        object PlayerSelectFragment : ScreenName("PlayerSelectFragment")
+        data object MainActivity : ScreenName("MainActivity")
+        data object GraphFragment : ScreenName("GraphFragment")
+        data object GameFragment : ScreenName("GameFragment")
+        data object GameListFragment : ScreenName("GameListFragment")
+        data object GameSetupFragment : ScreenName("GameSetupFragment")
+        data object PlayerSelectFragment : ScreenName("PlayerSelectFragment")
     }
 }

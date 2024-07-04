@@ -1,9 +1,7 @@
 package com.seakernel.android.scoreapp.gamelist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.GameSettings
@@ -17,7 +15,10 @@ import com.spotify.mobius.functions.Consumer
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-class GameListAdapter(private val gameList: List<GameSettings>, private val eventConsumer: Consumer<ListEvent>) : RecyclerView.Adapter<GameListViewHolder>() {
+class GameListAdapter(
+    private val gameList: List<GameSettings>,
+    private val eventConsumer: Consumer<ListEvent>
+) : RecyclerView.Adapter<GameListViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -40,17 +41,23 @@ class GameListAdapter(private val gameList: List<GameSettings>, private val even
     }
 }
 
-class GameListViewHolder(parent: ViewGroup) : BaseViewHolder<HolderGameListBinding>(HolderGameListBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
+class GameListViewHolder(parent: ViewGroup) : BaseViewHolder<HolderGameListBinding>(
+    HolderGameListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+) {
 
     fun bind(settings: GameSettings, eventConsumer: Consumer<ListEvent>) {
         binding.gameNameHolder.text = settings.name
         binding.gameDateHolder.text = settings.lastPlayedAt
-        binding.gamePlayersHolder.text = itemView.context.getString(R.string.playersHolder, settings.players.size)
+        binding.gamePlayersHolder.text =
+            itemView.context.getString(R.string.playersHolder, settings.players.size)
 
         itemView.setOnClickListener {
             logEvent(AnalyticsConstants.Event.GAME_LOADED) {
                 putString(AnalyticsConstants.Param.ITEM_NAME, settings.name)
-                putString(AnalyticsConstants.Param.GAME_PLAYER_COUNT, settings.players.count().toString())
+                putString(
+                    AnalyticsConstants.Param.GAME_PLAYER_COUNT,
+                    settings.players.count().toString()
+                )
             }
             eventConsumer.accept(ListEvent.GameRowClicked(settings.id!!))
         }

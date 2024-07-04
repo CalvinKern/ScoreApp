@@ -66,6 +66,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         setKeyboardListeners()
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun setInputChangedListener(
         calculator: String? = null,
         inputListener: InputChangedListener? = null,

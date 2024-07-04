@@ -6,7 +6,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
-import kotlin.jvm.Throws
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -24,9 +23,8 @@ class MigrationTest_4_5 {
     @Throws(IOException::class)
     fun migrate4To5() {
         DbTestHelper.createDatabaseAndMigrate(helper, 4, 5, Migration_4_5()) { db ->
-            db.gameDao().getRounds(0).forEach {
-                assertEquals(4.toDouble(), it.scores.first().score, 0.01)
-            }
+            val score = db.gameDao().getRounds(0)[0].scores.first().score
+            assertEquals(4.toDouble(), score, 0.01)
         }
     }
 }

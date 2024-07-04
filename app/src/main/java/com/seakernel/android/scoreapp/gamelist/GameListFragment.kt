@@ -71,7 +71,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentGameListBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
