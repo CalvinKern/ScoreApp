@@ -40,10 +40,10 @@ class PlayerStandingDialog(val gameId: Long) : DialogFragment() {
             .setView(binding.root)
             .setNegativeButton(R.string.actionClose, null)
             .setPositiveButton(R.string.gameCreateTitle) { _, _ ->
-                parentFragmentManager.setFragmentResult(
-                    GameFragment.REQUEST_NEW_GAME,
-                    Bundle().apply { },
-                )
+                parentFragmentManager.setFragmentResult(GameFragment.REQUEST_NEW_GAME, Bundle())
+            }
+            .setNeutralButton(R.string.actionGraph) { _, _ ->
+                parentFragmentManager.setFragmentResult(GameFragment.REQUEST_CHART, Bundle())
             }
             .create()
 

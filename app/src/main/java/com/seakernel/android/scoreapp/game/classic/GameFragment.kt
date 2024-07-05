@@ -134,20 +134,21 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 REQUEST_NEW_GAME -> {
                     eventConsumer?.accept(GameEvent.RequestNewGame)
                 }
+                REQUEST_CHART -> {
+                    arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
+                        listener?.onGraphSelected(gameId)
+                    }
+                }
             }
         }
-        parentFragmentManager.clearFragmentResultListener(REQUEST_DELETE_ROUND)
-        parentFragmentManager.clearFragmentResultListener(REQUEST_NEW_GAME)
-        parentFragmentManager.setFragmentResultListener(
-            REQUEST_DELETE_ROUND,
-            viewLifecycleOwner,
-            resultListener
-        )
-        parentFragmentManager.setFragmentResultListener(
-            REQUEST_NEW_GAME,
-            viewLifecycleOwner,
-            resultListener
-        )
+        requests.forEach { request ->
+            parentFragmentManager.clearFragmentResultListener(request)
+            parentFragmentManager.setFragmentResultListener(
+                request,
+                viewLifecycleOwner,
+                resultListener
+            )
+        }
     }
 
     override fun onDestroyView() {
@@ -359,8 +360,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     companion object {
         private const val ARG_GAME_ID = "game_id"
+
         const val REQUEST_DELETE_ROUND = "DELETE_ROUND"
         const val REQUEST_NEW_GAME = "NEW_GAME"
+        const val REQUEST_CHART = "CHART"
+
+        val requests = listOf(REQUEST_DELETE_ROUND, REQUEST_NEW_GAME, REQUEST_CHART)
 
         fun newInstance(gameId: Long): GameFragment {
             val fragment = GameFragment()
