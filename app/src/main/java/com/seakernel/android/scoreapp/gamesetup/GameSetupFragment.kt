@@ -101,6 +101,7 @@ class GameSetupFragment : Fragment() {
         _settingsBinding?.showNotesContainer?.setOnClickListener(null)
         _settingsBinding?.useCalculatorCheckbox?.setOnCheckedChangeListener(null)
         _settingsBinding?.useCalculatorContainer?.setOnClickListener(null)
+        binding.gamePlayersEmptyImage.setOnClickListener(null)
 
         _binding?.gameNameEdit?.removeTextChangedListener(nameTextWatcher)
 
@@ -132,7 +133,9 @@ class GameSetupFragment : Fragment() {
             )
         } else if (arguments?.containsKey(ARG_GAME_ID) == true) {
             viewModel.loadGame(requireArguments().getLong(ARG_GAME_ID))
-        } else viewModel.initializeGame()
+        } else {
+            viewModel.initializeGame()
+        }
     }
 
     override fun onResume() {
@@ -169,6 +172,10 @@ class GameSetupFragment : Fragment() {
                 viewModel.getGameSettings().value?.players?.mapNotNull { it.id } ?: emptyList()
             listener?.onShowPlayerSelectScreen(ids)
         }
+        binding.gamePlayersEmptyImage.setOnClickListener {
+            binding.playersHeaderEdit.performClick()
+        }
+
 
         val adapter = PlayersAdapter(object : PlayerAdapterCallback {
             override fun onSelectedDealer(playerId: Long) {

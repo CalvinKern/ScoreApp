@@ -149,6 +149,9 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         binding.fab.setOnClickListener {
             eventConsumer.accept(AddPlayerClicked)
         }
+        binding.playerEmptyImage.setOnClickListener {
+            binding.fab.performClick()
+        }
         binding.toolbar.setOnMenuItemClickListener(toolbarItemClickListener)
 
         return object : Connection<CreateModel> {
@@ -170,6 +173,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             override fun dispose() {
                 // Don't forget to remove listeners when the UI is disconnected
                 binding.fab.setOnClickListener(null)
+                binding.playerEmptyImage.setOnClickListener(null)
                 binding.playerRecycler.swapAdapter(null, true)
             }
         }

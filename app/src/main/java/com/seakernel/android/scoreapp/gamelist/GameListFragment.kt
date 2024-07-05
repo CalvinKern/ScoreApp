@@ -123,6 +123,10 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
             eventConsumer.accept(ListEvent.AddGameClicked)
         }
 
+        binding.gameListEmptyImage.setOnClickListener {
+            binding.fab.performClick()
+        }
+
         return object : Connection<ListModel> {
             override fun accept(model: ListModel) {
                 binding.gameListLoading.setVisible(model.isLoading)
@@ -138,6 +142,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
             override fun dispose() {
                 // Don't forget to remove listeners when the UI is disconnected
                 binding.fab.setOnClickListener(null)
+                binding.gameListEmptyImage.setOnClickListener(null)
                 binding.gameRecycler.swapAdapter(null, true)
             }
         }
