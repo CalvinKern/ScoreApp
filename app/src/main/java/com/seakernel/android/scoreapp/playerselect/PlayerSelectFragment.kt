@@ -253,7 +253,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                         playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
                             if (!disposed) {
                                 withContext(Dispatchers.Main) {
-                                    eventConsumer.accept(
+                                    // Double check we're not disposed
+                                    if (!disposed) eventConsumer.accept(
                                         PlayerNameChanged(
                                             player.id!!,
                                             player.name

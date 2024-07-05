@@ -90,18 +90,23 @@ class GraphFragment : Fragment() {
 
         // Get scores as a list of entries, separated by players
         val scoreMap =
-            mapOf(*game.rounds.first().scores.map { Pair(it.player.id!!, mutableListOf<Entry>()) }
-                .toTypedArray())
+            mapOf(*(game.rounds.firstOrNull()?.scores?.map {
+                Pair(
+                    it.player.id!!,
+                    mutableListOf<Entry>()
+                )
+            }?.toTypedArray() ?: arrayOf()))
         game.rounds.forEach { round ->
             round.scores.forEach { score ->
-                scoreMap.getValue(score.player.id!!).also { playerList ->
-                    playerList.add(
-                        Entry(
-                            round.number.toFloat() + 1,
-                            (playerList.lastOrNull()?.y ?: 0f) + score.value.toFloat()
+                if (score.player.id != null && scoreMap.containsKey(score.player.id))
+                    scoreMap.getValue(score.player.id).also { playerList ->
+                        playerList.add(
+                            Entry(
+                                round.number.toFloat() + 1,
+                                (playerList.lastOrNull()?.y ?: 0f) + score.value.toFloat()
+                            )
                         )
-                    )
-                }
+                    }
             }
         }
 

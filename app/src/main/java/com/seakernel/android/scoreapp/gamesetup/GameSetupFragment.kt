@@ -47,7 +47,10 @@ class GameSetupFragment : Fragment() {
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver =
         Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
-    private val modelObserver = Observer<GameSettings?> { settings -> renderSettings(settings) }
+    private val saveObserver =
+        Observer<Boolean?> { saving -> renderSettings(viewModel.getGameSettings().value, saving) }
+    private val modelObserver =
+        Observer<GameSettings?> { settings -> renderSettings(settings, viewModel.isSaving().value) }
     private val autocompleteObserver = Observer<List<String>?> { names ->
         binding.gameNameEdit.setAdapter(
             ArrayAdapter(
@@ -204,12 +207,12 @@ class GameSetupFragment : Fragment() {
         container.setOnClickListener { checkbox.performClick() }
     }
 
-    private fun renderSettings(settings: GameSettings?) {
+    private fun renderSettings(settings: GameSettings?, isSaving: Boolean?) {
         if (settings == null) {
             return // TODO: Show loading spinner
         }
         binding.toolbar.menu.findItem(R.id.actionSave).isEnabled =
-            settings.name.isNotBlank() && settings.players.isNotEmpty()
+            settings.name.isNotBlank() && settings.players.isNotEmpty() && isSaving != true
         binding.playerRecycler.setVisible(settings.players.isNotEmpty())
         binding.gamePlayerEmptyGroup.setVisible(settings.players.isEmpty())
 
