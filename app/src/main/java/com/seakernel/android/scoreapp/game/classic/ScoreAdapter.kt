@@ -1,5 +1,7 @@
 package com.seakernel.android.scoreapp.game.classic
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
@@ -193,9 +195,16 @@ class ScoreViewHolder(
             parent.context
         ), parent, false
     )
-) {
+), TextWatcher {
+
+    init {
+        binding.playerScore.addTextChangedListener(this)
+    }
 
     private var shouldFocus: Boolean = true
+    private var _eventConsumer: Consumer<GameEvent>? = null
+    private var _round: Round? = null
+    private var _score: Score? = null
 
     fun bind(
         hasDealer: Boolean,
@@ -205,6 +214,11 @@ class ScoreViewHolder(
         score: Score,
         eventConsumer: Consumer<GameEvent>?
     ) {
+        // I hate doing this, but it gets the score to update the total immediately
+        _eventConsumer = eventConsumer
+        _round = round
+        _score = score
+
         binding.playerScore.showSoftInputOnFocus = !useCalculator
 
         if (hasDealer && score.player == round.dealer) {
@@ -249,6 +263,7 @@ class ScoreViewHolder(
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
                 binding.playerScore.error = null // Clear error state when losing focus
+                if (score.value == 0.0) binding.playerScore.setText(formatScore(score.value))
             } else {
                 // Newly gained focus = open calculator
                 if (useCalculator) showCalculatorKeyboardCallback?.invoke(binding.playerScore)
@@ -306,6 +321,8 @@ class ScoreViewHolder(
             0.0
         }
 
+        if (score.value == updatedScore) return
+
         // Update the score
         eventConsumer?.accept(
             GameEvent.UpdateScore(
@@ -330,5 +347,17 @@ class ScoreViewHolder(
             }
             .create()
         dialog.show()
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+    override fun afterTextChanged(s: Editable?) {
+        _round?.let { round ->
+            _score?.let { score ->
+                updateScore(_eventConsumer, round, score)
+            }
+        }
     }
 }
