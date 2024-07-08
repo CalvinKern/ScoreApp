@@ -6,7 +6,7 @@
     <color name="gray">#707070</color>
     <color name="darkGray">#353535</color>
     <color name="winnerBackground">@color/colorSecondary</color>
-    <color name="winnerText">@color/colorOnSecondary</color>
+    <color name="winnerText">@color/colorOnPrimary</color>
     <color name="dealer">@color/colorPrimary</color>
     <color name="dealerPast">@color/colorPrimaryLight</color>
     <color name="transparent">#00000000</color>

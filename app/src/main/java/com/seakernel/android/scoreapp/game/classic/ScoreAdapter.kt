@@ -209,18 +209,21 @@ class ScoreViewHolder(
 
         if (hasDealer && score.player == round.dealer) {
             if (rounds.last().id == round.id) {
-                itemView.setBackgroundResource(R.color.dealer)
+                binding.playerBorder.setBackgroundResource(R.drawable.border_dealer)
             } else {
-                itemView.setBackgroundResource(R.color.dealerPast)
+                binding.playerBorder.setBackgroundResource(R.drawable.border_dealer_past)
             }
         } else {
-            // Make odd rows with a slight gray background to look a little better
-            if (round.number % 2 == 0) {
-                itemView.setBackgroundResource(R.color.slightGray)
-            } else {
-                itemView.setBackgroundResource(R.color.colorBackground)
-            }
+            binding.playerBorder.setBackgroundResource(0)
         }
+
+        // Make odd rows with a slight gray background to look a little better
+        if (round.number % 2 == 0) {
+            itemView.setBackgroundResource(R.color.slightGray)
+        } else {
+            itemView.setBackgroundResource(R.color.colorBackground)
+        }
+
         if (!binding.playerScore.hasFocus()) {
             // Hack to get score view to stay selected on next focus after an update occurs
             binding.playerScore.setText(formatScore(score.value))
@@ -241,6 +244,7 @@ class ScoreViewHolder(
 
             true
         }
+
         binding.playerScore.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
@@ -274,9 +278,10 @@ class ScoreViewHolder(
     fun bindTotal(score: Double, isLeader: Boolean) {
         binding.playerScore.isEnabled = false
         binding.playerScore.isFocusable = false
+        itemView.setBackgroundResource(R.color.black)
 
         if (isLeader) {
-            itemView.setBackgroundResource(R.color.winnerBackground)
+            binding.playerBorder.setBackgroundResource(R.drawable.border_winner)
             binding.playerScore.setTextColor(
                 ContextCompat.getColor(
                     itemView.context,
@@ -284,7 +289,7 @@ class ScoreViewHolder(
                 )
             )
         } else {
-            itemView.setBackgroundResource(R.color.black)
+            binding.playerBorder.setBackgroundResource(0)
             binding.playerScore.setTextColor(itemView.context.getColor(R.color.textWhite))
         }
         binding.playerScore.setText(formatScore(score))
