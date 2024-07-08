@@ -5,8 +5,9 @@
     android:id="@+id/addRoundButton"
     android:layout_width="match_parent"
     android:layout_height="@dimen/min_touch_size"
-    android:background="@color/colorSecondary"
-    android:foreground="?attr/selectableItemBackground"
+    android:layout_margin="8dp"
+    android:background="@drawable/background_secondary"
+    android:foreground="@drawable/selectable_bordered"
     android:focusable="true"
     android:clickable="true"
     >
