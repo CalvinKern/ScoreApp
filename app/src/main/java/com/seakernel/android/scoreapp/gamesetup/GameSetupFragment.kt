@@ -176,7 +176,6 @@ class GameSetupFragment : Fragment() {
             binding.playersHeaderEdit.performClick()
         }
 
-
         val adapter = PlayersAdapter(object : PlayerAdapterCallback {
             override fun onSelectedDealer(playerId: Long) {
                 viewModel.setDealer(playerId)

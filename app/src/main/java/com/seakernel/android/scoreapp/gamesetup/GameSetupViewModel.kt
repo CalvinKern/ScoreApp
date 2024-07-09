@@ -142,6 +142,8 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     fun createCopy(gameId: Long, initialDealerId: Long?) {
         loadGameNames()
 
+        if (gameSettings.value != null) return
+
         scope.launch {
             gameRepository.loadGame(gameId)?.let {
                 gameSettings.safePostValue(
