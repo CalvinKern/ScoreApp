@@ -54,11 +54,6 @@ ext {
     MOBIUS_VERSION = '1.4.0'
     ROOM_VERSION = '2.6.1'
 }
-configurations.configureEach {
-    exclude group: 'com.google.android.gms', module: 'play-services-ads'
-    exclude group: 'com.google.android.gms', module: 'play-services-ads-identifier'
-    exclude group: 'com.google.android.gms', module: 'play-services-ads-lite'
-}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
