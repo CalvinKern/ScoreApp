@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     }
 
     override fun onShowGameScreen(gameId: Long) {
+        popBackStackIfFound(GameFragment::class) // If copying, remove previous game fragment
         popBackStackIfFound(GameSetupFragment::class)
         showFragment(GameFragment.newInstance(gameId), GameFragment::class.java.simpleName)
     }
@@ -72,7 +73,6 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     }
 
     override fun onNewGame(gameId: Long, initialDealerId: Long?) {
-        popBackStackIfFound(GameFragment::class)
         showFragment(
             GameSetupFragment.newInstanceCopy(gameId, initialDealerId),
             GameSetupFragment::class.java.simpleName
