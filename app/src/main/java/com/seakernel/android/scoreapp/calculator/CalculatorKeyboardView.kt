@@ -100,21 +100,23 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         val weakInputText = WeakReference(inputText)
         setInputChangedListener(
             inputString, // Reset the string
-            inputListener = { input, _ ->
+            inputListener = { input, failed ->
                 // Return unless we still have a reference
                 val editText = weakInputText.get() ?: return@setInputChangedListener
 
                 delayCheckJob?.cancel()
                 delayCheckJob = GlobalScope.launch(Dispatchers.IO) {
                     delay(DELAY_VALID_COMPUTATION_MESSAGE)
+                    val weakEdit = weakInputText.get() ?: return@launch
                     post { // Need the main thread for editText
-                        editText.error =
-                            if (calculatorFailed && input.isNotEmpty()) resources.getString(R.string.incomplete)
+                        weakEdit.error =
+                            if (calculatorFailed && input.isNotEmpty() && weakEdit.hasFocus())
+                                resources.getString(R.string.incomplete)
                             else null // Always need to clear here in case it's a duplicate job finishing early
                     }
                 }
 
-                editText.error = null // Reset the error since they just typed
+                if (!failed) editText.error = null // Reset the error since they just typed
                 editText.setText(input)
                 // Set the selection to our edit index (or the length if editing the end)
                 editText.setSelection(min(calculatorEditIndex, input.length))
@@ -215,6 +217,12 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
         return (computeString() != null).also { validEquation ->
             calculatorFailed = !validEquation
+            inputView?.error =
+                if (calculatorFailed && key == resources.getString(R.string.equals)) {
+                    resources.getString(R.string.incomplete)
+                } else {
+                    null
+                }
         }
     }
 

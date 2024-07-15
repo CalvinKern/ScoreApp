@@ -263,7 +263,7 @@ class ScoreViewHolder(
             if (!hasFocus) {
                 updateScore(eventConsumer, round, score)
                 binding.playerScore.error = null // Clear error state when losing focus
-                if (score.value == 0.0) binding.playerScore.setText(formatScore(score.value))
+                binding.playerScore.setText(formatScore(score.value))
             } else {
                 // Newly gained focus = open calculator
                 if (useCalculator) showCalculatorKeyboardCallback?.invoke(binding.playerScore)
