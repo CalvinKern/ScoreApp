@@ -1,5 +1,7 @@
 package com.seakernel.android.scoreapp.gamelist
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -227,11 +229,28 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private fun openPlayStore() {
+        val url = "https://play.google.com/store/apps/details?id=com.seakernel.scorepad"
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://play.google.com/store/apps/details?id=com.seakernel.scorepad")
+            data = Uri.parse(url)
             setPackage("com.android.vending")
         }
-        startActivity(intent)
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            val clipboard: ClipboardManager? =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+
+            if (clipboard == null) {
+                Toast.makeText(requireContext(), R.string.storeToReview, Toast.LENGTH_SHORT).show()
+            } else {
+                clipboard.setPrimaryClip(ClipData.newPlainText("", url))
+
+                // Only show a toast for Android 12 and lower
+                if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.S_V2) {
+                    Toast.makeText(requireContext(), R.string.copiedUrl, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun openChangelog() {
