@@ -12,7 +12,23 @@ import com.seakernel.android.scoreapp.repository.RoundRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DeleteRoundDialog(private val roundIds: List<Long>) : DialogFragment() {
+class DeleteRoundDialog : DialogFragment() {
+
+    companion object {
+        private const val KEY_ROUND_IDS = "ROUND_IDS"
+
+        fun newInstance(roundIds: List<Long>): DeleteRoundDialog {
+            val args = Bundle().apply {
+                putLongArray(KEY_ROUND_IDS, roundIds.toLongArray())
+            }
+            val fragment = DeleteRoundDialog()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private val roundIds
+        get() = requireArguments().getLongArray(KEY_ROUND_IDS)?.toList() ?: emptyList()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val rounds = Array(roundIds.size) { i -> getString(R.string.deleteRoundItem, i + 1) }

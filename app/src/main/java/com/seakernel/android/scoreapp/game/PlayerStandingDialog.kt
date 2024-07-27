@@ -20,7 +20,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 
-class PlayerStandingDialog(val gameId: Long) : DialogFragment() {
+class PlayerStandingDialog : DialogFragment() {
+
+    companion object {
+        private const val KEY_GAME_ID = "GAME_ID"
+        fun newInstance(gameId: Long): PlayerStandingDialog {
+            val args = Bundle().apply {
+                putLong(KEY_GAME_ID, gameId)
+            }
+
+            val fragment = PlayerStandingDialog()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     private val adapter = PlayerStandingAdapter()
     private var _binding: DialogPlayerRoundBinding? = null
@@ -28,6 +41,8 @@ class PlayerStandingDialog(val gameId: Long) : DialogFragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val gameId get() = requireArguments().getLong(KEY_GAME_ID)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)

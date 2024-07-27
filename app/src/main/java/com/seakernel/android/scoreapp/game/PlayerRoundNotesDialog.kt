@@ -1,6 +1,8 @@
 package com.seakernel.android.scoreapp.game
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,8 +25,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PlayerRoundNotesDialog(private val player: Player, private val gameId: Long) :
-    DialogFragment() {
+class PlayerRoundNotesDialog : DialogFragment() {
+
+    companion object {
+        private const val KEY_GAME_ID = "GAME_ID"
+        private const val KEY_PLAYER = "PLAYER"
+
+        fun newInstance(player: Player, gameId: Long): PlayerRoundNotesDialog {
+            val args = Bundle().apply {
+                putLong(KEY_GAME_ID, gameId)
+                putParcelable(KEY_PLAYER, player)
+            }
+
+            val fragment = PlayerRoundNotesDialog()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     private val adapter = PlayerRoundNotesAdapter()
     private var _binding: DialogPlayerRoundBinding? = null
@@ -32,6 +49,15 @@ class PlayerRoundNotesDialog(private val player: Player, private val gameId: Lon
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val gameId get() = requireArguments().getLong(KEY_GAME_ID)
+    private val player
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable(KEY_PLAYER, Player::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            requireArguments().getParcelable(KEY_PLAYER)
+        }!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)
@@ -82,6 +108,7 @@ private class PlayerRoundNotesAdapter : RecyclerView.Adapter<PlayerRoundNotesVie
     NotesUpdatedListener {
     var playerRounds: MutableList<PlayerRoundNote> = ArrayList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setNotes(rounds: List<PlayerRoundNote>) {
         playerRounds.clear()
         playerRounds.addAll(rounds)
