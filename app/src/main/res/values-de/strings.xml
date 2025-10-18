@@ -38,6 +38,8 @@
     <string name="scoreHint">Ergebnis</string>
     <string name="showRoundNotesDescription">Klicken Sie auf den Namen eines Spielers, um Notizen für jede Runde anzuzeigen und zu bearbeiten</string>
     <string name="showRoundNotesTitle">Runde Noten anzeigen</string>
+    <string name="copiedUrl">URL kopiert</string>
+    <string name="storeToReview">Bitte öffnen Sie den App-Store, um eine Bewertung abzugeben</string>
     <string name="actionClose">Schließen</string>
     <string name="actionPlayerStanding">Stehen</string>
     <string name="playerStandingTitle">Spielerwertung</string>

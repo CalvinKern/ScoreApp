@@ -41,6 +41,8 @@
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">Clasamentul jucătorilor</string>
     <string name="actionPlayerStanding">Clasamente</string>
+    <string name="copiedUrl">URL copiat</string>
+    <string name="storeToReview">Deschideți magazinul de aplicații pentru a lăsa o recenzie</string>
     <string name="actionClose">Închide</string>
     <string name="useCalculatorDescription">Utilizați tastatura calculatorului personalizată. Va folosi tastatura de sistem dacă nu este activată.</string>
     <string name="useCalculatorTitle">Tastatură Calculator</string>

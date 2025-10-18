@@ -41,6 +41,8 @@
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">खिलाड़ी स्थान</string>
     <string name="actionPlayerStanding">स्थान</string>
+    <string name="copiedUrl">यूआरएल कॉपी किया गया</string>
+    <string name="storeToReview">कृपया समीक्षा के लिए ऐप स्टोर खोलें</string>
     <string name="actionClose">बंद करे</string>
     <string name="useCalculatorDescription">कस्टम कैलकुलेटर कीबोर्ड का उपयोग करें। सक्षम नहीं होने पर सिस्टम कीबोर्ड का उपयोग करेगा।</string>
     <string name="useCalculatorTitle">कैलकुलेटर कीबोर्ड</string>

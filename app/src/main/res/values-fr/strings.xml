@@ -41,6 +41,8 @@
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">Classement des joueurs</string>
     <string name="actionPlayerStanding">Classement</string>
+    <string name="copiedUrl">URL copiée</string>
+    <string name="storeToReview">Veuillez ouvrir la boutique d’applications pour laisser un avis</string>
     <string name="actionClose">Fermer</string>
     <string name="useCalculatorDescription">Utilisez le clavier personnalisé de la calculatrice. Utilisera le clavier système s\'il n\'est pas activé.</string>
     <string name="useCalculatorTitle">Clavier de la calculatrice</string>

@@ -41,6 +41,8 @@
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">プレーヤーの順位</string>
     <string name="actionPlayerStanding">順位</string>
+    <string name="copiedUrl">コピーしたURL</string>
+    <string name="storeToReview">レビューするにはアプリストアを開いてください</string>
     <string name="actionClose">閉じる</string>
     <string name="useCalculatorDescription">カスタム電卓キーボードを使用します。 有効になっていない場合は、システムキーボードを使用します。</string>
     <string name="useCalculatorTitle">電卓キーボード</string>
