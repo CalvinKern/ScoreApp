@@ -59,7 +59,7 @@ class GameSetupFragment : Fragment() {
             ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
-                names?.distinct() ?: emptyList(),
+                names?.map { it.trim() }?.distinct() ?: emptyList(),
             )
         )
     }
