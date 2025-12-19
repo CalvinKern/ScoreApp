@@ -9,7 +9,6 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
         <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:statusBarColor">?attr/statusBarBackground</item>
 
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="snackbarStyle">@style/SnackbarStyle</item>

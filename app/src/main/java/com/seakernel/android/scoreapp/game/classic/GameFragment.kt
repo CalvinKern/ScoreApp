@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
@@ -22,6 +23,8 @@ import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.spotify.mobius.Connection
@@ -92,6 +95,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_game)
+
+        ViewGroupCompat.installCompatInsetsDispatch(binding.root)
+        binding.toolbar.applyWindowInsetsCutout()
+        binding.nameRow.applyWindowInsetsNavigationPadding(includeBottom = false)
+        binding.scoreRows.applyWindowInsetsNavigationPadding(includeBottom = false)
+        binding.bottomContainer.applyWindowInsetsNavigationPadding()
+
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.actionEdit -> {

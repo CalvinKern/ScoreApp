@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -22,6 +23,8 @@ import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.databinding.FragmentGraphBinding
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.logScreenView
 import java.text.DecimalFormat
 
@@ -69,6 +72,10 @@ class GraphFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+
+        ViewGroupCompat.installCompatInsetsDispatch(binding.root)
+        binding.graphToolbar.applyWindowInsetsCutout()
+        binding.gameChart.applyWindowInsetsNavigationMargin()
 
         viewModel.getGame().observe(viewLifecycleOwner, modelObserver)
         viewModel.loadGame(

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -27,6 +28,8 @@ import com.seakernel.android.scoreapp.databinding.HolderGameCreatePlayerBinding
 import com.seakernel.android.scoreapp.databinding.ViewGameSettingsBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
@@ -118,6 +121,11 @@ class GameSetupFragment : Fragment() {
         // Setup toolbar
         initToolbar()
         initSettings()
+
+        ViewGroupCompat.installCompatInsetsDispatch(binding.root)
+        binding.toolbar.applyWindowInsetsCutout()
+        binding.gameEditContainer.applyWindowInsetsNavigationPadding(includeBottom = false)
+        binding.playerRecycler.applyWindowInsetsNavigationPadding()
 
         // Start observing the data
         viewModel.getGameSettings().observe(viewLifecycleOwner, modelObserver)

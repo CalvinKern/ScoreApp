@@ -2,6 +2,7 @@ package com.seakernel.android.scoreapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.game.classic.GameFragment
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.enableEdgeToEdge(window)
         setContentView(R.layout.activity_main)
 
         // Add the list fragment if we don't have any state

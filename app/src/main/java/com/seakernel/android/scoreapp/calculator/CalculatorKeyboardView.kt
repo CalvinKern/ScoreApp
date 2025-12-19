@@ -168,10 +168,10 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     }
 
     private fun onPrevClicked() {
-        if (resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
-            inputView?.focusSearch(View.FOCUS_LEFT)?.requestFocus()
+        if (inputView?.layoutDirection == LAYOUT_DIRECTION_LTR) {
+            inputView?.focusSearch(FOCUS_LEFT)?.requestFocus()
         } else {
-            inputView?.focusSearch(View.FOCUS_RIGHT)?.requestFocus()
+            inputView?.focusSearch(FOCUS_RIGHT)?.requestFocus()
         }
     }
 
@@ -190,7 +190,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                         calculatorString.run {
                             removeRange(calculatorEditIndex, calculatorEditIndex + 1)
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         // Default to empty string if error removing anything?
                         // This has been observed in weird selection cases (shouldn't be able to select though)
                         ""

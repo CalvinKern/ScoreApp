@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -19,6 +20,9 @@ import com.seakernel.android.scoreapp.databinding.FragmentGameListBinding
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
@@ -105,6 +109,11 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 else -> false
             }
         }
+
+        ViewGroupCompat.installCompatInsetsDispatch(binding.root)
+        binding.toolbar.applyWindowInsetsCutout()
+        binding.fab.applyWindowInsetsNavigationMargin()
+        binding.gameRecycler.applyWindowInsetsNavigationPadding()
     }
 
     override fun onResume() {

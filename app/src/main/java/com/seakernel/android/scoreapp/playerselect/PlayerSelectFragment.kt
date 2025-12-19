@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -24,6 +25,9 @@ import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
@@ -104,6 +108,11 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_player_select)
         binding.playerRecycler.layoutManager = LinearLayoutManager(requireContext())
+
+        ViewGroupCompat.installCompatInsetsDispatch(binding.root)
+        binding.toolbar.applyWindowInsetsCutout()
+        binding.fab.applyWindowInsetsNavigationMargin()
+        binding.playerRecycler.applyWindowInsetsNavigationPadding()
     }
 
     override fun onDestroyView() {

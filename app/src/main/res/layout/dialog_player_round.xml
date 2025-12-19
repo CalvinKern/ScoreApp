@@ -11,6 +11,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         tools:listitem="@layout/holder_player_round_notes"
         tools:itemCount="8"
         />
