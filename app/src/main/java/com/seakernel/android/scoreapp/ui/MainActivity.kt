@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -17,9 +18,19 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     PlayerSelectFragment.PlayerSelectListener,
     GameSetupFragment.GameSetupListener, GameFragment.GameListener {
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = isLightMode(newConfig)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.enableEdgeToEdge(window)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = isLightMode(resources.configuration)
+        }
         setContentView(R.layout.activity_main)
 
         // Add the list fragment if we don't have any state
@@ -82,6 +93,9 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     }
 
     // Helper Functions
+    private fun isLightMode(config: Configuration): Boolean =
+        (config.uiMode and Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES
+
     private fun popBackStackIfFound(clazz: KClass<*>) {
         supportFragmentManager.findFragmentByTag(clazz.java.simpleName)?.let {
             supportFragmentManager.popBackStack() // Get rid of create fragment if it exists
