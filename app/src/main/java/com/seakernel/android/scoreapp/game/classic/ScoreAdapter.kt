@@ -130,14 +130,19 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
 
         var leadScore: Double? = null
         totalsMap.forEach {
-            if (leadScore != null && leadScore!! > it.value) {
+            if (leadScore != null && leadScore > it.value) {
                 if (reversedScoring) leadPlayerIds.clear() else return@forEach
             }
-            if (leadScore != null && leadScore!! < it.value) {
+            if (leadScore != null && leadScore < it.value) {
                 if (reversedScoring) return@forEach else leadPlayerIds.clear()
             }
             leadPlayerIds.add(it.key)
             leadScore = it.value
+        }
+
+        // Don't show a lead player if everyone is tied
+        if (leadPlayerIds.size == totalsMap.size) {
+            leadPlayerIds.clear()
         }
     }
 
