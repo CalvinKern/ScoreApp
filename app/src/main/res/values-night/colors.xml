@@ -2,6 +2,7 @@
 <resources>
     <color name="slightGray">#121212</color>
     <color name="dealerPast">@color/colorPrimaryDark</color>
+    <color name="totalBackground">@color/black</color>
     <color name="colorSelected">#252525</color>
 
     <color name="colorOnPrimary">@color/white</color>

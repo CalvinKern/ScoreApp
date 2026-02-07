@@ -286,19 +286,19 @@ class ScoreViewHolder(
             true
         }
 
-        // Moved to the end so we don't muck too much with other focus logic
-        // If it's the first score in the last round, request focus (to save the previous rounds score)
-        // TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
-        if (score.id == rounds.last().scores.first().id && shouldFocus) {
-            binding.playerScore.requestFocus()
-            shouldFocus = false // Reset the focus flag so we don't constantly gain focus
-        }
+//        // Moved to the end so we don't muck too much with other focus logic
+//        // If it's the first score in the last round, request focus (to save the previous rounds score)
+//        // TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
+//        if (score.id == rounds.last().scores.first().id && shouldFocus) {
+//            binding.playerScore.requestFocus()
+//            shouldFocus = false // Reset the focus flag so we don't constantly gain focus
+//        }
     }
 
     fun bindTotal(score: Double, isLeader: Boolean) {
         binding.playerScore.isEnabled = false
         binding.playerScore.isFocusable = false
-        itemView.setBackgroundResource(R.color.black)
+        itemView.setBackgroundResource(R.color.totalBackground)
 
         if (isLeader) {
             binding.playerBorder.setBackgroundResource(R.drawable.border_winner)

@@ -9,6 +9,7 @@
     <color name="winnerText">@color/colorOnPrimary</color>
     <color name="dealer">@color/colorPrimary</color>
     <color name="dealerPast">@color/colorPrimaryLight</color>
+    <color name="totalBackground">@color/graphGray</color>
     <color name="transparent">#00000000</color>
     <color name="colorSelected">#DADADA</color>
 
@@ -36,5 +37,5 @@
     <color name="graphYellow">#ffeb3b</color>
     <color name="graphOrange">#ff9800</color>
     <color name="graphBrown">#795548</color>
-    <color name="graphGray">#607d8b</color>
+    <color name="graphGray">#546E7A</color>
 </resources>
