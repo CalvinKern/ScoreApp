@@ -112,7 +112,7 @@ fun View.applyWindowInsetsNavigationPadding(includeBottom: Boolean = true) {
 
     ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
         val insets = windowInsets.getInsets(
-            WindowInsetsCompat.Type.systemGestures()
+            WindowInsetsCompat.Type.mandatorySystemGestures()
                     or WindowInsetsCompat.Type.ime()
                     or WindowInsetsCompat.Type.displayCutout()
         )
