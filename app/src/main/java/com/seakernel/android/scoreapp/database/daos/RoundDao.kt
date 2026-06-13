@@ -19,10 +19,10 @@ interface RoundDao {
     fun getNotesForPlayer(playerId: Long, gameId: Long): List<ScoreNoteEntity>
 
     @Insert
-    fun insertAll(vararg rounds: RoundEntity): LongArray
+    fun insertAll(rounds: Array<RoundEntity>): LongArray
 
     @Insert
-    fun insertAll(vararg scores: ScoreEntity): LongArray
+    fun insertAll(scores: Array<ScoreEntity>): LongArray
 
     @Query("SELECT * FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} = :id")
     fun getRound(id: Long): RoundEntity
@@ -34,7 +34,7 @@ interface RoundDao {
     fun update(round: RoundEntity)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(vararg score: ScoreEntity)
+    fun update(score: Array<ScoreEntity>)
 
     @Query(
         """
@@ -56,7 +56,7 @@ interface RoundDao {
     fun updateScoreNote(id: Long, notes: String)
 
     @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} IN (:ids)")
-    fun deleteRoundsById(vararg ids: Long)
+    fun deleteRoundsById(ids: LongArray)
 
     @Query("DELETE FROM ${ScoreEntity.TABLE_NAME} WHERE ${ScoreEntity.COLUMN_ID} = :id")
     fun deleteScoreById(id: Long)

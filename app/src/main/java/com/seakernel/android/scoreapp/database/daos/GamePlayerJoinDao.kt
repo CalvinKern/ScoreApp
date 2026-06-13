@@ -15,7 +15,7 @@ import com.seakernel.android.scoreapp.database.entities.PlayerEntity
 @Dao
 interface GamePlayerJoinDao {
     @Insert
-    fun insertAll(vararg joins: GamePlayerJoin)
+    fun insertAll(joins: Array<GamePlayerJoin>)
 
     @Query(
         """
@@ -42,7 +42,7 @@ interface GamePlayerJoinDao {
     fun getGamesForPlayer(playerId: Long): List<GameEntity>
 
     @Update
-    fun updatePlayerPositions(vararg joins: GamePlayerJoin)
+    fun updatePlayerPositions(joins: Array<GamePlayerJoin>)
 
     @Query(
         """
@@ -51,5 +51,5 @@ interface GamePlayerJoinDao {
        AND ${GamePlayerJoin.COLUMN_PLAYER_ID} IN (:playerIds)
     """
     )
-    fun deleteAllPlayersForGame(gameId: Long, vararg playerIds: Long)
+    fun deleteAllPlayersForGame(gameId: Long, playerIds: LongArray)
 }

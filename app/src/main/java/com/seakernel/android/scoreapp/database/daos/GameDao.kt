@@ -24,7 +24,7 @@ interface GameDao {
     fun update(game: GameEntity)
 
     @Insert
-    fun insertAll(vararg games: GameEntity): LongArray
+    fun insertAll(games: Array<GameEntity>): LongArray
 
     @Delete
     fun delete(game: GameEntity)
@@ -32,9 +32,11 @@ interface GameDao {
     @Query("DELETE FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID} = :id")
     fun deleteById(id: Long): Int
 
+    @Transaction
     @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID}=:gameId")
     fun getFullGame(gameId: Long): FullGameEntity
 
+    @Transaction
     @Query("SELECT * FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID}=:gameId")
     fun getRounds(gameId: Long): List<FulLRoundEntity>
 

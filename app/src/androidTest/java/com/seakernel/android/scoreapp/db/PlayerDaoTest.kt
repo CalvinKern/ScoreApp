@@ -44,7 +44,7 @@ class PlayerDaoTest {
                 "User 1",
                 false,
             )
-        val playerIds = playerDao.insertAll(player)
+        val playerIds = playerDao.insertAll(arrayOf(player))
         val allPlayers = playerDao.getAll()
 
         assertEquals(allPlayers[0].uid, playerIds[0])
@@ -59,7 +59,7 @@ class PlayerDaoTest {
                 "User 1",
                 false,
             )
-        val playerIds = playerDao.insertAll(player)
+        val playerIds = playerDao.insertAll(arrayOf(player))
         val playerList = playerDao.loadAllByIds(longArrayOf(playerIds[0]))
 
         assertNotNull(playerList[0])
@@ -73,7 +73,7 @@ class PlayerDaoTest {
                 "User 1",
                 false
             )
-        val playerIds = playerDao.insertAll(player)
+        val playerIds = playerDao.insertAll(arrayOf(player))
 
         playerDao.updateName(
             playerIds[0],
@@ -92,7 +92,7 @@ class PlayerDaoTest {
                 "User 1",
                 false
             )
-        val playerIds = playerDao.insertAll(player)
+        val playerIds = playerDao.insertAll(arrayOf(player))
 
         playerDao.deleteById(playerIds[0])
 
@@ -110,7 +110,7 @@ class PlayerDaoTest {
             )
         }
 
-        playerDao.insertAll(*players.toTypedArray())
+        playerDao.insertAll(players.toTypedArray())
 
         val allPlayers = playerDao.getAll()
         assertEquals(n, allPlayers.size)
@@ -125,7 +125,7 @@ class PlayerDaoTest {
                 false
             )
 
-        val playerIds = playerDao.insertAll(player)
+        val playerIds = playerDao.insertAll(arrayOf(player))
         assertEquals(playerDao.getAll().first().archived, false)
 
         playerDao.setArchived(playerIds.first(), true)
