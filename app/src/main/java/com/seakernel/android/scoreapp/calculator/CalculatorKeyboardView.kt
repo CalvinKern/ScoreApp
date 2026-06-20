@@ -21,6 +21,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import kotlin.math.min
+import kotlin.time.Duration.Companion.milliseconds
 
 typealias InputChangedListener = (input: String, failure: Boolean) -> Unit
 
@@ -106,7 +107,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
                 delayCheckJob?.cancel()
                 delayCheckJob = GlobalScope.launch(Dispatchers.IO) {
-                    delay(DELAY_VALID_COMPUTATION_MESSAGE)
+                    delay(DELAY_VALID_COMPUTATION_MESSAGE.milliseconds)
                     val weakEdit = weakInputText.get() ?: return@launch
                     post { // Need the main thread for editText
                         weakEdit.error =
