@@ -140,6 +140,7 @@ fun View.applyWindowInsetsNavigationMargin() {
         val insets = windowInsets.getInsets(
             WindowInsetsCompat.Type.systemBars()
                     or WindowInsetsCompat.Type.displayCutout()
+                    or WindowInsetsCompat.Type.ime()
         )
         // Apply the insets as a margin to the view
         v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
