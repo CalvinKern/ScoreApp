@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,8 @@ import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
 import com.seakernel.android.scoreapp.repository.PlayerRoundNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,6 +68,7 @@ class PlayerRoundNotesDialog : DialogFragment() {
         binding.dialogPlayerRoundRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
         binding.dialogPlayerRoundRecycler.adapter = adapter
+        binding.root.applyWindowInsetsNavigationPadding()
 
         lifecycleScope.launch(Dispatchers.IO) {
             val roundNotes = RoundRepository(requireContext()).getNotesForPlayer(player, gameId)
@@ -89,9 +93,10 @@ class PlayerRoundNotesDialog : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        val window = dialog?.window ?: return
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
 
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         (dialog as? AlertDialog)?.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val playerRounds = adapter.playerRounds
@@ -149,7 +154,7 @@ private class PlayerRoundNotesViewHolder(
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                notesListener.onNotesUpdated(adapterPosition, text?.toString() ?: "")
+                notesListener.onNotesUpdated(bindingAdapterPosition, text?.toString() ?: "")
             }
         })
     }

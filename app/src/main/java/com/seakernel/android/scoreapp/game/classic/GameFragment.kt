@@ -245,7 +245,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         manager = GridLayoutManager(requireContext(), spanCount)
                         binding.scoreRows.layoutManager = manager
                     }
-                    manager?.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int) =
                             if (position == (model.rounds.size * spanCount)) spanCount else 1
                     }

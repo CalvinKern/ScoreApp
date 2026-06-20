@@ -283,7 +283,7 @@ class GameSetupFragment : Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                viewModel.movePlayer(viewHolder.adapterPosition, target.adapterPosition)
+                viewModel.movePlayer(viewHolder.bindingAdapterPosition, target.bindingAdapterPosition)
                 return true
             }
 
