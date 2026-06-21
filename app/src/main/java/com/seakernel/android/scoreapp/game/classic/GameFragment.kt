@@ -231,8 +231,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         return object : Connection<GameModel> {
             override fun accept(model: GameModel) {
                 binding.toolbar.title = model.settings.name
-                binding.calculatorKeyboard.visibility =
-                    if (model.settings.useCalculator) View.VISIBLE else View.GONE
+                binding.calculatorKeyboard.isCalculatorEnabled = model.settings.useCalculator
 
                 var manager = binding.scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
@@ -258,6 +257,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         model.settings.hasDealer,
                         model.settings.useCalculator,
                         model.rounds,
+                        model.focusedScoreId,
                         eventConsumer
                     ) { score -> binding.calculatorKeyboard.setInput(score) }, false
                 )

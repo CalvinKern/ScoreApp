@@ -27,6 +27,9 @@ sealed class GameEvent {
         val score: Double,
         val metadata: String
     ) : GameEvent()
+
+    data class ScoreFocused(val scoreId: Long) : GameEvent()
+    data class ScoreFocusLost(val scoreId: Long) : GameEvent()
 }
 
 sealed class GameEffect {
@@ -38,7 +41,8 @@ sealed class GameEffect {
 
 data class GameModel(
     val settings: GameSettings = GameSettings(),
-    val rounds: List<Round> = emptyList()
+    val rounds: List<Round> = emptyList(),
+    val focusedScoreId: Long? = null
 ) {
 
     companion object {
@@ -104,13 +108,21 @@ data class GameModel(
                 is GameEvent.RoundSaved -> {
                     val rounds = model.rounds.toMutableList()
                     val index = rounds.indexOfFirst { it.id == event.round.id }
-                    if (index >= 0) {
+                    val isNewRound = index < 0
+                    if (!isNewRound) {
                         rounds.removeAt(index)
                         rounds.add(index, event.round)
                     } else {
                         rounds.add(event.round)
                     }
-                    Next.next(model.copy(rounds = rounds))
+
+                    val focusedScoreId = if (isNewRound) {
+                        event.round.scores.firstOrNull()?.id
+                    } else {
+                        model.focusedScoreId
+                    }
+
+                    Next.next(model.copy(rounds = rounds, focusedScoreId = focusedScoreId))
                 }
                 is GameEvent.ScoreSaved -> {
                     val rounds = model.rounds.toMutableList()
@@ -142,6 +154,14 @@ data class GameModel(
                                 )
                             )
                         )
+                    } else {
+                        Next.noChange()
+                    }
+                }
+                is GameEvent.ScoreFocused -> Next.next(model.copy(focusedScoreId = event.scoreId))
+                is GameEvent.ScoreFocusLost -> {
+                    if (model.focusedScoreId == event.scoreId) {
+                        Next.next(model.copy(focusedScoreId = null))
                     } else {
                         Next.noChange()
                     }

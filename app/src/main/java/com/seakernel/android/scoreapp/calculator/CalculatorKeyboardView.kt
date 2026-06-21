@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
@@ -46,6 +47,14 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     private var inputView: EditText? = null
     private var inputChangedListener: InputChangedListener? = null
 
+    var isCalculatorEnabled = true
+        set(value) {
+            field = value
+
+            // Immediately hide if not enabled
+            if (!value) visibility = GONE
+        }
+
     private var delayCheckJob: Job? = null
     private var calculatorFailed = false
     private var calculatorString = ""
@@ -79,11 +88,43 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorEditIndex = calculatorString.length
     }
 
+    private var hideJob: Job? = null
+
     /**
      * @param inputText the calculator input for the current query
      */
     @OptIn(DelicateCoroutinesApi::class)
-    fun setInput(inputText: EditText) {
+    fun setInput(inputText: EditText?) {
+        hideJob?.cancel()
+        if (inputText == null) {
+            // Delay hiding slightly to allow for focus transitions between scores (e.g. when adding a round)
+            hideJob = GlobalScope.launch(Dispatchers.Main) {
+                delay(100.milliseconds)
+                if (!isAttachedToWindow) return@launch
+
+                inputView = null
+                visibility = GONE
+                setInputChangedListener()
+
+                // Hide system keyboard if it's showing
+                (context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+                    ?.hideSoftInputFromWindow(windowToken, 0)
+            }
+            return
+        }
+
+        if (!isCalculatorEnabled) {
+            inputView = null
+            visibility = GONE
+            return setInputChangedListener()
+        }
+
+        visibility = VISIBLE
+
+        // Hide system keyboard if it's showing (should be handled by showSoftInputOnFocus = false, but just in case)
+        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+            ?.hideSoftInputFromWindow(inputText.windowToken, 0)
+
         calculatorEditIndex = calculatorString.length
 
         inputView = inputText
@@ -181,6 +222,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
      * @return true if the string has changed, false otherwise
      */
     private fun appendToString(key: String): Boolean {
+        if (inputView == null) return false
         calculatorString = when (key) {
             resources.getString(R.string.del) -> {
                 if (calculatorString.isEmpty()) {

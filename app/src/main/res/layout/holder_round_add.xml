@@ -9,6 +9,7 @@
     android:background="@drawable/background_secondary"
     android:foreground="@drawable/selectable_bordered"
     android:focusable="true"
+    android:focusableInTouchMode="false"
     android:clickable="true"
     >
 

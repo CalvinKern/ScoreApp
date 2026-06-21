@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.game.classic
 
+import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -23,7 +24,7 @@ import com.spotify.mobius.functions.Consumer
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
 
-private typealias CalculatorKeyboardCallback = (scoreView: EditText) -> Unit
+private typealias CalculatorKeyboardCallback = (scoreView: EditText?) -> Unit
 
 /**
  * Created by Calvin on 12/21/18.
@@ -33,6 +34,7 @@ class GameScoreAdapter(
     private val hasDealer: Boolean,
     private val useCalculator: Boolean,
     private val rounds: List<Round>,
+    private val focusedScoreId: Long?,
     private val eventConsumer: Consumer<GameEvent>? = null,
     private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -70,12 +72,20 @@ class GameScoreAdapter(
                     rounds,
                     round,
                     round.scores[toScoreIndex(position)],
+                    focusedScoreId,
                     eventConsumer
                 )
             }
             VIEW_TYPE_ROUND_ADD -> {
                 (holder as AddRoundViewHolder).bind(eventConsumer)
             }
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is ScoreViewHolder) {
+            holder.onRecycled()
         }
     }
 
@@ -206,10 +216,10 @@ class ScoreViewHolder(
         binding.playerScore.addTextChangedListener(this)
     }
 
-    private var shouldFocus: Boolean = true
     private var _eventConsumer: Consumer<GameEvent>? = null
     private var _round: Round? = null
     private var _score: Score? = null
+    private var _focusedScoreId: Long? = null
 
     fun bind(
         hasDealer: Boolean,
@@ -217,12 +227,14 @@ class ScoreViewHolder(
         rounds: List<Round>,
         round: Round,
         score: Score,
+        focusedScoreId: Long?,
         eventConsumer: Consumer<GameEvent>?
     ) {
         // I hate doing this, but it gets the score to update the total immediately
         _eventConsumer = eventConsumer
         _round = round
         _score = score
+        _focusedScoreId = focusedScoreId
 
         binding.playerScore.showSoftInputOnFocus = !useCalculator
 
@@ -265,16 +277,33 @@ class ScoreViewHolder(
         }
 
         binding.playerScore.setOnFocusChangeListener { _, hasFocus ->
+            val scoreId = _score?.id ?: return@setOnFocusChangeListener
+            val scoreValue = _score?.value ?: return@setOnFocusChangeListener
+
             if (!hasFocus) {
-                updateScore(eventConsumer, round, score)
+                updateScore(
+                    _eventConsumer,
+                    _round ?: return@setOnFocusChangeListener,
+                    _score ?: return@setOnFocusChangeListener,
+                )
                 binding.playerScore.error = null // Clear error state when losing focus
-                binding.playerScore.setText(formatScore(score.value))
+                binding.playerScore.setText(formatScore(scoreValue))
+
+                // Notify Mobius that focus is lost so we don't "sticky focus" on scroll back
+                if (scoreId == _focusedScoreId) {
+                    showCalculatorKeyboardCallback?.invoke(null)
+                    _eventConsumer?.accept(GameEvent.ScoreFocusLost(scoreId))
+                }
             } else {
-                // Newly gained focus = open calculator
-                if (useCalculator) showCalculatorKeyboardCallback?.invoke(binding.playerScore)
+                // Newly gained focus = open calculator/keyboard
+                showCalculatorKeyboardCallback?.invoke(binding.playerScore)
+
+                if (scoreId != _focusedScoreId) {
+                    _eventConsumer?.accept(GameEvent.ScoreFocused(scoreId))
+                }
 
                 // Set the selection to the end of the score (makes quick edits/additions easier)
-                if (score.value == 0.0) {
+                if (scoreValue == 0.0) {
                     binding.playerScore.setText(R.string.emptyString)
                 } else {
                     binding.playerScore.setSelection(binding.playerScore.text.length)
@@ -286,13 +315,28 @@ class ScoreViewHolder(
             true
         }
 
-//        // Moved to the end so we don't muck too much with other focus logic
-//        // If it's the first score in the last round, request focus (to save the previous rounds score)
-//        // TODO: Should just debounce changes to save instead of this hack (then it will save on back/settings navigation too)
-//        if (score.id == rounds.last().scores.first().id && shouldFocus) {
-//            binding.playerScore.requestFocus()
-//            shouldFocus = false // Reset the focus flag so we don't constantly gain focus
-//        }
+        // Handle Focus Persistence and Automatic Focus
+        if (score.id == focusedScoreId) {
+            if (!binding.playerScore.hasFocus()) {
+                binding.playerScore.post {
+                    if (_score?.id == _focusedScoreId && !binding.playerScore.hasFocus()) {
+                        binding.playerScore.requestFocus()
+                    }
+                }
+            }
+        } else if (binding.playerScore.hasFocus()) {
+            binding.playerScore.clearFocus()
+        }
+    }
+
+    fun onRecycled() {
+        if (binding.playerScore.hasFocus()) {
+            binding.playerScore.clearFocus()
+        }
+        _score = null
+        _round = null
+        _eventConsumer = null
+        _focusedScoreId = null
     }
 
     fun bindTotal(score: Double, isLeader: Boolean) {
