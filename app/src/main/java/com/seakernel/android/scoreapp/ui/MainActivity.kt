@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
                 .add(
                     R.id.fragmentContainer,
                     GameListFragment.newInstance(),
-                    GameListFragment::class.java.simpleName
+                    GameListFragment::class.java.name
                 )
                 .commit()
         }
@@ -49,31 +49,31 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     override fun onPlayersSelected(playerIds: List<Long>) {
         popBackStackIfFound(PlayerSelectFragment::class)
         val fragment =
-            supportFragmentManager.findFragmentByTag(GameSetupFragment::class.java.simpleName) as GameSetupFragment
+            supportFragmentManager.findFragmentByTag(GameSetupFragment::class.java.name) as GameSetupFragment
         fragment.updateForNewPlayers(playerIds)
     }
 
     override fun onShowPlayerSelectScreen(playerIds: List<Long>) {
         showFragment(
             PlayerSelectFragment.newInstance(playerIds),
-            PlayerSelectFragment::class.java.simpleName
+            PlayerSelectFragment::class.java.name
         )
     }
 
     override fun onShowGameScreen(gameId: Long) {
         popBackStackIfFound(GameFragment::class) // If copying, remove previous game fragment
         popBackStackIfFound(GameSetupFragment::class)
-        showFragment(GameFragment.newInstance(gameId), GameFragment::class.java.simpleName)
+        showFragment(GameFragment.newInstance(gameId), GameFragment::class.java.name)
     }
 
     override fun onShowCreateGameScreen() {
-        showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.simpleName)
+        showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.name)
     }
 
     override fun onGameSettingsSelected(gameId: Long) {
         showFragment(
             GameSetupFragment.newInstance(gameId),
-            GameSetupFragment::class.java.simpleName
+            GameSetupFragment::class.java.name
         )
     }
 
@@ -82,13 +82,13 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     }
 
     override fun onGraphSelected(gameId: Long) {
-        showFragment(GraphFragment.newInstance(gameId), GraphFragment::class.java.simpleName)
+        showFragment(GraphFragment.newInstance(gameId), GraphFragment::class.java.name)
     }
 
     override fun onNewGame(gameId: Long, initialDealerId: Long?) {
         showFragment(
             GameSetupFragment.newInstanceCopy(gameId, initialDealerId),
-            GameSetupFragment::class.java.simpleName
+            GameSetupFragment::class.java.name
         )
     }
 
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
         (config.uiMode and Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES
 
     private fun popBackStackIfFound(clazz: KClass<*>) {
-        supportFragmentManager.findFragmentByTag(clazz.java.simpleName)?.let {
+        supportFragmentManager.findFragmentByTag(clazz.java.name)?.let {
             supportFragmentManager.popBackStack() // Get rid of create fragment if it exists
         }
     }

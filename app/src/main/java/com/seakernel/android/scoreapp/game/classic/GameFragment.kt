@@ -192,13 +192,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private fun showStandingDialog(gameId: Long) {
         logEvent(AnalyticsConstants.Event.SHOW_PLAYER_STANDING_DIALOG)
         val dialog = PlayerStandingDialog.newInstance(gameId)
-        dialog.show(parentFragmentManager, PlayerStandingDialog::class.java.simpleName)
+        dialog.show(parentFragmentManager, PlayerStandingDialog::class.java.name)
     }
 
     private fun showRoundNotesDialog(player: Player, gameId: Long) {
         logEvent(AnalyticsConstants.Event.SHOW_ROUND_NOTES_DIALOG)
         val dialog = PlayerRoundNotesDialog.newInstance(player, gameId)
-        dialog.show(parentFragmentManager, PlayerRoundNotesDialog::class.java.simpleName)
+        dialog.show(parentFragmentManager, PlayerRoundNotesDialog::class.java.name)
     }
 
     private fun showRoundDeleteDialog(gameId: Long) {
@@ -207,7 +207,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             val ids = RoundRepository(requireContext()).getRoundIds(gameId)
             withContext(Dispatchers.Main) {
                 val dialog = DeleteRoundDialog.newInstance(ids)
-                dialog.show(parentFragmentManager, DeleteRoundDialog::class.java.simpleName)
+                dialog.show(parentFragmentManager, DeleteRoundDialog::class.java.name)
             }
         }
     }

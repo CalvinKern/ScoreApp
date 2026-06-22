@@ -58,7 +58,7 @@ class GameScoreAdapter(
         return when (viewType) {
             VIEW_TYPE_SCORE -> ScoreViewHolder(parent, showCalculatorKeyboardCallback)
             VIEW_TYPE_ROUND_ADD -> AddRoundViewHolder(parent)
-            else -> throw InvalidParameterException("viewType ($viewType) is not supported in the ${GameScoreAdapter::class.java.simpleName}")
+            else -> throw InvalidParameterException("viewType ($viewType) is not supported in the ${GameScoreAdapter::class.java.name}")
         }
     }
 
