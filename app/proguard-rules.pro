@@ -14,10 +14,15 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 -keep class org.threeten.bp.zone.*
+
+# Keep Fragments and their no-arg constructors for restoration after process death/config change
+-keep public class * extends androidx.fragment.app.Fragment {
+    public <init>();
+}
