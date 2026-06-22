@@ -163,7 +163,11 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         binding.toolbar.setOnMenuItemClickListener(toolbarItemClickListener)
 
         return object : Connection<CreateModel> {
+            private var lastModel: CreateModel? = null
+
             override fun accept(model: CreateModel) {
+                if (model == lastModel) return
+
                 binding.playerLoading.setVisible(model.isLoading)
                 binding.playerEmptyGroup.setVisible(!model.isLoading && model.allPlayers.isEmpty())
                 binding.playerRecycler.setVisible(!model.isLoading && model.filteredPlayerList.isNotEmpty())
@@ -176,6 +180,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                         eventConsumer
                     ), false
                 )
+
+                lastModel = model
             }
 
             override fun dispose() {

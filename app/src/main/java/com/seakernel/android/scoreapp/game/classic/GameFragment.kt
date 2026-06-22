@@ -229,14 +229,22 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         this.eventConsumer = eventConsumer
 
         return object : Connection<GameModel> {
+            private var lastModel: GameModel? = null
+
             override fun accept(model: GameModel) {
-                binding.toolbar.title = model.settings.name
-                binding.calculatorKeyboard.isCalculatorEnabled = model.settings.useCalculator
+                if (model == lastModel) return
+
+                if (model.settings != lastModel?.settings) {
+                    binding.toolbar.title = model.settings.name
+                    binding.calculatorKeyboard.isCalculatorEnabled = model.settings.useCalculator
+                }
 
                 var manager = binding.scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
                 if (model.settings.players.isNotEmpty()) {
-                    setupHeaderAndFooter(model.settings)
+                    if (model.settings != lastModel?.settings) {
+                        setupHeaderAndFooter(model.settings)
+                    }
 
                     val spanCount = model.settings.players.size
                     if (oldSpanCount != spanCount) {
@@ -244,9 +252,12 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         manager = GridLayoutManager(requireContext(), spanCount)
                         binding.scoreRows.layoutManager = manager
                     }
-                    manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                        override fun getSpanSize(position: Int) =
-                            if (position == (model.rounds.size * spanCount)) spanCount else 1
+
+                    if (oldSpanCount != spanCount || model.rounds.size != lastModel?.rounds?.size) {
+                        manager?.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                            override fun getSpanSize(position: Int) =
+                                if (position == (model.rounds.size * spanCount)) spanCount else 1
+                        }
                     }
                 }
 
@@ -274,6 +285,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         model.rounds
                     ), false
                 )
+
+                lastModel = model
             }
 
             override fun dispose() {}
