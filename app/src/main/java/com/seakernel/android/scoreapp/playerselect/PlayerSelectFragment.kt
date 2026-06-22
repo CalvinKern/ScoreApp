@@ -55,7 +55,6 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     private var gameRepository: GameRepository? = null
     private var listener: PlayerSelectListener? = null
     private var addPlayerJob: Job? = null
-    private var disposed: Boolean = false
 
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
     private var _binding: FragmentPlayerSelectBinding? = null
@@ -190,18 +189,21 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
     override fun effectHandler(eventConsumer: Consumer<PlayerEvent>): Connection<PlayerEffect> {
         return object : Connection<PlayerEffect> {
+            private var isDisposed = false
+
             override fun accept(effect: PlayerEffect) {
-                disposed = false
                 when (effect) {
                     is ShowPlayerNameDialog -> {
                         view?.post {
-                            showPlayerNameDialog(eventConsumer, effect)
+                            if (!isDisposed) {
+                                showPlayerNameDialog(eventConsumer, effect) { isDisposed }
+                            }
                         }
                     }
                     is ShowDeletePlayerSnackbar -> {
                         playerRepository?.deleteUser(effect.playerId)
                         eventConsumer.accept(PlayerDeleteSuccessful(effect.playerId))
-                        showDeletePlayerSnackbar(eventConsumer, effect)
+                        showDeletePlayerSnackbar(eventConsumer, effect) { isDisposed }
                     }
                     is UndoDeletePlayer -> {
                         playerRepository?.undoDelete(effect.playerId)
@@ -223,7 +225,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             }
 
             override fun dispose() {
-                disposed = true
+                isDisposed = true
             }
         }
     }
@@ -232,7 +234,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
     private fun showDeletePlayerSnackbar(
         eventConsumer: Consumer<PlayerEvent>,
-        effect: ShowDeletePlayerSnackbar
+        effect: ShowDeletePlayerSnackbar,
+        isDisposed: () -> Boolean
     ) {
         Snackbar.make(
             requireView(),
@@ -240,7 +243,9 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             Snackbar.LENGTH_LONG
         )
             .setAction(R.string.undo) {
-                eventConsumer.accept(PlayerDeleteUndo(effect.playerId, effect.playerSelected))
+                if (!isDisposed()) {
+                    eventConsumer.accept(PlayerDeleteUndo(effect.playerId, effect.playerSelected))
+                }
             }
             .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorSecondary))
             .show()
@@ -248,7 +253,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
     private fun showPlayerNameDialog(
         eventConsumer: Consumer<PlayerEvent>,
-        effect: ShowPlayerNameDialog
+        effect: ShowPlayerNameDialog,
+        isDisposed: () -> Boolean
     ) {
         var name = ""
         val binding =
@@ -258,23 +264,21 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             .setView(binding.root)
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                if (name.isNotEmpty()) {
-                    logEvent(if (effect.playerId == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED) {
-                        putString(AnalyticsConstants.Param.ITEM_NAME, name)
-                    }
-                    addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
-                        playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
-                            if (!disposed) {
-                                withContext(Dispatchers.Main) {
-                                    // Double check we're not disposed
-                                    if (!disposed) eventConsumer.accept(
-                                        PlayerNameChanged(
-                                            player.id!!,
-                                            player.name
-                                        )
-                                    )
-                                }
-                            }
+                if (name.isEmpty()) return@setPositiveButton
+                logEvent(if (effect.playerId == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED) {
+                    putString(AnalyticsConstants.Param.ITEM_NAME, name)
+                }
+                addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
+                    playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
+                        if (isDisposed()) return@let
+                        withContext(Dispatchers.Main) {
+                            if (isDisposed()) return@withContext // Double check we're not disposed
+                            eventConsumer.accept(
+                                PlayerNameChanged(
+                                    player.id!!,
+                                    player.name
+                                )
+                            )
                         }
                     }
                 }
@@ -285,7 +289,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
                 it.setNeutralButton(R.string.delete) { _, _ ->
                     logEvent(AnalyticsConstants.Event.PLAYER_DELETED)
-                    if (!disposed) {
+                    if (!isDisposed()) {
                         eventConsumer.accept(PlayerDeleteClicked(effect.playerId))
                     }
                 }
