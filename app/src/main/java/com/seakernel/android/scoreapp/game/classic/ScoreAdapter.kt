@@ -299,7 +299,13 @@ class ScoreViewHolder(
                 showCalculatorKeyboardCallback?.invoke(binding.playerScore)
 
                 if (scoreId != _focusedScoreId) {
-                    _eventConsumer?.accept(GameEvent.ScoreFocused(scoreId))
+                    // Wait one frame, then double check if the cell still has focus
+                    //  If a deleted round was focused, it will be  given to the first cell in the recycler view, when we should wait for the intended cell to be focused
+                    binding.playerScore.post {
+                        if (binding.playerScore.hasFocus()) {
+                            _eventConsumer?.accept(GameEvent.ScoreFocused(scoreId))
+                        }
+                    }
                 }
 
                 // Set the selection to the end of the score (makes quick edits/additions easier)

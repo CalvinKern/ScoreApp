@@ -62,12 +62,45 @@ data class GameModel(
 
         fun update(model: GameModel, event: GameEvent): Next<GameModel, GameEffect> {
             return when (event) {
-                is GameEvent.Loaded -> Next.next(
-                    model.copy(
-                        settings = event.game.settings,
-                        rounds = event.game.rounds
+                is GameEvent.Loaded -> {
+                    val oldFocusedScoreId = model.focusedScoreId
+                    val newRounds = event.game.rounds
+
+                    var newFocusedScoreId = oldFocusedScoreId
+
+                    if (oldFocusedScoreId != null && newRounds.none { r -> r.scores.any { it.id == oldFocusedScoreId } }) {
+                        // The focused score is gone, find where it used to be
+                        var oldScoreIndex = 0
+                        val oldFocusedRoundIndex =
+                            model.rounds.indexOfFirst { r ->
+                                val index = r.scores.indexOfFirst { it.id == oldFocusedScoreId }
+                                if (index >= 0) {
+                                    oldScoreIndex = index
+                                }
+                                index >= 0
+                            }
+
+                        if (oldFocusedRoundIndex != -1) {
+                            // Try to focus the round at the same index in the new list (which is the "next" round)
+                            newFocusedScoreId = if (oldFocusedRoundIndex < newRounds.size) {
+                                newRounds[oldFocusedRoundIndex].scores.getOrNull(oldScoreIndex)?.id
+                            } else if (newRounds.isNotEmpty()) {
+                                // If it was the last round, focus the new last round
+                                newRounds.last().scores.getOrNull(oldScoreIndex)?.id
+                            } else {
+                                null
+                            }
+                        }
+                    }
+
+                    Next.next(
+                        model.copy(
+                            settings = event.game.settings,
+                            rounds = newRounds,
+                            focusedScoreId = newFocusedScoreId
+                        )
                     )
-                )
+                }
                 is GameEvent.RequestLoad -> Next.dispatch(
                     Effects.effects(
                         GameEffect.FetchData
