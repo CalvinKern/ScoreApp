@@ -12,7 +12,10 @@ import androidx.room.PrimaryKey
  */
 @Entity(
     tableName = ScoreEntity.TABLE_NAME,
-    indices = [Index(name = ScoreEntity.INDEX_ROUND_ID, value = [ScoreEntity.COLUMN_ROUND_ID])],
+    indices = [
+        Index(name = ScoreEntity.INDEX_ROUND_ID, value = [ScoreEntity.COLUMN_ROUND_ID]),
+        Index(name = ScoreEntity.INDEX_PLAYER_ID, value = [ScoreEntity.COLUMN_PLAYER_ID])
+    ],
     foreignKeys = [
         ForeignKey(
             entity = PlayerEntity::class,
@@ -44,6 +47,7 @@ data class ScoreEntity(
         const val COLUMN_SCORE = "score"
         const val COLUMN_SCORE_DATA = "score_data"
         const val INDEX_ROUND_ID = "index_${TABLE_NAME}_$COLUMN_ROUND_ID"
+        const val INDEX_PLAYER_ID = "index_${TABLE_NAME}_$COLUMN_PLAYER_ID"
 
         const val QUALIFIED_COLUMNS =
             "$TABLE_NAME.$COLUMN_ID, $TABLE_NAME.$COLUMN_PLAYER_ID, $TABLE_NAME.$COLUMN_ROUND_ID, $TABLE_NAME.$COLUMN_SCORE, $TABLE_NAME.$COLUMN_SCORE_DATA"

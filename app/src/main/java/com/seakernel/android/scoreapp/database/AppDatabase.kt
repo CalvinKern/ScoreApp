@@ -23,13 +23,14 @@ import com.seakernel.android.scoreapp.database.migrations.Migration_6_7
 import com.seakernel.android.scoreapp.database.migrations.Migration_7_8
 import com.seakernel.android.scoreapp.database.migrations.Migration_8_9
 import com.seakernel.android.scoreapp.database.migrations.Migration_9_10
+import com.seakernel.android.scoreapp.database.migrations.Migration_10_11
 
 /**
  * Created by Calvin on 12/20/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 @Database(
-    version = 10,
+    version = 11,
     entities = [PlayerEntity::class, GameEntity::class, GamePlayerJoin::class, RoundEntity::class, ScoreEntity::class]
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -68,6 +69,7 @@ abstract class AppDatabase : RoomDatabase() {
                 Migration_7_8(),
                 Migration_8_9(),
                 Migration_9_10(),
+                Migration_10_11(),
             )
         }
     }
