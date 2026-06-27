@@ -35,11 +35,22 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [appName: "Score Pad"]
+
+            ndk.debugSymbolLevel = 'full'
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
         }
         debug {
             minifyEnabled false
             applicationIdSuffix ".debug"
             manifestPlaceholders = [appName: "Score Pad (Debug)"]
+
+            // Speed up debug builds, don't need debug symbols
+            ndk.debugSymbolLevel = 'none'
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
     }
 
