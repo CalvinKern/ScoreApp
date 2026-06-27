@@ -254,7 +254,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     }
 
                     if (oldSpanCount != spanCount || model.rounds.size != lastModel?.rounds?.size) {
-                        manager?.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                             override fun getSpanSize(position: Int) =
                                 if (position == (model.rounds.size * spanCount)) spanCount else 1
                         }
@@ -275,7 +275,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 val newCount = binding.scoreRows.adapter!!.itemCount
 
                 if (oldCount in 2 until newCount && oldSpanCount == model.settings.players.size) {
-                    // When a new round is being inserted, scroll to the bottom so the it's visible
+                    // When a new round is being inserted, scroll to the bottom so that it's visible
                     binding.scoreRows.scrollToPosition(newCount - 1)
                 }
 
@@ -323,7 +323,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         val gameId = arguments?.getLong(ARG_GAME_ID, 0) ?: 0
                         gameRepository?.loadFullGame(gameId)?.let { game ->
                             if (game.rounds.isEmpty()) {
-                                // If we load a game and it has no rounds, we need to fix that
+                                // If we load a game that has no rounds, we need to fix it
                                 roundRepository?.addOrUpdateRound(gameId, createFirstRound(game))
                                     ?.let { round ->
                                         eventConsumer.accept(

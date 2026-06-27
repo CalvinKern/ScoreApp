@@ -34,6 +34,7 @@ import com.spotify.mobius.functions.Consumer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.core.net.toUri
 
 /**
  * Created by Calvin on 12/15/18.
@@ -240,12 +241,12 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     private fun openPlayStore() {
         val url = "https://play.google.com/store/apps/details?id=com.seakernel.scorepad"
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(url)
+            data = url.toUri()
             setPackage("com.android.vending")
         }
         try {
             startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             val clipboard: ClipboardManager? =
                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
 
@@ -265,7 +266,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     private fun openChangelog() {
         logEvent(AnalyticsConstants.Event.SHOW_CHANGELOG)
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://github.com/CalvinKern/ScoreApp/releases")
+            data = "https://github.com/CalvinKern/ScoreApp/releases".toUri()
         }
         startActivity(intent)
     }

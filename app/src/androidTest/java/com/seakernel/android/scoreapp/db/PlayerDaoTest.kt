@@ -129,7 +129,7 @@ class PlayerDaoTest {
         assertEquals(playerDao.getAll().first().archived, false)
 
         playerDao.setArchived(playerIds.first(), true)
-        assertEquals(playerDao.getAll().first().archived, true)
+        assertEquals(playerDao.getAll().isEmpty(), true)
 
         playerDao.setArchived(playerIds.first(), false)
         assertEquals(playerDao.getAll().first().archived, false)

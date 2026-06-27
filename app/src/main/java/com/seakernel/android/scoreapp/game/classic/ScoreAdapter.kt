@@ -1,6 +1,5 @@
 package com.seakernel.android.scoreapp.game.classic
 
-import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater

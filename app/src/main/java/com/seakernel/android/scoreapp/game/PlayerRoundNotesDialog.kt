@@ -22,7 +22,6 @@ import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
 import com.seakernel.android.scoreapp.repository.PlayerRoundNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
-import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -161,7 +160,7 @@ private class PlayerRoundNotesViewHolder(
 
     fun onBind(round: PlayerRoundNote) {
         val notes = round.score.metadata
-        // Make the round number human readable
+        // Make the round number 1 based indexed
         binding.playerRoundLabel.text =
             itemView.context.getString(R.string.playerRoundNumberFormat, round.roundNumber + 1)
         binding.playerRoundValue.setText(notes)

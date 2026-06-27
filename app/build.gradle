@@ -99,6 +99,12 @@ dependencies {
     testImplementation "androidx.room:room-testing:$ROOM_VERSION"
     androidTestImplementation "androidx.room:room-testing:$ROOM_VERSION"
 
+    configurations.configureEach {
+        resolutionStrategy {
+            force "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
+        }
+    }
+
     // Mobius
     implementation "com.spotify.mobius:mobius-core:$MOBIUS_VERSION"
     testImplementation "com.spotify.mobius:mobius-test:$MOBIUS_VERSION"
