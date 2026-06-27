@@ -222,7 +222,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
             if (request.isSuccessful) {
                 // We got the ReviewInfo object
                 val reviewInfo = request.result
-                val flow = manager.launchReviewFlow(requireActivity(), reviewInfo)
+                val flow = manager.launchReviewFlow(activity ?: return@addOnCompleteListener, reviewInfo)
                 flow.addOnCompleteListener { _ ->
                     // The flow has finished. The API does not indicate whether the user
                     // reviewed or not, or even whether the review dialog was shown. Thus, no
