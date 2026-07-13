@@ -28,6 +28,7 @@
     <string name="playerEmptySearchTitle">Tidak ada pemain yang cocok</string>
     <string name="playerEmptyTitle">Tidak ada pemain yang ditambahkan</string>
     <string name="playerIcon">Ikon Pemain</string>
+    <string name="playerStandingRoundsPlayed">%d Babak Dimainkan</string>
     <string name="playerName">Nama pemain</string>
     <string name="playerNotesTitle">Catatan untuk %s</string>
     <string name="playerRoundNumberFormat">Babak %d:</string>

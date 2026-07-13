@@ -28,6 +28,7 @@
     <string name="playerEmptySearchTitle">Keine Spieler passen zusammen</string>
     <string name="playerEmptyTitle">Keine Spieler hinzugefügt</string>
     <string name="playerIcon">Spieler-Symbol</string>
+    <string name="playerStandingRoundsPlayed">%d Runden gespielt</string>
     <string name="playerName">Spielername</string>
     <string name="playerNotesTitle">Notizen für %s</string>
     <string name="playerRoundNumberFormat">Runde %d:</string>

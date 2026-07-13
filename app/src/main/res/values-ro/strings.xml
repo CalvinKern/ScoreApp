@@ -28,6 +28,7 @@
     <string name="playerEmptySearchTitle">Nu se potrivesc jucători</string>
     <string name="playerEmptyTitle">Nu s-au adăugat jucători</string>
     <string name="playerIcon">Pictograma jucătorului</string>
+    <string name="playerStandingRoundsPlayed">%d Runde Jucate</string>
     <string name="playerName">Numele jucatorului</string>
     <string name="playerNotesTitle">Note pentru %s</string>
     <string name="playerRoundNumberFormat">Runda %d:</string>

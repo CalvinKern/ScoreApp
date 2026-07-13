@@ -9,6 +9,7 @@
     <string name="playerRoundNumberHint">notas</string>
     <string name="playerRoundNumberFormat">rodada %d:</string>
     <string name="playerNotesTitle">Notas para %s</string>
+    <string name="playerStandingRoundsPlayed">%d Rondas Jogadas</string>
     <string name="playerName">Nome do jogador</string>
     <string name="playerIcon">Ícone do jogador</string>
     <string name="playerEmptyTitle">Nenhum jogador adicionado</string>

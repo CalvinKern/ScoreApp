@@ -95,6 +95,8 @@ class PlayerStandingDialog : DialogFragment() {
 
             withContext(Dispatchers.Main) {
                 adapter.setScores(playerScores)
+                binding.dialogPlayerRoundSubheader.text =
+                    getString(R.string.playerStandingRoundsPlayed, game.rounds.size)
             }
         }
 

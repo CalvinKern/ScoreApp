@@ -62,6 +62,7 @@
     <!--Player Standing Dialog-->
     <string name="playerStandingTitle">Player Standings</string>
     <string name="playerStanding">#%d</string>
+    <string name="playerStandingRoundsPlayed">%d Rounds Played</string>
 
     <!--Player dialog-->
     <string name="playerName">Player Name</string>

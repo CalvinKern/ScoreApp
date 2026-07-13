@@ -28,6 +28,7 @@
     <string name="playerEmptySearchTitle">कोई भी खिलाड़ी मैच नहीं करता</string>
     <string name="playerEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
     <string name="playerIcon">प्लेयर आइकन</string>
+    <string name="playerStandingRoundsPlayed">%d राउंड खेले गए</string>
     <string name="playerName">खिलाडि का नाम</string>
     <string name="playerNotesTitle">%s के लिए नोट्स</string>
     <string name="playerRoundNumberFormat">दौर %d:</string>

@@ -28,6 +28,7 @@
     <string name="playerEmptySearchTitle">一致する選手はありません</string>
     <string name="playerEmptyTitle">選手は追加されていません</string>
     <string name="playerIcon">選手アイコン</string>
+    <string name="playerStandingRoundsPlayed">%dラウンドプレイ済み</string>
     <string name="playerName">選手の名前</string>
     <string name="playerNotesTitle">%sへのノート</string>
     <string name="playerRoundNumberFormat">ラウンド%d：</string>

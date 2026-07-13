@@ -28,6 +28,7 @@
     <string name="playerEmptySearchTitle">沒有球員比賽</string>
     <string name="playerEmptyTitle">未添加玩家</string>
     <string name="playerIcon">播放器圖標</string>
+    <string name="playerStandingRoundsPlayed">已進行 %d 輪</string>
     <string name="playerName">選手姓名</string>
     <string name="playerNotesTitle">%s的註釋</string>
     <string name="playerRoundNumberFormat">第%d回合</string>

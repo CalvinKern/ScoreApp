@@ -28,6 +28,7 @@
     <string name="playerEmptySearchTitle">Aucun joueur ne correspond</string>
     <string name="playerEmptyTitle">Aucun joueur ajouté</string>
     <string name="playerIcon">Icône de joueur</string>
+    <string name="playerStandingRoundsPlayed">%d Manches Jouées</string>
     <string name="playerName">Nom de joueur</string>
     <string name="playerNotesTitle">Remarques pour %s</string>
     <string name="playerRoundNumberFormat">Tour %d:</string>
