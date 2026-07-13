@@ -233,6 +233,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
             override fun accept(model: GameModel) {
                 if (model == lastModel) return
+                val isFirstLoad = lastModel?.settings?.id == null
 
                 if (model.settings != lastModel?.settings) {
                     binding.toolbar.title = model.settings.name
@@ -274,9 +275,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 )
                 val newCount = binding.scoreRows.adapter!!.itemCount
 
-                if (oldCount in 2 until newCount && oldSpanCount == model.settings.players.size) {
-                    // When a new round is being inserted, scroll to the bottom so that it's visible
-                    binding.scoreRows.scrollToPosition(newCount - 1)
+                if ((isFirstLoad && newCount > 0) || (oldCount in 2 until newCount && oldSpanCount == model.settings.players.size)) {
+                    // When a new round is being inserted, or it's the first load, scroll to the bottom so that new rounds can be added (likely action when loading up the game again)
+                    binding.scoreRows.post {
+                        _binding?.let {
+                            binding.scoreRows.scrollToPosition(newCount - 1)
+                        }
+                    }
                 }
 
                 binding.totalsRow.swapAdapter(
