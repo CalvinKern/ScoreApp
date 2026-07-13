@@ -8,7 +8,10 @@ import androidx.room.*
  */
 @Entity(
     tableName = RoundEntity.TABLE_NAME,
-    indices = [Index(name = RoundEntity.INDEX_GAME_ID, value = [RoundEntity.COLUMN_GAME_ID])],
+    indices = [
+        Index(name = RoundEntity.INDEX_GAME_ID, value = [RoundEntity.COLUMN_GAME_ID]),
+        Index(name = RoundEntity.INDEX_DEALER_ID, value = [RoundEntity.COLUMN_DEALER_ID])
+    ],
     foreignKeys = [
         ForeignKey(
             entity = GameEntity::class,
@@ -38,5 +41,6 @@ data class RoundEntity(
         const val COLUMN_ROUND_NUMBER = "round_number"
         const val COLUMN_DEALER_ID = "dealer_id"
         const val INDEX_GAME_ID = "index_${TABLE_NAME}_$COLUMN_GAME_ID"
+        const val INDEX_DEALER_ID = "index_${TABLE_NAME}_$COLUMN_DEALER_ID"
     }
 }

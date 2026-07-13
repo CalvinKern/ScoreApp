@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -20,9 +21,11 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.databinding.FragmentGraphBinding
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.logScreenView
-import kotlinx.android.synthetic.main.fragment_graph.*
 import java.text.DecimalFormat
 
 class GraphFragment : Fragment() {
@@ -44,25 +47,40 @@ class GraphFragment : Fragment() {
 
     private val modelObserver = Observer<Game?> { game -> game?.let { updateGraphData(it) } }
 
-    private val viewModel: GraphViewModel by lazy {
-        ViewModelProviders.of(this).get(GraphViewModel::class.java)
-    }
+    private val viewModel: GraphViewModel by viewModels<GraphViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_graph, container, false)
+    private var _binding: FragmentGraphBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentGraphBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.getGame().removeObserver(modelObserver)
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        binding.graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+
+        ViewGroupCompat.installCompatInsetsDispatch(binding.root)
+        binding.graphToolbar.applyWindowInsetsCutout()
+        binding.gameChart.applyWindowInsetsNavigationMargin()
 
         viewModel.getGame().observe(viewLifecycleOwner, modelObserver)
         viewModel.loadGame(
-            arguments?.getLong(ARG_GAME_ID) ?: throw RuntimeException("No game ID provided to GraphFragment")
+            arguments?.getLong(ARG_GAME_ID)
+                ?: throw RuntimeException("No game ID provided to GraphFragment")
         )
 
         initChartStyle()
@@ -74,22 +92,28 @@ class GraphFragment : Fragment() {
     }
 
     private fun updateGraphData(game: Game) {
-        graphToolbar.title = game.settings.name
-        graphToolbar.setSubtitle(R.string.graphSubtitle) // Update the subtitle with the title to avoid subtitle flashing in first
+        binding.graphToolbar.title = game.settings.name
+        binding.graphToolbar.setSubtitle(R.string.graphSubtitle) // Update the subtitle with the title to avoid subtitle flashing in first
 
         // Get scores as a list of entries, separated by players
         val scoreMap =
-            mapOf(*game.rounds.first().scores.map { Pair(it.player.id!!, mutableListOf<Entry>()) }.toTypedArray())
+            mapOf(*(game.rounds.firstOrNull()?.scores?.map {
+                Pair(
+                    it.player.id!!,
+                    mutableListOf<Entry>()
+                )
+            }?.toTypedArray() ?: arrayOf()))
         game.rounds.forEach { round ->
             round.scores.forEach { score ->
-                scoreMap.getValue(score.player.id!!).also { playerList ->
-                    playerList.add(
-                        Entry(
-                            round.number.toFloat() + 1,
-                            (playerList.lastOrNull()?.y ?: 0f) + score.value.toFloat()
+                if (score.player.id != null && scoreMap.containsKey(score.player.id))
+                    scoreMap.getValue(score.player.id).also { playerList ->
+                        playerList.add(
+                            Entry(
+                                round.number.toFloat() + 1,
+                                (playerList.lastOrNull()?.y ?: 0f) + score.value.toFloat()
+                            )
                         )
-                    )
-                }
+                    }
             }
         }
 
@@ -105,12 +129,12 @@ class GraphFragment : Fragment() {
         // Finally set the chart data
         val data = LineData(scoreSets)
         data.setValueFormatter(graphEmptyFormatter)
-        gameChart.data = data
-        gameChart.invalidate()
+        binding.gameChart.data = data
+        binding.gameChart.invalidate()
     }
 
     private fun initChartStyle() {
-        gameChart.apply {
+        binding.gameChart.apply {
             axisRight.isEnabled = false
             isDoubleTapToZoomEnabled = false
             description = Description().also {
@@ -131,13 +155,13 @@ class GraphFragment : Fragment() {
             setDrawBorders(true)
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onNothingSelected() {
-                    gameChart.data.setValueFormatter(graphEmptyFormatter)
+                    binding.gameChart.data.setValueFormatter(graphEmptyFormatter)
                 }
 
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     e?.let {
-                        gameChart.data.getDataSetForEntry(it).apply {
-                            gameChart.data.setValueFormatter(graphEmptyFormatter)
+                        binding.gameChart.data.getDataSetForEntry(it).apply {
+                            binding.gameChart.data.setValueFormatter(graphEmptyFormatter)
                             valueFormatter =
                                 graphValueFormatter
                         }

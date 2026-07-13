@@ -24,6 +24,7 @@
         android:id="@+id/nameRow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/scoreRows"
@@ -41,10 +42,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorBackground"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@+id/nameRow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/totalsRow"
+        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintHeight_default="spread"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -52,28 +54,36 @@
         tools:listitem="@layout/holder_score_row_data"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/totalsRow"
+    <LinearLayout
+        android:id="@+id/bottomContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/scoreRows"
-        app:layout_constraintBottom_toTopOf="@+id/calculatorKeyboard"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:overScrollMode="never"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:spanCount="4"
-        tools:itemCount="4"
-        tools:listitem="@layout/holder_score_row_data"
-        />
+        >
 
-    <com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
-        android:id="@+id/calculatorKeyboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/totalsRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:spanCount="4"
+            tools:itemCount="4"
+            tools:listitem="@layout/holder_score_row_data"
+            />
+
+        <com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
+            android:id="@+id/calculatorKeyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

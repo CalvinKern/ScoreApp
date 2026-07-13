@@ -29,7 +29,7 @@ interface PlayerDao {
     fun updateName(id: Long, name: String)
 
     @Insert
-    fun insertAll(vararg players: PlayerEntity): LongArray
+    fun insertAll(players: Array<PlayerEntity>): LongArray
 
     @Query("DELETE FROM ${PlayerEntity.TABLE_NAME} WHERE ${PlayerEntity.COLUMN_ID} = :id")
     fun deleteById(id: Long)

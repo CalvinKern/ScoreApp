@@ -38,6 +38,8 @@
     <string name="actionSave">Salve</string>
     <string name="actionGraph">Mostrar gráfico</string>
     <string name="actionEdit">Editar</string>
+    <string name="copiedUrl">URL copiado</string>
+    <string name="storeToReview">Abra a loja de aplicativos para deixar uma avaliação</string>
     <string name="actionClose">Perto</string>
     <string name="actionPlayerStanding">Classificação</string>
     <string name="playerStandingTitle">Classificação dos jogadores</string>

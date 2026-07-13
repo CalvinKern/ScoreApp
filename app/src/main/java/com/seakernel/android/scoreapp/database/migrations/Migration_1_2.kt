@@ -13,9 +13,9 @@ import com.seakernel.android.scoreapp.database.entities.ScoreEntity
  */
 @Suppress("ClassName")
 class Migration_1_2 : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        createRoundTable(database)
-        createScoreTable(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        createRoundTable(db)
+        createScoreTable(db)
     }
 
     private fun createRoundTable(database: SupportSQLiteDatabase) {

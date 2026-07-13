@@ -41,6 +41,8 @@
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">球员站立</string>
     <string name="actionPlayerStanding">站立</string>
+    <string name="copiedUrl">已复制网址</string>
+    <string name="storeToReview">请打开应用商店进行评价</string>
     <string name="actionClose">关</string>
     <string name="useCalculatorDescription">使用自定义计算器键盘。 如果未启用，将使用系统键盘。</string>
     <string name="useCalculatorTitle">计算器键盘</string>

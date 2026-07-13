@@ -10,20 +10,20 @@ import com.spotify.mobius.Next
  */
 
 sealed class ListEvent {
-    object AddGameClicked : ListEvent()
+    data object AddGameClicked : ListEvent()
     data class GameRowClicked(val gameId: Long) : ListEvent()
     data class GameRowLongPressed(val gameId: Long) : ListEvent()
     data class GameDeleteSuccessful(val gameId: Long) : ListEvent()
-    object LoadData : ListEvent()
+    data object LoadData : ListEvent()
     data class Loaded(val games: List<GameSettings>) : ListEvent()
 }
 
 sealed class ListEffect {
-    object ShowCreateGameScreen : ListEffect()
+    data object ShowCreateGameScreen : ListEffect()
     data class ShowGameScreen(val gameId: Long) : ListEffect()
     data class ShowGameRowDialog(val gameId: Long) : ListEffect()
     data class ShowDeleteSnackbar(val gameId: Long, val gameName: String?) : ListEffect()
-    object FetchData : ListEffect()
+    data object FetchData : ListEffect()
 }
 
 data class ListModel(

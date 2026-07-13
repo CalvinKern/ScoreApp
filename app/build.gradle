@@ -1,24 +1,22 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.google.devtools.ksp'
 
 android {
-    compileSdkVersion 30
+    compileSdk = 37
+
     defaultConfig {
         applicationId "com.seakernel.scorepad"
-        minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 10
-        versionName "1.6.0"
+        minSdk 23
+        targetSdk 37
+        versionCode 18
+        versionName "1.6.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
+        ksp {
+            arg('room.schemaLocation', "$projectDir/schemas")
         }
     }
 
@@ -26,58 +24,86 @@ android {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
+    buildFeatures {
+        viewBinding true
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appName:"Score Pad"]
+            manifestPlaceholders = [appName: "Score Pad"]
+
+            ndk.debugSymbolLevel = 'full'
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
         }
         debug {
             minifyEnabled false
             applicationIdSuffix ".debug"
-            manifestPlaceholders = [appName:"Score Pad (Debug)"]
+            manifestPlaceholders = [appName: "Score Pad (Debug)"]
+
+            // Speed up debug builds, don't need debug symbols
+            ndk.debugSymbolLevel = 'none'
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
     }
+
+    namespace 'com.seakernel.android.scoreapp'
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 ext {
-    MOBIUS_VERSION = '1.2.0'
-    ROOM_VERSION = '2.2.5'
+    MOBIUS_VERSION = '2.1.1'
+    ROOM_VERSION = '2.8.4'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Androidx
-    implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "androidx.fragment:fragment-ktx:1.2.5"
-    implementation "androidx.constraintlayout:constraintlayout:2.0.2"
-    implementation "com.google.android.material:material:1.2.1"
+    implementation "androidx.appcompat:appcompat:1.7.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.2.1"
+    implementation "androidx.core:core-ktx:1.19.0"
+    implementation "androidx.fragment:fragment-ktx:1.8.9"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation 'com.google.android.play:core:1.9.1'
-    implementation 'com.google.android.play:core-ktx:1.8.1'
+    implementation "com.google.android.material:material:1.14.0"
+    implementation 'com.google.android.play:review:2.0.2'
+    implementation 'com.google.android.play:review-ktx:2.0.2'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-analytics:17.6.0'
-    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:23.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics:20.0.6'
 
     // Testing
-    testImplementation "junit:junit:4.12"
-    androidTestImplementation "androidx.test:runner:1.3.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.2"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test:runner:1.7.0"
+    androidTestImplementation "androidx.test.ext:junit:1.3.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.7.0"
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0'
 
     // Room
     implementation "androidx.room:room-runtime:$ROOM_VERSION"
-    kapt "androidx.room:room-compiler:$ROOM_VERSION"
+    ksp "androidx.room:room-compiler:$ROOM_VERSION"
     testImplementation "androidx.room:room-testing:$ROOM_VERSION"
     androidTestImplementation "androidx.room:room-testing:$ROOM_VERSION"
+
+    configurations.configureEach {
+        resolutionStrategy {
+            force "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
+        }
+    }
 
     // Mobius
     implementation "com.spotify.mobius:mobius-core:$MOBIUS_VERSION"
@@ -86,9 +112,11 @@ dependencies {
     implementation "com.spotify.mobius:mobius-extras:$MOBIUS_VERSION"
 
     // Misc.
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
-    implementation "com.github.hadilq.liveevent:liveevent:1.0.1"
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.4.9'
+    implementation("com.github.hadilq:live-event:1.3.0") {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-android-extensions-runtime'
+    }
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

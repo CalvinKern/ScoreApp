@@ -2,8 +2,6 @@ package com.seakernel.android.scoreapp.database.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.seakernel.android.scoreapp.database.entities.GameEntity
-import com.seakernel.android.scoreapp.database.entities.RoundEntity
 
 /**
  * Created by Calvin on 12/23/18.
@@ -16,8 +14,8 @@ class Migration_8_9 : Migration(8, 9) {
     private val tempTable = "${table}_temp"
     private val columns = listOf("uid", "game_id", "round_number", "dealer_id").joinToString(",")
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        duplicateRoundTable(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        duplicateRoundTable(db)
     }
 
     private fun duplicateRoundTable(database: SupportSQLiteDatabase) {
@@ -32,7 +30,8 @@ class Migration_8_9 : Migration(8, 9) {
     }
 
     private fun createTableSql(database: SupportSQLiteDatabase, tableName: String) {
-        database.execSQL("""
+        database.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS `$tableName`(
             `uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             `game_id` INTEGER NOT NULL,
@@ -40,6 +39,7 @@ class Migration_8_9 : Migration(8, 9) {
             `dealer_id` INTEGER,
             FOREIGN KEY(`game_id`) REFERENCES `games`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE,
             FOREIGN KEY(`dealer_id`) REFERENCES `players`(`uid`) ON UPDATE NO ACTION ON DELETE SET NULL)
-        """)
+        """
+        )
     }
 }

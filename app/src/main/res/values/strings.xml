@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name" translatable="false">Score Pad</string>
+    <string name="emptyString" translatable="false" />
 
     <!--Game List Screen-->
     <string name="gameListTitle">Games</string>
     <string name="playersHolder">%d Players</string>
     <string name="gameListEmptyTitle">No games created</string>
     <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
+    <string name="copiedUrl">Copied URL</string>
+    <string name="storeToReview">Please open the app store to review</string>
 
     <!--Common Actions-->
     <string name="actionClose">Close</string>

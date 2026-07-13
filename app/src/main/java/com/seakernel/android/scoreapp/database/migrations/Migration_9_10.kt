@@ -11,8 +11,8 @@ import com.seakernel.android.scoreapp.database.entities.PlayerEntity
 @Suppress("ClassName")
 class Migration_9_10 : Migration(9, 10) {
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        addArchivedColumn(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        addArchivedColumn(db)
     }
 
     private fun addArchivedColumn(database: SupportSQLiteDatabase) {

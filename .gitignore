@@ -37,6 +37,9 @@ proguard/
 # Android Studio captures folder
 captures/
 
+# Since Kotlin 2.0.0
+.kotlin
+
 *.iml
 .idea/
 app/release/*

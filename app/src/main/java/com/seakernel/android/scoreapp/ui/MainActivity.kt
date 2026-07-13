@@ -1,7 +1,9 @@
 package com.seakernel.android.scoreapp.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.game.classic.GameFragment
@@ -12,18 +14,34 @@ import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import timber.log.Timber
 import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, PlayerSelectFragment.PlayerSelectListener,
+class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
+    PlayerSelectFragment.PlayerSelectListener,
     GameSetupFragment.GameSetupListener, GameFragment.GameListener {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = isLightMode(newConfig)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.enableEdgeToEdge(window)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = isLightMode(resources.configuration)
+        }
         setContentView(R.layout.activity_main)
 
         // Add the list fragment if we don't have any state
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, GameListFragment.newInstance(), GameListFragment::class.java.simpleName)
+                .add(
+                    R.id.fragmentContainer,
+                    GameListFragment.newInstance(),
+                    GameListFragment::class.java.name
+                )
                 .commit()
         }
     }
@@ -31,25 +49,32 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
     override fun onPlayersSelected(playerIds: List<Long>) {
         popBackStackIfFound(PlayerSelectFragment::class)
         val fragment =
-            supportFragmentManager.findFragmentByTag(GameSetupFragment::class.java.simpleName) as GameSetupFragment
+            supportFragmentManager.findFragmentByTag(GameSetupFragment::class.java.name) as GameSetupFragment
         fragment.updateForNewPlayers(playerIds)
     }
 
     override fun onShowPlayerSelectScreen(playerIds: List<Long>) {
-        showFragment(PlayerSelectFragment.newInstance(playerIds), PlayerSelectFragment::class.java.simpleName)
+        showFragment(
+            PlayerSelectFragment.newInstance(playerIds),
+            PlayerSelectFragment::class.java.name
+        )
     }
 
     override fun onShowGameScreen(gameId: Long) {
+        popBackStackIfFound(GameFragment::class) // If copying, remove previous game fragment
         popBackStackIfFound(GameSetupFragment::class)
-        showFragment(GameFragment.newInstance(gameId), GameFragment::class.java.simpleName)
+        showFragment(GameFragment.newInstance(gameId), GameFragment::class.java.name)
     }
 
     override fun onShowCreateGameScreen() {
-        showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.simpleName)
+        showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.name)
     }
 
     override fun onGameSettingsSelected(gameId: Long) {
-        showFragment(GameSetupFragment.newInstance(gameId), GameSetupFragment::class.java.simpleName)
+        showFragment(
+            GameSetupFragment.newInstance(gameId),
+            GameSetupFragment::class.java.name
+        )
     }
 
     override fun onGameUpdated() {
@@ -57,12 +82,22 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Pla
     }
 
     override fun onGraphSelected(gameId: Long) {
-        showFragment(GraphFragment.newInstance(gameId), GraphFragment::class.java.simpleName)
+        showFragment(GraphFragment.newInstance(gameId), GraphFragment::class.java.name)
+    }
+
+    override fun onNewGame(gameId: Long, initialDealerId: Long?) {
+        showFragment(
+            GameSetupFragment.newInstanceCopy(gameId, initialDealerId),
+            GameSetupFragment::class.java.name
+        )
     }
 
     // Helper Functions
+    private fun isLightMode(config: Configuration): Boolean =
+        (config.uiMode and Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES
+
     private fun popBackStackIfFound(clazz: KClass<*>) {
-        supportFragmentManager.findFragmentByTag(clazz.java.simpleName)?.let {
+        supportFragmentManager.findFragmentByTag(clazz.java.name)?.let {
             supportFragmentManager.popBackStack() // Get rid of create fragment if it exists
         }
     }

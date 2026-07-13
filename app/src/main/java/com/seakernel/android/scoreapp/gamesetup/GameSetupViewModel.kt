@@ -14,7 +14,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.coroutines.withContext
+import org.threeten.bp.ZonedDateTime
+import java.util.Collections
 
 class GameSetupViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,10 +30,14 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     private val gameUpdatedEvent = LiveEvent<Long>()
     private val gameNamesAutocomplete = MutableLiveData<List<String>?>().apply { value = null }
 
+    private val saveProcessing = MutableLiveData<Boolean>().apply { value = false }
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
     }
+
+    fun isSaving(): LiveData<Boolean> = saveProcessing
 
     fun getGameSettings(): LiveData<GameSettings?> = gameSettings
 
@@ -67,6 +73,9 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun saveGame() {
+        if (saveProcessing.value == true) return
+
+        saveProcessing.value = true
         val settings = gameSettings.value ?: GameSettings()
 
         scope.launch {
@@ -76,6 +85,9 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
             } else {
                 val gameId = gameRepository.createGame(settings)
                 gameCreatedEvent.safePostValue(gameId)
+            }
+            withContext(Dispatchers.Main) {
+                saveProcessing.value = false
             }
         }
     }
@@ -88,9 +100,15 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         val settings = gameSettings.value ?: GameSettings()
 
         scope.launch {
-            val dealerId = if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
+            val dealerId =
+                if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
             val newPlayers = playerRepository.loadUsers(playerIds)
-            gameSettings.safePostValue(settings.copy(players = newPlayers, initialDealerId = dealerId))
+            gameSettings.safePostValue(
+                settings.copy(
+                    players = newPlayers,
+                    initialDealerId = dealerId
+                )
+            )
         }
     }
 
@@ -117,6 +135,24 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         scope.launch {
             gameRepository.loadGame(gameId)?.let {
                 gameSettings.safePostValue(it)
+            }
+        }
+    }
+
+    fun createCopy(gameId: Long, initialDealerId: Long?) {
+        loadGameNames()
+
+        if (gameSettings.value != null) return
+
+        scope.launch {
+            gameRepository.loadGame(gameId)?.let {
+                gameSettings.safePostValue(
+                    it.copy(
+                        id = null,
+                        lastPlayed = ZonedDateTime.now(),
+                        initialDealerId = initialDealerId,
+                    )
+                )
             }
         }
     }

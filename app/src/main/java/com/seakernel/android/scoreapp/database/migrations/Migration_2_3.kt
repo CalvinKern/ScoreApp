@@ -10,8 +10,8 @@ import com.seakernel.android.scoreapp.database.entities.GamePlayerJoin
  */
 @Suppress("ClassName")
 class Migration_2_3 : Migration(2, 3) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        addColumnPlayerPosition(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        addColumnPlayerPosition(db)
     }
 
     private fun addColumnPlayerPosition(database: SupportSQLiteDatabase) {

@@ -1,18 +1,28 @@
 package com.seakernel.android.scoreapp.gamelist
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewGroupCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.databinding.FragmentGameListBinding
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
@@ -21,9 +31,10 @@ import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
-import kotlinx.android.synthetic.main.fragment_game_list.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.core.net.toUri
 
 /**
  * Created by Calvin on 12/15/18.
@@ -36,14 +47,17 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         fun onShowCreateGameScreen()
     }
 
-    override val layoutId = R.layout.fragment_game_list
-
     private var gameRepository: GameRepository? = null
     private var listener: GameListListener? = null
+    private var _binding: FragmentGameListBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     init {
-        loop = Mobius.loop(ListModel.Companion::update, ::effectHandler).init(::initMobius)
-        controller = MobiusAndroid.controller(loop, ListModel.createDefault())
+        loop = Mobius.loop(ListModel.Companion::update, ::effectHandler)
+        controller = MobiusAndroid.controller(loop, ListModel.createDefault(), ::initMobius)
     }
 
     override fun onAttach(context: Context) {
@@ -60,15 +74,30 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         listener = null
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentGameListBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
-        gameRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.gameRecycler.layoutManager = LinearLayoutManager(requireContext())
+        activity?.setTitle(R.string.gameListTitle)
 
         // Setup Toolbar
-        toolbar.inflateMenu(R.menu.menu_game_list)
-        toolbar.setOnMenuItemClickListener {
+        binding.toolbar.inflateMenu(R.menu.menu_game_list)
+        binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.actionRate -> {
                     rateApp()
@@ -81,11 +110,11 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 else -> false
             }
         }
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        activity?.setTitle(R.string.gameListTitle)
+        ViewGroupCompat.installCompatInsetsDispatch(binding.root)
+        binding.toolbar.applyWindowInsetsCutout()
+        binding.fab.applyWindowInsetsNavigationMargin()
+        binding.gameRecycler.applyWindowInsetsNavigationPadding()
     }
 
     override fun onResume() {
@@ -101,24 +130,32 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     override fun connectViews(eventConsumer: Consumer<ListEvent>): Connection<ListModel> {
         // Send events to the consumer when the button is pressed
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             logEvent(AnalyticsConstants.Event.GAME_CREATED)
             eventConsumer.accept(ListEvent.AddGameClicked)
         }
 
+        binding.gameListEmptyImage.setOnClickListener {
+            binding.fab.performClick()
+        }
+
         return object : Connection<ListModel> {
             override fun accept(model: ListModel) {
-                gameListLoading.setVisible(model.isLoading)
-                gameRecycler.setVisible(!model.isLoading && model.gameList.isNotEmpty())
-                gameListEmptyGroup.setVisible(!model.isLoading && model.gameList.isEmpty())
+                binding.gameListLoading.setVisible(model.isLoading)
+                binding.gameRecycler.setVisible(!model.isLoading && model.gameList.isNotEmpty())
+                binding.gameListEmptyGroup.setVisible(!model.isLoading && model.gameList.isEmpty())
 
-                gameRecycler.swapAdapter(GameListAdapter(model.gameList, eventConsumer), true)
+                binding.gameRecycler.swapAdapter(
+                    GameListAdapter(model.gameList, eventConsumer),
+                    true
+                )
             }
 
             override fun dispose() {
                 // Don't forget to remove listeners when the UI is disconnected
-                fab.setOnClickListener(null)
-                gameRecycler.swapAdapter(null, true)
+                binding.fab.setOnClickListener(null)
+                binding.gameListEmptyImage.setOnClickListener(null)
+                binding.gameRecycler.swapAdapter(null, true)
             }
         }
     }
@@ -164,12 +201,15 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     private fun deleteGameAsync(eventConsumer: Consumer<ListEvent>, gameId: Long) {
         logEvent(AnalyticsConstants.Event.GAME_DELETED)
-        GlobalScope.launch {
-            if (gameRepository?.deleteGame(gameId) == true) {
-                eventConsumer.accept(ListEvent.GameDeleteSuccessful(gameId))
-            } else {
-                // TODO: Show error, shouldn't happen, but why not catch it?
-                Toast.makeText(requireContext(), R.string.delete, Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val deleted = gameRepository?.deleteGame(gameId)
+            withContext(Dispatchers.Main) {
+                if (deleted == true) {
+                    eventConsumer.accept(ListEvent.GameDeleteSuccessful(gameId))
+                } else {
+                    // TODO: Show error, shouldn't happen, but why not catch it?
+                    Toast.makeText(requireContext(), R.string.delete, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -177,12 +217,12 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     private fun rateApp() {
         logEvent(AnalyticsConstants.Event.SHOW_RATING_DIALOG)
         val manager = ReviewManagerFactory.create(requireContext())
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { request ->
+        val reviewRequest = manager.requestReviewFlow()
+        reviewRequest.addOnCompleteListener { request ->
             if (request.isSuccessful) {
                 // We got the ReviewInfo object
                 val reviewInfo = request.result
-                val flow = manager.launchReviewFlow(requireActivity(), reviewInfo)
+                val flow = manager.launchReviewFlow(activity ?: return@addOnCompleteListener, reviewInfo)
                 flow.addOnCompleteListener { _ ->
                     // The flow has finished. The API does not indicate whether the user
                     // reviewed or not, or even whether the review dialog was shown. Thus, no
@@ -199,17 +239,34 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private fun openPlayStore() {
+        val url = "https://play.google.com/store/apps/details?id=com.seakernel.scorepad"
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://play.google.com/store/apps/details?id=com.seakernel.scorepad")
+            data = url.toUri()
             setPackage("com.android.vending")
         }
-        startActivity(intent)
+        try {
+            startActivity(intent)
+        } catch (_: Exception) {
+            val clipboard: ClipboardManager? =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+
+            if (clipboard == null) {
+                Toast.makeText(requireContext(), R.string.storeToReview, Toast.LENGTH_SHORT).show()
+            } else {
+                clipboard.setPrimaryClip(ClipData.newPlainText("", url))
+
+                // Only show a toast for Android 12 and lower
+                if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.S_V2) {
+                    Toast.makeText(requireContext(), R.string.copiedUrl, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun openChangelog() {
         logEvent(AnalyticsConstants.Event.SHOW_CHANGELOG)
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://github.com/CalvinKern/ScoreApp/releases")
+            data = "https://github.com/CalvinKern/ScoreApp/releases".toUri()
         }
         startActivity(intent)
     }

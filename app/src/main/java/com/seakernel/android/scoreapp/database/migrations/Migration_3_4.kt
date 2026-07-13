@@ -10,8 +10,8 @@ import com.seakernel.android.scoreapp.database.entities.GameEntity
  */
 @Suppress("ClassName")
 class Migration_3_4 : Migration(3, 4) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        addColumnHasDealer(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        addColumnHasDealer(db)
     }
 
     private fun addColumnHasDealer(database: SupportSQLiteDatabase) {

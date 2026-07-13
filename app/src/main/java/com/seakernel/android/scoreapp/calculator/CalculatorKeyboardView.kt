@@ -6,15 +6,23 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
-import kotlinx.android.synthetic.main.view_calculator_keyboard.view.*
-import kotlinx.coroutines.*
+import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView.Companion.KEYCODE_NEXT
+import com.seakernel.android.scoreapp.databinding.ViewCalculatorKeyboardBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import kotlin.math.min
+import kotlin.time.Duration.Companion.milliseconds
 
 typealias InputChangedListener = (input: String, failure: Boolean) -> Unit
 
@@ -39,6 +47,14 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     private var inputView: EditText? = null
     private var inputChangedListener: InputChangedListener? = null
 
+    var isCalculatorEnabled = true
+        set(value) {
+            field = value
+
+            // Immediately hide if not enabled
+            if (!value) visibility = GONE
+        }
+
     private var delayCheckJob: Job? = null
     private var calculatorFailed = false
     private var calculatorString = ""
@@ -46,15 +62,21 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         set(value) {
             field = if (value < 0) 0 else value
         }
+    private var _binding: ViewCalculatorKeyboardBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.view_calculator_keyboard, this, true)
+        _binding = ViewCalculatorKeyboardBinding.inflate(inflater, this, true)
 
         setupView()
         setKeyboardListeners()
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun setInputChangedListener(
         calculator: String? = null,
         inputListener: InputChangedListener? = null,
@@ -66,10 +88,43 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorEditIndex = calculatorString.length
     }
 
+    private var hideJob: Job? = null
+
     /**
      * @param inputText the calculator input for the current query
      */
-    fun setInput(inputText: EditText) {
+    @OptIn(DelicateCoroutinesApi::class)
+    fun setInput(inputText: EditText?) {
+        hideJob?.cancel()
+        if (inputText == null) {
+            // Delay hiding slightly to allow for focus transitions between scores (e.g. when adding a round)
+            hideJob = GlobalScope.launch(Dispatchers.Main) {
+                delay(100.milliseconds)
+                if (!isAttachedToWindow) return@launch
+
+                inputView = null
+                visibility = GONE
+                setInputChangedListener()
+
+                // Hide system keyboard if it's showing
+                (context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+                    ?.hideSoftInputFromWindow(windowToken, 0)
+            }
+            return
+        }
+
+        if (!isCalculatorEnabled) {
+            inputView = null
+            visibility = GONE
+            return setInputChangedListener()
+        }
+
+        visibility = VISIBLE
+
+        // Hide system keyboard if it's showing (should be handled by showSoftInputOnFocus = false, but just in case)
+        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+            ?.hideSoftInputFromWindow(inputText.windowToken, 0)
+
         calculatorEditIndex = calculatorString.length
 
         inputView = inputText
@@ -87,21 +142,23 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         val weakInputText = WeakReference(inputText)
         setInputChangedListener(
             inputString, // Reset the string
-            inputListener = { input, _ ->
+            inputListener = { input, failed ->
                 // Return unless we still have a reference
                 val editText = weakInputText.get() ?: return@setInputChangedListener
 
                 delayCheckJob?.cancel()
-                delayCheckJob = GlobalScope.launch {
-                    delay(DELAY_VALID_COMPUTATION_MESSAGE)
+                delayCheckJob = GlobalScope.launch(Dispatchers.IO) {
+                    delay(DELAY_VALID_COMPUTATION_MESSAGE.milliseconds)
+                    val weakEdit = weakInputText.get() ?: return@launch
                     post { // Need the main thread for editText
-                        editText.error =
-                            if (calculatorFailed) resources.getString(R.string.incomplete)
+                        weakEdit.error =
+                            if (calculatorFailed && input.isNotEmpty() && weakEdit.hasFocus())
+                                resources.getString(R.string.incomplete)
                             else null // Always need to clear here in case it's a duplicate job finishing early
                     }
                 }
 
-                editText.error = null // Reset the error since they just typed
+                if (!failed) editText.error = null // Reset the error since they just typed
                 editText.setText(input)
                 // Set the selection to our edit index (or the length if editing the end)
                 editText.setSelection(min(calculatorEditIndex, input.length))
@@ -117,28 +174,28 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     private fun setKeyboardListeners() {
         val listener = { button: View -> onButtonClicked((button as TextView).text.toString()) }
 
-        calculatorKeyOne.setOnClickListener(listener)
-        calculatorKeyTwo.setOnClickListener(listener)
-        calculatorKeyThree.setOnClickListener(listener)
-        calculatorKeyFour.setOnClickListener(listener)
-        calculatorKeyFive.setOnClickListener(listener)
-        calculatorKeySix.setOnClickListener(listener)
-        calculatorKeySeven.setOnClickListener(listener)
-        calculatorKeyEight.setOnClickListener(listener)
-        calculatorKeyNine.setOnClickListener(listener)
-        calculatorKeyZero.setOnClickListener(listener)
-        calculatorKeyPlus.setOnClickListener(listener)
-        calculatorKeyMinus.setOnClickListener(listener)
-        calculatorKeyMultiply.setOnClickListener(listener)
-        calculatorKeyDivide.setOnClickListener(listener)
-        calculatorKeyEquals.setOnClickListener(listener)
-        calculatorKeyDelete.setOnClickListener(listener)
-        calculatorKeyDecimal.setOnClickListener(listener)
-        calculatorKeyOpenParen.setOnClickListener(listener)
-        calculatorKeyCloseParen.setOnClickListener(listener)
+        binding.calculatorKeyOne.setOnClickListener(listener)
+        binding.calculatorKeyTwo.setOnClickListener(listener)
+        binding.calculatorKeyThree.setOnClickListener(listener)
+        binding.calculatorKeyFour.setOnClickListener(listener)
+        binding.calculatorKeyFive.setOnClickListener(listener)
+        binding.calculatorKeySix.setOnClickListener(listener)
+        binding.calculatorKeySeven.setOnClickListener(listener)
+        binding.calculatorKeyEight.setOnClickListener(listener)
+        binding.calculatorKeyNine.setOnClickListener(listener)
+        binding.calculatorKeyZero.setOnClickListener(listener)
+        binding.calculatorKeyPlus.setOnClickListener(listener)
+        binding.calculatorKeyMinus.setOnClickListener(listener)
+        binding.calculatorKeyMultiply.setOnClickListener(listener)
+        binding.calculatorKeyDivide.setOnClickListener(listener)
+        binding.calculatorKeyEquals.setOnClickListener(listener)
+        binding.calculatorKeyDelete.setOnClickListener(listener)
+        binding.calculatorKeyDecimal.setOnClickListener(listener)
+        binding.calculatorKeyOpenParen.setOnClickListener(listener)
+        binding.calculatorKeyCloseParen.setOnClickListener(listener)
 
-        calculatorKeyNext.setOnClickListener{ onNextClicked() }
-        calculatorKeyPrev.setOnClickListener{ onPrevClicked() }
+        binding.calculatorKeyNext.setOnClickListener { onNextClicked() }
+        binding.calculatorKeyPrev.setOnClickListener { onPrevClicked() }
     }
 
     private fun onButtonClicked(key: String) {
@@ -153,10 +210,10 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     }
 
     private fun onPrevClicked() {
-        if (resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
-            inputView?.focusSearch(View.FOCUS_LEFT)?.requestFocus()
+        if (inputView?.layoutDirection == LAYOUT_DIRECTION_LTR) {
+            inputView?.focusSearch(FOCUS_LEFT)?.requestFocus()
         } else {
-            inputView?.focusSearch(View.FOCUS_RIGHT)?.requestFocus()
+            inputView?.focusSearch(FOCUS_RIGHT)?.requestFocus()
         }
     }
 
@@ -165,6 +222,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
      * @return true if the string has changed, false otherwise
      */
     private fun appendToString(key: String): Boolean {
+        if (inputView == null) return false
         calculatorString = when (key) {
             resources.getString(R.string.del) -> {
                 if (calculatorString.isEmpty()) {
@@ -175,17 +233,19 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
                         calculatorString.run {
                             removeRange(calculatorEditIndex, calculatorEditIndex + 1)
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         // Default to empty string if error removing anything?
                         // This has been observed in weird selection cases (shouldn't be able to select though)
                         ""
                     }
                 }
             }
+
             resources.getString(R.string.equals) -> {
                 inputView?.onEditorAction(KEYCODE_EQUALS)
                 computeString() ?: calculatorString
             }
+
             else -> {
                 calculatorEditIndex++ // Increment the index
                 if (calculatorEditIndex - 1 < calculatorString.length) {
@@ -200,6 +260,12 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
         return (computeString() != null).also { validEquation ->
             calculatorFailed = !validEquation
+            inputView?.error =
+                if (calculatorFailed && key == resources.getString(R.string.equals)) {
+                    resources.getString(R.string.incomplete)
+                } else {
+                    null
+                }
         }
     }
 

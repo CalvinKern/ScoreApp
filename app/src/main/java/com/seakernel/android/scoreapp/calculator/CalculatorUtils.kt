@@ -45,11 +45,11 @@ object CalculatorUtils {
             var pos = -1
             var ch = 0
             fun nextChar() {
-                ch = if (++pos < str.length) str[pos].toInt() else -1
+                ch = if (++pos < str.length) str[pos].code else -1
             }
 
             fun eat(charToEat: Int): Boolean {
-                while (ch == ' '.toInt()) nextChar() // Eat whitespace
+                while (ch == ' '.code) nextChar() // Eat whitespace
                 if (ch == charToEat) {
                     nextChar()
                     return true
@@ -76,8 +76,8 @@ object CalculatorUtils {
                 var x = parseTerm() ?: return null
                 while (true) {
                     when {
-                        eat(PLUS.toInt()) -> x += parseTerm() ?: return null // addition
-                        eat(MINUS.toInt()) -> x -= parseTerm() ?: return null // subtraction
+                        eat(PLUS.code) -> x += parseTerm() ?: return null // addition
+                        eat(MINUS.code) -> x -= parseTerm() ?: return null // subtraction
                         else -> return x
                     }
                 }
@@ -87,23 +87,23 @@ object CalculatorUtils {
                 var x = parseFactor() ?: return null
                 while (true) {
                     when {
-                        eat(MULTIPLY.toInt()) -> x *= parseFactor() ?: return null // multiplication
-                        eat(DIVIDE.toInt()) -> x /= parseFactor() ?: return null // division
+                        eat(MULTIPLY.code) -> x *= parseFactor() ?: return null // multiplication
+                        eat(DIVIDE.code) -> x /= parseFactor() ?: return null // division
                         else -> return x
                     }
                 }
             }
 
             fun parseFactor(): Double? {
-                if (eat(PLUS.toInt())) return parseFactor() // unary plus
-                if (eat(MINUS.toInt())) return parseFactor()?.times(-1) // unary minus
+                if (eat(PLUS.code)) return parseFactor() // unary plus
+                if (eat(MINUS.code)) return parseFactor()?.times(-1) // unary minus
                 var x: Double
                 val startPos = pos
-                if (eat(OPEN_PAREN.toInt())) { // parentheses
+                if (eat(OPEN_PAREN.code)) { // parentheses
                     x = parseExpression() ?: return null
-                    eat(CLOSE_PAREN.toInt())
-                } else if (ch >= '0'.toInt() && ch <= '9'.toInt() || ch == DECIMAL.toInt()) { // numbers
-                    while (ch >= '0'.toInt() && ch <= '9'.toInt() || ch == DECIMAL.toInt()) nextChar()
+                    eat(CLOSE_PAREN.code)
+                } else if (ch >= '0'.code && ch <= '9'.code || ch == DECIMAL.code) { // numbers
+                    while (ch >= '0'.code && ch <= '9'.code || ch == DECIMAL.code) nextChar()
                     x = str.substring(startPos, pos).toDoubleOrNull() ?: return null
 //                } else if (ch >= 'a'.toInt() && ch <= 'z'.toInt()) { // functions
 //                    while (ch >= 'a'.toInt() && ch <= 'z'.toInt()) nextChar()
@@ -123,7 +123,7 @@ object CalculatorUtils {
                     println("Unexpected: ${ch.toChar()} ($ch)")
                     return null
                 }
-                if (eat(EXPONENT.toInt())) x = x.pow(parseFactor() ?: return null) // exponentiation
+                if (eat(EXPONENT.code)) x = x.pow(parseFactor() ?: return null) // exponentiation
                 return x
             }
         }.parse() ?: return null

@@ -38,6 +38,8 @@
     <string name="scoreHint">Puntuación</string>
     <string name="showRoundNotesDescription">Haga clic en el nombre de un jugador para ver y editar notas para cada ronda</string>
     <string name="showRoundNotesTitle">Mostrar notas redondas</string>
+    <string name="copiedUrl">URL copiado</string>
+    <string name="storeToReview">Abra la tienda de aplicaciones para dejar una reseña</string>
     <string name="actionClose">Cerca</string>
     <string name="actionPlayerStanding">Posiciones</string>
     <string name="playerStandingTitle">Posiciones de los jugadores</string>

@@ -43,7 +43,7 @@ class PlayerRepository(val context: Context) {
                 name,
                 false,
             )
-        val id = playerDao.insertAll(player)[0]
+        val id = playerDao.insertAll(arrayOf(player))[0]
         return Player(id, name)
     }
 

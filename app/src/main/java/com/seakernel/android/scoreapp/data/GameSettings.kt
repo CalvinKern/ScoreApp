@@ -15,7 +15,7 @@ data class GameSettings(
     val players: List<Player> = listOf(),
     val initialDealerId: Long? = players.firstOrNull()?.id,
     val hasDealer: Boolean = true,
-    val showRounds: Boolean = false,
+    val showRounds: Boolean = false, // showRounds deprecated in favor of showRoundNotes
     val reversedScoring: Boolean = false,
     val maxScore: Double? = null,
     val maxRounds: Int? = null,

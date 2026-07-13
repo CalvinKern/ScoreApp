@@ -15,6 +15,7 @@ import kotlin.math.max
 /**
  * A custom key for a calculator keyboard.
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class CalculatorKeyView : View {
 
     private var _keyText: String? = null
@@ -29,6 +30,7 @@ class CalculatorKeyView : View {
 
     private var contentWidth: Int = 0
     private var contentHeight: Int = 0
+
     /**
      * The text drawn for the key's value.
      * If [keyDrawable] is also provided, this is used as the accessibility string.
@@ -143,8 +145,8 @@ class CalculatorKeyView : View {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // Try for a width based on our minimum
-        val minw = max(paddingLeft + paddingRight + textWidth.toInt(), suggestedMinimumWidth)
-        val w = resolveSizeAndState(minw, widthMeasureSpec, 0)
+        val minW = max(paddingLeft + paddingRight + textWidth.toInt(), suggestedMinimumWidth)
+        val w = resolveSizeAndState(minW, widthMeasureSpec, 0)
 
         val minh = max(
             paddingBottom + paddingTop + MeasureSpec.getSize(w) - textWidth.toInt(),

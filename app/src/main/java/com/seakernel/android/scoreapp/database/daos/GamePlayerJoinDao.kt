@@ -15,9 +15,10 @@ import com.seakernel.android.scoreapp.database.entities.PlayerEntity
 @Dao
 interface GamePlayerJoinDao {
     @Insert
-    fun insertAll(vararg joins: GamePlayerJoin)
+    fun insertAll(joins: Array<GamePlayerJoin>)
 
-    @Query("""
+    @Query(
+        """
         SELECT ${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}, ${PlayerEntity.COLUMN_ARCHIVED}
         FROM ${PlayerEntity.TABLE_NAME}
         INNER JOIN ${GamePlayerJoin.TABLE_NAME}
@@ -25,25 +26,30 @@ interface GamePlayerJoinDao {
         WHERE ${GamePlayerJoin.COLUMN_GAME_ID}=:gameId
         AND ${PlayerEntity.COLUMN_ARCHIVED}=0
         ORDER BY ${GamePlayerJoin.COLUMN_PLAYER_POSITION}
-    """)
+    """
+    )
     fun getPlayersForGame(gameId: Long): List<PlayerEntity>
 
-    @Query("""
-        SELECT ${GameEntity.columnNames}
+    @Query(
+        """
+        SELECT ${GameEntity.ALL_COLUMNS}
         FROM ${GameEntity.TABLE_NAME}
         INNER JOIN ${GamePlayerJoin.TABLE_NAME}
         ON ${GameEntity.COLUMN_ID}=${GamePlayerJoin.COLUMN_GAME_ID}
         WHERE ${GamePlayerJoin.COLUMN_PLAYER_ID}=:playerId
-        """)
+        """
+    )
     fun getGamesForPlayer(playerId: Long): List<GameEntity>
 
     @Update
-    fun updatePlayerPositions(vararg joins: GamePlayerJoin)
+    fun updatePlayerPositions(joins: Array<GamePlayerJoin>)
 
-    @Query("""
+    @Query(
+        """
        DELETE FROM ${GamePlayerJoin.TABLE_NAME}
        WHERE ${GamePlayerJoin.COLUMN_GAME_ID} = :gameId
        AND ${GamePlayerJoin.COLUMN_PLAYER_ID} IN (:playerIds)
-    """)
-    fun deleteAllPlayersForGame(gameId: Long, vararg playerIds: Long)
+    """
+    )
+    fun deleteAllPlayersForGame(gameId: Long, playerIds: LongArray)
 }

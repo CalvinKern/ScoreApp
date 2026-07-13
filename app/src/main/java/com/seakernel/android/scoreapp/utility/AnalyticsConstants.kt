@@ -23,6 +23,7 @@ object AnalyticsConstants {
         const val SHOW_ROUND_NOTES_DIALOG = "show_round_notes"
         const val SHOW_ROUND_DELETE_DIALOG = "delete_round_dialog"
         const val TOGGLE_GAME_SETTING = "game_setting_changed"
+        const val NEW_GAME_CLICKED = "new_game_clicked"
     }
 
 
@@ -33,11 +34,11 @@ object AnalyticsConstants {
     }
 
     sealed class ScreenName(val value: String) {
-        object MainActivity : ScreenName("MainActivity")
-        object GraphFragment : ScreenName("GraphFragment")
-        object GameFragment : ScreenName("GameFragment")
-        object GameListFragment : ScreenName("GameListFragment")
-        object GameSetupFragment : ScreenName("GameSetupFragment")
-        object PlayerSelectFragment : ScreenName("PlayerSelectFragment")
+        data object MainActivity : ScreenName("MainActivity")
+        data object GraphFragment : ScreenName("GraphFragment")
+        data object GameFragment : ScreenName("GameFragment")
+        data object GameListFragment : ScreenName("GameListFragment")
+        data object GameSetupFragment : ScreenName("GameSetupFragment")
+        data object PlayerSelectFragment : ScreenName("PlayerSelectFragment")
     }
 }

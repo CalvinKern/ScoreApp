@@ -44,6 +44,7 @@
         android:padding="@dimen/image_padding"
         android:src="@drawable/ic_settings"
         android:foreground="?selectableItemBackgroundBorderless"
+        android:contentDescription="@string/actionEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

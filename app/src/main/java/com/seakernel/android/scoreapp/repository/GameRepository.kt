@@ -39,8 +39,8 @@ class GameRepository(val context: Context) {
      */
     fun createGame(settings: GameSettings): Long {
         val game = settings.toGameEntity()
-        val id = gameDao.insertAll(game)[0]
-        gamePlayerDao.insertAll(*getPlayerJoins(settings.copy(id = id)))
+        val id = gameDao.insertAll(arrayOf(game))[0]
+        gamePlayerDao.insertAll(getPlayerJoins(settings.copy(id = id)))
 
         // Create an empty round for ease
         val dealer = Player(id = settings.initialDealerId ?: settings.players.random().id)
@@ -61,14 +61,14 @@ class GameRepository(val context: Context) {
         val removedPlayers = originalPlayerIds.filterNot { it in currentPlayerIds }.toLongArray()
 
         if (removedPlayers.isNotEmpty()) {
-            gamePlayerDao.deleteAllPlayersForGame(settings.id, *removedPlayers)
+            gamePlayerDao.deleteAllPlayersForGame(settings.id, removedPlayers)
         }
 
         // Update the players in the new order
         val (oldPlayers, newPlayers) = getPlayerJoins(settings).partition { it.playerId in originalPlayerIds }
 
-        gamePlayerDao.updatePlayerPositions(*oldPlayers.toTypedArray())
-        gamePlayerDao.insertAll(*newPlayers.toTypedArray())
+        gamePlayerDao.updatePlayerPositions(oldPlayers.toTypedArray())
+        gamePlayerDao.insertAll(newPlayers.toTypedArray())
 
         val rounds = gameDao.getRounds(settings.id)
         val roundRepository = RoundRepository(context)

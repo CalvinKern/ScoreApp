@@ -1,9 +1,7 @@
 package com.seakernel.android.scoreapp.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -25,11 +23,6 @@ import com.spotify.mobius.functions.Consumer
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 abstract class MobiusFragment<M, E, F> : Fragment() {
-    open val layoutId: Int = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(layoutId, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

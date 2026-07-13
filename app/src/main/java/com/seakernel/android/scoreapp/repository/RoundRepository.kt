@@ -54,7 +54,7 @@ class RoundRepository(val context: Context) {
         }
     }
     fun insertScores(vararg scores: ScoreEntity) {
-        roundDao.insertAll(*scores)
+        roundDao.insertAll(arrayOf(*scores))
     }
 
     fun updateScore(score: Score): Score {
@@ -77,7 +77,7 @@ class RoundRepository(val context: Context) {
                 round.number
             )
         )
-        roundDao.update(*round.scores.map {
+        roundDao.update(round.scores.map {
             ScoreEntity(
                 it.id,
                 it.player.id!!,
@@ -91,20 +91,22 @@ class RoundRepository(val context: Context) {
 
     private fun createRound(gameId: Long, round: Round): Round {
         val roundId = roundDao.insertAll(
-            RoundEntity(
-                0,
-                gameId,
-                round.dealer?.id ?: 0,
-                round.number
+            arrayOf(
+                RoundEntity(
+                    0,
+                    gameId,
+                    round.dealer?.id ?: 0,
+                    round.number
+                )
             )
         )[0]
-        val scoreIds = roundDao.insertAll(*round.scores.map {
+        val scoreIds = roundDao.insertAll(round.scores.map {
             ScoreEntity(
                 0,
                 it.player.id!!,
                 roundId,
                 it.value,
-                it.metadata
+                it.metadata,
             )
         }.toTypedArray())
         return round.copy(
@@ -114,7 +116,7 @@ class RoundRepository(val context: Context) {
     }
 
     fun deleteRounds(vararg roundIds: Long) {
-        roundDao.deleteRoundsById(*roundIds)
+        roundDao.deleteRoundsById(longArrayOf(*roundIds))
     }
 
     fun deleteScore(id: Long) {
