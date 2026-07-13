@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -240,10 +239,20 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     private fun openPlayStore() {
         val url = "https://play.google.com/store/apps/details?id=com.seakernel.scorepad"
+        openUrl(url, R.string.storeToReview, "com.android.vending")
+    }
+
+    private fun openChangelog() {
+        logEvent(AnalyticsConstants.Event.SHOW_CHANGELOG)
+        openUrl("https://github.com/CalvinKern/ScoreApp/releases", R.string.incomplete)
+    }
+
+    private fun openUrl(url: String, errorStringResource: Int, intentPackage: String? = null) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = url.toUri()
-            setPackage("com.android.vending")
+            intentPackage?.let { setPackage(it) }
         }
+
         try {
             startActivity(intent)
         } catch (_: Exception) {
@@ -251,7 +260,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
 
             if (clipboard == null) {
-                Toast.makeText(requireContext(), R.string.storeToReview, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), errorStringResource, Toast.LENGTH_SHORT).show()
             } else {
                 clipboard.setPrimaryClip(ClipData.newPlainText("", url))
 
@@ -261,14 +270,6 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 }
             }
         }
-    }
-
-    private fun openChangelog() {
-        logEvent(AnalyticsConstants.Event.SHOW_CHANGELOG)
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = "https://github.com/CalvinKern/ScoreApp/releases".toUri()
-        }
-        startActivity(intent)
     }
 
     // End Mobius functions
