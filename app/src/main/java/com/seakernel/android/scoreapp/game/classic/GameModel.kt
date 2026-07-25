@@ -30,6 +30,7 @@ sealed class GameEvent {
 
     data class ScoreFocused(val scoreId: Long) : GameEvent()
     data class ScoreFocusLost(val scoreId: Long) : GameEvent()
+    data object RequestFinishGame : GameEvent()
 }
 
 sealed class GameEffect {
@@ -37,15 +38,37 @@ sealed class GameEffect {
     data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
     data class SaveScore(val roundId: Long, val score: Score) : GameEffect()
     data class NewGame(val gameId: Long, val initialPlayerId: Long?) : GameEffect()
+    data class ShowFinishGame(val gameId: Long) : GameEffect()
 }
 
 data class GameModel(
     val settings: GameSettings = GameSettings(),
     val rounds: List<Round> = emptyList(),
-    val focusedScoreId: Long? = null
+    val focusedScoreId: Long? = null,
+    val isGoalReached: Boolean = false,
 ) {
 
     companion object {
+
+        private fun checkGoalReached(model: GameModel): Boolean {
+            val maxRounds = model.settings.maxRounds
+            if (maxRounds != null && model.rounds.size >= maxRounds) {
+                return true
+            }
+
+            val maxScore = model.settings.maxScore
+            if (maxScore != null) {
+                val totalsMap = mutableMapOf<Long, Double>()
+                model.rounds.forEach { round ->
+                    round.scores.forEach { score ->
+                        totalsMap[score.player.id!!] = (totalsMap[score.player.id] ?: 0.0) + score.value
+                    }
+                }
+                return totalsMap.any { it.value >= maxScore }
+            }
+
+            return false
+        }
 
         private fun getNextDealer(model: GameModel): Player? {
             if (model.rounds.isEmpty()) return null
@@ -93,13 +116,12 @@ data class GameModel(
                         }
                     }
 
-                    Next.next(
-                        model.copy(
-                            settings = event.game.settings,
-                            rounds = newRounds,
-                            focusedScoreId = newFocusedScoreId
-                        )
+                    val newModel = model.copy(
+                        settings = event.game.settings,
+                        rounds = newRounds,
+                        focusedScoreId = newFocusedScoreId,
                     )
+                    Next.next(newModel.copy(isGoalReached = checkGoalReached(newModel)))
                 }
                 is GameEvent.RequestLoad -> Next.dispatch(
                     Effects.effects(
@@ -155,7 +177,8 @@ data class GameModel(
                         model.focusedScoreId
                     }
 
-                    Next.next(model.copy(rounds = rounds, focusedScoreId = focusedScoreId))
+                    val newModel = model.copy(rounds = rounds, focusedScoreId = focusedScoreId)
+                    Next.next(newModel.copy(isGoalReached = checkGoalReached(newModel)))
                 }
                 is GameEvent.ScoreSaved -> {
                     val rounds = model.rounds.toMutableList()
@@ -171,7 +194,8 @@ data class GameModel(
 
                     rounds.removeAt(index)
                     rounds.add(index, round)
-                    Next.next(model.copy(rounds = rounds))
+                    val newModel = model.copy(rounds = rounds)
+                    Next.next(newModel.copy(isGoalReached = checkGoalReached(newModel)))
                 }
                 is GameEvent.UpdateScore -> {
                     val round = model.rounds.firstOrNull { it.id == event.roundId }
@@ -199,6 +223,10 @@ data class GameModel(
                         Next.noChange()
                     }
                 }
+                is GameEvent.RequestFinishGame ->
+                    model.settings.id?.let {
+                        Next.dispatch(Effects.effects(GameEffect.ShowFinishGame(it)))
+                    } ?: Next.noChange()
             }
         }
     }

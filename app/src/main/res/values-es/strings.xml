@@ -53,4 +53,13 @@
     <string name="deleteRounds">Eliminar rondas</string>
     <string name="deleteRoundItem">Ronda %d</string>
     <string name="incomplete">Incompleta</string>
+    <string name="maxScoreTitle">Puntuación objetivo</string>
+    <string name="maxScoreDescription">Terminar la partida al alcanzar la puntuación</string>
+    <string name="maxRoundsTitle">Rondas objetivo</string>
+    <string name="maxRoundsDescription">Número máximo de rondas a jugar</string>
+    <string name="finishGame">Terminar partida</string>
+    <string name="finishGameTitle">¡Objetivo alcanzado!</string>
+    <string name="finishGameConfirmation">¿Quieres terminar la partida y ver la clasificación?</string>
+    <string name="finish">Terminar</string>
+    <string name="continuePlaying">Continuar</string>
 </resources>

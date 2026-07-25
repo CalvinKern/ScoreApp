@@ -270,6 +270,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         model.settings.useCalculator,
                         model.rounds,
                         model.focusedScoreId,
+                        model.isGoalReached,
                         eventConsumer
                     ) { score -> binding.calculatorKeyboard.setInput(score) }, false
                 )
@@ -374,6 +375,21 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     is GameEffect.NewGame -> {
                         listener?.onNewGame(effect.gameId, effect.initialPlayerId)
                         logEvent(AnalyticsConstants.Event.NEW_GAME_CLICKED)
+                    }
+
+                    is GameEffect.ShowFinishGame -> {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                                .setTitle(R.string.finishGameTitle)
+                                .setMessage(R.string.finishGameConfirmation)
+                                .setPositiveButton(R.string.finish) { _, _ ->
+                                    showStandingDialog(effect.gameId)
+                                }
+                                .setNegativeButton(R.string.continuePlaying) { _, _ ->
+                                    eventConsumer.accept(GameEvent.RequestCreateRound)
+                                }
+                                .show()
+                        }
                     }
                 }.hashCode() // Exhaustive call
             }

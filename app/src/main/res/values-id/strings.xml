@@ -53,4 +53,13 @@
     <string name="deleteRounds">Hapus Putaran</string>
     <string name="deleteRoundItem">Putaran %d</string>
     <string name="incomplete">Tidak lengkap</string>
+    <string name="maxScoreTitle">Skor Target</string>
+    <string name="maxScoreDescription">Akhiri permainan setelah skor tercapai</string>
+    <string name="maxRoundsTitle">Target Ronde</string>
+    <string name="maxRoundsDescription">Jumlah maksimum ronde yang dimainkan</string>
+    <string name="finishGame">Akhiri Permainan</string>
+    <string name="finishGameTitle">Target Tercapai!</string>
+    <string name="finishGameConfirmation">Apakah Anda ingin mengakhiri permainan dan melihat klasemen?</string>
+    <string name="finish">Selesai</string>
+    <string name="continuePlaying">Lanjutkan</string>
 </resources>

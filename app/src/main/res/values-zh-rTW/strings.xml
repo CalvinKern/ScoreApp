@@ -53,4 +53,13 @@
     <string name="deleteRounds">刪除回合</string>
     <string name="deleteRoundItem">第 %d 輪</string>
     <string name="incomplete">不完整</string>
+    <string name="maxScoreTitle">目標分數</string>
+    <string name="maxScoreDescription">達到該分數後結束遊戲</string>
+    <string name="maxRoundsTitle">目標回合數</string>
+    <string name="maxRoundsDescription">最多進行的回合數</string>
+    <string name="finishGame">結束遊戲</string>
+    <string name="finishGameTitle">已達成目標！</string>
+    <string name="finishGameConfirmation">是否要結束遊戲並查看排名？</string>
+    <string name="finish">結束</string>
+    <string name="continuePlaying">繼續</string>
 </resources>

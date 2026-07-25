@@ -34,6 +34,7 @@ class GameScoreAdapter(
     private val useCalculator: Boolean,
     private val rounds: List<Round>,
     private val focusedScoreId: Long?,
+    private val isGoalReached: Boolean = false,
     private val eventConsumer: Consumer<GameEvent>? = null,
     private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -72,11 +73,12 @@ class GameScoreAdapter(
                     round,
                     round.scores[toScoreIndex(position)],
                     focusedScoreId,
-                    eventConsumer
+                    isGoalReached,
+                    eventConsumer,
                 )
             }
             VIEW_TYPE_ROUND_ADD -> {
-                (holder as AddRoundViewHolder).bind(eventConsumer)
+                (holder as AddRoundViewHolder).bind(isGoalReached, eventConsumer)
             }
         }
     }
@@ -123,7 +125,10 @@ class PlayersAdapter(
     }
 }
 
-class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: List<Round>) :
+class TotalsAdapter(
+    private val reversedScoring: Boolean,
+    private val rounds: List<Round>,
+) :
     RecyclerView.Adapter<ScoreViewHolder>() {
     private val leadPlayerIds: ArrayList<Long> = arrayListOf()
     private val totalsMap: HashMap<Long, Double> = HashMap(rounds.size) // PlayerID to total
@@ -166,7 +171,10 @@ class TotalsAdapter(private val reversedScoring: Boolean, private val rounds: Li
 
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
         val playerId = rounds.first().scores[position].player.id
-        holder.bindTotal(totalsMap[playerId] ?: 0.0, leadPlayerIds.contains(playerId))
+        holder.bindTotal(
+            totalsMap[playerId] ?: 0.0,
+            leadPlayerIds.contains(playerId),
+        )
     }
 }
 
@@ -193,9 +201,21 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
         false
     )
 ) {
-    fun bind(eventConsumer: Consumer<GameEvent>?) {
+    fun bind(isGoalReached: Boolean, eventConsumer: Consumer<GameEvent>?) {
+        if (isGoalReached) {
+            binding.addRoundLabel.setText(R.string.finishGame)
+            binding.addRoundIcon.setImageResource(R.drawable.ic_trophy)
+        } else {
+            binding.addRoundLabel.setText(R.string.addRound)
+            binding.addRoundIcon.setImageResource(R.drawable.ic_add_black)
+        }
+
         itemView.setOnClickListener {
-            eventConsumer?.accept(GameEvent.RequestCreateRound)
+            if (isGoalReached) {
+                eventConsumer?.accept(GameEvent.RequestFinishGame)
+            } else {
+                eventConsumer?.accept(GameEvent.RequestCreateRound)
+            }
         }
     }
 }
@@ -219,6 +239,7 @@ class ScoreViewHolder(
     private var _round: Round? = null
     private var _score: Score? = null
     private var _focusedScoreId: Long? = null
+    private var _isGoalReached: Boolean = false
 
     fun bind(
         hasDealer: Boolean,
@@ -227,6 +248,7 @@ class ScoreViewHolder(
         round: Round,
         score: Score,
         focusedScoreId: Long?,
+        isGoalReached: Boolean,
         eventConsumer: Consumer<GameEvent>?
     ) {
         // I hate doing this, but it gets the score to update the total immediately
@@ -234,6 +256,7 @@ class ScoreViewHolder(
         _round = round
         _score = score
         _focusedScoreId = focusedScoreId
+        _isGoalReached = isGoalReached
 
         binding.playerScore.showSoftInputOnFocus = !useCalculator
 
@@ -268,7 +291,11 @@ class ScoreViewHolder(
                     // Add a new round only when we're the last round, otherwise let the action propagate to the system
                     if (score.id != rounds.last().scores.last().id) return@setOnEditorActionListener false
 
-                    eventConsumer?.accept(GameEvent.RequestCreateRound)
+                    if (isGoalReached) {
+                        eventConsumer?.accept(GameEvent.RequestFinishGame)
+                    } else {
+                        eventConsumer?.accept(GameEvent.RequestCreateRound)
+                    }
                 }
             }
 
@@ -352,10 +379,7 @@ class ScoreViewHolder(
         if (isLeader) {
             binding.playerBorder.setBackgroundResource(R.drawable.border_winner)
             binding.playerScore.setTextColor(
-                ContextCompat.getColor(
-                    itemView.context,
-                    R.color.winnerText
-                )
+                ContextCompat.getColor(itemView.context, R.color.winnerText)
             )
         } else {
             binding.playerBorder.setBackgroundResource(0)

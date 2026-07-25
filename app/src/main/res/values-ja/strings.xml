@@ -53,4 +53,13 @@
     <string name="deleteRounds">ラウンドを削除</string>
     <string name="deleteRoundItem">ラウンド%d</string>
     <string name="incomplete">不完全な</string>
+    <string name="maxScoreTitle">目標スコア</string>
+    <string name="maxScoreDescription">スコアに達したらゲームを終了します</string>
+    <string name="maxRoundsTitle">目標ラウンド数</string>
+    <string name="maxRoundsDescription">プレイする最大ラウンド数</string>
+    <string name="finishGame">ゲームを終了</string>
+    <string name="finishGameTitle">目標達成！</string>
+    <string name="finishGameConfirmation">ゲームを終了して順位を表示しますか？</string>
+    <string name="finish">終了</string>
+    <string name="continuePlaying">続ける</string>
 </resources>

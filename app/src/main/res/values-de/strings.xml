@@ -53,4 +53,13 @@
     <string name="deleteRounds">Runden löschen</string>
     <string name="deleteRoundItem">Runde %d</string>
     <string name="incomplete">Unvollständig</string>
+    <string name="maxScoreTitle">Zielpunktzahl</string>
+    <string name="maxScoreDescription">Spiel beenden, sobald die Punktzahl erreicht ist</string>
+    <string name="maxRoundsTitle">Zielrundenzahl</string>
+    <string name="maxRoundsDescription">Maximale Anzahl an Runden</string>
+    <string name="finishGame">Spiel beenden</string>
+    <string name="finishGameTitle">Ziel erreicht!</string>
+    <string name="finishGameConfirmation">Möchtest du das Spiel beenden und die Rangliste ansehen?</string>
+    <string name="finish">Beenden</string>
+    <string name="continuePlaying">Weiter</string>
 </resources>

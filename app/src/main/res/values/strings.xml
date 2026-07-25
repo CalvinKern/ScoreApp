@@ -34,6 +34,10 @@
     <string name="showRoundNotesDescription">Click on a player\'s name to view and edit notes for each round</string>
     <string name="useCalculatorTitle">Calculator Keyboard</string>
     <string name="useCalculatorDescription">Use the custom calculator keyboard. Will use the system keyboard if not enabled.</string>
+    <string name="maxScoreTitle">Target Score</string>
+    <string name="maxScoreDescription">Finish game once score is reached</string>
+    <string name="maxRoundsTitle">Target Rounds</string>
+    <string name="maxRoundsDescription">Maximum number of rounds to play</string>
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>
@@ -46,6 +50,11 @@
 
     <!--Game Screen-->
     <string name="addRound">Add Round</string>
+    <string name="finishGame">Finish Game</string>
+    <string name="finishGameTitle">Goal Reached!</string>
+    <string name="finishGameConfirmation">Would you like to finish the game and see the standings?</string>
+    <string name="finish">Finish</string>
+    <string name="continuePlaying">Continue</string>
     <string name="makePlayerDealerMessage">Make %s dealer for this round?</string>
     <string name="scoreHint">Score</string>
     <string name="incomplete">Incomplete</string>

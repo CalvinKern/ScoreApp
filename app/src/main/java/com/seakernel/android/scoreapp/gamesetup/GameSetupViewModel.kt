@@ -72,6 +72,16 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         gameSettings.value = gameSettings.value!!.copy(useCalculator = useCalculator)
     }
 
+    @MainThread
+    fun setMaxScore(maxScore: Double?) {
+        gameSettings.value = gameSettings.value!!.copy(maxScore = maxScore)
+    }
+
+    @MainThread
+    fun setMaxRounds(maxRounds: Int?) {
+        gameSettings.value = gameSettings.value!!.copy(maxRounds = maxRounds)
+    }
+
     fun saveGame() {
         if (saveProcessing.value == true) return
 

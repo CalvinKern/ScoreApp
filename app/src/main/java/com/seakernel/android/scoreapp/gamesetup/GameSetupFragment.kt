@@ -35,6 +35,7 @@ import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setBackgroundRipple
 import com.seakernel.android.scoreapp.utility.setVisible
+import java.text.DecimalFormat
 
 class GameSetupFragment : Fragment() {
 
@@ -46,6 +47,8 @@ class GameSetupFragment : Fragment() {
 
     private var listener: GameSetupListener? = null
     private var nameTextWatcher: TextWatcher? = null
+    private var maxScoreTextWatcher: TextWatcher? = null
+    private var maxRoundsTextWatcher: TextWatcher? = null
 
     private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
     private val gameCreatedObserver =
@@ -107,6 +110,8 @@ class GameSetupFragment : Fragment() {
         binding.gamePlayersEmptyImage.setOnClickListener(null)
 
         _binding?.gameNameEdit?.removeTextChangedListener(nameTextWatcher)
+        _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)
+        _settingsBinding?.maxRoundsEdit?.removeTextChangedListener(maxRoundsTextWatcher)
 
         viewModel.getGameSettings().removeObserver(modelObserver)
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
@@ -203,6 +208,21 @@ class GameSetupFragment : Fragment() {
             }
         }
 
+        maxScoreTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(text: Editable?) {
+                viewModel.setMaxScore(text.toString().toDoubleOrNull())
+            }
+        }
+        maxRoundsTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(text: Editable?) {
+                viewModel.setMaxRounds(text.toString().toIntOrNull())
+            }
+        }
+
         val settingsBinding = _settingsBinding ?: return
 
         setListenerRow(settingsBinding.hasDealerContainer, settingsBinding.hasDealerCheckbox)
@@ -272,6 +292,19 @@ class GameSetupFragment : Fragment() {
             binding.gameNameEdit.removeTextChangedListener(nameTextWatcher)
             binding.gameNameEdit.setText(settings.name)
             binding.gameNameEdit.addTextChangedListener(nameTextWatcher)
+        }
+
+        // Update max score/rounds unless it has focus
+        if (_settingsBinding?.maxScoreEdit?.hasFocus() == false) {
+            val score = settings.maxScore?.let { DecimalFormat("#.##").format(it) } ?: ""
+            _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)
+            _settingsBinding?.maxScoreEdit?.setText(score)
+            _settingsBinding?.maxScoreEdit?.addTextChangedListener(maxScoreTextWatcher)
+        }
+        if (_settingsBinding?.maxRoundsEdit?.hasFocus() == false) {
+            _settingsBinding?.maxRoundsEdit?.removeTextChangedListener(maxRoundsTextWatcher)
+            _settingsBinding?.maxRoundsEdit?.setText(settings.maxRounds?.toString() ?: "")
+            _settingsBinding?.maxRoundsEdit?.addTextChangedListener(maxRoundsTextWatcher)
         }
     }
 

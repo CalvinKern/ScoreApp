@@ -53,4 +53,13 @@
     <string name="deleteRounds">Ștergeți rundele</string>
     <string name="deleteRoundItem">Runda %d</string>
     <string name="incomplete">Incomplet</string>
+    <string name="maxScoreTitle">Scor țintă</string>
+    <string name="maxScoreDescription">Termină jocul când scorul este atins</string>
+    <string name="maxRoundsTitle">Runde țintă</string>
+    <string name="maxRoundsDescription">Numărul maxim de runde de jucat</string>
+    <string name="finishGame">Termină jocul</string>
+    <string name="finishGameTitle">Obiectiv atins!</string>
+    <string name="finishGameConfirmation">Dorești să închei jocul și să vezi clasamentul?</string>
+    <string name="finish">Termină</string>
+    <string name="continuePlaying">Continuă</string>
 </resources>
