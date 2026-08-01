@@ -5,7 +5,7 @@
     <color name="slightGray">#F5F5F5</color>
     <color name="gray">#707070</color>
     <color name="darkGray">#353535</color>
-    <color name="winnerBackground">@color/colorSecondary</color>
+    <color name="winnerBackground">@color/colorTertiary</color>
     <color name="winnerText">@color/colorOnPrimary</color>
     <color name="dealer">@color/colorPrimary</color>
     <color name="dealerPast">@color/colorPrimaryLight</color>
@@ -17,12 +17,16 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorPrimaryLight">#4cb5a6</color>
-    <color name="colorOnPrimary">@color/white</color>
-    <color name="colorSecondary">#3f51b5</color> <!--Indigo-500-->
-    <color name="colorOnSecondary">@color/white</color>
+    <color name="colorOnPrimary">@color/textWhite</color>
+    <color name="colorSecondary">#284d63</color>
+    <color name="colorOnSecondary">@color/textWhite</color>
+    <color name="colorTertiary">#FF9E80</color>
+    <color name="colorOnTertiary">@color/textWhite</color>
     <color name="colorBackground">@color/white</color>
     <color name="colorBackgroundPopup">@color/white</color>
     <color name="colorControlHighlight">#1F000000</color>
+    <color name="colorControlHighlightFab">#1FFFFFFF</color>
+    <color name="colorPrimaryRipple">#2F008577</color>
 
     <!-- Text Colors-->
     <color name="textBlack">@color/black</color>

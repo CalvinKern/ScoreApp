@@ -66,12 +66,20 @@
         app:layout_constraintVertical_chainStyle="packed"
         >
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/totalsRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:overScrollMode="never"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="@color/totalBackground"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:spanCount="4"
             tools:itemCount="4"

@@ -5,8 +5,8 @@
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <item name="colorTertiary">@color/colorPrimary</item>
-        <item name="colorOnTertiary">@color/colorOnPrimary</item>
+        <item name="colorTertiary">@color/colorTertiary</item>
+        <item name="colorOnTertiary">@color/colorOnTertiary</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorSurface">@color/colorBackground</item>
         <item name="colorOnSurface">@color/textBlack</item>
@@ -18,6 +18,7 @@
         <item name="snackbarButtonStyle">@style/SnackbarButton</item>
         <item name="floatingActionButtonStyle">@style/AppTheme.FloatingActionButton</item>
         <item name="textInputStyle">@style/AppTheme.TextInputLayout.Outlined</item>
+        <item name="checkboxStyle">@style/AppTheme.Checkbox</item>
 
         <!-- For NoActionBar -->
         <item name="windowActionBar">false</item>
@@ -26,7 +27,14 @@
 
     <style name="AppTheme.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="backgroundTint">@color/colorSecondary</item>
-        <item name="tint">@color/white</item>
+        <item name="tint">@color/colorOnSecondary</item>
+        <item name="rippleColor">@color/colorControlHighlightFab</item>
+    </style>
+
+    <style name="AppTheme.Checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:padding">@dimen/margin_checkbox</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="rippleColor">@color/colorPrimaryRipple</item>
     </style>
 
     <style name="SnackbarStyle" parent="@style/Widget.Material3.Snackbar">
@@ -43,12 +51,12 @@
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorPrimary">@color/colorSecondary</item>
-        <item name="colorOnPrimary">@color/colorOnSecondary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <item name="colorTertiary">@color/colorPrimary</item>
-        <item name="colorOnTertiary">@color/colorOnPrimary</item>
+        <item name="colorTertiary">@color/colorTertiary</item>
+        <item name="colorOnTertiary">@color/colorOnTertiary</item>
         <item name="colorSurface">@color/colorBackgroundPopup</item>
         <item name="colorOnSurface">@color/textBlack</item>
         <item name="colorSurfaceVariant">@color/colorBackgroundPopup</item>

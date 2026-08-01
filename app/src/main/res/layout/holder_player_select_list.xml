@@ -12,12 +12,11 @@
         android:id="@+id/playerCheckHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playerNameHolder"
-        />
+    />
 
     <TextView
         android:id="@+id/playerNameHolder"
@@ -43,7 +42,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:padding="@dimen/image_padding"
         android:src="@drawable/ic_settings"
-        android:foreground="?selectableItemBackgroundBorderless"
+        android:background="?selectableItemBackgroundBorderless"
         android:contentDescription="@string/actionEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

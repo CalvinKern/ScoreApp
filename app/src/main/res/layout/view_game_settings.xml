@@ -17,12 +17,10 @@
         android:orientation="horizontal"
         >
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/hasDealerCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             />
 
         <TextView
@@ -45,12 +43,10 @@
         android:orientation="horizontal"
         >
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/reversedScoringCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             />
 
         <LinearLayout
@@ -87,12 +83,10 @@
         android:orientation="horizontal"
         >
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/showNotesCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             />
 
         <LinearLayout
@@ -128,12 +122,10 @@
         android:orientation="horizontal"
         >
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/useCalculatorCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             />
 
         <LinearLayout

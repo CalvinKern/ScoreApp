@@ -8,6 +8,8 @@
     <dimen name="description_width">300dp</dimen>
     <dimen name="empty_margin_vertical">50dp</dimen>
 
+    <dimen name="margin_checkbox">8dp</dimen>
+
     <!--Text Size-->
     <dimen name="text_detail">12sp</dimen>
     <dimen name="text_title">16sp</dimen>

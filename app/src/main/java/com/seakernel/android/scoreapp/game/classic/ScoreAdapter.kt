@@ -374,7 +374,6 @@ class ScoreViewHolder(
     fun bindTotal(score: Double, isLeader: Boolean) {
         binding.playerScore.isEnabled = false
         binding.playerScore.isFocusable = false
-        itemView.setBackgroundResource(R.color.totalBackground)
 
         if (isLeader) {
             binding.playerBorder.setBackgroundResource(R.drawable.border_winner)
