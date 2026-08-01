@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,7 +50,7 @@ class PlayerStandingDialog : DialogFragment() {
         binding.dialogPlayerRoundRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.dialogPlayerRoundRecycler.adapter = adapter
 
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.playerStandingTitle))
             .setView(binding.root)
             .setNegativeButton(R.string.actionClose, null)

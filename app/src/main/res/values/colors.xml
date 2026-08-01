@@ -22,6 +22,7 @@
     <color name="colorOnSecondary">@color/white</color>
     <color name="colorBackground">@color/white</color>
     <color name="colorBackgroundPopup">@color/white</color>
+    <color name="colorControlHighlight">#1F000000</color>
 
     <!-- Text Colors-->
     <color name="textBlack">@color/black</color>

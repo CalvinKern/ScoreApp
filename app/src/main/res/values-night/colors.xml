@@ -10,6 +10,7 @@
     <color name="colorOnSecondary">@color/black</color>
     <color name="colorBackground">@color/black</color>
     <color name="colorBackgroundPopup">#FF2C2C2C</color>
+    <color name="colorControlHighlight">#1FFFFFFF</color>
 
     <color name="textWhite">#BFFFFFFF</color>
     <color name="textBlack">#BFFFFFFF</color>

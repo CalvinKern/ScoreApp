@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -188,7 +188,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     private fun showDeleteGameDialog(eventConsumer: Consumer<ListEvent>, gameId: Long) {
         view?.post {
-            val builder = AlertDialog.Builder(requireContext())
+            val builder = MaterialAlertDialogBuilder(requireContext())
             builder.setMessage(R.string.deleteGameConfirmation)
                 .setPositiveButton(R.string.delete) { _, _ ->
                     deleteGameAsync(eventConsumer, gameId)

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -379,7 +380,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                     is GameEffect.ShowFinishGame -> {
                         lifecycleScope.launch(Dispatchers.Main) {
-                            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                            MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(R.string.finishGameTitle)
                                 .setMessage(R.string.finishGameConfirmation)
                                 .setPositiveButton(R.string.finish) { _, _ ->

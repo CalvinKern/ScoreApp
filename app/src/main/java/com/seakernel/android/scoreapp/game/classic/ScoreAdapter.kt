@@ -5,7 +5,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
@@ -210,7 +210,7 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
             binding.addRoundIcon.setImageResource(R.drawable.ic_add_black)
         }
 
-        itemView.setOnClickListener {
+        binding.addRoundButton.setOnClickListener {
             if (isGoalReached) {
                 eventConsumer?.accept(GameEvent.RequestFinishGame)
             } else {
@@ -417,7 +417,7 @@ class ScoreViewHolder(
         round: Round,
         eventConsumer: Consumer<GameEvent>?
     ) {
-        val dialog = AlertDialog.Builder(itemView.context)
+        val dialog = MaterialAlertDialogBuilder(itemView.context)
             .setMessage(itemView.context.getString(R.string.makePlayerDealerMessage, player.name))
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.dealerLabel) { _, _ ->

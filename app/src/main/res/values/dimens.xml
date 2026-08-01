@@ -12,4 +12,9 @@
     <dimen name="text_detail">12sp</dimen>
     <dimen name="text_title">16sp</dimen>
     <dimen name="text_header">20sp</dimen>
+
+    <dimen name="cell_border_radius">8dp</dimen>
+    <dimen name="button_corner_radius">150dp</dimen>
+    <dimen name="dialog_corner_radius">28dp</dimen>
+    <dimen name="popup_item_corner_radius">28dp</dimen>
 </resources>

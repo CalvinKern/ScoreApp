@@ -1,20 +1,22 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorTertiary">@color/colorPrimary</item>
+        <item name="colorOnTertiary">@color/colorOnPrimary</item>
         <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorBackground</item>
+        <item name="colorOnSurface">@color/textBlack</item>
 
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="snackbarStyle">@style/SnackbarStyle</item>
         <item name="snackbarTextViewStyle">@style/SnackbarText</item>
         <item name="snackbarButtonStyle">@style/SnackbarButton</item>
-
+        <item name="floatingActionButtonStyle">@style/AppTheme.FloatingActionButton</item>
         <item name="textInputStyle">@style/AppTheme.TextInputLayout.Outlined</item>
 
         <!-- For NoActionBar -->
@@ -22,31 +24,65 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="SnackbarStyle" parent="@style/Widget.MaterialComponents.Snackbar">
+    <style name="AppTheme.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="SnackbarStyle" parent="@style/Widget.Material3.Snackbar">
         <item name="backgroundTint">@color/colorBackgroundPopup</item>
     </style>
 
-    <style name="SnackbarText" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+    <style name="SnackbarText" parent="@style/Widget.Material3.Snackbar.TextView">
         <item name="android:textColor">@color/textBlack</item>
     </style>
 
-    <style name="SnackbarButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+    <style name="SnackbarButton" parent="@style/Widget.Material3.Button.TextButton">
         <item name="actionTextColorAlpha">1</item>
         <item name="rippleColor">@color/colorSecondary</item>
     </style>
 
-    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorPrimary">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnSecondary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorTertiary">@color/colorPrimary</item>
+        <item name="colorOnTertiary">@color/colorOnPrimary</item>
+        <item name="colorSurface">@color/colorBackgroundPopup</item>
+        <item name="colorOnSurface">@color/textBlack</item>
+        <item name="colorSurfaceVariant">@color/colorBackgroundPopup</item>
+        <item name="colorOnSurfaceVariant">@color/textBlack</item>
+        <item name="colorSecondaryContainer">@color/colorSecondary</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnSecondary</item>
+        <item name="colorOutline">@color/gray</item>
+        <item name="colorSurfaceContainerHigh">@color/colorBackgroundPopup</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.Dialog</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">?attr/colorPrimarySurface</item>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay">
-        <item name="android:background">@color/colorBackgroundPopup</item>
+    <style name="ShapeAppearance.App.Dialog" parent="@style/ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/dialog_corner_radius</item>
+    </style>
+
+    <style name="AppTheme.OverflowMenu" parent="Widget.Material3.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/bg_popup_rounded</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3">
+        <item name="android:background">@null</item>
         <item name="android:textColor">@color/textBlack</item>
+        <item name="colorControlHighlight">@color/colorControlHighlight</item>
+        <item name="dropDownListViewStyle">@style/AppTheme.DropDownListView</item>
+    </style>
+
+    <style name="AppTheme.DropDownListView" parent="Widget.AppCompat.ListView.DropDown">
+        <item name="android:listSelector">@drawable/bg_popup_item_selectable</item>
     </style>
 
     <style name="AppTheme.TextHeader">
@@ -55,7 +91,7 @@
         <item name="android:textColor">@color/textBlack</item>
     </style>
 
-    <style name="AppTheme.CalculatorButton" parent="@style/Widget.MaterialComponents.Button">
+    <style name="AppTheme.CalculatorButton" parent="@style/Widget.Material3.Button">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/calculator_button_size</item>
         <item name="android:layout_columnWeight">1</item>
@@ -77,11 +113,11 @@
         <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.TextInputLayout.Outlined" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="AppTheme.TextInputLayout.Outlined" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="hintTextColor">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.TextInputLayout.Outlined.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+    <style name="AppTheme.TextInputLayout.Outlined.ExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="hintTextColor">@color/colorPrimary</item>
     </style>
 </resources>

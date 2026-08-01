@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
@@ -76,7 +77,7 @@ class PlayerRoundNotesDialog : DialogFragment() {
             }
         }
 
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.playerNotesTitle, player.name))
             .setView(binding.root)
             .setCancelable(false)
