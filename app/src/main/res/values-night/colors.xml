@@ -2,16 +2,35 @@
 <resources>
     <color name="slightGray">#121212</color>
     <color name="dealerPast">@color/colorPrimaryDark</color>
-    <color name="totalBackground">@color/black</color>
+    <color name="totalBackground">@color/colorBackground</color>
     <color name="colorSelected">#252525</color>
 
     <color name="colorPrimary">#28635B</color>
     <color name="colorOnPrimary">@color/textWhite</color>
+    <color name="colorSecondary">#A06B6A</color>
+    <color name="colorOnSecondary">@color/colorBackground</color>
+    <color name="colorTertiary">#284D63</color>
+
     <color name="colorBackground">@color/black</color>
     <color name="colorBackgroundPopup">#2C2C2C</color>
     <color name="colorControlHighlight">#1FFFFFFF</color>
     <color name="colorPrimaryRipple">#4F4CB5A6</color>
+    <color name="colorPrimaryDialog">#5BB1AB</color>
+    <color name="colorSecondaryDialog">#D9A09F</color>
+<!--    <color name="colorTertiaryDialog">#83AAC4</color>-->
 
     <color name="textWhite">#BFFFFFFF</color>
     <color name="textBlack">#BFFFFFFF</color>
+
+    <!-- Graph palette (slightly desaturated/lightened for dark bg) -->
+    <color name="graphRed">#B06363</color>
+    <color name="graphPurple">#A05DAC</color>
+    <color name="graphBlue">#4B7DAF</color>
+    <color name="graphCyan">#2D8086</color>
+    <color name="graphTeal">#2B8279</color>
+    <color name="graphGreen">#518153</color>
+    <color name="graphYellow">#CBB967</color>
+    <color name="graphOrange">#B4723C</color>
+    <color name="graphBrown">#966A5A</color>
+    <color name="graphGray">#5C7984</color>
 </resources>

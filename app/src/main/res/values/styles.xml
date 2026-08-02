@@ -51,9 +51,9 @@
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimaryDialog</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondary">@color/colorSecondaryDialog</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
         <item name="colorTertiary">@color/colorTertiary</item>
         <item name="colorOnTertiary">@color/colorOnTertiary</item>

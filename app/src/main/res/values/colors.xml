@@ -5,7 +5,7 @@
     <color name="slightGray">#F5F5F5</color>
     <color name="gray">#707070</color>
     <color name="darkGray">#353535</color>
-    <color name="winnerBackground">@color/colorTertiary</color>
+    <color name="winnerBackground">@color/colorSecondary</color>
     <color name="winnerText">@color/colorOnPrimary</color>
     <color name="dealer">@color/colorPrimary</color>
     <color name="dealerPast">@color/colorPrimaryLight</color>
@@ -18,29 +18,32 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorPrimaryLight">#4cb5a6</color>
     <color name="colorOnPrimary">@color/textWhite</color>
-    <color name="colorSecondary">#284d63</color>
+    <color name="colorSecondary">#A76362</color>
+    <color name="colorTertiary">#457590</color>
+    <!--    <color name="colorTertiary">#005085</color>-->
     <color name="colorOnSecondary">@color/textWhite</color>
-    <color name="colorTertiary">#FF9E80</color>
     <color name="colorOnTertiary">@color/textWhite</color>
     <color name="colorBackground">@color/white</color>
     <color name="colorBackgroundPopup">@color/white</color>
     <color name="colorControlHighlight">#1F000000</color>
     <color name="colorControlHighlightFab">#1FFFFFFF</color>
     <color name="colorPrimaryRipple">#2F008577</color>
+    <color name="colorPrimaryDialog">@color/colorPrimary</color>
+    <color name="colorSecondaryDialog">@color/colorSecondary</color>
 
     <!-- Text Colors-->
     <color name="textBlack">@color/black</color>
     <color name="textWhite">@color/white</color>
 
     <!-- Graph Colors-->
-    <color name="graphRed">#f44336</color>
+    <color name="graphRed">#D32F2F</color>
     <color name="graphPurple">#9c27b0</color>
-    <color name="graphBlue">#2196f3</color>
-    <color name="graphCyan">#00bcd4</color>
-    <color name="graphTeal">#009688</color>
-    <color name="graphGreen">#4caf50</color>
-    <color name="graphYellow">#ffeb3b</color>
-    <color name="graphOrange">#ff9800</color>
+    <color name="graphBlue">#1976D2</color>
+    <color name="graphCyan">#00838F</color>
+    <color name="graphTeal">#00796B</color>
+    <color name="graphGreen">#2E7D32</color>
+    <color name="graphYellow">#FDD835</color>
+    <color name="graphOrange">#EF6C00</color>
     <color name="graphBrown">#795548</color>
     <color name="graphGray">#546E7A</color>
 </resources>
