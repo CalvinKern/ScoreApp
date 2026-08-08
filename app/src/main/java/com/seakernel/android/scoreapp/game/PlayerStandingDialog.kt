@@ -51,6 +51,7 @@ class PlayerStandingDialog : DialogFragment() {
         binding.dialogPlayerRoundRecycler.adapter = adapter
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setIcon(R.drawable.ic_trophy)
             .setTitle(getString(R.string.playerStandingTitle))
             .setView(binding.root)
             .setNegativeButton(R.string.actionClose, null)
