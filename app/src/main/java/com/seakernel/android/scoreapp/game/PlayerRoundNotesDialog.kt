@@ -18,12 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.databinding.DialogPlayerRoundBinding
+import com.seakernel.android.scoreapp.databinding.DialogPlayerNotesBinding
 import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
 import com.seakernel.android.scoreapp.repository.PlayerRoundNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
-import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,7 +46,7 @@ class PlayerRoundNotesDialog : DialogFragment() {
     }
 
     private val adapter = PlayerRoundNotesAdapter()
-    private var _binding: DialogPlayerRoundBinding? = null
+    private var _binding: DialogPlayerNotesBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -63,12 +62,11 @@ class PlayerRoundNotesDialog : DialogFragment() {
         }!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)
+        _binding = DialogPlayerNotesBinding.inflate(layoutInflater, null, false)
 
-        binding.dialogPlayerRoundRecycler.layoutManager =
+        binding.dialogPlayerNotesRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
-        binding.dialogPlayerRoundRecycler.adapter = adapter
-        binding.root.applyWindowInsetsNavigationPadding()
+        binding.dialogPlayerNotesRecycler.adapter = adapter
 
         lifecycleScope.launch(Dispatchers.IO) {
             val roundNotes = RoundRepository(requireContext()).getNotesForPlayer(player, gameId)
