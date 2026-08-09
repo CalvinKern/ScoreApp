@@ -382,7 +382,7 @@ class ScoreViewHolder(
             )
         } else {
             binding.playerBorder.setBackgroundResource(0)
-            binding.playerScore.setTextColor(itemView.context.getColor(R.color.textWhite))
+            binding.playerScore.setTextColor(itemView.context.getColor(R.color.textBlack))
         }
         binding.playerScore.setText(formatScore(score))
     }

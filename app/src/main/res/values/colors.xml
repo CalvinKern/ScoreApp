@@ -6,10 +6,10 @@
     <color name="gray">#707070</color>
     <color name="darkGray">#353535</color>
     <color name="winnerBackground">@color/colorSecondary</color>
-    <color name="winnerText">@color/colorOnPrimary</color>
+    <color name="winnerText">@color/textBlack</color>
     <color name="dealer">@color/colorPrimary</color>
     <color name="dealerPast">@color/colorPrimaryLight</color>
-    <color name="totalBackground">@color/graphGray</color>
+    <color name="totalBackground">@color/colorBackground</color>
     <color name="transparent">#00000000</color>
     <color name="colorSelected">#DADADA</color>
 
