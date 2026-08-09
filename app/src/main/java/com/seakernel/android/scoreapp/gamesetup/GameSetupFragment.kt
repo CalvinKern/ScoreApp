@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
@@ -71,6 +72,8 @@ class GameSetupFragment : Fragment() {
     private val viewModel: GameSetupViewModel by viewModels<GameSetupViewModel>()
     private var _binding: FragmentGameCreateBinding? = null
     private var _settingsBinding: ViewGameSettingsBinding? = null
+
+    private var hasFocusedGameName = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -294,6 +297,16 @@ class GameSetupFragment : Fragment() {
             binding.gameNameEdit.removeTextChangedListener(nameTextWatcher)
             binding.gameNameEdit.setText(settings.name)
             binding.gameNameEdit.addTextChangedListener(nameTextWatcher)
+
+            // If we haven't focused the game name, focus that unless the other edit texts are focused
+            if (settings.name.isBlank() && !hasFocusedGameName && _settingsBinding?.maxScoreEdit?.hasFocus() != true && _settingsBinding?.maxRoundsEdit?.hasFocus() != true) {
+                hasFocusedGameName = true
+                binding.gameNameEdit.requestFocus()
+                binding.gameNameEdit.post {
+                    val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                    imm?.showSoftInput(binding.gameNameEdit, 0)
+                }
+            }
         }
 
         // Update max score/rounds unless it has focus
