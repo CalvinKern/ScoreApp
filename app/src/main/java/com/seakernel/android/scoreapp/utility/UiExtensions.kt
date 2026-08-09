@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,7 +18,9 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import timber.log.Timber
 
 fun AppCompatCheckBox.isCheckedSafe(
     checked: Boolean,
@@ -150,5 +153,17 @@ fun View.applyWindowInsetsNavigationMargin() {
         }
 
         windowInsets.inset(insets.left, 0, insets.right, insets.bottom)
+    }
+}
+
+fun MaterialToolbar.setOptionalIconsVisible() {
+    try {
+        menu.javaClass.getDeclaredMethod("setOptionalIconsVisible", Boolean::class.javaPrimitiveType)
+            .apply {
+                isAccessible = true
+                invoke(menu, true)
+            }
+    } catch (t: Throwable) {
+        Timber.d(t, "Failed to set optional icons visible - in Toolbar: $title")
     }
 }

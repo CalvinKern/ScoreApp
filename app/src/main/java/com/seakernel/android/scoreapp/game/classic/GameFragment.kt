@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.data.GameSettings
@@ -28,6 +28,7 @@ import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
+import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
@@ -96,6 +97,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_game)
+        binding.toolbar.setOptionalIconsVisible()
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
         binding.toolbar.applyWindowInsetsCutout()

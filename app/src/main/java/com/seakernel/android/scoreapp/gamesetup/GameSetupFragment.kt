@@ -34,6 +34,7 @@ import com.seakernel.android.scoreapp.utility.isCheckedSafe
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setBackgroundRipple
+import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 import com.seakernel.android.scoreapp.utility.setVisible
 import java.text.DecimalFormat
 
@@ -162,7 +163,9 @@ class GameSetupFragment : Fragment() {
 
     private fun initToolbar() {
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() /* TODO: Verify leaving the new settings? */ }
+        binding.toolbar.setTitle(if (arguments?.containsKey(ARG_GAME_ID) == true) R.string.gameSettingsTitle else R.string.gameCreateTitle)
         binding.toolbar.inflateMenu(R.menu.menu_game_create)
+        binding.toolbar.setOptionalIconsVisible()
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> {
@@ -173,7 +176,6 @@ class GameSetupFragment : Fragment() {
                 else -> false
             }
         }
-        binding.toolbar.setTitle(if (arguments?.containsKey(ARG_GAME_ID) == true) R.string.gameSettingsTitle else R.string.gameCreateTitle)
     }
 
     private fun initSettings() {

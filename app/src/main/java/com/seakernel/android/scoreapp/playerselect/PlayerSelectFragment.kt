@@ -31,6 +31,7 @@ import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
+import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -107,6 +108,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         // Setup views
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_player_select)
+        binding.toolbar.setOptionalIconsVisible()
         binding.playerRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
