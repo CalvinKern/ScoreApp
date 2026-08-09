@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
@@ -172,6 +173,17 @@ class GameSetupFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> {
+                    if (viewModel.getGameSettings().value?.name.isNullOrBlank()) {
+                        context?.let {
+                            Toast.makeText(it, R.string.gameNameRequired, Toast.LENGTH_SHORT).show()
+                        }
+                        return@setOnMenuItemClickListener false
+                    } else if (viewModel.getGameSettings().value?.players.isNullOrEmpty()) {
+                        context?.let {
+                            Toast.makeText(it, R.string.gamePlayersRequired, Toast.LENGTH_SHORT).show()
+                        }
+                        return@setOnMenuItemClickListener false
+                    }
                     viewModel.saveGame()
                     true
                 }
@@ -250,8 +262,7 @@ class GameSetupFragment : Fragment() {
         if (settings == null) {
             return // TODO: Show loading spinner
         }
-        binding.toolbar.menu.findItem(R.id.actionSave).isEnabled =
-            settings.name.isNotBlank() && settings.players.isNotEmpty() && isSaving != true
+        binding.toolbar.menu.findItem(R.id.actionSave).isEnabled = isSaving != true
         binding.playerRecycler.setVisible(settings.players.isNotEmpty())
         binding.gamePlayerEmptyGroup.setVisible(settings.players.isEmpty())
 
