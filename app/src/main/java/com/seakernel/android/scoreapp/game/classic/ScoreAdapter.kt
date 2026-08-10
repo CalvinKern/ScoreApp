@@ -5,9 +5,9 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
 import com.seakernel.android.scoreapp.calculator.CalculatorUtils
@@ -18,6 +18,7 @@ import com.seakernel.android.scoreapp.databinding.HolderRoundAddBinding
 import com.seakernel.android.scoreapp.databinding.HolderScoreRowDataBinding
 import com.seakernel.android.scoreapp.databinding.HolderScoreRowHeaderBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
+import com.seakernel.android.scoreapp.ui.ConfettiHost
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.functions.Consumer
 import java.security.InvalidParameterException
@@ -128,10 +129,12 @@ class PlayersAdapter(
 class TotalsAdapter(
     private val reversedScoring: Boolean,
     private val rounds: List<Round>,
+    private val previousLeadPlayerIds: List<Long> = emptyList(),
+    private val maxScore: Double?
 ) :
     RecyclerView.Adapter<ScoreViewHolder>() {
-    private val leadPlayerIds: ArrayList<Long> = arrayListOf()
-    private val totalsMap: HashMap<Long, Double> = HashMap(rounds.size) // PlayerID to total
+    val leadPlayerIds: ArrayList<Long> = arrayListOf()
+    private val totalsMap: HashMap<Long, Double> = HashMap(rounds.firstOrNull()?.scores?.size ?: 0) // PlayerID to total
 
     init {
         setHasStableIds(true)
@@ -171,9 +174,14 @@ class TotalsAdapter(
 
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
         val playerId = rounds.first().scores[position].player.id
+        val score = totalsMap[playerId] ?: 0.0
+        val wasLeader = previousLeadPlayerIds.isEmpty() || previousLeadPlayerIds.contains(playerId)
         holder.bindTotal(
-            totalsMap[playerId] ?: 0.0,
+            score,
             leadPlayerIds.contains(playerId),
+            !wasLeader && score != 0.0 && maxScore?.let {
+                (reversedScoring && score < it) || (!reversedScoring && score > it)
+            } ?: false,
         )
     }
 }
@@ -371,7 +379,11 @@ class ScoreViewHolder(
         _focusedScoreId = null
     }
 
-    fun bindTotal(score: Double, isLeader: Boolean) {
+    fun bindTotal(
+        score: Double,
+        isLeader: Boolean,
+        showKonfetti: Boolean,
+    ) {
         binding.playerScore.isEnabled = false
         binding.playerScore.isFocusable = false
 
@@ -380,6 +392,11 @@ class ScoreViewHolder(
             binding.playerScore.setTextColor(
                 ContextCompat.getColor(itemView.context, R.color.winnerText)
             )
+            if (showKonfetti) {
+                itemView.post {
+                    (itemView.context as? ConfettiHost)?.celebrateFrom(binding.playerScore)
+                }
+            }
         } else {
             binding.playerBorder.setBackgroundResource(0)
             binding.playerScore.setTextColor(itemView.context.getColor(R.color.textBlack))

@@ -118,5 +118,6 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-android-extensions-runtime'
     }
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'nl.dionsegijn:konfetti-xml:2.0.5'
 }
 apply plugin: 'com.google.gms.google-services'

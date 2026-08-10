@@ -2,21 +2,36 @@ package com.seakernel.android.scoreapp.ui
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.databinding.ActivityMainBinding
 import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.game.graph.GraphFragment
 import com.seakernel.android.scoreapp.gamelist.GameListFragment
 import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
+import nl.dionsegijn.konfetti.core.Angle
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import nl.dionsegijn.konfetti.core.models.Shape
+import nl.dionsegijn.konfetti.core.models.Size
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
+interface ConfettiHost {
+    fun celebrateFrom(anchor: View)
+}
+
 class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
-    PlayerSelectFragment.PlayerSelectListener,
+    PlayerSelectFragment.PlayerSelectListener, ConfettiHost,
     GameSetupFragment.GameSetupListener, GameFragment.GameListener {
+
+    private lateinit var binding: ActivityMainBinding
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -27,11 +42,12 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         WindowCompat.enableEdgeToEdge(window)
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightNavigationBars = isLightMode(resources.configuration)
         }
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         // Add the list fragment if we don't have any state
         if (savedInstanceState == null) {
@@ -111,4 +127,38 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
             .addToBackStack(tag)
             .commit()
     }
+
+    /**
+     * Show a medium, circular burst of confetti from the given anchor
+     */
+    override fun celebrateFrom(anchor: View) {
+        // Anchor center in screen coordinates
+        val anchorLoc = IntArray(2)
+        anchor.getLocationOnScreen(anchorLoc)
+        val anchorCenterX = anchorLoc[0] + anchor.width / 2f
+        val anchorCenterY = anchorLoc[1] + anchor.height / 2f
+
+        // Konfetti origin in screen coordinates
+        val konfettiLoc = IntArray(2)
+        binding.konfettiView.getLocationOnScreen(konfettiLoc)
+
+        // Translate into Konfetti coordinate space
+        val x = anchorCenterX - konfettiLoc[0]
+        val y = anchorCenterY - konfettiLoc[1]
+
+        binding.konfettiView.start(burstParty(x, y))
+    }
+
+    private fun burstParty(x: Float, y: Float) = Party(
+        speed = 0f,
+        maxSpeed = 30f,
+        damping = 0.9f,
+        spread = 360, // Full circle so it pops out everywhere
+        angle = Angle.TOP, // Biased upward; use with spread
+        colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+        shapes = listOf(Shape.Square, Shape.Circle),
+        size = listOf(Size.SMALL, Size.MEDIUM),
+        emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(100),
+        position = Position.Absolute(x, y) // Takes Pixels in Konfetti view's coordinate space
+    )
 }

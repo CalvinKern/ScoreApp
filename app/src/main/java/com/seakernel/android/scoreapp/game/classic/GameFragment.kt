@@ -233,6 +233,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
         return object : Connection<GameModel> {
             private var lastModel: GameModel? = null
+            private var lastLeadPlayerIds: List<Long> = emptyList()
 
             override fun accept(model: GameModel) {
                 if (model == lastModel) return
@@ -288,12 +289,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     }
                 }
 
-                binding.totalsRow.swapAdapter(
-                    TotalsAdapter(
-                        model.settings.reversedScoring,
-                        model.rounds
-                    ), false
+                val totalsAdapter = TotalsAdapter(
+                    model.settings.reversedScoring,
+                    model.rounds,
+                    lastLeadPlayerIds.toList(),
+                    model.settings.maxScore
                 )
+                binding.totalsRow.swapAdapter(totalsAdapter, false)
+                lastLeadPlayerIds = totalsAdapter.leadPlayerIds
 
                 lastModel = model
             }
