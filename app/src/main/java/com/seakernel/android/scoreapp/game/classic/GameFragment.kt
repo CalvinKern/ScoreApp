@@ -35,8 +35,11 @@ import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Created by Calvin on 12/21/18.
@@ -234,6 +237,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         return object : Connection<GameModel> {
             private var lastModel: GameModel? = null
             private var lastLeadPlayerIds: List<Long> = emptyList()
+            private var lastCelebratedPlayerId: Long? = null
+            private var confettiJob: Job? = null
+            private var pendingSingleLeadId: Long? = null
 
             override fun accept(model: GameModel) {
                 if (model == lastModel) return
@@ -290,18 +296,58 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 }
 
                 val totalsAdapter = TotalsAdapter(
-                    model.settings.reversedScoring,
-                    model.rounds,
-                    lastLeadPlayerIds.toList(),
-                    model.settings.maxScore
+                    model.settings.players,
+                    model.playerTotals,
+                    model.leadPlayerIds,
                 )
                 binding.totalsRow.swapAdapter(totalsAdapter, false)
-                lastLeadPlayerIds = totalsAdapter.leadPlayerIds
+                lastLeadPlayerIds = model.leadPlayerIds
+
+                val currentSingleLeadId = if (lastLeadPlayerIds.size == 1) lastLeadPlayerIds[0] else null
+                pendingSingleLeadId = currentSingleLeadId
+
+                if (isFirstLoad) {
+                    lastCelebratedPlayerId = currentSingleLeadId
+                } else {
+                    val focusLost = lastModel?.focusedScoreId != null && model.focusedScoreId == null
+                    val scoreChanged = model.rounds != lastModel?.rounds
+
+                    if (focusLost) {
+                        confettiJob?.cancel()
+                        triggerConfettiIfChanged()
+                    } else if (scoreChanged) {
+                        confettiJob?.cancel()
+                        confettiJob = lifecycleScope.launch {
+                            delay(CONFETTI_DEBOUNCE_MS.milliseconds)
+                            triggerConfettiIfChanged()
+                        }
+                    }
+                }
 
                 lastModel = model
             }
 
-            override fun dispose() {}
+            private fun triggerConfettiIfChanged() {
+                val leadId = pendingSingleLeadId ?: return
+                if (leadId == lastCelebratedPlayerId) return
+
+                val model = lastModel ?: return
+
+                if (model.hasReachedGoalScore(leadId)) {
+                    lastCelebratedPlayerId = leadId
+
+                    val adapter = binding.totalsRow.adapter as? TotalsAdapter
+                    val position = adapter?.getPlayerPosition(leadId) ?: -1
+                    if (position != -1) {
+                        val holder = binding.totalsRow.findViewHolderForAdapterPosition(position) as? ScoreViewHolder
+                        holder?.celebrate()
+                    }
+                }
+            }
+
+            override fun dispose() {
+                confettiJob?.cancel()
+            }
         }
     }
 
@@ -409,6 +455,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     // End Mobius functions
 
     companion object {
+        private const val CONFETTI_DEBOUNCE_MS = 600L // 250 - 400 based on user typing/pausing
+
         private const val ARG_GAME_ID = "game_id"
 
         const val REQUEST_DELETE_ROUND = "DELETE_ROUND"

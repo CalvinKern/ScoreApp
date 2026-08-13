@@ -127,40 +127,14 @@ class PlayersAdapter(
 }
 
 class TotalsAdapter(
-    private val reversedScoring: Boolean,
-    private val rounds: List<Round>,
-    private val previousLeadPlayerIds: List<Long> = emptyList(),
-    private val maxScore: Double?
+    private val players: List<Player>,
+    private val playerTotals: Map<Long, Double>,
+    val leadPlayerIds: List<Long>
 ) :
     RecyclerView.Adapter<ScoreViewHolder>() {
-    val leadPlayerIds: ArrayList<Long> = arrayListOf()
-    private val totalsMap: HashMap<Long, Double> = HashMap(rounds.firstOrNull()?.scores?.size ?: 0) // PlayerID to total
 
     init {
         setHasStableIds(true)
-
-        rounds.forEach { round ->
-            round.scores.forEach { score ->
-                totalsMap[score.player.id!!] = (totalsMap[score.player.id] ?: 0.0) + score.value
-            }
-        }
-
-        var leadScore: Double? = null
-        totalsMap.forEach {
-            if (leadScore != null && leadScore > it.value) {
-                if (reversedScoring) leadPlayerIds.clear() else return@forEach
-            }
-            if (leadScore != null && leadScore < it.value) {
-                if (reversedScoring) return@forEach else leadPlayerIds.clear()
-            }
-            leadPlayerIds.add(it.key)
-            leadScore = it.value
-        }
-
-        // Don't show a lead player if everyone is tied
-        if (leadPlayerIds.size == totalsMap.size) {
-            leadPlayerIds.clear()
-        }
     }
 
     override fun getItemId(position: Int): Long {
@@ -170,19 +144,20 @@ class TotalsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder =
         ScoreViewHolder(parent)
 
-    override fun getItemCount(): Int = totalsMap.size
+    override fun getItemCount(): Int = players.size
 
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
-        val playerId = rounds.first().scores[position].player.id
-        val score = totalsMap[playerId] ?: 0.0
-        val wasLeader = previousLeadPlayerIds.isEmpty() || previousLeadPlayerIds.contains(playerId)
+        val playerId = players[position].id ?: return
+        val score = playerTotals[playerId] ?: 0.0
         holder.bindTotal(
             score,
             leadPlayerIds.contains(playerId),
-            !wasLeader && score != 0.0 && maxScore?.let {
-                (reversedScoring && score < it) || (!reversedScoring && score > it)
-            } ?: false,
+            false,
         )
+    }
+
+    fun getPlayerPosition(playerId: Long): Int {
+        return players.indexOfFirst { it.id == playerId }
     }
 }
 
@@ -294,7 +269,10 @@ class ScoreViewHolder(
         binding.playerScore.setTextColor(itemView.context.getColor(R.color.textBlack))
         binding.playerScore.setOnEditorActionListener { _, code, _ ->
             when (code) {
-                CalculatorKeyboardView.KEYCODE_EQUALS -> updateScore(eventConsumer, round, score)
+                CalculatorKeyboardView.KEYCODE_EQUALS -> {
+                    updateScore(eventConsumer, round, score)
+                    binding.playerScore.clearFocus()
+                }
                 CalculatorKeyboardView.KEYCODE_NEXT -> {
                     // Add a new round only when we're the last round, otherwise let the action propagate to the system
                     if (score.id != rounds.last().scores.last().id) return@setOnEditorActionListener false
@@ -366,6 +344,12 @@ class ScoreViewHolder(
             }
         } else if (binding.playerScore.hasFocus()) {
             binding.playerScore.clearFocus()
+        }
+    }
+
+    fun celebrate() {
+        itemView.post {
+            (itemView.context as? ConfettiHost)?.celebrateFrom(binding.playerScore)
         }
     }
 

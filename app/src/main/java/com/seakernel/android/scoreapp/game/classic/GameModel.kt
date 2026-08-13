@@ -44,11 +44,62 @@ sealed class GameEffect {
 data class GameModel(
     val settings: GameSettings = GameSettings(),
     val rounds: List<Round> = emptyList(),
+    val playerTotals: Map<Long, Double> = emptyMap(),
+    val leadPlayerIds: List<Long> = emptyList(),
     val focusedScoreId: Long? = null,
     val isGoalReached: Boolean = false,
 ) {
 
+    fun hasReachedGoalScore(playerId: Long): Boolean {
+        val maxScore = settings.maxScore ?: return false
+        val playerScore = playerTotals[playerId] ?: return false
+
+        return if (settings.reversedScoring) playerScore <= maxScore else playerScore >= maxScore
+    }
+
     companion object {
+
+        private fun calculateTotals(rounds: List<Round>): Map<Long, Double> {
+            val totalsMap = mutableMapOf<Long, Double>()
+            rounds.forEach { round ->
+                round.scores.forEach { score ->
+                    score.player.id?.let { totalsMap[it] = (totalsMap[it] ?: 0.0) + score.value }
+                }
+            }
+            return totalsMap
+        }
+
+        private fun calculateLeadPlayerIds(settings: GameSettings, totals: Map<Long, Double>): List<Long> {
+            if (totals.isEmpty()) return emptyList()
+
+            val leadPlayerIds = mutableListOf<Long>()
+            var leadScore: Double? = null
+
+            totals.forEach { (playerId, score) ->
+                if (leadScore == null) {
+                    leadScore = score
+                    leadPlayerIds.add(playerId)
+                } else {
+                    val isBetter = if (settings.reversedScoring) score < leadScore else score > leadScore
+                    val isTied = score == leadScore
+
+                    if (isBetter) {
+                        leadScore = score
+                        leadPlayerIds.clear()
+                        leadPlayerIds.add(playerId)
+                    } else if (isTied) {
+                        leadPlayerIds.add(playerId)
+                    }
+                }
+            }
+
+            // Don't show a lead player if everyone is tied
+            return if (leadPlayerIds.size == totals.size) {
+                emptyList()
+            } else {
+                leadPlayerIds
+            }
+        }
 
         private fun checkGoalReached(model: GameModel): Boolean {
             val maxRounds = model.settings.maxRounds
@@ -56,18 +107,14 @@ data class GameModel(
                 return true
             }
 
-            val maxScore = model.settings.maxScore
-            if (maxScore != null) {
-                val totalsMap = mutableMapOf<Long, Double>()
-                model.rounds.forEach { round ->
-                    round.scores.forEach { score ->
-                        totalsMap[score.player.id!!] = (totalsMap[score.player.id] ?: 0.0) + score.value
-                    }
-                }
-                return totalsMap.any { it.value >= maxScore }
-            }
+            return model.playerTotals.keys.any { model.hasReachedGoalScore(it) }
+        }
 
-            return false
+        private fun updateComputedFields(model: GameModel): GameModel {
+            val totals = calculateTotals(model.rounds)
+            val leadPlayerIds = calculateLeadPlayerIds(model.settings, totals)
+            val newModel = model.copy(playerTotals = totals, leadPlayerIds = leadPlayerIds)
+            return newModel.copy(isGoalReached = checkGoalReached(newModel))
         }
 
         private fun getNextDealer(model: GameModel): Player? {
@@ -116,12 +163,14 @@ data class GameModel(
                         }
                     }
 
-                    val newModel = model.copy(
-                        settings = event.game.settings,
-                        rounds = newRounds,
-                        focusedScoreId = newFocusedScoreId,
+                    val newModel = updateComputedFields(
+                        model.copy(
+                            settings = event.game.settings,
+                            rounds = newRounds,
+                            focusedScoreId = newFocusedScoreId,
+                        )
                     )
-                    Next.next(newModel.copy(isGoalReached = checkGoalReached(newModel)))
+                    Next.next(newModel)
                 }
                 is GameEvent.RequestLoad -> Next.dispatch(
                     Effects.effects(
@@ -177,8 +226,13 @@ data class GameModel(
                         model.focusedScoreId
                     }
 
-                    val newModel = model.copy(rounds = rounds, focusedScoreId = focusedScoreId)
-                    Next.next(newModel.copy(isGoalReached = checkGoalReached(newModel)))
+                    val newModel = updateComputedFields(
+                        model.copy(
+                            rounds = rounds,
+                            focusedScoreId = focusedScoreId,
+                        )
+                    )
+                    Next.next(newModel)
                 }
                 is GameEvent.ScoreSaved -> {
                     val rounds = model.rounds.toMutableList()
@@ -194,8 +248,8 @@ data class GameModel(
 
                     rounds.removeAt(index)
                     rounds.add(index, round)
-                    val newModel = model.copy(rounds = rounds)
-                    Next.next(newModel.copy(isGoalReached = checkGoalReached(newModel)))
+                    val newModel = updateComputedFields(model.copy(rounds = rounds))
+                    Next.next(newModel)
                 }
                 is GameEvent.UpdateScore -> {
                     val round = model.rounds.firstOrNull { it.id == event.roundId }
