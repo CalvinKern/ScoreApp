@@ -54,6 +54,7 @@
         <item name="floatingActionButtonStyle">@style/AppTheme.FloatingActionButton</item>
         <item name="textInputStyle">@style/AppTheme.TextInputLayout.Outlined</item>
         <item name="checkboxStyle">@style/AppTheme.Checkbox</item>
+        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
 
         <!-- For NoActionBar -->
         <item name="windowActionBar">false</item>
@@ -83,12 +84,6 @@
     <style name="SnackbarButton" parent="@style/Widget.Material3Expressive.Button.TextButton.Snackbar">
         <item name="actionTextColorAlpha">1</item>
         <item name="rippleColor">@color/colorSecondary</item>
-    </style>
-
-    <!-- TODO(M3 step 2): app bars move to a surface background; until then keep the legacy brand color -->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
     </style>
 
     <style name="AppTheme.OverflowMenu" parent="Widget.Material3.PopupMenu.Overflow">

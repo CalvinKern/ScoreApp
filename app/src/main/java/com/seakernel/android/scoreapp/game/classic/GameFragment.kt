@@ -103,8 +103,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         binding.toolbar.setOptionalIconsVisible()
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
-        binding.toolbar.applyWindowInsetsCutout()
-        binding.nameRow.applyWindowInsetsNavigationPadding(includeBottom = false)
+        binding.appBar.applyWindowInsetsCutout()
         binding.scoreRows.applyWindowInsetsNavigationPadding(includeBottom = false)
         binding.bottomContainer.applyWindowInsetsNavigationPadding()
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,91 +7,97 @@
     android:layout_height="match_parent"
     >
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <!-- The player name row lives in the app bar so it lifts (tints) together with the toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nameRow"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintVertical_bias="0"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/nameRow"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/scoreRows"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:overScrollMode="never"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:spanCount="4"
-        tools:itemCount="4"
-        tools:listitem="@layout/holder_score_row_header"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/scoreRows"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorBackground"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@+id/nameRow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintHeight_default="spread"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:spanCount="4"
-        tools:listitem="@layout/holder_score_row_data"
-        />
-
-    <LinearLayout
-        android:id="@+id/bottomContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/scoreRows"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
+        app:liftOnScrollTargetViewId="@id/scoreRows"
         >
 
-        <com.google.android.material.divider.MaterialDivider
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:navigationIcon="?attr/homeAsUpIndicator"
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/totalsRow"
+            android:id="@+id/nameRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:background="@color/totalBackground"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:spanCount="4"
             tools:itemCount="4"
+            tools:listitem="@layout/holder_score_row_header"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/scoreRows"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorBackground"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintHeight_default="spread"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:spanCount="4"
             tools:listitem="@layout/holder_score_row_data"
             />
 
-        <com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
-            android:id="@+id/calculatorKeyboard"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/bottomContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
-    </LinearLayout>
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/scoreRows"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/totalsRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:background="@color/totalBackground"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:spanCount="4"
+                tools:itemCount="4"
+                tools:listitem="@layout/holder_score_row_data"
+                />
+
+            <com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
+                android:id="@+id/calculatorKeyboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

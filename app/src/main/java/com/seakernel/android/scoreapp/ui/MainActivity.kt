@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = isLightMode(newConfig)
             isAppearanceLightNavigationBars = isLightMode(newConfig)
         }
     }
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
         binding = ActivityMainBinding.inflate(layoutInflater)
         WindowCompat.enableEdgeToEdge(window)
         WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = isLightMode(resources.configuration)
             isAppearanceLightNavigationBars = isLightMode(resources.configuration)
         }
         setContentView(binding.root)

@@ -74,7 +74,7 @@ class GraphFragment : Fragment() {
         binding.graphToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
-        binding.graphToolbar.applyWindowInsetsCutout()
+        binding.graphAppBar.applyWindowInsetsCutout()
         binding.gameChart.applyWindowInsetsNavigationMargin()
 
         viewModel.getGame().observe(viewLifecycleOwner, modelObserver)

@@ -8,7 +8,7 @@
         android:title="@string/actionPlayerStanding"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_trophy"
-        app:iconTint="@color/white"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         />
 
     <item
@@ -16,7 +16,7 @@
         android:title="@string/actionGraph"
         app:showAsAction="never"
         android:icon="@drawable/ic_timeline_black"
-        app:iconTint="@color/white"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         />
 
     <item
@@ -24,7 +24,7 @@
         android:title="@string/actionEdit"
         app:showAsAction="never"
         android:icon="@drawable/ic_settings"
-        app:iconTint="@color/white"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         />
 
     <item
@@ -32,7 +32,7 @@
         android:title="@string/deleteRounds"
         app:showAsAction="never"
         android:icon="@drawable/ic_clear_black"
-        app:iconTint="@color/white"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         />
 
     <item
@@ -40,6 +40,6 @@
         android:title="@string/gameCreateTitle"
         app:showAsAction="never"
         android:icon="@drawable/ic_add_black"
-        app:iconTint="@color/white"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         />
 </menu>

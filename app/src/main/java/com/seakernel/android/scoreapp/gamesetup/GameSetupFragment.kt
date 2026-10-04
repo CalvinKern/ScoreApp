@@ -133,7 +133,7 @@ class GameSetupFragment : Fragment() {
         initSettings()
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
-        binding.toolbar.applyWindowInsetsCutout()
+        binding.appBar.applyWindowInsetsCutout()
         binding.gameEditContainer.applyWindowInsetsNavigationPadding(includeBottom = false)
         binding.playerRecycler.applyWindowInsetsNavigationPadding()
 

@@ -7,21 +7,27 @@
     android:orientation="vertical"
     >
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/graphToolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/graphAppBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_height="wrap_content"
+        app:liftOnScroll="false"
         app:layout_constraintBottom_toTopOf="@+id/graphByRoundsLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:subtitleTextColor="@color/colorOnPrimary"
-        tools:subtitle="@string/graphSubtitle"
-        tools:title="@string/gameCreateTitle"
-        />
+        >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/graphToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            tools:subtitle="@string/graphSubtitle"
+            tools:title="@string/gameCreateTitle"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:id="@+id/graphByRoundsLabel"
@@ -35,7 +41,7 @@
         app:layout_constraintBottom_toTopOf="@id/gameChart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/gameChart"
-        app:layout_constraintTop_toBottomOf="@+id/graphToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/graphAppBar"
         />
 
     <com.github.mikephil.charting.charts.LineChart

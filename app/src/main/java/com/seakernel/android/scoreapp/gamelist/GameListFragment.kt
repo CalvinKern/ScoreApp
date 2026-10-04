@@ -113,7 +113,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         }
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
-        binding.toolbar.applyWindowInsetsCutout()
+        binding.appBar.applyWindowInsetsCutout()
         binding.fab.applyWindowInsetsNavigationMargin()
         binding.gameRecycler.applyWindowInsetsNavigationPadding()
     }

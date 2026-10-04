@@ -7,7 +7,7 @@
         android:id="@+id/actionSearch"
         android:title="@string/actionSearch"
         android:icon="@drawable/ic_search_black"
-        app:iconTint="@color/white"
+        app:iconTint="?attr/colorOnSurfaceVariant"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
     <item

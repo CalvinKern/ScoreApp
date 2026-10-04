@@ -112,7 +112,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         binding.playerRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
-        binding.toolbar.applyWindowInsetsCutout()
+        binding.appBar.applyWindowInsetsCutout()
         binding.fab.applyWindowInsetsNavigationMargin()
         binding.playerRecycler.applyWindowInsetsNavigationPadding()
     }
