@@ -2,7 +2,7 @@
 <resources>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
-    <color name="slightGray">#F5F5F5</color>
+    <color name="slightGray">@color/md_theme_surfaceContainer</color>
     <color name="gray">#707070</color>
     <color name="darkGray">#353535</color>
     <color name="winnerBackground">@color/colorSecondary</color>
@@ -11,9 +11,58 @@
     <color name="dealerPast">@color/colorPrimaryLight</color>
     <color name="totalBackground">@color/colorBackground</color>
     <color name="transparent">#00000000</color>
-    <color name="colorSelected">#DADADA</color>
+    <color name="colorSelected">@color/md_theme_surfaceContainerHighest</color>
 
-    <!-- Material colors -->
+    <!-- Material 3 color scheme. Generated from the brand key colors: primary #008577,
+         secondary #A76362, tertiary #457590 (Material Theme Builder "custom colors" style). -->
+    <color name="md_theme_primary">#006B5F</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#90F4E3</color>
+    <color name="md_theme_onPrimaryContainer">#005047</color>
+    <color name="md_theme_primaryInverse">#73D8C7</color>
+    <color name="md_theme_primaryFixed">#90F4E3</color>
+    <color name="md_theme_primaryFixedDim">#73D8C7</color>
+    <color name="md_theme_onPrimaryFixed">#00201C</color>
+    <color name="md_theme_onPrimaryFixedVariant">#005047</color>
+    <color name="md_theme_secondary">#8B4C4C</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#FFDAD8</color>
+    <color name="md_theme_onSecondaryContainer">#6F3535</color>
+    <color name="md_theme_secondaryFixed">#FFDAD8</color>
+    <color name="md_theme_secondaryFixedDim">#FFB3B1</color>
+    <color name="md_theme_onSecondaryFixed">#390B0D</color>
+    <color name="md_theme_onSecondaryFixedVariant">#6F3535</color>
+    <color name="md_theme_tertiary">#33647E</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#C4E7FF</color>
+    <color name="md_theme_onTertiaryContainer">#154C65</color>
+    <color name="md_theme_tertiaryFixed">#C4E7FF</color>
+    <color name="md_theme_tertiaryFixedDim">#9DCDEB</color>
+    <color name="md_theme_onTertiaryFixed">#001E2C</color>
+    <color name="md_theme_onTertiaryFixedVariant">#154C65</color>
+    <color name="md_theme_error">#BA1A1A</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FFDAD6</color>
+    <color name="md_theme_onErrorContainer">#93000A</color>
+    <color name="md_theme_background">#F4FBF8</color>
+    <color name="md_theme_onBackground">#171D1B</color>
+    <color name="md_theme_surface">#F4FBF8</color>
+    <color name="md_theme_onSurface">#171D1B</color>
+    <color name="md_theme_surfaceVariant">#DAE5E1</color>
+    <color name="md_theme_onSurfaceVariant">#3F4946</color>
+    <color name="md_theme_surfaceInverse">#2B3230</color>
+    <color name="md_theme_onSurfaceInverse">#ECF2EF</color>
+    <color name="md_theme_surfaceBright">#F4FBF8</color>
+    <color name="md_theme_surfaceDim">#D5DBD9</color>
+    <color name="md_theme_surfaceContainerLowest">#FFFFFF</color>
+    <color name="md_theme_surfaceContainerLow">#EFF5F2</color>
+    <color name="md_theme_surfaceContainer">#E9EFEC</color>
+    <color name="md_theme_surfaceContainerHigh">#E3EAE7</color>
+    <color name="md_theme_surfaceContainerHighest">#DDE4E1</color>
+    <color name="md_theme_outline">#6F7976</color>
+    <color name="md_theme_outlineVariant">#BEC9C5</color>
+
+    <!-- Legacy brand colors (still referenced directly by some views; migrate to theme attributes) -->
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorPrimaryLight">#4cb5a6</color>
@@ -23,16 +72,14 @@
     <!--    <color name="colorTertiary">#005085</color>-->
     <color name="colorOnSecondary">@color/textWhite</color>
     <color name="colorOnTertiary">@color/textWhite</color>
-    <color name="colorBackground">@color/white</color>
-    <color name="colorBackgroundPopup">@color/white</color>
+    <color name="colorBackground">@color/md_theme_surface</color>
+    <color name="colorBackgroundPopup">@color/md_theme_surfaceContainer</color>
     <color name="colorControlHighlight">#1F000000</color>
     <color name="colorControlHighlightFab">#1FFFFFFF</color>
     <color name="colorPrimaryRipple">#2F008577</color>
-    <color name="colorPrimaryDialog">@color/colorPrimary</color>
-    <color name="colorSecondaryDialog">@color/colorSecondary</color>
 
     <!-- Text Colors-->
-    <color name="textBlack">@color/black</color>
+    <color name="textBlack">@color/md_theme_onSurface</color>
     <color name="textWhite">@color/white</color>
 
     <!-- Graph Colors-->
