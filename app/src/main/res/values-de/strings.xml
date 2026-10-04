@@ -33,7 +33,13 @@
     <string name="playerNotesTitle">Notizen für %s</string>
     <string name="playerRoundNumberFormat">Runde %d:</string>
     <string name="playerRoundNumberHint">Anmerkungen</string>
-    <string name="playersHolder">%d Spieler</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d Spieler</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d Runde</item>
+        <item quantity="other">%d Runden</item>
+    </plurals>
     <string name="lastPlayedLabel">Zuletzt gespielt:</string>
     <string name="reversedScoringDescription">Der Spieler mit der niedrigsten Punktzahl gewinnt, anstatt die höchste Punktzahl zu erzielen</string>
     <string name="reversedScoringTitle">Reverse Scoring</string>

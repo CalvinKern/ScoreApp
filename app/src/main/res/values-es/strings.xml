@@ -33,7 +33,14 @@
     <string name="playerNotesTitle">Notas para %s</string>
     <string name="playerRoundNumberFormat">Ronda %d:</string>
     <string name="playerRoundNumberHint">Notas</string>
-    <string name="playersHolder">%d jugadores</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d jugador</item>
+        <item quantity="other">%d jugadores</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d ronda</item>
+        <item quantity="other">%d rondas</item>
+    </plurals>
     <string name="lastPlayedLabel">Última partida:</string>
     <string name="reversedScoringTitle">Puntuación inversa</string>
     <string name="reversedScoringDescription">El jugador con el puntaje más bajo gana, en lugar de tener el puntaje más alto</string>

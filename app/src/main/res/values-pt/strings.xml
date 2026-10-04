@@ -5,7 +5,14 @@
     <string name="scoreHint">Ponto</string>
     <string name="reversedScoringTitle">Pontuação Reversa</string>
     <string name="reversedScoringDescription">O jogador com a menor pontuação vence, em vez de ter a maior pontuação</string>
-    <string name="playersHolder">%d jogadores</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d jogador</item>
+        <item quantity="other">%d jogadores</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d rodada</item>
+        <item quantity="other">%d rodadas</item>
+    </plurals>
     <string name="lastPlayedLabel">Última partida:</string>
     <string name="playerRoundNumberHint">notas</string>
     <string name="playerRoundNumberFormat">rodada %d:</string>

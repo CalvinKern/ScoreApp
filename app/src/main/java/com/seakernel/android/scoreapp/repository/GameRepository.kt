@@ -15,9 +15,12 @@ import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 class GameRepository(val context: Context) {
     private val gameDao = AppDatabase.getInstance(context).gameDao()
     private val gamePlayerDao = AppDatabase.getInstance(context).gamePlayerDao()
+    private val roundDao = AppDatabase.getInstance(context).roundDao()
 
     fun loadAllGames(): List<GameSettings> {
-        return gameDao.getAll().map { convertToGame(it) }
+        return gameDao.getAll().map { game ->
+            convertToGame(game).copy(roundCount = roundDao.getRoundCount(game.uid))
+        }
     }
 
     fun gameNameSearch(): List<String> {

@@ -32,7 +32,12 @@
     <string name="playerName">选手姓名</string>
     <string name="playerNotesTitle">%s的注释</string>
     <string name="playerRoundNumberHint">笔记</string>
-    <string name="playersHolder">%d人</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d人</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="other">%d轮</item>
+    </plurals>
     <string name="lastPlayedLabel">上次游玩：</string>
     <string name="playerRoundNumberFormat">第%d回合</string>
     <string name="reversedScoringDescription">得分最低的玩家获胜，而不是得分最高的</string>

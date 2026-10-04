@@ -4,7 +4,14 @@
 
     <!--Game List Screen-->
     <string name="gameListTitle">Games</string>
-    <string name="playersHolder">%d Players</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d Player</item>
+        <item quantity="other">%d Players</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d Round</item>
+        <item quantity="other">%d Rounds</item>
+    </plurals>
     <string name="lastPlayedLabel">Last Played:</string>
     <string name="gameListEmptyTitle">No games created</string>
     <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>

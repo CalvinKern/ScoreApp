@@ -33,7 +33,12 @@
     <string name="playerNotesTitle">Catatan untuk %s</string>
     <string name="playerRoundNumberFormat">Babak %d:</string>
     <string name="playerRoundNumberHint">Catatan</string>
-    <string name="playersHolder">%d Pemain</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d Pemain</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="other">%d Babak</item>
+    </plurals>
     <string name="lastPlayedLabel">Terakhir dimainkan:</string>
     <string name="reversedScoringDescription">Pemain dengan skor terendah menang, alih-alih memiliki skor tertinggi</string>
     <string name="reversedScoringTitle">Membalikkan Skor</string>

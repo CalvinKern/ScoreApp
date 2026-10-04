@@ -58,4 +58,16 @@
         tools:text="6 Players"
         />
 
+    <TextView
+        android:id="@+id/gameRoundsHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        app:layout_constraintStart_toEndOf="@id/gamePlayersHolder"
+        app:layout_constraintBaseline_toBaselineOf="@id/gamePlayersHolder"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        tools:text="4 Rounds"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

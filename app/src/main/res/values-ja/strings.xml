@@ -33,7 +33,12 @@
     <string name="playerNotesTitle">%sへのノート</string>
     <string name="playerRoundNumberFormat">ラウンド%d：</string>
     <string name="playerRoundNumberHint">ノート</string>
-    <string name="playersHolder">%d人の選手</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d人の選手</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="other">%dラウンド</item>
+    </plurals>
     <string name="lastPlayedLabel">最終プレイ:</string>
     <string name="reversedScoringDescription">最高得点ではなく、最低得点の選手が勝ちます</string>
     <string name="reversedScoringTitle">逆スコアリング</string>

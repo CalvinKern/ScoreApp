@@ -33,7 +33,16 @@
     <string name="playerNotesTitle">Note pentru %s</string>
     <string name="playerRoundNumberFormat">Runda %d:</string>
     <string name="playerRoundNumberHint">notițe</string>
-    <string name="playersHolder">%d jucători</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d jucător</item>
+        <item quantity="few">%d jucători</item>
+        <item quantity="other">%d de jucători</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d rundă</item>
+        <item quantity="few">%d runde</item>
+        <item quantity="other">%d de runde</item>
+    </plurals>
     <string name="lastPlayedLabel">Jucat ultima dată:</string>
     <string name="reversedScoringDescription">Jucătorul cu cel mai mic scor câștigă, în loc să obțină cel mai mare scor</string>
     <string name="reversedScoringTitle">Scoring invers</string>

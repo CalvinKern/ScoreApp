@@ -31,6 +31,9 @@ interface RoundDao {
     @Query("SELECT ${RoundEntity.COLUMN_ID} FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID} = :gameId")
     fun getRoundIds(gameId: Long): List<Long>
 
+    @Query("SELECT COUNT(*) FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID} = :gameId")
+    fun getRoundCount(gameId: Long): Int
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(round: RoundEntity)
 

@@ -33,7 +33,13 @@
     <string name="playerNotesTitle">%s के लिए नोट्स</string>
     <string name="playerRoundNumberFormat">दौर %d:</string>
     <string name="playerRoundNumberHint">टिप्पणियाँ</string>
-    <string name="playersHolder">%d खिलाड़ी</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d खिलाड़ी</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d राउंड</item>
+        <item quantity="other">%d राउंड</item>
+    </plurals>
     <string name="lastPlayedLabel">अंतिम बार खेला:</string>
     <string name="reversedScoringDescription">उच्चतम स्कोर होने के बजाय सबसे कम स्कोर वाला खिलाड़ी जीतता है</string>
     <string name="reversedScoringTitle">रिवर्स स्कोरिंग</string>

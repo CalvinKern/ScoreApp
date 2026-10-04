@@ -21,6 +21,7 @@ data class GameSettings(
     val maxRounds: Int? = null,
     val showRoundNotes: Boolean = false,
     val useCalculator: Boolean = false,
+    val roundCount: Int = 0, // Only loaded for the game list
 ) {
 
     constructor(settings: GameEntity, players: List<Player>) : this(

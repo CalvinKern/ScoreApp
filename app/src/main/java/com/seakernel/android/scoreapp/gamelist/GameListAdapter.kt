@@ -49,7 +49,17 @@ class GameListViewHolder(parent: ViewGroup) : BaseViewHolder<HolderGameListBindi
         binding.gameNameHolder.text = settings.name
         binding.gameDateHolder.text = settings.lastPlayedAt
         binding.gamePlayersHolder.text =
-            itemView.context.getString(R.string.playersHolder, settings.players.size)
+            itemView.context.resources.getQuantityString(
+                R.plurals.playersHolder,
+                settings.players.size,
+                settings.players.size
+            )
+        binding.gameRoundsHolder.text =
+            itemView.context.resources.getQuantityString(
+                R.plurals.roundsHolder,
+                settings.roundCount,
+                settings.roundCount
+            )
 
         itemView.setOnClickListener {
             logEvent(AnalyticsConstants.Event.GAME_LOADED) {
