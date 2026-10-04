@@ -49,6 +49,18 @@
     <string name="useCalculatorTitle">计算器键盘</string>
     <string name="actionChangelog">变更日志</string>
     <string name="actionRateApp">评价应用</string>
+    <string name="actionSettings">设置</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">外观</string>
+    <string name="settingsAboutHeader">关于</string>
+    <string name="settingsDynamicColorTitle">壁纸配色</string>
+    <string name="settingsDynamicColorSummary">让应用颜色与设备壁纸相匹配</string>
+    <string name="settingsTrueBlackTitle">纯黑</string>
+    <string name="settingsTrueBlackSummary">在深色模式下使用纯黑背景</string>
+    <string name="settingsChangelogSummary">查看每个版本的新功能</string>
+    <string name="settingsRateSummary">在 Google Play 上留下评价</string>
+    <string name="settingsVersionTitle">版本</string>
     <string name="undo">撤消</string>
     <string name="deleteRounds">删除回合</string>
     <string name="deleteRoundItem">第 %d 轮</string>

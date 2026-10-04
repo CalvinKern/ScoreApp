@@ -49,6 +49,18 @@
     <string name="useCalculatorTitle">कैलकुलेटर कीबोर्ड</string>
     <string name="actionChangelog">चंगेलोग</string>
     <string name="actionRateApp">एप्प का मूल्यांकन</string>
+    <string name="actionSettings">सेटिंग्स</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">दिखावट</string>
+    <string name="settingsAboutHeader">ऐप के बारे में</string>
+    <string name="settingsDynamicColorTitle">वॉलपेपर रंग</string>
+    <string name="settingsDynamicColorSummary">ऐप के रंगों को डिवाइस के वॉलपेपर से मिलाएँ</string>
+    <string name="settingsTrueBlackTitle">शुद्ध काला</string>
+    <string name="settingsTrueBlackSummary">डार्क मोड में पूरी तरह काली पृष्ठभूमि का उपयोग करें</string>
+    <string name="settingsChangelogSummary">हर रिलीज़ में क्या नया है, देखें</string>
+    <string name="settingsRateSummary">Google Play पर समीक्षा लिखें</string>
+    <string name="settingsVersionTitle">संस्करण</string>
     <string name="undo">पूर्ववत</string>
     <string name="deleteRounds">राउंड हटाएं</string>
     <string name="deleteRoundItem">राउंड %d</string>

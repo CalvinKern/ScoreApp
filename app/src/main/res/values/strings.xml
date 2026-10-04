@@ -31,7 +31,7 @@
     <string name="settingsChangelogSummary">See what\'s new in each release</string>
     <string name="settingsRateSummary">Leave a review on Google Play</string>
     <string name="settingsVersionTitle">Version</string>
-    <string name="settingsVersionFormat">%1$s (%2$d)</string>
+    <string name="settingsVersionFormat" translatable="false">%1$s (%2$d)</string>
 
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>

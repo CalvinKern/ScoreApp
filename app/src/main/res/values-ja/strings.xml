@@ -49,6 +49,18 @@
     <string name="useCalculatorTitle">電卓キーボード</string>
     <string name="actionChangelog">変更ログ</string>
     <string name="actionRateApp">アプリを評価</string>
+    <string name="actionSettings">設定</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">外観</string>
+    <string name="settingsAboutHeader">このアプリについて</string>
+    <string name="settingsDynamicColorTitle">壁紙の色</string>
+    <string name="settingsDynamicColorSummary">アプリの色を壁紙に合わせる</string>
+    <string name="settingsTrueBlackTitle">トゥルーブラック</string>
+    <string name="settingsTrueBlackSummary">ダークモードで純黒の背景を使用</string>
+    <string name="settingsChangelogSummary">各リリースの新機能を確認</string>
+    <string name="settingsRateSummary">Google Play でレビューを書く</string>
+    <string name="settingsVersionTitle">バージョン</string>
     <string name="undo">元に戻す</string>
     <string name="deleteRounds">ラウンドを削除</string>
     <string name="deleteRoundItem">ラウンド%d</string>

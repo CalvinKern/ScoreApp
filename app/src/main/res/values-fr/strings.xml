@@ -49,6 +49,18 @@
     <string name="useCalculatorTitle">Clavier de la calculatrice</string>
     <string name="actionChangelog">Changelog</string>
     <string name="actionRateApp">Application de taux</string>
+    <string name="actionSettings">Paramètres</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">Apparence</string>
+    <string name="settingsAboutHeader">À propos</string>
+    <string name="settingsDynamicColorTitle">Couleurs du fond d\'écran</string>
+    <string name="settingsDynamicColorSummary">Adapter les couleurs de l\'application au fond d\'écran de l\'appareil</string>
+    <string name="settingsTrueBlackTitle">Noir pur</string>
+    <string name="settingsTrueBlackSummary">Utiliser un fond noir pur en mode sombre</string>
+    <string name="settingsChangelogSummary">Voir les nouveautés de chaque version</string>
+    <string name="settingsRateSummary">Laisser un avis sur Google Play</string>
+    <string name="settingsVersionTitle">Version</string>
     <string name="undo">annuler</string>
     <string name="deleteRounds">Supprimer les rondes</string>
     <string name="deleteRoundItem">Tour %d</string>

@@ -47,6 +47,18 @@
     <string name="playerStanding">#%d</string>
     <string name="actionRateApp">Avaliar aplicativo</string>
     <string name="actionChangelog">Changelog</string>
+    <string name="actionSettings">Configurações</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">Aparência</string>
+    <string name="settingsAboutHeader">Sobre</string>
+    <string name="settingsDynamicColorTitle">Cores do papel de parede</string>
+    <string name="settingsDynamicColorSummary">Combinar as cores do aplicativo com o papel de parede do dispositivo</string>
+    <string name="settingsTrueBlackTitle">Preto puro</string>
+    <string name="settingsTrueBlackSummary">Usar um fundo preto puro no modo escuro</string>
+    <string name="settingsChangelogSummary">Ver as novidades de cada versão</string>
+    <string name="settingsRateSummary">Deixar uma avaliação no Google Play</string>
+    <string name="settingsVersionTitle">Versão</string>
     <string name="useCalculatorTitle">Teclado da Calculadora</string>
     <string name="useCalculatorDescription">Use o teclado da calculadora personalizada. Usará o teclado do sistema se não estiver ativado.</string>
     <string name="undo">Desfazer</string>

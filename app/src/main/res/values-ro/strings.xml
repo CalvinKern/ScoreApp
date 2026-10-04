@@ -49,6 +49,18 @@
     <string name="useCalculatorTitle">Tastatură Calculator</string>
     <string name="actionChangelog">Jurnal de schimbări</string>
     <string name="actionRateApp">Evaluează aplicația</string>
+    <string name="actionSettings">Setări</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">Aspect</string>
+    <string name="settingsAboutHeader">Despre</string>
+    <string name="settingsDynamicColorTitle">Culorile imaginii de fundal</string>
+    <string name="settingsDynamicColorSummary">Potriviți culorile aplicației cu imaginea de fundal a dispozitivului</string>
+    <string name="settingsTrueBlackTitle">Negru pur</string>
+    <string name="settingsTrueBlackSummary">Folosiți un fundal complet negru în modul întunecat</string>
+    <string name="settingsChangelogSummary">Vedeți noutățile din fiecare versiune</string>
+    <string name="settingsRateSummary">Lăsați o recenzie pe Google Play</string>
+    <string name="settingsVersionTitle">Versiune</string>
     <string name="undo">Anula</string>
     <string name="deleteRounds">Ștergeți rundele</string>
     <string name="deleteRoundItem">Runda %d</string>

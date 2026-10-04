@@ -47,6 +47,18 @@
     <string name="playerStanding">#%d</string>
     <string name="actionRateApp">評價應用</string>
     <string name="actionChangelog">變更日誌</string>
+    <string name="actionSettings">設定</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">外觀</string>
+    <string name="settingsAboutHeader">關於</string>
+    <string name="settingsDynamicColorTitle">牆紙配色</string>
+    <string name="settingsDynamicColorSummary">讓應用程式顏色與裝置牆紙相配</string>
+    <string name="settingsTrueBlackTitle">純黑</string>
+    <string name="settingsTrueBlackSummary">在深色模式下使用純黑背景</string>
+    <string name="settingsChangelogSummary">查看每個版本的新功能</string>
+    <string name="settingsRateSummary">在 Google Play 上留下評價</string>
+    <string name="settingsVersionTitle">版本</string>
     <string name="useCalculatorTitle">計算器鍵盤</string>
     <string name="useCalculatorDescription">使用自定義計算器鍵盤。 如果未啟用，將使用系統鍵盤。</string>
     <string name="undo">撤消</string>
