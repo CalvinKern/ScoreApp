@@ -61,5 +61,5 @@
     <string name="finishGameTitle">目標達成！</string>
     <string name="finishGameConfirmation">ゲームを終了して順位を表示しますか？</string>
     <string name="finish">終了</string>
-    <string name="continuePlaying">続ける</string>
+    <string name="continuePlaying">もう1ラウンド！</string>
 </resources>

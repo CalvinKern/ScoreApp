@@ -61,5 +61,5 @@
     <string name="finishGameTitle">लक्ष्य पूरा हुआ!</string>
     <string name="finishGameConfirmation">क्या आप गेम समाप्त करके अंक तालिका देखना चाहेंगे?</string>
     <string name="finish">समाप्त करें</string>
-    <string name="continuePlaying">जारी रखें</string>
+    <string name="continuePlaying">एक और राउंड!</string>
 </resources>

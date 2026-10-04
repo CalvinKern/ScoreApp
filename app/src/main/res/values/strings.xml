@@ -56,7 +56,7 @@
     <string name="finishGameTitle">Goal Reached!</string>
     <string name="finishGameConfirmation">Would you like to finish the game and see the standings?</string>
     <string name="finish">Finish</string>
-    <string name="continuePlaying">Continue</string>
+    <string name="continuePlaying">Another Round!</string>
     <string name="makePlayerDealerMessage">Make %s dealer for this round?</string>
     <string name="scoreHint">Score</string>
     <string name="incomplete">Incomplete</string>

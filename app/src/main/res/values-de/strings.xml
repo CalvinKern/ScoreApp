@@ -61,5 +61,5 @@
     <string name="finishGameTitle">Ziel erreicht!</string>
     <string name="finishGameConfirmation">Möchtest du das Spiel beenden und die Rangliste ansehen?</string>
     <string name="finish">Beenden</string>
-    <string name="continuePlaying">Weiter</string>
+    <string name="continuePlaying">Noch eine Runde!</string>
 </resources>

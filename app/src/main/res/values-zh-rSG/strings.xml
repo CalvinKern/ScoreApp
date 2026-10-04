@@ -61,5 +61,5 @@
     <string name="finishGameTitle">已达成目标！</string>
     <string name="finishGameConfirmation">是否结束游戏并查看排行榜？</string>
     <string name="finish">结束</string>
-    <string name="continuePlaying">继续</string>
+    <string name="continuePlaying">再来一局！</string>
 </resources>

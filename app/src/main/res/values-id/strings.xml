@@ -61,5 +61,5 @@
     <string name="finishGameTitle">Target Tercapai!</string>
     <string name="finishGameConfirmation">Apakah Anda ingin mengakhiri permainan dan melihat klasemen?</string>
     <string name="finish">Selesai</string>
-    <string name="continuePlaying">Lanjutkan</string>
+    <string name="continuePlaying">Satu Ronde Lagi!</string>
 </resources>
