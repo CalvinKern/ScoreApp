@@ -34,6 +34,7 @@
     <string name="playerRoundNumberFormat">Ronda %d:</string>
     <string name="playerRoundNumberHint">Notas</string>
     <string name="playersHolder">%d jugadores</string>
+    <string name="lastPlayedLabel">Última partida:</string>
     <string name="reversedScoringTitle">Puntuación inversa</string>
     <string name="reversedScoringDescription">El jugador con el puntaje más bajo gana, en lugar de tener el puntaje más alto</string>
     <string name="scoreHint">Puntuación</string>

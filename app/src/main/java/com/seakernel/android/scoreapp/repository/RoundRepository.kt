@@ -1,12 +1,14 @@
 package com.seakernel.android.scoreapp.repository
 
 import android.content.Context
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.database.AppDatabase
 import com.seakernel.android.scoreapp.database.entities.RoundEntity
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
+import org.threeten.bp.ZonedDateTime
 
 /**
  * Created by Calvin on 12/23/18.
@@ -59,6 +61,10 @@ class RoundRepository(val context: Context) {
 
     fun updateScore(score: Score): Score {
         roundDao.updateScore(score.id, score.value)
+        roundDao.updateLastPlayedForScore(
+            score.id,
+            ZonedDateTime.now().format(GameSettings.DATE_FORMATTER)
+        )
         return score.copy()
     }
 

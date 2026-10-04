@@ -34,6 +34,7 @@
     <string name="playerRoundNumberFormat">Runda %d:</string>
     <string name="playerRoundNumberHint">notițe</string>
     <string name="playersHolder">%d jucători</string>
+    <string name="lastPlayedLabel">Jucat ultima dată:</string>
     <string name="reversedScoringDescription">Jucătorul cu cel mai mic scor câștigă, în loc să obțină cel mai mare scor</string>
     <string name="reversedScoringTitle">Scoring invers</string>
     <string name="scoreHint">Scor</string>

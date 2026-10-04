@@ -34,6 +34,7 @@
     <string name="playerRoundNumberFormat">Babak %d:</string>
     <string name="playerRoundNumberHint">Catatan</string>
     <string name="playersHolder">%d Pemain</string>
+    <string name="lastPlayedLabel">Terakhir dimainkan:</string>
     <string name="reversedScoringDescription">Pemain dengan skor terendah menang, alih-alih memiliki skor tertinggi</string>
     <string name="reversedScoringTitle">Membalikkan Skor</string>
     <string name="scoreHint">Skor</string>

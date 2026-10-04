@@ -43,7 +43,7 @@ data class GameSettings(
         GameEntity(
             uid = id ?: 0,
             name = name,
-            date = ZonedDateTime.now().format(DATE_FORMATTER),
+            date = lastPlayed.format(DATE_FORMATTER),
             hasDealer = hasDealer,
             showRounds = showRounds,
             reversedScoring = reversedScoring,
@@ -54,7 +54,7 @@ data class GameSettings(
         )
 
     companion object {
-        private const val DATE_FORMAT = "MMM dd, YYYY"
+        private const val DATE_FORMAT = "MMM dd, yyyy"
         val DATE_FORMATTER = DateTimeFormatter.ISO_DATE_TIME!!
         val UI_DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT)!!
     }

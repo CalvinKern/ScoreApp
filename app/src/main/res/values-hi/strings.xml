@@ -34,6 +34,7 @@
     <string name="playerRoundNumberFormat">दौर %d:</string>
     <string name="playerRoundNumberHint">टिप्पणियाँ</string>
     <string name="playersHolder">%d खिलाड़ी</string>
+    <string name="lastPlayedLabel">अंतिम बार खेला:</string>
     <string name="reversedScoringDescription">उच्चतम स्कोर होने के बजाय सबसे कम स्कोर वाला खिलाड़ी जीतता है</string>
     <string name="reversedScoringTitle">रिवर्स स्कोरिंग</string>
     <string name="scoreHint">स्कोर</string>

@@ -34,6 +34,7 @@
     <string name="playerRoundNumberFormat">第%d回合</string>
     <string name="playerRoundNumberHint">筆記</string>
     <string name="playersHolder">%d位玩家</string>
+    <string name="lastPlayedLabel">上次遊玩：</string>
     <string name="reversedScoringDescription">得分最低的玩家獲勝，而不是得分最高的</string>
     <string name="reversedScoringTitle">反向計分</string>
     <string name="scoreHint">得分了</string>

@@ -5,6 +5,7 @@
     <!--Game List Screen-->
     <string name="gameListTitle">Games</string>
     <string name="playersHolder">%d Players</string>
+    <string name="lastPlayedLabel">Last Played:</string>
     <string name="gameListEmptyTitle">No games created</string>
     <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
     <string name="copiedUrl">Copied URL</string>

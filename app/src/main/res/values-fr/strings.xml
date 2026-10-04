@@ -34,6 +34,7 @@
     <string name="playerRoundNumberFormat">Tour %d:</string>
     <string name="playerRoundNumberHint">Remarques</string>
     <string name="playersHolder">%d joueurs</string>
+    <string name="lastPlayedLabel">Dernière partie :</string>
     <string name="reversedScoringDescription">Le joueur avec le score le plus bas gagne, au lieu d\'avoir le score le plus élevé</string>
     <string name="reversedScoringTitle">Score inversé</string>
     <string name="scoreHint">Score</string>

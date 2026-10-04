@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.seakernel.android.scoreapp.database.entities.GameEntity
 import com.seakernel.android.scoreapp.database.entities.RoundEntity
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 
@@ -45,6 +46,20 @@ interface RoundDao {
     """
     )
     fun updateScore(id: Long, score: Double)
+
+    @Query(
+        """
+        UPDATE ${GameEntity.TABLE_NAME}
+        SET ${GameEntity.COLUMN_LAST_PLAYED} = :date
+        WHERE ${GameEntity.COLUMN_ID} = (
+            SELECT ROUND_.${RoundEntity.COLUMN_GAME_ID}
+            FROM ${RoundEntity.TABLE_NAME} AS ROUND_
+            INNER JOIN ${ScoreEntity.TABLE_NAME} ON ${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} = ROUND_.${RoundEntity.COLUMN_ID}
+            WHERE ${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ID} = :scoreId
+        )
+    """
+    )
+    fun updateLastPlayedForScore(scoreId: Long, date: String)
 
     @Query(
         """
