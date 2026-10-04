@@ -168,7 +168,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     private fun setupView() {
         alignmentMode = ALIGN_MARGINS
-        setBackgroundColor(context.themeColor(R.attr.colorSurfaceContainer))
+        setBackgroundColor(context.themeColor(R.attr.colorSurface))
     }
 
     private fun setKeyboardListeners() {

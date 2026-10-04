@@ -14,6 +14,7 @@ import com.seakernel.android.scoreapp.gamelist.GameListFragment
 import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import com.seakernel.android.scoreapp.settings.SettingsFragment
+import com.seakernel.android.scoreapp.utility.AppPreferences
 import nl.dionsegijn.konfetti.core.Angle
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.Position
@@ -43,6 +44,11 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Applied after dynamic colors (which are applied before onCreate) so it wins over their
+        // tinted surfaces. The overlay only has values in dark mode.
+        if (AppPreferences.isTrueBlackEnabled(this)) {
+            theme.applyStyle(R.style.ThemeOverlay_App_TrueBlack, true)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         WindowCompat.enableEdgeToEdge(window)

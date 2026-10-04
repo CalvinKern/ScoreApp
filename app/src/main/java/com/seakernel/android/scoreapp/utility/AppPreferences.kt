@@ -9,6 +9,7 @@ import androidx.core.content.edit
 object AppPreferences {
     private const val PREFS_NAME = "app_preferences"
     private const val KEY_DYNAMIC_COLOR = "dynamic_color_enabled"
+    private const val KEY_TRUE_BLACK = "true_black_enabled"
 
     private fun prefs(context: Context) =
         context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -19,4 +20,11 @@ object AppPreferences {
 
     fun setDynamicColorEnabled(context: Context, enabled: Boolean) =
         prefs(context).edit { putBoolean(KEY_DYNAMIC_COLOR, enabled) }
+
+    /** Whether dark mode uses a pure black background instead of the tinted dark surface */
+    fun isTrueBlackEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_TRUE_BLACK, true)
+
+    fun setTrueBlackEnabled(context: Context, enabled: Boolean) =
+        prefs(context).edit { putBoolean(KEY_TRUE_BLACK, enabled) }
 }

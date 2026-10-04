@@ -66,6 +66,9 @@
         <item name="colorOnPrimaryAccent">?attr/colorOnPrimaryFixed</item>
     </style>
 
+    <!-- "True black" setting overlay, only has values in dark mode (values-night) -->
+    <style name="ThemeOverlay.App.TrueBlack" parent="" />
+
     <style name="AppTheme.FloatingActionButton" parent="Widget.Material3Expressive.FloatingActionButton">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.FloatingActionButton</item>
     </style>

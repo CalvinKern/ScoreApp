@@ -64,11 +64,15 @@ class SettingsFragment : Fragment() {
 
     private fun initAppearance() {
         // Dynamic color is only supported on Android 12+, older devices always use the app colors
-        binding.appearanceSection.setVisible(DynamicColors.isDynamicColorAvailable())
+        binding.dynamicColorRow.setVisible(DynamicColors.isDynamicColorAvailable())
 
         binding.dynamicColorSwitch.isChecked = AppPreferences.isDynamicColorEnabled(requireContext())
         binding.dynamicColorSwitch.setOnCheckedChangeListener { _, isChecked -> setDynamicColorEnabled(isChecked) }
         binding.dynamicColorRow.setOnClickListener { binding.dynamicColorSwitch.toggle() }
+
+        binding.trueBlackSwitch.isChecked = AppPreferences.isTrueBlackEnabled(requireContext())
+        binding.trueBlackSwitch.setOnCheckedChangeListener { _, isChecked -> setTrueBlackEnabled(isChecked) }
+        binding.trueBlackRow.setOnClickListener { binding.trueBlackSwitch.toggle() }
     }
 
     private fun initAbout() {
@@ -84,6 +88,15 @@ class SettingsFragment : Fragment() {
         }
         AppPreferences.setDynamicColorEnabled(requireContext(), enabled)
         // Dynamic colors are applied when an activity is created, so recreate to pick up the change
+        requireActivity().recreate()
+    }
+
+    private fun setTrueBlackEnabled(enabled: Boolean) {
+        logEvent(AnalyticsConstants.Event.TOGGLE_TRUE_BLACK) {
+            putBoolean(AnalyticsConstants.Param.ENABLED, enabled)
+        }
+        AppPreferences.setTrueBlackEnabled(requireContext(), enabled)
+        // The true black overlay is applied when the activity is created, so recreate to pick up the change
         requireActivity().recreate()
     }
 

@@ -26,6 +26,8 @@
     <string name="settingsAboutHeader">About</string>
     <string name="settingsDynamicColorTitle">Wallpaper Colors</string>
     <string name="settingsDynamicColorSummary">Match the app colors to your device wallpaper</string>
+    <string name="settingsTrueBlackTitle">True Black</string>
+    <string name="settingsTrueBlackSummary">Use a pure black background in dark mode</string>
     <string name="settingsChangelogSummary">See what\'s new in each release</string>
     <string name="settingsRateSummary">Leave a review on Google Play</string>
     <string name="settingsVersionTitle">Version</string>
