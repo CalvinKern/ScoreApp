@@ -13,7 +13,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -256,7 +255,6 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     eventConsumer.accept(PlayerDeleteUndo(effect.playerId, effect.playerSelected))
                 }
             }
-            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorSecondary))
             .show()
     }
 

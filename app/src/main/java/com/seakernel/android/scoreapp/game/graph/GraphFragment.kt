@@ -26,11 +26,12 @@ import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.logScreenView
+import com.seakernel.android.scoreapp.utility.themeColor
 import java.text.DecimalFormat
 
 class GraphFragment : Fragment() {
 
-    private val colorTextBlack by lazy { getColor(requireContext(), R.color.textBlack) }
+    private val colorOnSurface by lazy { requireContext().themeColor(R.attr.colorOnSurface) }
 
     private val graphColors = intArrayOf(
         R.color.graphRed,
@@ -141,16 +142,16 @@ class GraphFragment : Fragment() {
                 it.text = ""
             }
             legend.also {
-                it.textColor = colorTextBlack
+                it.textColor = colorOnSurface
             }
             xAxis.also {
                 it.granularity = 1f
                 it.position = XAxis.XAxisPosition.BOTTOM
-                it.textColor = colorTextBlack
+                it.textColor = colorOnSurface
             }
             axisLeft.also {
                 it.granularity = 1f
-                it.textColor = colorTextBlack
+                it.textColor = colorOnSurface
             }
             setDrawBorders(true)
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -178,7 +179,7 @@ class GraphFragment : Fragment() {
             lineWidth = 4f
             valueTextSize = 14f
             axisDependency = YAxis.AxisDependency.LEFT
-            valueTextColor = ColorUtils.blendARGB(playerColor, colorTextBlack, 0.3f)
+            valueTextColor = ColorUtils.blendARGB(playerColor, colorOnSurface, 0.3f)
             setDrawHighlightIndicators(false)
 
             // Set circle data

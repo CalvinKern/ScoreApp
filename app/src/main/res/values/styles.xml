@@ -48,11 +48,7 @@
         <item name="colorOutline">@color/md_theme_outline</item>
         <item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
 
-        <item name="snackbarStyle">@style/SnackbarStyle</item>
-        <item name="snackbarTextViewStyle">@style/SnackbarText</item>
-        <item name="snackbarButtonStyle">@style/SnackbarButton</item>
-        <item name="floatingActionButtonStyle">@style/AppTheme.FloatingActionButton</item>
-        <item name="textInputStyle">@style/AppTheme.TextInputLayout.Outlined</item>
+
         <item name="checkboxStyle">@style/AppTheme.Checkbox</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
 
@@ -61,29 +57,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.FloatingActionButton" parent="Widget.Material3Expressive.FloatingActionButton">
-        <item name="backgroundTint">@color/colorSecondary</item>
-        <item name="tint">@color/colorOnSecondary</item>
-        <item name="rippleColor">@color/colorControlHighlightFab</item>
-    </style>
-
     <style name="AppTheme.Checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
         <item name="android:padding">@dimen/margin_checkbox</item>
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="rippleColor">@color/colorPrimaryRipple</item>
-    </style>
-
-    <style name="SnackbarStyle" parent="@style/Widget.Material3.Snackbar">
-        <item name="backgroundTint">@color/colorBackgroundPopup</item>
-    </style>
-
-    <style name="SnackbarText" parent="@style/Widget.Material3.Snackbar.TextView">
-        <item name="android:textColor">@color/textBlack</item>
-    </style>
-
-    <style name="SnackbarButton" parent="@style/Widget.Material3Expressive.Button.TextButton.Snackbar">
-        <item name="actionTextColorAlpha">1</item>
-        <item name="rippleColor">@color/colorSecondary</item>
     </style>
 
     <style name="AppTheme.OverflowMenu" parent="Widget.Material3.PopupMenu.Overflow">
@@ -92,8 +67,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3">
         <item name="android:background">@null</item>
-        <item name="android:textColor">@color/textBlack</item>
-        <item name="colorControlHighlight">@color/colorControlHighlight</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="dropDownListViewStyle">@style/AppTheme.DropDownListView</item>
     </style>
 
@@ -101,39 +75,47 @@
         <item name="android:listSelector">@drawable/bg_popup_item_selectable</item>
     </style>
 
+    <!-- Section headers and empty state titles -->
     <style name="AppTheme.TextHeader">
-        <item name="android:textSize">@dimen/text_header</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/textBlack</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <style name="AppTheme.CalculatorButton" parent="@style/Widget.Material3.Button">
+    <!-- Settings row title + supporting text (M3 list item headline / supporting text) -->
+    <style name="AppTheme.TextListHeadline">
+        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="AppTheme.TextListSupporting">
+        <item name="android:textAppearance">?attr/textAppearanceBodyMedium</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <!-- Calculator keys: digits on a surface container, operators tonal, actions filled -->
+    <style name="AppTheme.CalculatorButton" parent="@style/Widget.Material3Expressive.Button">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/calculator_button_size</item>
         <item name="android:layout_columnWeight">1</item>
-        <item name="android:textColor">@color/textWhite</item>
+        <item name="android:layout_margin">@dimen/calculator_button_spacing</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetTop">0dp</item>
-        <item name="android:paddingTop">@dimen/fab_margin</item>
-        <item name="android:paddingBottom">@dimen/fab_margin</item>
-        <item name="cornerRadius">0dp</item>
-        <item name="rippleColor">@color/textWhite</item>
-        <item name="backgroundTint">@color/gray</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CalculatorKey</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Operator">
-        <item name="backgroundTint">@color/darkGray</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3Expressive.Button.Tonal</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Action">
-        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3Expressive.Button.Filled</item>
     </style>
 
-    <style name="AppTheme.TextInputLayout.Outlined" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="hintTextColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="AppTheme.TextInputLayout.Outlined.ExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-        <item name="hintTextColor">@color/colorPrimary</item>
+    <style name="ThemeOverlay.App.CalculatorKey" parent="">
+        <item name="colorContainer">?attr/colorSurfaceContainerHighest</item>
+        <item name="colorOnContainer">?attr/colorOnSurface</item>
     </style>
 </resources>

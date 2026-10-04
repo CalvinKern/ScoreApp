@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playerNameHolder"
         android:src="@drawable/ic_drag_indicator"
-        app:tint="@color/gray"
+        app:tint="?attr/colorOnSurfaceVariant"
         />
 
     <TextView
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toStartOf="@id/playerDealerLabel"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="@dimen/text_title"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         tools:text="@tools:sample/full_names"
         />
 

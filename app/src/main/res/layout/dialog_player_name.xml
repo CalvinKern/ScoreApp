@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingStart="?attr/dialogPreferredPadding"
+    android:paddingTop="8dp"
+    android:paddingEnd="?attr/dialogPreferredPadding"
     >
 
-    <EditText
-        android:id="@+id/playerNameEdit"
-        android:orientation="vertical"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:inputType="textCapWords"
         android:hint="@string/playerName"
-        android:importantForAutofill="no"
         >
 
-        <requestFocus />
-    </EditText>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/playerNameEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords"
+            android:importantForAutofill="no"
+            >
+
+            <requestFocus />
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
 </FrameLayout>

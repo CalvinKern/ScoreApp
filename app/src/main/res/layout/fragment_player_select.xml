@@ -51,7 +51,7 @@
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_person_add"
-            app:tint="@color/gray"
+            app:tint="?attr/colorOnSurfaceVariant"
             app:layout_constraintBottom_toTopOf="@+id/playerEmptyTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +101,7 @@
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_person_pin"
-            app:tint="@color/gray"
+            app:tint="?attr/colorOnSurfaceVariant"
             app:layout_constraintBottom_toTopOf="@+id/playerEmptySearchTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -142,10 +142,11 @@
             app:constraint_referenced_ids="playerEmptySearchImage,playerEmptySearchTitle,playerEmptySearchMessage"
             />
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/playerLoading"
-            android:layout_width="@dimen/image_size"
-            android:layout_height="@dimen/image_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

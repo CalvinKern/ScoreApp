@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFF</color>
-    <color name="black">#000</color>
-    <color name="slightGray">@color/md_theme_surfaceContainer</color>
-    <color name="gray">#707070</color>
-    <color name="darkGray">#353535</color>
-    <color name="winnerBackground">@color/colorSecondary</color>
-    <color name="winnerText">@color/textBlack</color>
-    <color name="dealer">@color/colorPrimary</color>
-    <color name="dealerPast">@color/colorPrimaryLight</color>
-    <color name="totalBackground">@color/colorBackground</color>
-    <color name="transparent">#00000000</color>
-    <color name="colorSelected">@color/md_theme_surfaceContainerHighest</color>
 
     <!-- Material 3 color scheme. Generated from the brand key colors: primary #008577,
          secondary #A76362, tertiary #457590 (Material Theme Builder "custom colors" style). -->
@@ -61,26 +50,6 @@
     <color name="md_theme_surfaceContainerHighest">#DDE4E1</color>
     <color name="md_theme_outline">#6F7976</color>
     <color name="md_theme_outlineVariant">#BEC9C5</color>
-
-    <!-- Legacy brand colors (still referenced directly by some views; migrate to theme attributes) -->
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorPrimaryLight">#4cb5a6</color>
-    <color name="colorOnPrimary">@color/textWhite</color>
-    <color name="colorSecondary">#A76362</color>
-    <color name="colorTertiary">#457590</color>
-    <!--    <color name="colorTertiary">#005085</color>-->
-    <color name="colorOnSecondary">@color/textWhite</color>
-    <color name="colorOnTertiary">@color/textWhite</color>
-    <color name="colorBackground">@color/md_theme_surface</color>
-    <color name="colorBackgroundPopup">@color/md_theme_surfaceContainer</color>
-    <color name="colorControlHighlight">#1F000000</color>
-    <color name="colorControlHighlightFab">#1FFFFFFF</color>
-    <color name="colorPrimaryRipple">#2F008577</color>
-
-    <!-- Text Colors-->
-    <color name="textBlack">@color/md_theme_onSurface</color>
-    <color name="textWhite">@color/white</color>
 
     <!-- Graph Colors-->
     <color name="graphRed">#D32F2F</color>

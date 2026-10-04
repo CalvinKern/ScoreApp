@@ -7,6 +7,8 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.view.ViewCompat
@@ -19,6 +21,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.color.MaterialColors
 import com.google.firebase.analytics.FirebaseAnalytics
 import timber.log.Timber
 
@@ -39,6 +42,11 @@ fun View.setBackgroundRipple() = with(TypedValue()) {
     context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
     setBackgroundResource(resourceId)
 }
+
+/** Resolves a color attribute (e.g. `R.attr.colorOnSurface`) from this context's theme */
+@ColorInt
+fun Context.themeColor(@AttrRes attr: Int): Int =
+    MaterialColors.getColor(this, attr, "Theme color attribute not set")
 
 // Converts px to dp
 val Int.px: Int

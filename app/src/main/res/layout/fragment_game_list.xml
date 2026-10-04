@@ -53,7 +53,7 @@
             android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_dice_black"
-            app:tint="@color/gray"
+            app:tint="?attr/colorOnSurfaceVariant"
             app:layout_constraintBottom_toTopOf="@+id/gameListEmptyTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -95,10 +95,11 @@
             tools:visibility="visible"
             />
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/gameListLoading"
-            android:layout_width="@dimen/image_size"
-            android:layout_height="@dimen/image_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

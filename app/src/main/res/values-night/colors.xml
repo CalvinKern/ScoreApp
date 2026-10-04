@@ -49,20 +49,6 @@
     <color name="md_theme_outline">#899390</color>
     <color name="md_theme_outlineVariant">#3F4946</color>
 
-    <color name="dealerPast">@color/colorPrimaryDark</color>
-    <color name="totalBackground">@color/colorBackground</color>
-
-    <color name="colorPrimary">#28635B</color>
-    <color name="colorOnPrimary">@color/textWhite</color>
-    <color name="colorSecondary">#A06B6A</color>
-    <color name="colorOnSecondary">@color/colorBackground</color>
-    <color name="colorTertiary">#284D63</color>
-
-    <color name="colorControlHighlight">#1FFFFFFF</color>
-    <color name="colorPrimaryRipple">#4F4CB5A6</color>
-
-    <color name="textWhite">#BFFFFFFF</color>
-
     <!-- Graph palette (slightly desaturated/lightened for dark bg) -->
     <color name="graphRed">#B06363</color>
     <color name="graphPurple">#A05DAC</color>

@@ -45,7 +45,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="@string/gameNameHint"
-                style="@style/AppTheme.TextInputLayout.Outlined.ExposedDropdownMenu"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 app:endIconMode="none"
                 >
 
@@ -78,19 +78,14 @@
                     android:text="@string/gamePlayersHeader"
                     />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/playersHeaderEdit"
+                    style="@style/Widget.Material3Expressive.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:backgroundTint="@color/colorSecondary"
-                    android:gravity="center"
-                    android:minWidth="@dimen/min_touch_size"
-                    android:minHeight="@dimen/min_touch_size"
                     android:text="@string/actionEdit"
-                    android:textColor="@color/colorOnSecondary"
-                    android:textSize="14sp"
                     />
 
             </LinearLayout>
@@ -129,7 +124,7 @@
                     android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_person_add"
-                    app:tint="@color/gray"
+                    app:tint="?attr/colorOnSurfaceVariant"
                     />
 
                 <TextView

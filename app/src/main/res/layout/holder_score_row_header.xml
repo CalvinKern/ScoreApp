@@ -30,6 +30,6 @@
         android:src="@drawable/ic_notes_black"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/showRoundNotesTitle"
-        app:tint="@color/gray"
+        app:tint="?attr/colorOnSurfaceVariant"
         />
 </LinearLayout>

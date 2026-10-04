@@ -10,10 +10,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView.Companion.KEYCODE_NEXT
 import com.seakernel.android.scoreapp.databinding.ViewCalculatorKeyboardBinding
+import com.seakernel.android.scoreapp.utility.themeColor
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -168,7 +168,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     private fun setupView() {
         alignmentMode = ALIGN_MARGINS
-        setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
+        setBackgroundColor(context.themeColor(R.attr.colorSurfaceContainer))
     }
 
     private fun setKeyboardListeners() {

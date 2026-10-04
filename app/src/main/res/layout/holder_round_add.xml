@@ -4,47 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/addRoundButton"
+        style="@style/Widget.Material3Expressive.Button.TonalButton"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/min_touch_size"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:paddingHorizontal="24dp"
-        android:background="@drawable/background_secondary"
-        android:foreground="@drawable/selectable_button"
-        android:focusable="true"
-        android:focusableInTouchMode="false"
-        android:clickable="true"
-        >
-
-        <ImageView
-            android:id="@+id/addRoundIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/addRoundLabel"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_add_black"
-            app:tint="@color/colorOnSecondary"
-            />
-
-        <TextView
-            android:id="@+id/addRoundLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/addRoundIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            android:text="@string/addRound"
-            android:textColor="@color/colorOnSecondary"
-            android:textSize="@dimen/text_title"
-            android:padding="8dp"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="@string/addRound"
+        app:icon="@drawable/ic_add_black"
+        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.Medium"
+        />
 </FrameLayout>

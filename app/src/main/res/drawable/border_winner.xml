@@ -9,7 +9,7 @@
             <corners android:radius="@dimen/cell_border_radius" />
             <stroke
                 android:width="4dp"
-                android:color="@color/winnerBackground" />
+                android:color="?attr/colorSecondary" />
         </shape>
     </item>
 </layer-list>

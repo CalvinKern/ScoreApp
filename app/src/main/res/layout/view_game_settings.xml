@@ -24,7 +24,7 @@
             />
 
         <TextView
-            style="@style/AppTheme.TextHeader"
+            style="@style/AppTheme.TextListHeadline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -58,7 +58,7 @@
             >
 
             <TextView
-                style="@style/AppTheme.TextHeader"
+                style="@style/AppTheme.TextListHeadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reversedScoringTitle"
@@ -70,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="@string/reversedScoringDescription"
+                style="@style/AppTheme.TextListSupporting"
                 />
         </LinearLayout>
     </LinearLayout>
@@ -98,7 +99,7 @@
             >
 
             <TextView
-                style="@style/AppTheme.TextHeader"
+                style="@style/AppTheme.TextListHeadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/showRoundNotesTitle"
@@ -110,6 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="@string/showRoundNotesDescription"
+                style="@style/AppTheme.TextListSupporting"
                 />
         </LinearLayout>
     </LinearLayout>
@@ -137,7 +139,7 @@
             >
 
             <TextView
-                style="@style/AppTheme.TextHeader"
+                style="@style/AppTheme.TextListHeadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/useCalculatorTitle"
@@ -149,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="@string/useCalculatorDescription"
+                style="@style/AppTheme.TextListSupporting"
                 />
         </LinearLayout>
     </LinearLayout>

@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -38,6 +37,7 @@ import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setBackgroundRipple
 import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 import com.seakernel.android.scoreapp.utility.setVisible
+import com.seakernel.android.scoreapp.utility.themeColor
 import java.text.DecimalFormat
 
 class GameSetupFragment : Fragment() {
@@ -464,7 +464,7 @@ private class PlayerViewHolder(parent: ViewGroup, val callback: PlayerAdapterCal
     }
 
     override fun onSelected() {
-        itemView.setBackgroundColor(getColor(itemView.context, R.color.colorSelected))
+        itemView.setBackgroundColor(itemView.context.themeColor(R.attr.colorSurfaceContainerHighest))
     }
 
     override fun onCleared() {

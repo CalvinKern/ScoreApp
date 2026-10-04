@@ -5,7 +5,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
@@ -20,6 +19,7 @@ import com.seakernel.android.scoreapp.databinding.HolderScoreRowHeaderBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.ui.ConfettiHost
 import com.seakernel.android.scoreapp.utility.setVisible
+import com.seakernel.android.scoreapp.utility.themeColor
 import com.spotify.mobius.functions.Consumer
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
@@ -186,11 +186,11 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
 ) {
     fun bind(isGoalReached: Boolean, eventConsumer: Consumer<GameEvent>?) {
         if (isGoalReached) {
-            binding.addRoundLabel.setText(R.string.finishGame)
-            binding.addRoundIcon.setImageResource(R.drawable.ic_trophy)
+            binding.addRoundButton.setText(R.string.finishGame)
+            binding.addRoundButton.setIconResource(R.drawable.ic_trophy)
         } else {
-            binding.addRoundLabel.setText(R.string.addRound)
-            binding.addRoundIcon.setImageResource(R.drawable.ic_add_black)
+            binding.addRoundButton.setText(R.string.addRound)
+            binding.addRoundButton.setIconResource(R.drawable.ic_add_black)
         }
 
         binding.addRoundButton.setOnClickListener {
@@ -255,9 +255,9 @@ class ScoreViewHolder(
 
         // Make odd rows with a slight gray background to look a little better
         if (round.number % 2 == 0) {
-            itemView.setBackgroundResource(R.color.slightGray)
+            itemView.setBackgroundColor(itemView.context.themeColor(R.attr.colorSurfaceContainer))
         } else {
-            itemView.setBackgroundResource(R.color.colorBackground)
+            itemView.setBackgroundColor(itemView.context.themeColor(R.attr.colorSurface))
         }
 
         if (!binding.playerScore.hasFocus()) {
@@ -266,7 +266,7 @@ class ScoreViewHolder(
         }
         binding.playerScore.isEnabled = true
         binding.playerScore.isFocusable = true
-        binding.playerScore.setTextColor(itemView.context.getColor(R.color.textBlack))
+        binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
         binding.playerScore.setOnEditorActionListener { _, code, _ ->
             when (code) {
                 CalculatorKeyboardView.KEYCODE_EQUALS -> {
@@ -374,7 +374,7 @@ class ScoreViewHolder(
         if (isLeader) {
             binding.playerBorder.setBackgroundResource(R.drawable.border_winner)
             binding.playerScore.setTextColor(
-                ContextCompat.getColor(itemView.context, R.color.winnerText)
+                itemView.context.themeColor(R.attr.colorOnSurface)
             )
             if (showKonfetti) {
                 itemView.post {
@@ -383,7 +383,7 @@ class ScoreViewHolder(
             }
         } else {
             binding.playerBorder.setBackgroundResource(0)
-            binding.playerScore.setTextColor(itemView.context.getColor(R.color.textBlack))
+            binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
         }
         binding.playerScore.setText(formatScore(score))
     }
