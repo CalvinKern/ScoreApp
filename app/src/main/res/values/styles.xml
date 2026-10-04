@@ -118,4 +118,45 @@
         <item name="colorContainer">?attr/colorSurfaceContainerHighest</item>
         <item name="colorOnContainer">?attr/colorOnSurface</item>
     </style>
+
+    <!-- Settings screen: M3 list subheaders and two-line list items -->
+    <style name="AppTheme.SettingsSubheader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">@dimen/fab_margin</item>
+        <item name="android:paddingEnd">@dimen/fab_margin</item>
+        <item name="android:paddingTop">@dimen/fab_margin</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleSmall</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:accessibilityHeading">true</item>
+    </style>
+
+    <style name="AppTheme.SettingsRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/settings_row_min_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">@dimen/fab_margin</item>
+        <item name="android:paddingEnd">@dimen/fab_margin</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppTheme.SettingsRowIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginEnd">@dimen/fab_margin</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="tint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="AppTheme.SettingsRowText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
 </resources>

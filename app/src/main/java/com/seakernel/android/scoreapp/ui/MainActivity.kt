@@ -13,6 +13,7 @@ import com.seakernel.android.scoreapp.game.graph.GraphFragment
 import com.seakernel.android.scoreapp.gamelist.GameListFragment
 import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
+import com.seakernel.android.scoreapp.settings.SettingsFragment
 import nl.dionsegijn.konfetti.core.Angle
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.Position
@@ -86,6 +87,10 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
 
     override fun onShowCreateGameScreen() {
         showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.name)
+    }
+
+    override fun onShowSettingsScreen() {
+        showFragment(SettingsFragment.newInstance(), SettingsFragment::class.java.name)
     }
 
     override fun onGameSettingsSelected(gameId: Long) {

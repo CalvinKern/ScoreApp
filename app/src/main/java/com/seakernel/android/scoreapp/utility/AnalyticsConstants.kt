@@ -23,6 +23,7 @@ object AnalyticsConstants {
         const val SHOW_ROUND_NOTES_DIALOG = "show_round_notes"
         const val SHOW_ROUND_DELETE_DIALOG = "delete_round_dialog"
         const val TOGGLE_GAME_SETTING = "game_setting_changed"
+        const val TOGGLE_DYNAMIC_COLOR = "dynamic_color_changed"
         const val NEW_GAME_CLICKED = "new_game_clicked"
     }
 
@@ -31,6 +32,7 @@ object AnalyticsConstants {
         const val GAME_PLAYER_COUNT = FirebaseAnalytics.Param.NUMBER_OF_PASSENGERS
         const val ITEM_NAME = FirebaseAnalytics.Param.ITEM_NAME
         const val MESSAGE = FirebaseAnalytics.Param.CONTENT
+        const val ENABLED = "enabled"
     }
 
     sealed class ScreenName(val value: String) {
@@ -40,5 +42,6 @@ object AnalyticsConstants {
         data object GameListFragment : ScreenName("GameListFragment")
         data object GameSetupFragment : ScreenName("GameSetupFragment")
         data object PlayerSelectFragment : ScreenName("PlayerSelectFragment")
+        data object SettingsFragment : ScreenName("SettingsFragment")
     }
 }

@@ -10,6 +10,7 @@
     <dimen name="empty_margin_vertical">50dp</dimen>
 
     <dimen name="margin_checkbox">8dp</dimen>
+    <dimen name="settings_row_min_height">72dp</dimen>
 
     <dimen name="cell_border_radius">8dp</dimen>
     <dimen name="dialog_corner_radius">28dp</dimen>
