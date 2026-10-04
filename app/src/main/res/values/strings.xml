@@ -28,6 +28,9 @@
     <string name="settingsDynamicColorSummary">Match the app colors to your device wallpaper</string>
     <string name="settingsTrueBlackTitle">True Black</string>
     <string name="settingsTrueBlackSummary">Use a pure black background in dark mode</string>
+    <string name="settingsGamesHeader">Games</string>
+    <string name="settingsAutoLoadSettingsTitle">Load Previous Settings</string>
+    <string name="settingsAutoLoadSettingsSummary">Picking a previous game name fills in its last settings and players</string>
     <string name="settingsChangelogSummary">See what\'s new in each release</string>
     <string name="settingsRateSummary">Leave a review on Google Play</string>
     <string name="settingsVersionTitle">Version</string>

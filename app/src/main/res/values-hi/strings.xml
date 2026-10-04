@@ -58,6 +58,9 @@
     <string name="settingsDynamicColorSummary">ऐप के रंगों को डिवाइस के वॉलपेपर से मिलाएँ</string>
     <string name="settingsTrueBlackTitle">शुद्ध काला</string>
     <string name="settingsTrueBlackSummary">डार्क मोड में पूरी तरह काली पृष्ठभूमि का उपयोग करें</string>
+    <string name="settingsGamesHeader">खेल</string>
+    <string name="settingsAutoLoadSettingsTitle">पिछली सेटिंग्स लोड करें</string>
+    <string name="settingsAutoLoadSettingsSummary">पिछले खेल का नाम चुनने पर उसकी आखिरी सेटिंग्स और खिलाड़ी भर दिए जाते हैं</string>
     <string name="settingsChangelogSummary">हर रिलीज़ में क्या नया है, देखें</string>
     <string name="settingsRateSummary">Google Play पर समीक्षा लिखें</string>
     <string name="settingsVersionTitle">संस्करण</string>

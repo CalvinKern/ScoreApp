@@ -53,6 +53,7 @@ class SettingsFragment : Fragment() {
         binding.appBar.applyWindowInsetsCutout()
         binding.settingsContainer.applyWindowInsetsNavigationPadding()
 
+        initGames()
         initAppearance()
         initAbout()
     }
@@ -73,6 +74,12 @@ class SettingsFragment : Fragment() {
         binding.trueBlackSwitch.isChecked = AppPreferences.isTrueBlackEnabled(requireContext())
         binding.trueBlackSwitch.setOnCheckedChangeListener { _, isChecked -> setTrueBlackEnabled(isChecked) }
         binding.trueBlackRow.setOnClickListener { binding.trueBlackSwitch.toggle() }
+    }
+
+    private fun initGames() {
+        binding.autoLoadSettingsSwitch.isChecked = AppPreferences.isAutoLoadGameSettingsEnabled(requireContext())
+        binding.autoLoadSettingsSwitch.setOnCheckedChangeListener { _, isChecked -> setAutoLoadSettingsEnabled(isChecked) }
+        binding.autoLoadSettingsRow.setOnClickListener { binding.autoLoadSettingsSwitch.toggle() }
     }
 
     private fun initAbout() {
@@ -98,6 +105,13 @@ class SettingsFragment : Fragment() {
         AppPreferences.setTrueBlackEnabled(requireContext(), enabled)
         // The true black overlay is applied when the activity is created, so recreate to pick up the change
         requireActivity().recreate()
+    }
+
+    private fun setAutoLoadSettingsEnabled(enabled: Boolean) {
+        logEvent(AnalyticsConstants.Event.TOGGLE_AUTO_LOAD_GAME_SETTINGS) {
+            putBoolean(AnalyticsConstants.Param.ENABLED, enabled)
+        }
+        AppPreferences.setAutoLoadGameSettingsEnabled(requireContext(), enabled)
     }
 
     companion object {

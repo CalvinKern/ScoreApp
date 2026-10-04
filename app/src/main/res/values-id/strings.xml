@@ -56,6 +56,9 @@
     <string name="settingsDynamicColorSummary">Sesuaikan warna aplikasi dengan wallpaper perangkat</string>
     <string name="settingsTrueBlackTitle">Hitam Pekat</string>
     <string name="settingsTrueBlackSummary">Gunakan latar belakang hitam pekat dalam mode gelap</string>
+    <string name="settingsGamesHeader">Permainan</string>
+    <string name="settingsAutoLoadSettingsTitle">Muat Pengaturan Sebelumnya</string>
+    <string name="settingsAutoLoadSettingsSummary">Memilih nama permainan sebelumnya akan mengisi pengaturan dan pemain terakhirnya</string>
     <string name="settingsChangelogSummary">Lihat yang baru di setiap rilis</string>
     <string name="settingsRateSummary">Beri ulasan di Google Play</string>
     <string name="settingsVersionTitle">Versi</string>

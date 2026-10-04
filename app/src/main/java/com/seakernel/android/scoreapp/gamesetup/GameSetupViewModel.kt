@@ -167,6 +167,29 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    /**
+     * Load the settings and players from the most recently played game with the given name into the
+     * new game being set up. Games that already exist are never changed.
+     */
+    fun loadPreviousSettings(name: String) {
+        if (gameSettings.value?.id != null) return
+
+        scope.launch {
+            val previous = gameRepository.loadMostRecentGame(name) ?: return@launch
+            withContext(Dispatchers.Main) {
+                val current = gameSettings.value ?: GameSettings()
+                // Re-check in case the game was saved while loading
+                if (current.id != null) return@withContext
+
+                gameSettings.value = previous.copy(
+                    id = null,
+                    name = current.name,
+                    lastPlayed = ZonedDateTime.now(),
+                )
+            }
+        }
+    }
+
     @MainThread
     fun initializeGame() {
         if (gameSettings.value == null) {

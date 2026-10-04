@@ -25,6 +25,8 @@ object AnalyticsConstants {
         const val TOGGLE_GAME_SETTING = "game_setting_changed"
         const val TOGGLE_DYNAMIC_COLOR = "dynamic_color_changed"
         const val TOGGLE_TRUE_BLACK = "true_black_changed"
+        const val TOGGLE_AUTO_LOAD_GAME_SETTINGS = "auto_load_game_settings_changed"
+        const val GAME_SETTINGS_AUTO_LOADED = "game_settings_auto_loaded"
         const val NEW_GAME_CLICKED = "new_game_clicked"
     }
 

@@ -58,6 +58,9 @@
     <string name="settingsDynamicColorSummary">Potriviți culorile aplicației cu imaginea de fundal a dispozitivului</string>
     <string name="settingsTrueBlackTitle">Negru pur</string>
     <string name="settingsTrueBlackSummary">Folosiți un fundal complet negru în modul întunecat</string>
+    <string name="settingsGamesHeader">Jocuri</string>
+    <string name="settingsAutoLoadSettingsTitle">Încarcă setările anterioare</string>
+    <string name="settingsAutoLoadSettingsSummary">Alegerea numelui unui joc anterior completează ultimele setări și jucători ale acestuia</string>
     <string name="settingsChangelogSummary">Vedeți noutățile din fiecare versiune</string>
     <string name="settingsRateSummary">Lăsați o recenzie pe Google Play</string>
     <string name="settingsVersionTitle">Versiune</string>

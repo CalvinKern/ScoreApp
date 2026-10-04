@@ -17,6 +17,9 @@ interface GameDao {
     @Query("SELECT ${GameEntity.COLUMN_NAME} FROM ${GameEntity.TABLE_NAME} ORDER BY ${GameEntity.COLUMN_NAME} ASC")
     fun getAllNames(): List<String>
 
+    @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE TRIM(${GameEntity.COLUMN_NAME}) = TRIM(:name) ORDER BY ${GameEntity.COLUMN_LAST_PLAYED} DESC LIMIT 1")
+    fun getMostRecentByName(name: String): GameEntity?
+
     @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID} IN (:gameIds)")
     fun loadAllByIds(gameIds: LongArray): List<GameEntity>
 

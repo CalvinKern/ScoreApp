@@ -56,6 +56,9 @@
     <string name="settingsDynamicColorSummary">Combinar as cores do aplicativo com o papel de parede do dispositivo</string>
     <string name="settingsTrueBlackTitle">Preto puro</string>
     <string name="settingsTrueBlackSummary">Usar um fundo preto puro no modo escuro</string>
+    <string name="settingsGamesHeader">Jogos</string>
+    <string name="settingsAutoLoadSettingsTitle">Carregar configurações anteriores</string>
+    <string name="settingsAutoLoadSettingsSummary">Escolher o nome de um jogo anterior preenche suas últimas configurações e jogadores</string>
     <string name="settingsChangelogSummary">Ver as novidades de cada versão</string>
     <string name="settingsRateSummary">Deixar uma avaliação no Google Play</string>
     <string name="settingsVersionTitle">Versão</string>

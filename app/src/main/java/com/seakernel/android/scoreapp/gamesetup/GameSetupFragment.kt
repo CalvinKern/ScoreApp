@@ -29,6 +29,7 @@ import com.seakernel.android.scoreapp.databinding.HolderGameCreatePlayerBinding
 import com.seakernel.android.scoreapp.databinding.ViewGameSettingsBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.AppPreferences
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
@@ -113,6 +114,7 @@ class GameSetupFragment : Fragment() {
         _settingsBinding?.useCalculatorCheckbox?.setOnCheckedChangeListener(null)
         _settingsBinding?.useCalculatorContainer?.setOnClickListener(null)
         binding.gamePlayersEmptyImage.setOnClickListener(null)
+        _binding?.gameNameEdit?.onItemClickListener = null
 
         _binding?.gameNameEdit?.removeTextChangedListener(nameTextWatcher)
         _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)
@@ -238,6 +240,16 @@ class GameSetupFragment : Fragment() {
             override fun afterTextChanged(text: Editable?) {
                 viewModel.setMaxRounds(text.toString().toIntOrNull())
             }
+        }
+
+        // Picking a previous game name for a new game loads that game's settings and players
+        binding.gameNameEdit.setOnItemClickListener { parent, _, position, _ ->
+            if (viewModel.getGameSettings().value?.id != null) return@setOnItemClickListener
+            if (!AppPreferences.isAutoLoadGameSettingsEnabled(requireContext())) return@setOnItemClickListener
+
+            val name = parent.getItemAtPosition(position) as? String ?: return@setOnItemClickListener
+            logEvent(AnalyticsConstants.Event.GAME_SETTINGS_AUTO_LOADED)
+            viewModel.loadPreviousSettings(name)
         }
 
         val settingsBinding = _settingsBinding ?: return

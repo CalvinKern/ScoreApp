@@ -56,6 +56,9 @@
     <string name="settingsDynamicColorSummary">讓應用程式顏色與裝置牆紙相配</string>
     <string name="settingsTrueBlackTitle">純黑</string>
     <string name="settingsTrueBlackSummary">在深色模式下使用純黑背景</string>
+    <string name="settingsGamesHeader">遊戲</string>
+    <string name="settingsAutoLoadSettingsTitle">載入上次設定</string>
+    <string name="settingsAutoLoadSettingsSummary">選擇以前的遊戲名稱時，自動填入其上次的設定和玩家</string>
     <string name="settingsChangelogSummary">查看每個版本的新功能</string>
     <string name="settingsRateSummary">在 Google Play 上留下評價</string>
     <string name="settingsVersionTitle">版本</string>

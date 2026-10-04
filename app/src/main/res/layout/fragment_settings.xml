@@ -37,6 +37,50 @@
             android:orientation="vertical"
             >
 
+            <!-- Games -->
+            <TextView
+                style="@style/AppTheme.SettingsSubheader"
+                android:text="@string/settingsGamesHeader"
+                />
+
+            <LinearLayout
+                android:id="@+id/autoLoadSettingsRow"
+                style="@style/AppTheme.SettingsRow"
+                >
+
+                <ImageView
+                    style="@style/AppTheme.SettingsRowIcon"
+                    android:src="@drawable/ic_history"
+                    tools:ignore="ContentDescription"
+                    />
+
+                <LinearLayout style="@style/AppTheme.SettingsRowText">
+
+                    <TextView
+                        style="@style/AppTheme.TextListHeadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settingsAutoLoadSettingsTitle"
+                        android:labelFor="@id/autoLoadSettingsSwitch"
+                        />
+
+                    <TextView
+                        style="@style/AppTheme.TextListSupporting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settingsAutoLoadSettingsSummary"
+                        />
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/autoLoadSettingsSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:saveEnabled="false"
+                    android:layout_marginStart="@dimen/fab_margin"
+                    />
+            </LinearLayout>
+
             <!-- Appearance -->
             <TextView
                 style="@style/AppTheme.SettingsSubheader"

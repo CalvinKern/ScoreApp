@@ -24,6 +24,10 @@ class GameRepository(val context: Context) {
         return gameDao.getAllNames()
     }
 
+    fun loadMostRecentGame(name: String): GameSettings? {
+        return gameDao.getMostRecentByName(name)?.let { convertToGame(it) }
+    }
+
     fun loadGame(gameId: Long): GameSettings? {
         return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
