@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand accent used by the FAB and the past dealer border (set per light/dark mode in AppTheme) -->
+    <attr name="colorPrimaryAccent" format="color|reference" />
+    <attr name="colorOnPrimaryAccent" format="color|reference" />
+</resources>

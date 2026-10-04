@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark mode values for the app's primary accent (see values/styles.xml) -->
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="colorPrimaryAccent">?attr/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryAccent">?attr/colorOnPrimaryContainer</item>
+    </style>
+</resources>

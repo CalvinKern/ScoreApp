@@ -9,5 +9,5 @@
         android:title="@string/actionSettings"
         android:icon="@drawable/ic_settings"
         app:iconTint="?attr/colorOnSurfaceVariant"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 </menu>

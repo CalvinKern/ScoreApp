@@ -29,7 +29,6 @@ import com.spotify.mobius.functions.Consumer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 
 /**
  * Created by Calvin on 12/15/18.
@@ -93,7 +92,6 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
         // Setup Toolbar
         binding.toolbar.inflateMenu(R.menu.menu_game_list)
-        binding.toolbar.setOptionalIconsVisible()
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.actionSettings -> {
