@@ -99,4 +99,7 @@
     <string name="playerTotalDescription">%1$s, gesamt %2$s</string>
     <string name="leading">In Führung</string>
     <string name="editNotes">Anmerkungen bearbeiten</string>
+    <string name="calculatorNextDescription">Weiter</string>
+    <string name="calculatorMultiplyDescription">Multiplizieren</string>
+    <string name="calculatorDivideDescription">Dividieren</string>
 </resources>

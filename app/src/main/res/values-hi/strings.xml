@@ -99,4 +99,7 @@
     <string name="playerTotalDescription">%1$s, कुल %2$s</string>
     <string name="leading">आगे</string>
     <string name="editNotes">टिप्पणियाँ संपादित करें</string>
+    <string name="calculatorNextDescription">अगला</string>
+    <string name="calculatorMultiplyDescription">गुणा करें</string>
+    <string name="calculatorDivideDescription">भाग दें</string>
 </resources>

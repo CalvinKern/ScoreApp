@@ -96,4 +96,7 @@
     <string name="playerTotalDescription">%1$s，总分 %2$s</string>
     <string name="leading">领先</string>
     <string name="editNotes">编辑笔记</string>
+    <string name="calculatorNextDescription">下一个</string>
+    <string name="calculatorMultiplyDescription">乘</string>
+    <string name="calculatorDivideDescription">除</string>
 </resources>

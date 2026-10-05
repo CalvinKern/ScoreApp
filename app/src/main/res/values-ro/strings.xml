@@ -102,4 +102,7 @@
     <string name="playerTotalDescription">%1$s, total %2$s</string>
     <string name="leading">În frunte</string>
     <string name="editNotes">Editați notițele</string>
+    <string name="calculatorNextDescription">Următorul</string>
+    <string name="calculatorMultiplyDescription">Înmulțire</string>
+    <string name="calculatorDivideDescription">Împărțire</string>
 </resources>

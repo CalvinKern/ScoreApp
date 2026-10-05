@@ -96,4 +96,7 @@
     <string name="playerTotalDescription">%1$s、合計%2$s</string>
     <string name="leading">首位</string>
     <string name="editNotes">ノートを編集</string>
+    <string name="calculatorNextDescription">次へ</string>
+    <string name="calculatorMultiplyDescription">掛ける</string>
+    <string name="calculatorDivideDescription">割る</string>
 </resources>

@@ -95,6 +95,10 @@
     <string name="leading">Leading</string>
     <string name="editNotes">Edit notes</string>
     <string name="incomplete">Incomplete</string>
+    <!-- Spoken by screen readers for calculator keys whose symbols don't read well -->
+    <string name="calculatorNextDescription">Next</string>
+    <string name="calculatorMultiplyDescription">Multiply</string>
+    <string name="calculatorDivideDescription">Divide</string>
 
     <!--Graph Screen-->
     <string name="graphByRoundsLabel">Score by rounds</string>

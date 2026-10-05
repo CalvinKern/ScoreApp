@@ -74,6 +74,7 @@
     <Button
         android:id="@+id/calculatorKeyMultiply"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorMultiplyDescription"
         android:text="@string/multiply"
         android:textAllCaps="false"
         />
@@ -81,6 +82,7 @@
     <Button
         android:id="@+id/calculatorKeyDivide"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorDivideDescription"
         android:text="@string/divide"
         />
 
@@ -130,6 +132,7 @@
     <Button
         android:id="@+id/calculatorKeyNext"
         style="@style/AppTheme.CalculatorButton.Action"
+        android:contentDescription="@string/calculatorNextDescription"
         android:text="@string/next"
         />
 
