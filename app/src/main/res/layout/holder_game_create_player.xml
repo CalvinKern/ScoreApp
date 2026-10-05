@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
     >
 
     <ImageView
@@ -47,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playerDealerBox"
         app:layout_constraintStart_toEndOf="@id/playerNameHolder"
-        android:labelFor="@id/playerDealerBox"
+        android:importantForAccessibility="no"
         android:text="@string/dealerLabel"
         android:visibility="gone"
         tools:visibility="visible"
@@ -62,6 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/playerDealerLabel"
         android:layout_marginEnd="@dimen/fab_margin"
+        android:importantForAccessibility="no"
         tools:checked="true"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

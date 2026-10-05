@@ -11,8 +11,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
+import android.widget.RadioButton
 import android.widget.Toast
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.ViewGroupCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -495,10 +499,28 @@ private class PlayerViewHolder(parent: ViewGroup, val callback: PlayerAdapterCal
                 if (state.showDealer && state.isDealer) View.VISIBLE else View.GONE
             playerDealerBox.visibility = if (state.showDealer) View.VISIBLE else View.GONE
             playerDealerBox.isChecked = state.isDealer
-            playerDealerBox.setOnClickListener {
+
+            val selectDealer = View.OnClickListener {
                 logEvent(AnalyticsConstants.Event.DEALER_REPLACED)
                 callback.onSelectedDealer(state.player.id!!)
             }
+            playerDealerBox.setOnClickListener(selectDealer)
+
+            // The whole row picks the dealer, and screen readers hear it as one radio button named after the
+            // player (the radio button and label inside are only visual)
+            root.setOnClickListener(if (state.showDealer) selectDealer else null)
+            root.isClickable = state.showDealer
+            root.isFocusable = state.showDealer
+            ViewCompat.setAccessibilityDelegate(root, object : AccessibilityDelegateCompat() {
+                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+                    super.onInitializeAccessibilityNodeInfo(host, info)
+                    if (!state.showDealer) return
+                    info.className = RadioButton::class.java.name
+                    info.isCheckable = true
+                    info.isChecked = state.isDealer
+                    info.hintText = host.context.getString(R.string.dealerLabel)
+                }
+            })
         }
     }
 
