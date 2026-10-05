@@ -4,9 +4,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -115,6 +119,8 @@ class GameScoreAdapter(
 class PlayersAdapter(
     private val showNotes: Boolean,
     private val players: List<Player>,
+    private val playerTotals: Map<Long, Double>,
+    private val leadPlayerIds: List<Long>,
     private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener
 ) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
@@ -127,7 +133,14 @@ class PlayersAdapter(
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        holder.bind(showNotes, players[position], playerHolderClickedListener)
+        val player = players[position]
+        holder.bind(
+            showNotes,
+            player,
+            playerTotals[player.id] ?: 0.0,
+            player.id in leadPlayerIds,
+            playerHolderClickedListener,
+        )
     }
 }
 
@@ -169,9 +182,27 @@ class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) :
         fun playerHolderClicked(player: Player)
     }
 
-    fun bind(showNotes: Boolean, player: Player, clickListener: PlayerHolderClickedListener) {
+    fun bind(
+        showNotes: Boolean,
+        player: Player,
+        total: Double,
+        isLeader: Boolean,
+        clickListener: PlayerHolderClickedListener,
+    ) {
         binding.playerNameHeader.text = player.name
         binding.playerNameNoteIcon.setVisible(showNotes)
+
+        // Screen readers hear each player's total and lead here, at the top of the game, instead of in the totals row
+        val context = itemView.context
+        itemView.contentDescription =
+            context.getString(R.string.playerTotalDescription, player.name, ScoreFormat.format(total))
+        ViewCompat.setStateDescription(itemView, if (isLeader) context.getString(R.string.leading) else null)
+        ViewCompat.replaceAccessibilityAction(
+            itemView,
+            AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+            context.getString(R.string.editNotes),
+            null,
+        )
 
         // The Show Round Notes setting only shows the notes icon as a hint. Tapping a name opens the notes either
         // way on purpose, so notes are always reachable, even in games that don't use them much.
@@ -228,6 +259,16 @@ class ScoreViewHolder(
     init {
         binding.playerScore.keyListener = ScoreKeyListener()
         binding.playerScore.addTextChangedListener(this)
+        ViewCompat.setAccessibilityDelegate(binding.playerScore, object : AccessibilityDelegateCompat() {
+            override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+                super.onInitializeAccessibilityNodeInfo(host, info)
+                accessibilityHint?.let { info.hintText = it }
+                if (hasInvalidInput) {
+                    info.isContentInvalid = true
+                    info.error = host.context.getString(R.string.incomplete)
+                }
+            }
+        })
     }
 
     private var _eventConsumer: Consumer<GameEvent>? = null
@@ -242,6 +283,10 @@ class ScoreViewHolder(
 
     /** Text set by the app (instead of typed) shouldn't be saved as a new score */
     private var isSettingText = false
+
+    // Read by screen readers, the score is read as the text, followed by who and which round it's for
+    private var accessibilityHint: String? = null
+    private var hasInvalidInput = false
 
     fun bind(
         hasDealer: Boolean,
@@ -262,8 +307,18 @@ class ScoreViewHolder(
 
         binding.playerScore.showSoftInputOnFocus = !useCalculator
 
+        // Short enough to move through rounds quickly. Only the current dealer is announced, past dealers don't
+        // matter during play and would slow down every round.
+        val isCurrentDealer = hasDealer && score.player == round.dealer && rounds.last().id == round.id
+        val roundNumber = rounds.indexOfFirst { it.id == round.id } + 1
+        accessibilityHint = itemView.context.getString(R.string.scoreCellHint, score.player.name, roundNumber)
+        ViewCompat.setStateDescription(
+            binding.playerScore,
+            if (isCurrentDealer) itemView.context.getString(R.string.dealerLabel) else null,
+        )
+
         if (hasDealer && score.player == round.dealer) {
-            if (rounds.last().id == round.id) {
+            if (isCurrentDealer) {
                 binding.playerBorder.setBackgroundResource(R.drawable.border_dealer)
             } else {
                 binding.playerBorder.setBackgroundResource(R.drawable.border_dealer_past)
@@ -389,6 +444,8 @@ class ScoreViewHolder(
     }
 
     fun bindTotal(score: Double, isLeader: Boolean) {
+        accessibilityHint = null
+        hasInvalidInput = false
         binding.playerScore.isEnabled = false
         binding.playerScore.isFocusable = false
 
@@ -415,8 +472,8 @@ class ScoreViewHolder(
      */
     private fun showSavedScore(score: Score) {
         val input = score.input
-        val hasInvalidInput = input != null && CalculatorUtils.eval(input) == null
-        if (hasInvalidInput) {
+        hasInvalidInput = input != null && CalculatorUtils.eval(input) == null
+        if (input != null && hasInvalidInput) {
             setScoreText(CalculatorUtils.toDisplayInput(input, itemView.context))
             binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorError))
         } else {

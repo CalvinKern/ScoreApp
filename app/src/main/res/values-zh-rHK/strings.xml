@@ -92,4 +92,8 @@
     <string name="settingsShareDataTitle">分享使用情況資料</string>
     <string name="settingsShareDataSummary">傳送使用情況統計資料以協助改善應用程式。我們絕不會分享名稱和分數。</string>
     <string name="navigateUp">瀏覽首頁</string>
+    <string name="scoreCellHint">%1$s，第 %2$d 輪</string>
+    <string name="playerTotalDescription">%1$s，總分 %2$s</string>
+    <string name="leading">領先</string>
+    <string name="editNotes">編輯筆記</string>
 </resources>

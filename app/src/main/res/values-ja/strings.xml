@@ -92,4 +92,8 @@
     <string name="settingsShareDataTitle">使用状況データを共有</string>
     <string name="settingsShareDataSummary">アプリの改善のために使用状況の統計を送信します。名前とスコアが共有されることはありません。</string>
     <string name="navigateUp">上へ移動</string>
+    <string name="scoreCellHint">%1$s、ラウンド%2$d</string>
+    <string name="playerTotalDescription">%1$s、合計%2$s</string>
+    <string name="leading">首位</string>
+    <string name="editNotes">ノートを編集</string>
 </resources>

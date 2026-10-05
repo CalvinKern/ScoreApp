@@ -95,4 +95,8 @@
     <string name="settingsShareDataTitle">उपयोग डेटा साझा करें</string>
     <string name="settingsShareDataSummary">ऐप को बेहतर बनाने के लिए उपयोग के आंकड़े भेजें। नाम और स्कोर कभी साझा नहीं किए जाते।</string>
     <string name="navigateUp">ऊपर नेविगेट करें</string>
+    <string name="scoreCellHint">%1$s, राउंड %2$d</string>
+    <string name="playerTotalDescription">%1$s, कुल %2$s</string>
+    <string name="leading">आगे</string>
+    <string name="editNotes">टिप्पणियाँ संपादित करें</string>
 </resources>

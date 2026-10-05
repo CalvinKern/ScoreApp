@@ -94,8 +94,10 @@
                     android:layout_height="1dp"
                     />
 
+                <!-- Screen readers hear each total with the player's name at the top instead (see PlayerViewHolder) -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/totalsRow"
+                    android:importantForAccessibility="noHideDescendants"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"

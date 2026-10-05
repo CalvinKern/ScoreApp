@@ -95,4 +95,8 @@
     <string name="settingsShareDataTitle">Nutzungsdaten teilen</string>
     <string name="settingsShareDataSummary">Nutzungsstatistiken senden, um die App zu verbessern. Namen und Punktzahlen werden nie geteilt.</string>
     <string name="navigateUp">Nach oben</string>
+    <string name="scoreCellHint">%1$s, Runde %2$d</string>
+    <string name="playerTotalDescription">%1$s, gesamt %2$s</string>
+    <string name="leading">In Führung</string>
+    <string name="editNotes">Anmerkungen bearbeiten</string>
 </resources>

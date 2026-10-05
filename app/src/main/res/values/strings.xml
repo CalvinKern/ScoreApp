@@ -88,6 +88,12 @@
     <string name="continuePlaying">Another Round!</string>
     <string name="makePlayerDealerMessage">Make %s dealer for this round?</string>
     <string name="scoreHint">Score</string>
+    <!-- Spoken by screen readers for a score cell, e.g. "Alice, round 2" -->
+    <string name="scoreCellHint">%1$s, round %2$d</string>
+    <!-- Spoken by screen readers for a player's name at the top of the game, e.g. "Alice, total 12" -->
+    <string name="playerTotalDescription">%1$s, total %2$s</string>
+    <string name="leading">Leading</string>
+    <string name="editNotes">Edit notes</string>
     <string name="incomplete">Incomplete</string>
 
     <!--Graph Screen-->

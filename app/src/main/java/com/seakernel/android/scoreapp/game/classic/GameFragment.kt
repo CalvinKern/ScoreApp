@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
-import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
@@ -191,7 +190,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         _binding = null
     }
 
-    private fun setupHeaderAndFooter(settings: GameSettings) {
+    /** Sets up the player names (which also read out the totals for screen readers) and the totals row */
+    private fun setupHeaderAndFooter(model: GameModel) {
+        val settings = model.settings
         val players = settings.players
         updateTableWidth(players.size)
 
@@ -205,6 +206,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         val adapter = PlayersAdapter(
             settings.showRoundNotes,
             players,
+            model.playerTotals,
+            model.leadPlayerIds,
             object :
                 PlayerViewHolder.PlayerHolderClickedListener {
                 override fun playerHolderClicked(player: Player) {
@@ -315,8 +318,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 var manager = binding.scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
                 if (model.settings.players.isNotEmpty()) {
-                    if (model.settings != lastModel?.settings) {
-                        setupHeaderAndFooter(model.settings)
+                    if (model.settings != lastModel?.settings ||
+                        model.playerTotals != lastModel?.playerTotals ||
+                        model.leadPlayerIds != lastModel?.leadPlayerIds
+                    ) {
+                        setupHeaderAndFooter(model)
                     }
 
                     val spanCount = model.settings.players.size
