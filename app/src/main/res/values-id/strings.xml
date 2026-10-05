@@ -87,4 +87,5 @@
     <string name="finishGameConfirmation">Apakah Anda ingin mengakhiri permainan dan melihat klasemen?</string>
     <string name="finish">Selesai</string>
     <string name="continuePlaying">Satu Ronde Lagi!</string>
+    <string name="errorGeneric">Terjadi kesalahan</string>
 </resources>

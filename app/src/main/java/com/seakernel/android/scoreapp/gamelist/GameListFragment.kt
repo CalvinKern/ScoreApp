@@ -23,7 +23,6 @@ import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
-import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +50,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     private val binding get() = _binding!!
 
     init {
-        loop = Mobius.loop(ListModel.Companion::update, ::effectHandler)
+        loop = createLoop(ListModel.Companion::update)
         controller = MobiusAndroid.controller(loop, ListModel.createDefault(), ::initMobius)
     }
 

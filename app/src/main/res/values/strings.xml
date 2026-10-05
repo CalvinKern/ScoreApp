@@ -18,6 +18,7 @@
     <string name="copiedUrl">Copied URL</string>
     <string name="storeToReview">Please open the app store to review</string>
     <string name="changelogUnavailable">Unable to open the changelog</string>
+    <string name="errorGeneric">Something went wrong</string>
 
     <!--Common Actions-->
     <string name="actionClose">Close</string>

@@ -5,7 +5,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
+import com.spotify.mobius.Mobius
 import com.spotify.mobius.MobiusLoop
+import com.spotify.mobius.Update
 import com.spotify.mobius.functions.Consumer
 
 /**
@@ -52,4 +54,10 @@ abstract class MobiusFragment<M, E, F> : Fragment() {
     abstract fun initMobius(model: M): First<M, F>
     abstract fun connectViews(eventConsumer: Consumer<E>): Connection<M>
     abstract fun effectHandler(eventConsumer: Consumer<E>): Connection<F>
+
+    /** Builds the loop so that errors in [update] or [effectHandler] are reported instead of silently dropped */
+    protected fun createLoop(update: Update<M, E, F>): MobiusLoop.Builder<M, E, F> =
+        Mobius.loop(update) { eventConsumer: Consumer<E> ->
+            effectHandler(eventConsumer).reportingErrors { context }
+        }.logger(ReportingLogger { context })
 }

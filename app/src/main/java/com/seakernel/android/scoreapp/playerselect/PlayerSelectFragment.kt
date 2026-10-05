@@ -34,7 +34,6 @@ import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
-import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +64,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     private val binding get() = _binding!!
 
     init {
-        loop = Mobius.loop(::update, ::effectHandler)
+        loop = createLoop(::update)
     }
 
     override fun onAttach(context: Context) {

@@ -87,4 +87,5 @@
     <string name="finishGameConfirmation">ゲームを終了して順位を表示しますか？</string>
     <string name="finish">終了</string>
     <string name="continuePlaying">もう1ラウンド！</string>
+    <string name="errorGeneric">問題が発生しました</string>
 </resources>

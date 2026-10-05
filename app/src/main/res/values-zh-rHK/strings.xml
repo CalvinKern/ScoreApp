@@ -87,4 +87,5 @@
     <string name="finishGameConfirmation">是否結束遊戲並查看排名？</string>
     <string name="finish">結束</string>
     <string name="continuePlaying">再來一局！</string>
+    <string name="errorGeneric">發生錯誤</string>
 </resources>
