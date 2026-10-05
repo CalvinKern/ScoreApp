@@ -332,9 +332,14 @@ class ScoreViewHolder(
                 }
             }
         }
-        binding.playerScore.setOnLongClickListener {
-            showPlayerDealerDialog(score.player, round, eventConsumer)
-            true
+        if (hasDealer) {
+            binding.playerScore.setOnLongClickListener {
+                showPlayerDealerDialog(score.player, round, eventConsumer)
+                true
+            }
+        } else {
+            // Games without a dealer keep the normal long press behavior of the text field
+            binding.playerScore.setOnLongClickListener(null)
         }
 
         // Handle Focus Persistence and Automatic Focus
