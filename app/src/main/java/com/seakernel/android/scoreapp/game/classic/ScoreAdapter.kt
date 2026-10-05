@@ -2,9 +2,12 @@ package com.seakernel.android.scoreapp.game.classic
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
@@ -38,6 +41,7 @@ class GameScoreAdapter(
     private val focusedScoreId: Long?,
     private val isGoalReached: Boolean = false,
     private val eventConsumer: Consumer<GameEvent>? = null,
+    private val isTableScrollable: () -> Boolean = { false },
     private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -80,7 +84,7 @@ class GameScoreAdapter(
                 )
             }
             VIEW_TYPE_ROUND_ADD -> {
-                (holder as AddRoundViewHolder).bind(isGoalReached, eventConsumer)
+                (holder as AddRoundViewHolder).bind(isGoalReached, eventConsumer, isTableScrollable())
             }
         }
     }
@@ -181,7 +185,15 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
         false
     )
 ) {
-    fun bind(isGoalReached: Boolean, eventConsumer: Consumer<GameEvent>?) {
+    /**
+     * @param alignStart keeps the button on screen when the table is wider than the screen, where centering
+     * would put it in the middle of the whole table
+     */
+    fun bind(isGoalReached: Boolean, eventConsumer: Consumer<GameEvent>?, alignStart: Boolean) {
+        binding.addRoundButton.updateLayoutParams<FrameLayout.LayoutParams> {
+            gravity = if (alignStart) Gravity.START or Gravity.CENTER_VERTICAL else Gravity.CENTER
+        }
+
         if (isGoalReached) {
             binding.addRoundButton.setText(R.string.finishGame)
             binding.addRoundButton.setIconResource(R.drawable.ic_trophy)

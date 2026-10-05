@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.view.ViewGroupCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
@@ -38,6 +39,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.max
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -57,6 +59,10 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private var gameRepository: GameRepository? = null
     private var roundRepository: RoundRepository? = null
     private var eventConsumer: Consumer<GameEvent>? = null
+
+    // The number of players the score table is sized for
+    private var tablePlayerCount = 0
+    private var isTableScrollable = false
 
     private var _binding: FragmentGameBinding? = null
 
@@ -104,8 +110,13 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
         binding.appBar.applyWindowInsetsCutout()
-        binding.scoreRows.applyWindowInsetsNavigationPadding(includeBottom = false)
+        binding.scoreScroll.applyWindowInsetsNavigationPadding(includeBottom = false)
         binding.bottomContainer.applyWindowInsetsNavigationPadding()
+        syncHorizontalScroll(binding.nameScroll, binding.scoreScroll)
+        binding.scoreScroll.addOnLayoutChangeListener { view, left, _, right, _, oldLeft, _, oldRight, _ ->
+            // Fit the table to the new width (e.g. after rotating), after this layout pass finishes
+            if (right - left != oldRight - oldLeft) view.post { applyTableWidth() }
+        }
 
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -182,6 +193,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     private fun setupHeaderAndFooter(settings: GameSettings) {
         val players = settings.players
+        updateTableWidth(players.size)
 
         if ((binding.totalsRow.layoutManager as? GridLayoutManager)?.spanCount != players.size) {
             binding.totalsRow.layoutManager = GridLayoutManager(requireContext(), players.size)
@@ -200,6 +212,49 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 }
             })
         binding.nameRow.swapAdapter(adapter, false)
+    }
+
+    private fun updateTableWidth(playerCount: Int) {
+        tablePlayerCount = playerCount
+        applyTableWidth()
+    }
+
+    /**
+     * Keeps every column wide enough to read and tap, scaling with the text size. When the players don't fit
+     * across the screen, the names and scores scroll sideways instead of being squeezed.
+     *
+     * The rows get an exact width, since a horizontal scroll view lets its content measure as wide as it likes,
+     * which would make the name and score columns different widths.
+     */
+    private fun applyTableWidth() {
+        val binding = _binding ?: return
+        val scroll = binding.scoreScroll
+        val screenWidth = scroll.width - scroll.paddingLeft - scroll.paddingRight
+        if (screenWidth <= 0 || tablePlayerCount == 0) return
+
+        // Scaled by the font scale directly, since large sp values barely grow with nonlinear font scaling
+        val minColumnWidth = MIN_COLUMN_WIDTH_DP * resources.displayMetrics.density * resources.configuration.fontScale
+        val tableWidth = max(screenWidth, (tablePlayerCount * minColumnWidth).toInt())
+        val isScrollable = tableWidth > screenWidth
+        if (isScrollable != isTableScrollable) {
+            isTableScrollable = isScrollable
+            binding.scoreRows.adapter?.let { it.notifyItemChanged(it.itemCount - 1) } // Realign the add round button
+        }
+        listOf(binding.nameRow, binding.scoreRows, binding.totalsRow).forEach { row ->
+            if (row.layoutParams.width != tableWidth) {
+                row.updateLayoutParams { width = tableWidth }
+            }
+        }
+    }
+
+    /** Keeps the name row and the score table scrolled to the same players */
+    private fun syncHorizontalScroll(first: View, second: View) {
+        first.setOnScrollChangeListener { _, scrollX, _, _, _ ->
+            if (second.scrollX != scrollX) second.scrollTo(scrollX, 0)
+        }
+        second.setOnScrollChangeListener { _, scrollX, _, _, _ ->
+            if (first.scrollX != scrollX) first.scrollTo(scrollX, 0)
+        }
     }
 
     private fun showStandingDialog(gameId: Long) {
@@ -288,7 +343,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         model.rounds,
                         model.focusedScoreId,
                         model.isGoalReached,
-                        eventConsumer
+                        eventConsumer,
+                        { isTableScrollable },
                     ) { score -> binding.calculatorKeyboard.setInput(score) }, false
                 )
                 val newCount = binding.scoreRows.adapter!!.itemCount
@@ -459,6 +515,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     companion object {
         private const val CONFETTI_DEBOUNCE_MS = 600L // 250 - 400 based on user typing/pausing
+        private const val MIN_COLUMN_WIDTH_DP = 48f // A touch target wide at the default text size
 
         private const val ARG_GAME_ID = "game_id"
 

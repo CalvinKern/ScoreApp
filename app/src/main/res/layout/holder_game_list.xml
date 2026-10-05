@@ -51,8 +51,6 @@
         android:id="@+id/gamePlayersHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/gameNameHolder"
-        app:layout_constraintStart_toStartOf="@id/gameNameHolder"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         tools:text="6 Players"
@@ -62,12 +60,25 @@
         android:id="@+id/gameRoundsHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fab_margin"
-        app:layout_constraintStart_toEndOf="@id/gamePlayersHolder"
-        app:layout_constraintBaseline_toBaselineOf="@id/gamePlayersHolder"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         tools:text="4 Rounds"
+        />
+
+    <!-- Players and rounds wrap onto another line before running into the date (e.g. with large text) -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin"
+        app:layout_constraintTop_toBottomOf="@id/gameNameHolder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/gameDateHolder"
+        app:constraint_referenced_ids="gamePlayersHolder,gameRoundsHolder"
+        app:flow_wrapMode="chain"
+        app:flow_horizontalStyle="packed"
+        app:flow_horizontalBias="0"
+        app:flow_horizontalGap="@dimen/fab_margin"
+        app:flow_verticalAlign="baseline"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
