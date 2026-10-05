@@ -173,6 +173,8 @@ class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) :
         binding.playerNameHeader.text = player.name
         binding.playerNameNoteIcon.setVisible(showNotes)
 
+        // The Show Round Notes setting only shows the notes icon as a hint. Tapping a name opens the notes either
+        // way on purpose, so notes are always reachable, even in games that don't use them much.
         itemView.setOnClickListener { clickListener.playerHolderClicked(player) }
         itemView.setOnLongClickListener { clickListener.playerHolderClicked(player); true }
     }
