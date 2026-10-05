@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.color.DynamicColors
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.seakernel.android.scoreapp.BuildConfig
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.databinding.FragmentSettingsBinding
@@ -55,7 +56,19 @@ class SettingsFragment : Fragment() {
 
         initGames()
         initAppearance()
+        initPrivacy()
         initAbout()
+    }
+
+    private fun initPrivacy() {
+        binding.shareUsageDataSwitch.isChecked = AppPreferences.isShareUsageDataEnabled(requireContext())
+        binding.shareUsageDataSwitch.setOnCheckedChangeListener { _, isChecked -> setShareUsageDataEnabled(isChecked) }
+        binding.shareUsageDataRow.setOnClickListener { binding.shareUsageDataSwitch.toggle() }
+    }
+
+    private fun setShareUsageDataEnabled(enabled: Boolean) {
+        AppPreferences.setShareUsageDataEnabled(requireContext(), enabled)
+        FirebaseAnalytics.getInstance(requireContext()).setAnalyticsCollectionEnabled(enabled)
     }
 
     override fun onResume() {

@@ -94,4 +94,7 @@
     <string name="finish">Terminer</string>
     <string name="continuePlaying">Encore une manche !</string>
     <string name="errorGeneric">Un problème est survenu</string>
+    <string name="settingsPrivacyHeader">Confidentialité</string>
+    <string name="settingsShareDataTitle">Partager les données d\'utilisation</string>
+    <string name="settingsShareDataSummary">Envoyer des statistiques d\'utilisation pour aider à améliorer l\'application. Les noms et les scores ne sont jamais partagés.</string>
 </resources>

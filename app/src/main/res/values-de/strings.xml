@@ -91,4 +91,7 @@
     <string name="finish">Beenden</string>
     <string name="continuePlaying">Noch eine Runde!</string>
     <string name="errorGeneric">Etwas ist schiefgelaufen</string>
+    <string name="settingsPrivacyHeader">Datenschutz</string>
+    <string name="settingsShareDataTitle">Nutzungsdaten teilen</string>
+    <string name="settingsShareDataSummary">Nutzungsstatistiken senden, um die App zu verbessern. Namen und Punktzahlen werden nie geteilt.</string>
 </resources>

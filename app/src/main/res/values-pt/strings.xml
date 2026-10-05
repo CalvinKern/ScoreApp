@@ -94,4 +94,7 @@
     <string name="finish">Terminar</string>
     <string name="continuePlaying">Mais uma ronda!</string>
     <string name="errorGeneric">Algo deu errado</string>
+    <string name="settingsPrivacyHeader">Privacidade</string>
+    <string name="settingsShareDataTitle">Compartilhar dados de uso</string>
+    <string name="settingsShareDataSummary">Enviar estatísticas de uso para ajudar a melhorar o aplicativo. Nomes e pontuações nunca são compartilhados.</string>
 </resources>

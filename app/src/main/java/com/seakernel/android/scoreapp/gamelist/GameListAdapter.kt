@@ -62,8 +62,8 @@ class GameListViewHolder(parent: ViewGroup) : BaseViewHolder<HolderGameListBindi
             )
 
         itemView.setOnClickListener {
+            // Game names are typed by the user and may be personal, so they aren't logged
             logEvent(AnalyticsConstants.Event.GAME_LOADED) {
-                putString(AnalyticsConstants.Param.ITEM_NAME, settings.name)
                 putString(
                     AnalyticsConstants.Param.GAME_PLAYER_COUNT,
                     settings.players.count().toString()

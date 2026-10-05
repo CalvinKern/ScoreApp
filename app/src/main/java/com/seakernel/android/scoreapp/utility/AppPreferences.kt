@@ -11,6 +11,7 @@ object AppPreferences {
     private const val KEY_DYNAMIC_COLOR = "dynamic_color_enabled"
     private const val KEY_TRUE_BLACK = "true_black_enabled"
     private const val KEY_AUTO_LOAD_GAME_SETTINGS = "auto_load_game_settings_enabled"
+    private const val KEY_SHARE_USAGE_DATA = "share_usage_data_enabled"
 
     private fun prefs(context: Context) =
         context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -35,4 +36,11 @@ object AppPreferences {
 
     fun setAutoLoadGameSettingsEnabled(context: Context, enabled: Boolean) =
         prefs(context).edit { putBoolean(KEY_AUTO_LOAD_GAME_SETTINGS, enabled) }
+
+    /** Whether usage statistics are sent to Firebase Analytics */
+    fun isShareUsageDataEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SHARE_USAGE_DATA, true)
+
+    fun setShareUsageDataEnabled(context: Context, enabled: Boolean) =
+        prefs(context).edit { putBoolean(KEY_SHARE_USAGE_DATA, enabled) }
 }

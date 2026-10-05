@@ -91,4 +91,7 @@
     <string name="finish">समाप्त करें</string>
     <string name="continuePlaying">एक और राउंड!</string>
     <string name="errorGeneric">कुछ गलत हो गया</string>
+    <string name="settingsPrivacyHeader">गोपनीयता</string>
+    <string name="settingsShareDataTitle">उपयोग डेटा साझा करें</string>
+    <string name="settingsShareDataSummary">ऐप को बेहतर बनाने के लिए उपयोग के आंकड़े भेजें। नाम और स्कोर कभी साझा नहीं किए जाते।</string>
 </resources>

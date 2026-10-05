@@ -88,4 +88,7 @@
     <string name="finish">Selesai</string>
     <string name="continuePlaying">Satu Ronde Lagi!</string>
     <string name="errorGeneric">Terjadi kesalahan</string>
+    <string name="settingsPrivacyHeader">Privasi</string>
+    <string name="settingsShareDataTitle">Bagikan Data Penggunaan</string>
+    <string name="settingsShareDataSummary">Kirim statistik penggunaan untuk membantu meningkatkan aplikasi. Nama dan skor tidak pernah dibagikan.</string>
 </resources>

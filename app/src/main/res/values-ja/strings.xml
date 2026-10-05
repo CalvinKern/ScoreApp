@@ -88,4 +88,7 @@
     <string name="finish">終了</string>
     <string name="continuePlaying">もう1ラウンド！</string>
     <string name="errorGeneric">問題が発生しました</string>
+    <string name="settingsPrivacyHeader">プライバシー</string>
+    <string name="settingsShareDataTitle">使用状況データを共有</string>
+    <string name="settingsShareDataSummary">アプリの改善のために使用状況の統計を送信します。名前とスコアが共有されることはありません。</string>
 </resources>

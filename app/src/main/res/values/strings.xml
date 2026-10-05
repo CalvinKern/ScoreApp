@@ -41,6 +41,9 @@
     <string name="settingsGamesHeader">Games</string>
     <string name="settingsAutoLoadSettingsTitle">Load Previous Settings</string>
     <string name="settingsAutoLoadSettingsSummary">Picking a previous game name fills in its last settings and players</string>
+    <string name="settingsPrivacyHeader">Privacy</string>
+    <string name="settingsShareDataTitle">Share Usage Data</string>
+    <string name="settingsShareDataSummary">Send usage statistics to help improve the app. Names and scores are never shared.</string>
     <string name="settingsChangelogSummary">See what\'s new in each release</string>
     <string name="settingsRateSummary">Leave a review on Google Play</string>
     <string name="settingsVersionTitle">Version</string>

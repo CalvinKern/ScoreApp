@@ -271,9 +271,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 if (name.isEmpty()) return@setPositiveButton
-                logEvent(if (effect.playerId == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED) {
-                    putString(AnalyticsConstants.Param.ITEM_NAME, name)
-                }
+                // Player names are personal data, so only the event is logged
+                logEvent(if (effect.playerId == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED)
                 addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
                     playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
                         if (isDisposed()) return@let
