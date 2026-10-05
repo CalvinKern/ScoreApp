@@ -50,14 +50,14 @@
     <color name="md_theme_outlineVariant">#3F4946</color>
 
     <!-- Graph palette (slightly desaturated/lightened for dark bg) -->
-    <color name="graphRed">#B06363</color>
-    <color name="graphPurple">#A05DAC</color>
-    <color name="graphBlue">#4B7DAF</color>
-    <color name="graphCyan">#2D8086</color>
-    <color name="graphTeal">#2B8279</color>
-    <color name="graphGreen">#518153</color>
+    <color name="graphRed">#C96A6A</color>
+    <color name="graphBlue">#5C8FD6</color>
+    <color name="graphGreen">#5E9A62</color>
+    <color name="graphOrange">#C27C40</color>
+    <color name="graphPurple">#A877B5</color>
+    <color name="graphCyan">#3A939A</color>
+    <color name="graphBrown">#A07A6A</color>
     <color name="graphYellow">#CBB967</color>
-    <color name="graphOrange">#B4723C</color>
-    <color name="graphBrown">#966A5A</color>
-    <color name="graphGray">#5C7984</color>
+    <color name="graphGray">#8E9499</color>
+    <color name="graphPink">#C76B8F</color>
 </resources>

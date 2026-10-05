@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.game.graph
 
+import android.graphics.DashPathEffect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
@@ -33,17 +35,21 @@ class GraphFragment : Fragment() {
 
     private val colorOnSurface by lazy { requireContext().themeColor(R.attr.colorOnSurface) }
 
+    /**
+     * Players get colors by their seat in the game, so everyone in a game of up to 10 players has their own color
+     * and keeps it while the game goes on. Larger games repeat the colors, with dashed lines to tell them apart.
+     */
     private val graphColors = intArrayOf(
         R.color.graphRed,
-        R.color.graphPurple,
         R.color.graphBlue,
-        R.color.graphCyan,
-        R.color.graphTeal,
         R.color.graphGreen,
-        R.color.graphYellow,
         R.color.graphOrange,
+        R.color.graphPurple,
+        R.color.graphCyan,
         R.color.graphBrown,
-        R.color.graphGray
+        R.color.graphYellow,
+        R.color.graphGray,
+        R.color.graphPink,
     )
 
     private val modelObserver = Observer<Game?> { game -> game?.let { updateGraphData(it) } }
@@ -120,10 +126,11 @@ class GraphFragment : Fragment() {
 
         // Convert the entries to line sets (with all that wonderful color info)
         val scoreSets = scoreMap.map { scores ->
-            val playerName = game.settings.players.find { it.id == scores.key }?.name
-            val playerColor = graphColors[scores.key.toInt() % graphColors.size]
+            val seat = game.settings.players.indexOfFirst { it.id == scores.key }.coerceAtLeast(0)
+            val playerName = game.settings.players.getOrNull(seat)?.name
+            val playerColor = graphColors[seat % graphColors.size]
             LineDataSet(scores.value, playerName).also {
-                setDataSetStyle(it, getColor(requireContext(), playerColor))
+                setDataSetStyle(it, getColor(requireContext(), playerColor), isDashed = seat >= graphColors.size)
             }
         }
 
@@ -143,6 +150,12 @@ class GraphFragment : Fragment() {
             }
             legend.also {
                 it.textColor = colorOnSurface
+                // Lines (instead of squares) so the legend shows which players have dashed lines
+                it.form = Legend.LegendForm.LINE
+                it.formSize = 16f
+                it.formLineWidth = 4f
+                // Wrap onto more lines for larger games instead of running off the screen
+                it.isWordWrapEnabled = true
             }
             xAxis.also {
                 it.granularity = 1f
@@ -173,10 +186,14 @@ class GraphFragment : Fragment() {
         }
     }
 
-    private fun setDataSetStyle(dataSet: LineDataSet, playerColor: Int) {
+    private fun setDataSetStyle(dataSet: LineDataSet, playerColor: Int, isDashed: Boolean) {
         dataSet.apply { // Random float values are defined by dp
             color = playerColor
             lineWidth = 4f
+            if (isDashed) {
+                enableDashedLine(DASH_LENGTH, DASH_LENGTH, 0f)
+                formLineDashEffect = DashPathEffect(floatArrayOf(DASH_LENGTH, DASH_LENGTH), 0f)
+            }
             valueTextSize = 14f
             axisDependency = YAxis.AxisDependency.LEFT
             valueTextColor = ColorUtils.blendARGB(playerColor, colorOnSurface, 0.3f)
@@ -192,6 +209,7 @@ class GraphFragment : Fragment() {
 
     companion object {
         private const val ARG_GAME_ID = "game_id"
+        private const val DASH_LENGTH = 16f
 
         private val graphEmptyFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float) = ""
