@@ -49,7 +49,7 @@
     <color name="md_theme_outline">#899390</color>
     <color name="md_theme_outlineVariant">#3F4946</color>
 
-    <!-- Graph palette (slightly desaturated/lightened for dark bg) -->
+    <!-- Graph palette (slightly desaturated/lightened for dark bg), all at least 3:1 against the surface -->
     <color name="graphRed">#C96A6A</color>
     <color name="graphBlue">#5C8FD6</color>
     <color name="graphGreen">#5E9A62</color>

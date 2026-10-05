@@ -59,7 +59,7 @@
 
     <!--
         Light mode values for the app's primary accent (the dark mode values are in values-night).
-        The accent is shared by the FAB and the past dealer border so the brand color stays consistent.
+        The accent is used by the FAB so the brand color stays consistent.
     -->
     <style name="AppTheme" parent="Base.AppTheme">
         <item name="colorPrimaryAccent">?attr/colorPrimaryFixedDim</item>

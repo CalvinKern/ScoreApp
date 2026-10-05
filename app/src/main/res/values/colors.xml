@@ -51,7 +51,8 @@
     <color name="md_theme_outline">#6F7976</color>
     <color name="md_theme_outlineVariant">#BEC9C5</color>
 
-    <!-- Graph colors, ordered so players next to each other get clearly different colors (see GraphFragment) -->
+    <!-- Graph colors, all at least 3:1 against the surface and ordered so players next to each other get
+         clearly different colors (see GraphFragment) -->
     <color name="graphRed">#D32F2F</color>
     <color name="graphBlue">#1976D2</color>
     <color name="graphGreen">#2E7D32</color>
@@ -59,7 +60,7 @@
     <color name="graphPurple">#8E24AA</color>
     <color name="graphCyan">#00838F</color>
     <color name="graphBrown">#795548</color>
-    <color name="graphYellow">#FDD835</color>
+    <color name="graphYellow">#9C8600</color>
     <color name="graphGray">#546E7A</color>
     <color name="graphPink">#C2185B</color>
 </resources>
