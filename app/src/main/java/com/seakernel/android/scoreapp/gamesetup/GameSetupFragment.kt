@@ -30,6 +30,7 @@ import com.seakernel.android.scoreapp.databinding.ViewGameSettingsBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.AppPreferences
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.isCheckedSafe
@@ -39,7 +40,6 @@ import com.seakernel.android.scoreapp.utility.setBackgroundRipple
 import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.seakernel.android.scoreapp.utility.themeColor
-import java.text.DecimalFormat
 
 class GameSetupFragment : Fragment() {
 
@@ -233,7 +233,7 @@ class GameSetupFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(text: Editable?) {
-                viewModel.setMaxScore(text.toString().toDoubleOrNull())
+                viewModel.setMaxScore(ScoreFormat.parse(text.toString()))
             }
         }
         maxRoundsTextWatcher = object : TextWatcher {
@@ -349,7 +349,7 @@ class GameSetupFragment : Fragment() {
     /** Update max score/rounds unless they have focus (being edited) */
     private fun renderTargetFields(settings: GameSettings) {
         if (_settingsBinding?.maxScoreEdit?.hasFocus() == false) {
-            val score = settings.maxScore?.let { DecimalFormat("#.##").format(it) } ?: ""
+            val score = settings.maxScore?.let { ScoreFormat.format(it) } ?: ""
             _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)
             _settingsBinding?.maxScoreEdit?.setText(score)
             _settingsBinding?.maxScoreEdit?.addTextChangedListener(maxScoreTextWatcher)

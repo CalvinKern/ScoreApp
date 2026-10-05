@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView.Companion.KEYCODE_NEXT
 import com.seakernel.android.scoreapp.databinding.ViewCalculatorKeyboardBinding
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import com.seakernel.android.scoreapp.utility.themeColor
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -169,6 +170,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
     private fun setupView() {
         alignmentMode = ALIGN_MARGINS
         setBackgroundColor(context.themeColor(R.attr.colorSurface))
+
+        // Show the decimal separator of the user's language, so what is typed matches how scores are shown
+        binding.calculatorKeyDecimal.text = ScoreFormat.decimalSeparator().toString()
     }
 
     private fun setKeyboardListeners() {
@@ -243,7 +247,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
             resources.getString(R.string.equals) -> {
                 inputView?.onEditorAction(KEYCODE_EQUALS)
-                computeString() ?: calculatorString
+                computeString()?.let(CalculatorUtils::toDisplay) ?: calculatorString
             }
 
             else -> {

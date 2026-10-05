@@ -2,6 +2,7 @@ package com.seakernel.android.scoreapp.calculator
 
 import android.content.Context
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import kotlin.math.pow
 
 /**
@@ -33,12 +34,23 @@ object CalculatorUtils {
             .replace(resources.getString(R.string.divide), DIVIDE.toString())
             .replace(resources.getString(R.string.close_paren), CLOSE_PAREN.toString())
             .replace(resources.getString(R.string.open_paren), OPEN_PAREN.toString())
-            .replace(resources.getString(R.string.decimal), DECIMAL.toString())
+    }
+
+    /** Replaces the user's decimal separator (e.g. the ',' in a German "2,5") with [DECIMAL] */
+    private fun normalizeDecimal(input: String): String {
+        val separator = ScoreFormat.decimalSeparator()
+        return if (separator == DECIMAL) input else input.replace(separator, DECIMAL)
+    }
+
+    /** Shows a computed result with the user's decimal separator, the reverse of [normalizeDecimal] */
+    fun toDisplay(result: String): String {
+        val separator = ScoreFormat.decimalSeparator()
+        return if (separator == DECIMAL) result else result.replace(DECIMAL, separator)
     }
 
     // Answer snagged from this post: https://stackoverflow.com/a/26227947/4472135
     fun eval(input: String, context: Context? = null): String? {
-        val str = if (context != null) sanitize(input, context) else input
+        val str = normalizeDecimal(if (context != null) sanitize(input, context) else input)
         if (!VALIDATOR_REGEX.matches(str)) return null
 
         val output = object : Any() {

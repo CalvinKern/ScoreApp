@@ -15,10 +15,10 @@ import com.seakernel.android.scoreapp.databinding.HolderPlayerStandingBinding
 import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DecimalFormat
 
 class PlayerStandingDialog : DialogFragment() {
 
@@ -141,7 +141,7 @@ private class PlayerStandingViewHolder(parent: ViewGroup) :
 
     fun onBind(playerScore: PlayerScore) {
         binding.playerNameHolder.text = playerScore.name
-        binding.playerScoreHolder.text = DecimalFormat("##.###").format(playerScore.score)
+        binding.playerScoreHolder.text = ScoreFormat.format(playerScore.score)
         binding.playerStandingHolder.text =
             itemView.context.getString(R.string.playerStanding, playerScore.position)
     }

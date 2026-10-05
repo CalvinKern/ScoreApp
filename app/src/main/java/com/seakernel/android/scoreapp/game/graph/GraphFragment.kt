@@ -23,11 +23,11 @@ import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.databinding.FragmentGraphBinding
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.themeColor
-import java.text.DecimalFormat
 
 class GraphFragment : Fragment() {
 
@@ -193,8 +193,6 @@ class GraphFragment : Fragment() {
     companion object {
         private const val ARG_GAME_ID = "game_id"
 
-        private val decimalFormat = DecimalFormat("#.##")
-
         private val graphEmptyFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float) = ""
         }
@@ -209,7 +207,7 @@ class GraphFragment : Fragment() {
             }
 
             override fun getFormattedValue(value: Float): String {
-                return decimalFormat.format(value)
+                return ScoreFormat.format(value.toDouble())
             }
         }
 

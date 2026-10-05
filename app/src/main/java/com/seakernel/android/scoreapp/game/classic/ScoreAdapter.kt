@@ -10,6 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
 import com.seakernel.android.scoreapp.calculator.CalculatorUtils
+import com.seakernel.android.scoreapp.calculator.ScoreKeyListener
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
@@ -18,11 +19,11 @@ import com.seakernel.android.scoreapp.databinding.HolderScoreRowDataBinding
 import com.seakernel.android.scoreapp.databinding.HolderScoreRowHeaderBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.ui.ConfettiHost
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.seakernel.android.scoreapp.utility.themeColor
 import com.spotify.mobius.functions.Consumer
 import java.security.InvalidParameterException
-import java.text.DecimalFormat
 
 private typealias CalculatorKeyboardCallback = (scoreView: EditText?) -> Unit
 
@@ -211,6 +212,7 @@ class ScoreViewHolder(
 ), TextWatcher {
 
     init {
+        binding.playerScore.keyListener = ScoreKeyListener()
         binding.playerScore.addTextChangedListener(this)
     }
 
@@ -375,7 +377,7 @@ class ScoreViewHolder(
         binding.playerScore.setText(formatScore(score))
     }
 
-    private fun formatScore(score: Double) = DecimalFormat("#.##").format(score)
+    private fun formatScore(score: Double) = ScoreFormat.format(score)
 
     private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
         val updatedScore = if (binding.playerScore.text.isNotBlank()) {

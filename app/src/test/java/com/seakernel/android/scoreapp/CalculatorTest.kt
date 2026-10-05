@@ -1,8 +1,10 @@
 package com.seakernel.android.scoreapp
 
 import com.seakernel.android.scoreapp.calculator.CalculatorUtils
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.Locale
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -61,6 +63,26 @@ class CalculatorTest {
     @Test
     fun decimals() {
         assertEquals("12.3", CalculatorUtils.eval("10.1 + 2.2"))
+    }
+
+    @Test
+    fun localizedDecimals() = withLocale(Locale.GERMANY) {
+        assertEquals("2.5", CalculatorUtils.eval("2,5"))
+        assertEquals("4.33", CalculatorUtils.eval("3,33 + 1"))
+        assertEquals("2.5", CalculatorUtils.eval("2.5")) // A '.' is always accepted
+        assertEquals("4,33", CalculatorUtils.toDisplay("4.33"))
+        assertEquals(2.5, ScoreFormat.parse("2,5"))
+        assertEquals("3,33", ScoreFormat.format(10.0 / 3))
+    }
+
+    private fun withLocale(locale: Locale, block: () -> Unit) {
+        val original = Locale.getDefault()
+        Locale.setDefault(locale)
+        try {
+            block()
+        } finally {
+            Locale.setDefault(original)
+        }
     }
 
     @Test
