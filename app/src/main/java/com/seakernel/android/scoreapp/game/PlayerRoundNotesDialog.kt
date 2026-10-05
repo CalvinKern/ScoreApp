@@ -62,6 +62,9 @@ class PlayerRoundNotesDialog : DialogFragment() {
         }!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // Notes are only saved with the save button, so don't let a tap outside or back throw them away. The
+        // fragment controls this, setting it on the dialog builder is overridden.
+        isCancelable = false
         _binding = DialogPlayerNotesBinding.inflate(layoutInflater, null, false)
 
         binding.dialogPlayerNotesRecycler.layoutManager =
@@ -78,7 +81,6 @@ class PlayerRoundNotesDialog : DialogFragment() {
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.playerNotesTitle, player.name))
             .setView(binding.root)
-            .setCancelable(false)
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.actionSave, null)
             .create()
