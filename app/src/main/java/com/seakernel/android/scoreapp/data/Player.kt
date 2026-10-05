@@ -12,4 +12,9 @@ data class Player(
     val id: Long? = null,
     val name: String = "",
     val archived: Boolean = false
-) : Parcelable
+) : Parcelable {
+    companion object {
+        /** Alphabetical, ignoring case, so "alice" isn't listed after "Zed" */
+        val NAME_ORDER: Comparator<Player> = compareBy(String.CASE_INSENSITIVE_ORDER) { it.name }
+    }
+}

@@ -14,7 +14,7 @@ class PlayerRepository(val context: Context) {
     private val playerDao: PlayerDao = AppDatabase.getInstance(context).playerDao()
 
     fun loadAllUsers(): List<Player> {
-        return playerDao.getAll().map { Player(it.uid, it.name) }
+        return playerDao.getAll().map { Player(it.uid, it.name) }.sortedWith(Player.NAME_ORDER)
     }
 
     fun loadUsers(ids: List<Long>): List<Player> {

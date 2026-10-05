@@ -23,7 +23,7 @@ interface GameDao {
     )
     fun getAllWithRoundCount(): List<GameWithRoundCount>
 
-    @Query("SELECT ${GameEntity.COLUMN_NAME} FROM ${GameEntity.TABLE_NAME} ORDER BY ${GameEntity.COLUMN_NAME} ASC")
+    @Query("SELECT ${GameEntity.COLUMN_NAME} FROM ${GameEntity.TABLE_NAME} ORDER BY ${GameEntity.COLUMN_NAME} COLLATE NOCASE ASC")
     fun getAllNames(): List<String>
 
     @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE TRIM(${GameEntity.COLUMN_NAME}) = TRIM(:name) ORDER BY ${GameEntity.COLUMN_LAST_PLAYED} DESC LIMIT 1")

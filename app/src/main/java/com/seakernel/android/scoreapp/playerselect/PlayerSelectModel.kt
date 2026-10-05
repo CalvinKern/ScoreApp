@@ -53,6 +53,12 @@ data class CreateModel(
     }
 
     companion object {
+        /** Adds the player before the first player whose name sorts after it */
+        private fun List<Player>.insertSorted(player: Player): List<Player> {
+            val index = indexOfFirst { Player.NAME_ORDER.compare(it, player) > 0 }.let { if (it >= 0) it else size }
+            return toMutableList().apply { add(index, player) }
+        }
+
         fun createDefault(selectedPlayers: List<Long>?): CreateModel {
             return CreateModel(
                 selectedPlayerList = selectedPlayers ?: listOf()
@@ -135,36 +141,16 @@ data class CreateModel(
                     Next.next(nextModel, Effects.effects(UndoDeletePlayer(event.playerId)))
                 }
                 is PlayerNameChanged -> {
-                    val list = model.allPlayers.toMutableList()
+                    val existingPlayer = model.player(event.playerId)
+                    val player = existingPlayer?.copy(name = event.newName) ?: Player(event.playerId, event.newName)
                     val selected = model.selectedPlayerList.toMutableList()
-                    val index = list.indexOfFirst { it.id == event.playerId }
-                    var oldPlayer: Player? = null
+                    if (existingPlayer == null) selected.add(event.playerId) // New players are picked right away
 
-                    val insertIndex =
-                        list.indexOfFirst { player -> player.name > event.newName }.let {
-                            if (it >= 0) it else if (list.isNotEmpty()) list.size - 1 else 0
-                        }
-                    if (index >= 0) {
-                        oldPlayer = list.removeAt(index)
-                        list.add(insertIndex, oldPlayer.copy(name = event.newName))
-                    } else {
-                        list.add(insertIndex, Player(event.playerId, event.newName))
-                        selected.add(event.playerId)
+                    // Move the player to where the new name sorts, the same order the players are loaded in
+                    val list = model.allPlayers.filterNot { it.id == event.playerId }.insertSorted(player)
+                    val filteredList = model.filteredPlayerList.filterNot { it.id == event.playerId }.let {
+                        if (event.newName.contains(model.searchTerm, ignoreCase = true)) it.insertSorted(player) else it
                     }
-
-                    val filteredList = if (event.newName.contains(model.searchTerm)) {
-                        model.filteredPlayerList.toMutableList().also {
-                            val filteredIndex =
-                                it.indexOfFirst { player -> player.name > event.newName }
-                                    .let { index ->
-                                        if (index >= 0) index else it.size
-                                    }
-                            it.add(filteredIndex, Player(event.playerId, event.newName))
-                        }
-                    } else {
-                        model.filteredPlayerList.toMutableList()
-                    }
-                    if (oldPlayer != null) filteredList.remove(oldPlayer)
                     Next.next(
                         model.copy(
                             allPlayers = list,
