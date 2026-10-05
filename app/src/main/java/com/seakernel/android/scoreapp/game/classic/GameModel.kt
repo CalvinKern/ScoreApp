@@ -38,7 +38,7 @@ sealed class GameEffect {
     data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
     data class SaveScore(val roundId: Long, val score: Score) : GameEffect()
     data class NewGame(val gameId: Long, val initialPlayerId: Long?) : GameEffect()
-    data class ShowFinishGame(val gameId: Long) : GameEffect()
+    data object ShowFinishGame : GameEffect()
 }
 
 data class GameModel(
@@ -50,11 +50,13 @@ data class GameModel(
     val isGoalReached: Boolean = false,
 ) {
 
-    fun hasReachedGoalScore(playerId: Long): Boolean {
-        val maxScore = settings.maxScore ?: return false
-        val playerScore = playerTotals[playerId] ?: return false
-
-        return if (settings.reversedScoring) playerScore <= maxScore else playerScore >= maxScore
+    /**
+     * Whether any player's total has reached the max score. The game ends when someone reaches it
+     * in both scoring modes, reversed scoring only changes who is winning.
+     */
+    fun hasReachedGoalScore(): Boolean {
+        val maxScore = settings.maxScore?.takeIf { it > 0 } ?: return false
+        return playerTotals.values.any { it >= maxScore }
     }
 
     companion object {
@@ -102,12 +104,13 @@ data class GameModel(
         }
 
         private fun checkGoalReached(model: GameModel): Boolean {
-            val maxRounds = model.settings.maxRounds
+            // A limit of 0 would end the game before it starts, so treat it as no limit
+            val maxRounds = model.settings.maxRounds?.takeIf { it > 0 }
             if (maxRounds != null && model.rounds.size >= maxRounds) {
                 return true
             }
 
-            return model.playerTotals.keys.any { model.hasReachedGoalScore(it) }
+            return model.hasReachedGoalScore()
         }
 
         private fun updateComputedFields(model: GameModel): GameModel {
@@ -279,7 +282,7 @@ data class GameModel(
                 }
                 is GameEvent.RequestFinishGame ->
                     model.settings.id?.let {
-                        Next.dispatch(Effects.effects(GameEffect.ShowFinishGame(it)))
+                        Next.dispatch(Effects.effects(GameEffect.ShowFinishGame))
                     } ?: Next.noChange()
             }
         }

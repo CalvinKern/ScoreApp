@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.utility
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
@@ -23,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.color.MaterialColors
 import com.google.firebase.analytics.FirebaseAnalytics
-import timber.log.Timber
 
 fun AppCompatCheckBox.isCheckedSafe(
     checked: Boolean,
@@ -164,14 +164,8 @@ fun View.applyWindowInsetsNavigationMargin() {
     }
 }
 
+/** Shows the icons of the menu items in the overflow menu, which the toolbar hides by default */
+@SuppressLint("RestrictedApi") // MenuBuilder is restricted, but this is the common way to show overflow icons
 fun MaterialToolbar.setOptionalIconsVisible() {
-    try {
-        menu.javaClass.getDeclaredMethod("setOptionalIconsVisible", Boolean::class.javaPrimitiveType)
-            .apply {
-                isAccessible = true
-                invoke(menu, true)
-            }
-    } catch (t: Throwable) {
-        Timber.d(t, "Failed to set optional icons visible - in Toolbar: $title")
-    }
+    (menu as? MenuBuilder)?.setOptionalIconsVisible(true)
 }

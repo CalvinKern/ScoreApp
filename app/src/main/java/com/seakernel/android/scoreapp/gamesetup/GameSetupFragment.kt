@@ -119,6 +119,8 @@ class GameSetupFragment : Fragment() {
         _binding?.gameNameEdit?.removeTextChangedListener(nameTextWatcher)
         _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)
         _settingsBinding?.maxRoundsEdit?.removeTextChangedListener(maxRoundsTextWatcher)
+        _settingsBinding?.maxScoreEdit?.onFocusChangeListener = null
+        _settingsBinding?.maxRoundsEdit?.onFocusChangeListener = null
 
         viewModel.getGameSettings().removeObserver(modelObserver)
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
@@ -242,9 +244,10 @@ class GameSetupFragment : Fragment() {
             }
         }
 
-        // Picking a previous game name for a new game loads that game's settings and players
+        // Picking a previous game name for a new game loads that game's settings and players, as long
+        // as no players have been added yet
         binding.gameNameEdit.setOnItemClickListener { parent, _, position, _ ->
-            if (viewModel.getGameSettings().value?.id != null) return@setOnItemClickListener
+            if (!viewModel.canLoadPreviousSettings()) return@setOnItemClickListener
             if (!AppPreferences.isAutoLoadGameSettingsEnabled(requireContext())) return@setOnItemClickListener
 
             val name = parent.getItemAtPosition(position) as? String ?: return@setOnItemClickListener
@@ -253,6 +256,14 @@ class GameSetupFragment : Fragment() {
         }
 
         val settingsBinding = _settingsBinding ?: return
+
+        // The text isn't updated while a target field is being edited, so show what was actually
+        // saved once it loses focus (e.g. a typed "0" is saved as no limit, which clears the field)
+        val targetFocusListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) viewModel.getGameSettings().value?.let { renderTargetFields(it) }
+        }
+        settingsBinding.maxScoreEdit.onFocusChangeListener = targetFocusListener
+        settingsBinding.maxRoundsEdit.onFocusChangeListener = targetFocusListener
 
         setListenerRow(settingsBinding.hasDealerContainer, settingsBinding.hasDealerCheckbox)
         setListenerRow(
@@ -332,7 +343,11 @@ class GameSetupFragment : Fragment() {
             }
         }
 
-        // Update max score/rounds unless it has focus
+        renderTargetFields(settings)
+    }
+
+    /** Update max score/rounds unless they have focus (being edited) */
+    private fun renderTargetFields(settings: GameSettings) {
         if (_settingsBinding?.maxScoreEdit?.hasFocus() == false) {
             val score = settings.maxScore?.let { DecimalFormat("#.##").format(it) } ?: ""
             _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)

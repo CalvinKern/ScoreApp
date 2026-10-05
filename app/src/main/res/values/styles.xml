@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.AppTheme" parent="Theme.Material3Expressive.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
@@ -150,7 +150,8 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textAppearance">?attr/textAppearanceTitleSmall</item>
         <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:accessibilityHeading">true</item>
+        <!-- Ignored below API 28, where screen readers read it as plain text -->
+        <item name="android:accessibilityHeading" tools:targetApi="p">true</item>
     </style>
 
     <style name="AppTheme.SettingsRow">

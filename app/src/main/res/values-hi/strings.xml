@@ -27,13 +27,16 @@
     <string name="playerEmptySearchMessage">कोई भी खिलाड़ी वर्तमान खोज मापदंड से मेल नहीं खाता है। आप नीचे दिए गए + बटन पर क्लिक करके एक नया खिलाड़ी जोड़ सकते हैं!</string>
     <string name="playerEmptySearchTitle">कोई भी खिलाड़ी मैच नहीं करता</string>
     <string name="playerEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
-    <string name="playerIcon">प्लेयर आइकन</string>
-    <string name="playerStandingRoundsPlayed">%d राउंड खेले गए</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d राउंड खेला गया</item>
+        <item quantity="other">%d राउंड खेले गए</item>
+    </plurals>
     <string name="playerName">खिलाडि का नाम</string>
     <string name="playerNotesTitle">%s के लिए नोट्स</string>
     <string name="playerRoundNumberFormat">दौर %d:</string>
     <string name="playerRoundNumberHint">टिप्पणियाँ</string>
     <plurals name="playersHolder">
+        <item quantity="one">%d खिलाड़ी</item>
         <item quantity="other">%d खिलाड़ी</item>
     </plurals>
     <plurals name="roundsHolder">
@@ -51,6 +54,9 @@
     <string name="actionPlayerStanding">स्थान</string>
     <string name="copiedUrl">यूआरएल कॉपी किया गया</string>
     <string name="storeToReview">कृपया समीक्षा के लिए ऐप स्टोर खोलें</string>
+    <string name="changelogUnavailable">परिवर्तन लॉग नहीं खोला जा सका</string>
+    <string name="gameNameRequired">कृपया खेल के लिए एक नाम दर्ज करें</string>
+    <string name="gamePlayersRequired">कृपया एक खिलाड़ी जोड़ें</string>
     <string name="actionClose">बंद करे</string>
     <string name="useCalculatorDescription">कस्टम कैलकुलेटर कीबोर्ड का उपयोग करें। सक्षम नहीं होने पर सिस्टम कीबोर्ड का उपयोग करेगा।</string>
     <string name="useCalculatorTitle">कैलकुलेटर कीबोर्ड</string>

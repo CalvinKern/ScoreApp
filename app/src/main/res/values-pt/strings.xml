@@ -7,19 +7,24 @@
     <string name="reversedScoringDescription">O jogador com a menor pontuação vence, em vez de ter a maior pontuação</string>
     <plurals name="playersHolder">
         <item quantity="one">%d jogador</item>
+        <item quantity="many">%d jogadores</item>
         <item quantity="other">%d jogadores</item>
     </plurals>
     <plurals name="roundsHolder">
         <item quantity="one">%d rodada</item>
+        <item quantity="many">%d rodadas</item>
         <item quantity="other">%d rodadas</item>
     </plurals>
     <string name="lastPlayedLabel">Última partida:</string>
     <string name="playerRoundNumberHint">notas</string>
     <string name="playerRoundNumberFormat">rodada %d:</string>
     <string name="playerNotesTitle">Notas para %s</string>
-    <string name="playerStandingRoundsPlayed">%d Rondas Jogadas</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Ronda Jogada</item>
+        <item quantity="many">%d Rondas Jogadas</item>
+        <item quantity="other">%d Rondas Jogadas</item>
+    </plurals>
     <string name="playerName">Nome do jogador</string>
-    <string name="playerIcon">Ícone do jogador</string>
     <string name="playerEmptyTitle">Nenhum jogador adicionado</string>
     <string name="playerEmptySearchTitle">Nenhum jogador corresponde</string>
     <string name="playerEmptySearchMessage">Nenhum jogador corresponde aos critérios de pesquisa atuais. Você pode adicionar um novo jogador clicando no botão + abaixo!</string>
@@ -49,6 +54,9 @@
     <string name="actionEdit">Editar</string>
     <string name="copiedUrl">URL copiado</string>
     <string name="storeToReview">Abra a loja de aplicativos para deixar uma avaliação</string>
+    <string name="changelogUnavailable">Não foi possível abrir o registro de alterações</string>
+    <string name="gameNameRequired">Insira um nome para o jogo</string>
+    <string name="gamePlayersRequired">Adicione um jogador</string>
     <string name="actionClose">Perto</string>
     <string name="actionPlayerStanding">Classificação</string>
     <string name="playerStandingTitle">Classificação dos jogadores</string>

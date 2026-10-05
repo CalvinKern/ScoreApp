@@ -27,8 +27,9 @@
     <string name="playerEmptySearchMessage">Tidak ada pemain yang cocok dengan kriteria pencarian saat ini. Anda dapat menambahkan pemain baru dengan mengeklik tombol + di bawah!</string>
     <string name="playerEmptySearchTitle">Tidak ada pemain yang cocok</string>
     <string name="playerEmptyTitle">Tidak ada pemain yang ditambahkan</string>
-    <string name="playerIcon">Ikon Pemain</string>
-    <string name="playerStandingRoundsPlayed">%d Babak Dimainkan</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">%d Babak Dimainkan</item>
+    </plurals>
     <string name="playerName">Nama pemain</string>
     <string name="playerNotesTitle">Catatan untuk %s</string>
     <string name="playerRoundNumberFormat">Babak %d:</string>
@@ -47,6 +48,9 @@
     <string name="showRoundNotesTitle">Tampilkan Catatan Bulat</string>
     <string name="copiedUrl">URL disalin</string>
     <string name="storeToReview">Silakan buka toko aplikasi untuk memberi ulasan</string>
+    <string name="changelogUnavailable">Tidak dapat membuka catatan perubahan</string>
+    <string name="gameNameRequired">Silakan masukkan nama permainan</string>
+    <string name="gamePlayersRequired">Silakan tambahkan pemain</string>
     <string name="actionClose">Menutup</string>
     <string name="actionPlayerStanding">Klasemen</string>
     <string name="playerStandingTitle">Klasemen Pemain</string>

@@ -27,13 +27,16 @@
     <string name="playerEmptySearchMessage">Kein Spieler entspricht den aktuellen Suchkriterien. Sie können einen neuen Spieler hinzufügen, indem Sie auf das + unten klicken!</string>
     <string name="playerEmptySearchTitle">Keine Spieler passen zusammen</string>
     <string name="playerEmptyTitle">Keine Spieler hinzugefügt</string>
-    <string name="playerIcon">Spieler-Symbol</string>
-    <string name="playerStandingRoundsPlayed">%d Runden gespielt</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Runde gespielt</item>
+        <item quantity="other">%d Runden gespielt</item>
+    </plurals>
     <string name="playerName">Spielername</string>
     <string name="playerNotesTitle">Notizen für %s</string>
     <string name="playerRoundNumberFormat">Runde %d:</string>
     <string name="playerRoundNumberHint">Anmerkungen</string>
     <plurals name="playersHolder">
+        <item quantity="one">%d Spieler</item>
         <item quantity="other">%d Spieler</item>
     </plurals>
     <plurals name="roundsHolder">
@@ -48,6 +51,9 @@
     <string name="showRoundNotesTitle">Runde Noten anzeigen</string>
     <string name="copiedUrl">URL kopiert</string>
     <string name="storeToReview">Bitte öffnen Sie den App-Store, um eine Bewertung abzugeben</string>
+    <string name="changelogUnavailable">Das Änderungsprotokoll konnte nicht geöffnet werden</string>
+    <string name="gameNameRequired">Bitte geben Sie einen Namen für das Spiel ein</string>
+    <string name="gamePlayersRequired">Bitte fügen Sie einen Spieler hinzu</string>
     <string name="actionClose">Schließen</string>
     <string name="actionPlayerStanding">Stehen</string>
     <string name="playerStandingTitle">Spielerwertung</string>

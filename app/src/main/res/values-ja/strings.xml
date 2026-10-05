@@ -27,8 +27,9 @@
     <string name="playerEmptySearchMessage">現在の検索条件に一致する選手はありません。下の[+]ボタンを押すと、新しい選手を追加できます。</string>
     <string name="playerEmptySearchTitle">一致する選手はありません</string>
     <string name="playerEmptyTitle">選手は追加されていません</string>
-    <string name="playerIcon">選手アイコン</string>
-    <string name="playerStandingRoundsPlayed">%dラウンドプレイ済み</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">%dラウンドプレイ済み</item>
+    </plurals>
     <string name="playerName">選手の名前</string>
     <string name="playerNotesTitle">%sへのノート</string>
     <string name="playerRoundNumberFormat">ラウンド%d：</string>
@@ -50,6 +51,9 @@
     <string name="actionPlayerStanding">順位</string>
     <string name="copiedUrl">コピーしたURL</string>
     <string name="storeToReview">レビューするにはアプリストアを開いてください</string>
+    <string name="changelogUnavailable">変更履歴を開けませんでした</string>
+    <string name="gameNameRequired">ゲーム名を入力してください</string>
+    <string name="gamePlayersRequired">プレイヤーを追加してください</string>
     <string name="actionClose">閉じる</string>
     <string name="useCalculatorDescription">カスタム電卓キーボードを使用します。 有効になっていない場合は、システムキーボードを使用します。</string>
     <string name="useCalculatorTitle">電卓キーボード</string>

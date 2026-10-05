@@ -9,7 +9,6 @@ import android.view.WindowManager
 import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.data.GameSettings
@@ -18,6 +17,7 @@ import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.databinding.FragmentGameBinding
 import com.seakernel.android.scoreapp.game.DeleteRoundDialog
+import com.seakernel.android.scoreapp.game.FinishGameDialog
 import com.seakernel.android.scoreapp.game.PlayerRoundNotesDialog
 import com.seakernel.android.scoreapp.game.PlayerStandingDialog
 import com.seakernel.android.scoreapp.repository.GameRepository
@@ -153,6 +153,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
                         listener?.onGraphSelected(gameId)
                     }
+                }
+                REQUEST_FINISH_GAME -> {
+                    arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
+                        showStandingDialog(gameId)
+                    }
+                }
+                REQUEST_CONTINUE_GAME -> {
+                    eventConsumer?.accept(GameEvent.RequestCreateRound)
                 }
             }
         }
@@ -332,7 +340,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                 val model = lastModel ?: return
 
-                if (model.hasReachedGoalScore(leadId)) {
+                if (model.hasReachedGoalScore()) {
                     lastCelebratedPlayerId = leadId
 
                     val adapter = binding.totalsRow.adapter as? TotalsAdapter
@@ -430,16 +438,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                     is GameEffect.ShowFinishGame -> {
                         lifecycleScope.launch(Dispatchers.Main) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(R.string.finishGameTitle)
-                                .setMessage(R.string.finishGameConfirmation)
-                                .setPositiveButton(R.string.finish) { _, _ ->
-                                    showStandingDialog(effect.gameId)
-                                }
-                                .setNegativeButton(R.string.continuePlaying) { _, _ ->
-                                    eventConsumer.accept(GameEvent.RequestCreateRound)
-                                }
-                                .show()
+                            if (parentFragmentManager.isStateSaved) return@launch
+                            FinishGameDialog.newInstance()
+                                .show(parentFragmentManager, FinishGameDialog::class.java.name)
                         }
                     }
                 }.hashCode() // Exhaustive call
@@ -461,8 +462,16 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         const val REQUEST_DELETE_ROUND = "DELETE_ROUND"
         const val REQUEST_NEW_GAME = "NEW_GAME"
         const val REQUEST_CHART = "CHART"
+        const val REQUEST_FINISH_GAME = "FINISH_GAME"
+        const val REQUEST_CONTINUE_GAME = "CONTINUE_GAME"
 
-        val requests = listOf(REQUEST_DELETE_ROUND, REQUEST_NEW_GAME, REQUEST_CHART)
+        val requests = listOf(
+            REQUEST_DELETE_ROUND,
+            REQUEST_NEW_GAME,
+            REQUEST_CHART,
+            REQUEST_FINISH_GAME,
+            REQUEST_CONTINUE_GAME,
+        )
 
         fun newInstance(gameId: Long): GameFragment {
             val fragment = GameFragment()

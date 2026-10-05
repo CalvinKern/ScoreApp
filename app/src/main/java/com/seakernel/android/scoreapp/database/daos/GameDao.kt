@@ -11,8 +11,17 @@ import com.seakernel.android.scoreapp.database.entities.ScoreEntity
  */
 @Dao
 interface GameDao {
-    @Query("SELECT * FROM ${GameEntity.TABLE_NAME} ORDER BY ${GameEntity.COLUMN_LAST_PLAYED} DESC")
-    fun getAll(): List<GameEntity>
+    @Query(
+        """
+        SELECT ${GameEntity.TABLE_NAME}.*, (
+            SELECT COUNT(*) FROM ${RoundEntity.TABLE_NAME}
+            WHERE ${RoundEntity.TABLE_NAME}.${RoundEntity.COLUMN_GAME_ID} = ${GameEntity.TABLE_NAME}.${GameEntity.COLUMN_ID}
+        ) AS ${GameWithRoundCount.COLUMN_ROUND_COUNT}
+        FROM ${GameEntity.TABLE_NAME}
+        ORDER BY ${GameEntity.COLUMN_LAST_PLAYED} DESC
+    """
+    )
+    fun getAllWithRoundCount(): List<GameWithRoundCount>
 
     @Query("SELECT ${GameEntity.COLUMN_NAME} FROM ${GameEntity.TABLE_NAME} ORDER BY ${GameEntity.COLUMN_NAME} ASC")
     fun getAllNames(): List<String>
@@ -61,5 +70,17 @@ interface GameDao {
 
         @Relation(parentColumn = RoundEntity.COLUMN_ID, entityColumn = ScoreEntity.COLUMN_ROUND_ID)
         lateinit var scores: List<ScoreEntity>
+    }
+
+    class GameWithRoundCount {
+        @Embedded
+        lateinit var game: GameEntity
+
+        @ColumnInfo(name = COLUMN_ROUND_COUNT)
+        var roundCount: Int = 0
+
+        companion object {
+            const val COLUMN_ROUND_COUNT = "round_count"
+        }
     }
 }

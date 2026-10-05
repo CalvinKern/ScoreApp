@@ -27,8 +27,9 @@
     <string name="playerEmptySearchMessage">沒有玩家符合當前的搜索條件。 您可以點擊下面的+按鈕來添加新的播放器！</string>
     <string name="playerEmptySearchTitle">沒有球員比賽</string>
     <string name="playerEmptyTitle">未添加玩家</string>
-    <string name="playerIcon">播放器圖標</string>
-    <string name="playerStandingRoundsPlayed">已進行 %d 輪</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">已進行 %d 輪</item>
+    </plurals>
     <string name="playerName">選手姓名</string>
     <string name="playerNotesTitle">%s的註釋</string>
     <string name="playerRoundNumberFormat">第%d回合</string>
@@ -47,6 +48,9 @@
     <string name="showRoundNotesTitle">顯示回合筆記</string>
     <string name="copiedUrl">已複製連結</string>
     <string name="storeToReview">請開啟應用程式商店進行評分</string>
+    <string name="changelogUnavailable">無法開啟更新日誌</string>
+    <string name="gameNameRequired">請輸入遊戲名稱</string>
+    <string name="gamePlayersRequired">請新增玩家</string>
     <string name="actionClose">關</string>
     <string name="actionPlayerStanding">站立</string>
     <string name="playerStandingTitle">球員站立</string>

@@ -19,6 +19,9 @@ fun Fragment.rateApp() {
     val manager = ReviewManagerFactory.create(requireContext())
     val reviewRequest = manager.requestReviewFlow()
     reviewRequest.addOnCompleteListener { request ->
+        // The request is async, so the user may have left the screen before it completes
+        if (!isAdded) return@addOnCompleteListener
+
         if (request.isSuccessful) {
             // We got the ReviewInfo object
             val reviewInfo = request.result
@@ -40,7 +43,7 @@ fun Fragment.rateApp() {
 
 fun Fragment.openChangelog() {
     logEvent(AnalyticsConstants.Event.SHOW_CHANGELOG)
-    openUrl("https://github.com/CalvinKern/ScoreApp/releases", R.string.incomplete)
+    openUrl("https://github.com/CalvinKern/ScoreApp/releases", R.string.changelogUnavailable)
 }
 
 private fun Fragment.openPlayStore() {
@@ -49,6 +52,7 @@ private fun Fragment.openPlayStore() {
 }
 
 private fun Fragment.openUrl(url: String, errorStringResource: Int, intentPackage: String? = null) {
+    val context = context ?: return
     val intent = Intent(Intent.ACTION_VIEW).apply {
         data = url.toUri()
         intentPackage?.let { setPackage(it) }
@@ -58,16 +62,16 @@ private fun Fragment.openUrl(url: String, errorStringResource: Int, intentPackag
         startActivity(intent)
     } catch (_: Exception) {
         val clipboard: ClipboardManager? =
-            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
 
         if (clipboard == null) {
-            Toast.makeText(requireContext(), errorStringResource, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, errorStringResource, Toast.LENGTH_SHORT).show()
         } else {
             clipboard.setPrimaryClip(ClipData.newPlainText("", url))
 
             // Only show a toast for Android 12 and lower
             if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.S_V2) {
-                Toast.makeText(requireContext(), R.string.copiedUrl, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.copiedUrl, Toast.LENGTH_SHORT).show()
             }
         }
     }

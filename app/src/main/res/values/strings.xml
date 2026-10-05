@@ -17,6 +17,7 @@
     <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
     <string name="copiedUrl">Copied URL</string>
     <string name="storeToReview">Please open the app store to review</string>
+    <string name="changelogUnavailable">Unable to open the changelog</string>
 
     <!--Common Actions-->
     <string name="actionClose">Close</string>
@@ -68,7 +69,6 @@
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>
     <string name="playerCreateTitle">New Player</string>
-    <string name="playerIcon">Player Icon</string>
     <string name="playerEmptyTitle">No players added</string>
     <string name="playerEmptyMessage">Start by clicking the + button down below to add a new player!</string>
     <string name="playerEmptySearchTitle">No players match</string>
@@ -97,7 +97,10 @@
     <!--Player Standing Dialog-->
     <string name="playerStandingTitle">Player Standings</string>
     <string name="playerStanding">#%d</string>
-    <string name="playerStandingRoundsPlayed">%d Rounds Played</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Round Played</item>
+        <item quantity="other">%d Rounds Played</item>
+    </plurals>
 
     <!--Player dialog-->
     <string name="playerName">Player Name</string>

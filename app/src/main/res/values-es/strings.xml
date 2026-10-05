@@ -27,18 +27,23 @@
     <string name="playerEmptySearchMessage">Ningún jugador coincide con el criterio de búsqueda actual. ¡Puedes agregar un nuevo jugador haciendo clic en el botón + a continuación!</string>
     <string name="playerEmptySearchTitle">Ningún jugador coincide</string>
     <string name="playerEmptyTitle">No se agregaron jugadores</string>
-    <string name="playerIcon">Ícono de jugador</string>
-    <string name="playerStandingRoundsPlayed">%d Rondas Jugadas</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Ronda Jugada</item>
+        <item quantity="many">%d Rondas Jugadas</item>
+        <item quantity="other">%d Rondas Jugadas</item>
+    </plurals>
     <string name="playerName">Nombre del jugador</string>
     <string name="playerNotesTitle">Notas para %s</string>
     <string name="playerRoundNumberFormat">Ronda %d:</string>
     <string name="playerRoundNumberHint">Notas</string>
     <plurals name="playersHolder">
         <item quantity="one">%d jugador</item>
+        <item quantity="many">%d jugadores</item>
         <item quantity="other">%d jugadores</item>
     </plurals>
     <plurals name="roundsHolder">
         <item quantity="one">%d ronda</item>
+        <item quantity="many">%d rondas</item>
         <item quantity="other">%d rondas</item>
     </plurals>
     <string name="lastPlayedLabel">Última partida:</string>
@@ -49,6 +54,9 @@
     <string name="showRoundNotesTitle">Mostrar notas redondas</string>
     <string name="copiedUrl">URL copiado</string>
     <string name="storeToReview">Abra la tienda de aplicaciones para dejar una reseña</string>
+    <string name="changelogUnavailable">No se pudo abrir el registro de cambios</string>
+    <string name="gameNameRequired">Introduzca un nombre para el juego</string>
+    <string name="gamePlayersRequired">Agregue un jugador</string>
     <string name="actionClose">Cerca</string>
     <string name="actionPlayerStanding">Posiciones</string>
     <string name="playerStandingTitle">Posiciones de los jugadores</string>

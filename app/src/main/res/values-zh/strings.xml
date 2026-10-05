@@ -27,8 +27,9 @@
     <string name="playerEmptySearchMessage">没有玩家符合当前的搜索条件。 您可以点击下面的+按钮来添加新的播放器！</string>
     <string name="playerEmptySearchTitle">没有球员比赛</string>
     <string name="playerEmptyTitle">未添加玩家</string>
-    <string name="playerIcon">播放器图标</string>
-    <string name="playerStandingRoundsPlayed">已进行 %d 轮</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">已进行 %d 轮</item>
+    </plurals>
     <string name="playerName">选手姓名</string>
     <string name="playerNotesTitle">%s的注释</string>
     <string name="playerRoundNumberHint">笔记</string>
@@ -50,6 +51,9 @@
     <string name="actionPlayerStanding">站立</string>
     <string name="copiedUrl">已复制网址</string>
     <string name="storeToReview">请打开应用商店进行评价</string>
+    <string name="changelogUnavailable">无法打开更新日志</string>
+    <string name="gameNameRequired">请输入游戏名称</string>
+    <string name="gamePlayersRequired">请添加玩家</string>
     <string name="actionClose">关</string>
     <string name="useCalculatorDescription">使用自定义计算器键盘。 如果未启用，将使用系统键盘。</string>
     <string name="useCalculatorTitle">计算器键盘</string>

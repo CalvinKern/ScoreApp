@@ -27,18 +27,23 @@
     <string name="playerEmptySearchMessage">Aucun joueur ne correspond aux critères de recherche actuels. Vous pouvez ajouter un nouveau joueur en cliquant sur le bouton + ci-dessous!</string>
     <string name="playerEmptySearchTitle">Aucun joueur ne correspond</string>
     <string name="playerEmptyTitle">Aucun joueur ajouté</string>
-    <string name="playerIcon">Icône de joueur</string>
-    <string name="playerStandingRoundsPlayed">%d Manches Jouées</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Manche Jouée</item>
+        <item quantity="many">%d Manches Jouées</item>
+        <item quantity="other">%d Manches Jouées</item>
+    </plurals>
     <string name="playerName">Nom de joueur</string>
     <string name="playerNotesTitle">Remarques pour %s</string>
     <string name="playerRoundNumberFormat">Tour %d:</string>
     <string name="playerRoundNumberHint">Remarques</string>
     <plurals name="playersHolder">
         <item quantity="one">%d joueur</item>
+        <item quantity="many">%d joueurs</item>
         <item quantity="other">%d joueurs</item>
     </plurals>
     <plurals name="roundsHolder">
         <item quantity="one">%d manche</item>
+        <item quantity="many">%d manches</item>
         <item quantity="other">%d manches</item>
     </plurals>
     <string name="lastPlayedLabel">Dernière partie :</string>
@@ -52,6 +57,9 @@
     <string name="actionPlayerStanding">Classement</string>
     <string name="copiedUrl">URL copiée</string>
     <string name="storeToReview">Veuillez ouvrir la boutique d’applications pour laisser un avis</string>
+    <string name="changelogUnavailable">Impossible d’ouvrir le journal des modifications</string>
+    <string name="gameNameRequired">Veuillez saisir un nom pour la partie</string>
+    <string name="gamePlayersRequired">Veuillez ajouter un joueur</string>
     <string name="actionClose">Fermer</string>
     <string name="useCalculatorDescription">Utilisez le clavier personnalisé de la calculatrice. Utilisera le clavier système s\'il n\'est pas activé.</string>
     <string name="useCalculatorTitle">Clavier de la calculatrice</string>

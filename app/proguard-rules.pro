@@ -27,6 +27,3 @@
 -keep public class * extends androidx.fragment.app.Fragment {
     public <init>();
 }
-
-#-keep class android.support.v7.view.menu.MenuBuilder {*;} -keep class com.android.view.menu.MenuBuilder {*;}
--keep class androidx.appcompat.view.menu.MenuBuilder {*;}

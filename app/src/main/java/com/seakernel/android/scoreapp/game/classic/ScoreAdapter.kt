@@ -149,11 +149,7 @@ class TotalsAdapter(
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
         val playerId = players[position].id ?: return
         val score = playerTotals[playerId] ?: 0.0
-        holder.bindTotal(
-            score,
-            leadPlayerIds.contains(playerId),
-            false,
-        )
+        holder.bindTotal(score, leadPlayerIds.contains(playerId))
     }
 
     fun getPlayerPosition(playerId: Long): Int {
@@ -363,11 +359,7 @@ class ScoreViewHolder(
         _focusedScoreId = null
     }
 
-    fun bindTotal(
-        score: Double,
-        isLeader: Boolean,
-        showKonfetti: Boolean,
-    ) {
+    fun bindTotal(score: Double, isLeader: Boolean) {
         binding.playerScore.isEnabled = false
         binding.playerScore.isFocusable = false
 
@@ -376,11 +368,6 @@ class ScoreViewHolder(
             binding.playerScore.setTextColor(
                 itemView.context.themeColor(R.attr.colorOnSurface)
             )
-            if (showKonfetti) {
-                itemView.post {
-                    (itemView.context as? ConfettiHost)?.celebrateFrom(binding.playerScore)
-                }
-            }
         } else {
             binding.playerBorder.setBackgroundResource(0)
             binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))

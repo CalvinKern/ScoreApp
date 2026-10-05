@@ -27,8 +27,11 @@
     <string name="playerEmptySearchMessage">Niciun jucător nu corespunde criteriilor de căutare actuale. Puteți adăuga un jucător nou, făcând clic pe butonul + de mai jos!</string>
     <string name="playerEmptySearchTitle">Nu se potrivesc jucători</string>
     <string name="playerEmptyTitle">Nu s-au adăugat jucători</string>
-    <string name="playerIcon">Pictograma jucătorului</string>
-    <string name="playerStandingRoundsPlayed">%d Runde Jucate</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Rundă Jucată</item>
+        <item quantity="few">%d Runde Jucate</item>
+        <item quantity="other">%d de Runde Jucate</item>
+    </plurals>
     <string name="playerName">Numele jucatorului</string>
     <string name="playerNotesTitle">Note pentru %s</string>
     <string name="playerRoundNumberFormat">Runda %d:</string>
@@ -54,6 +57,9 @@
     <string name="actionPlayerStanding">Clasamente</string>
     <string name="copiedUrl">URL copiat</string>
     <string name="storeToReview">Deschideți magazinul de aplicații pentru a lăsa o recenzie</string>
+    <string name="changelogUnavailable">Nu s-a putut deschide jurnalul de modificări</string>
+    <string name="gameNameRequired">Introduceți un nume pentru joc</string>
+    <string name="gamePlayersRequired">Adăugați un jucător</string>
     <string name="actionClose">Închide</string>
     <string name="useCalculatorDescription">Utilizați tastatura calculatorului personalizată. Va folosi tastatura de sistem dacă nu este activată.</string>
     <string name="useCalculatorTitle">Tastatură Calculator</string>

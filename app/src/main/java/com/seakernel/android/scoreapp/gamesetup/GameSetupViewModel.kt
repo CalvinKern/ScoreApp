@@ -74,12 +74,13 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     @MainThread
     fun setMaxScore(maxScore: Double?) {
-        gameSettings.value = gameSettings.value!!.copy(maxScore = maxScore)
+        // A limit of 0 would end the game before it starts, so treat it as no limit
+        gameSettings.value = gameSettings.value!!.copy(maxScore = maxScore?.takeIf { it > 0 })
     }
 
     @MainThread
     fun setMaxRounds(maxRounds: Int?) {
-        gameSettings.value = gameSettings.value!!.copy(maxRounds = maxRounds)
+        gameSettings.value = gameSettings.value!!.copy(maxRounds = maxRounds?.takeIf { it > 0 })
     }
 
     fun saveGame() {
@@ -169,17 +170,18 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     /**
      * Load the settings and players from the most recently played game with the given name into the
-     * new game being set up. Games that already exist are never changed.
+     * new game being set up. Games that already exist are never changed, and neither is a setup
+     * that already has players, so nothing the user picked gets overwritten.
      */
     fun loadPreviousSettings(name: String) {
-        if (gameSettings.value?.id != null) return
+        if (!canLoadPreviousSettings()) return
 
         scope.launch {
             val previous = gameRepository.loadMostRecentGame(name) ?: return@launch
             withContext(Dispatchers.Main) {
                 val current = gameSettings.value ?: GameSettings()
-                // Re-check in case the game was saved while loading
-                if (current.id != null) return@withContext
+                // Re-check in case the game was saved or players were added while loading
+                if (!canLoadPreviousSettings(current)) return@withContext
 
                 gameSettings.value = previous.copy(
                     id = null,
@@ -189,6 +191,10 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
+
+    /** Previous settings only load into a new game that has no players yet */
+    fun canLoadPreviousSettings(settings: GameSettings? = gameSettings.value) =
+        settings?.id == null && settings?.players.isNullOrEmpty()
 
     @MainThread
     fun initializeGame() {
