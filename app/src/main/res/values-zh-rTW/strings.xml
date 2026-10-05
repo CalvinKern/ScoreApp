@@ -91,4 +91,5 @@
     <string name="settingsPrivacyHeader">隱私權</string>
     <string name="settingsShareDataTitle">分享使用情況資料</string>
     <string name="settingsShareDataSummary">傳送使用情況統計資料以協助改善應用程式。我們絕不會分享名稱和分數。</string>
+    <string name="navigateUp">向上瀏覽</string>
 </resources>

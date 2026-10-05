@@ -94,4 +94,5 @@
     <string name="settingsPrivacyHeader">Datenschutz</string>
     <string name="settingsShareDataTitle">Nutzungsdaten teilen</string>
     <string name="settingsShareDataSummary">Nutzungsstatistiken senden, um die App zu verbessern. Namen und Punktzahlen werden nie geteilt.</string>
+    <string name="navigateUp">Nach oben</string>
 </resources>

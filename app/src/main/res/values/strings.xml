@@ -22,6 +22,7 @@
 
     <!--Common Actions-->
     <string name="actionClose">Close</string>
+    <string name="navigateUp">Navigate up</string>
     <string name="actionSave">Save</string>
     <string name="actionEdit">Edit</string>
     <string name="actionSearch">Search</string>

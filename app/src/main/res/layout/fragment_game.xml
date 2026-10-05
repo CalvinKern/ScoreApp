@@ -21,6 +21,7 @@
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:navigationIcon="?attr/homeAsUpIndicator"
+            app:navigationContentDescription="@string/navigateUp"
             />
 
         <!-- Scrolls together with the score table when there are too many players to fit (see GameFragment) -->

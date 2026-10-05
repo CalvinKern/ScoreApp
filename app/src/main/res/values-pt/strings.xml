@@ -97,4 +97,5 @@
     <string name="settingsPrivacyHeader">Privacidade</string>
     <string name="settingsShareDataTitle">Compartilhar dados de uso</string>
     <string name="settingsShareDataSummary">Enviar estatísticas de uso para ajudar a melhorar o aplicativo. Nomes e pontuações nunca são compartilhados.</string>
+    <string name="navigateUp">Navegar para cima</string>
 </resources>

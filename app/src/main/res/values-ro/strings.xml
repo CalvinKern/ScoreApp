@@ -97,4 +97,5 @@
     <string name="settingsPrivacyHeader">Confidențialitate</string>
     <string name="settingsShareDataTitle">Partajați datele de utilizare</string>
     <string name="settingsShareDataSummary">Trimiteți statistici de utilizare pentru a ajuta la îmbunătățirea aplicației. Numele și scorurile nu sunt partajate niciodată.</string>
+    <string name="navigateUp">Navigați în sus</string>
 </resources>

@@ -91,4 +91,5 @@
     <string name="settingsPrivacyHeader">プライバシー</string>
     <string name="settingsShareDataTitle">使用状況データを共有</string>
     <string name="settingsShareDataSummary">アプリの改善のために使用状況の統計を送信します。名前とスコアが共有されることはありません。</string>
+    <string name="navigateUp">上へ移動</string>
 </resources>
