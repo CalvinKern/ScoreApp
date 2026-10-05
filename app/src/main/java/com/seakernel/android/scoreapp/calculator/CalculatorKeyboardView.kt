@@ -206,6 +206,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorEditIndex = inputView?.selectionStart ?: calculatorEditIndex
 
         val failure = !appendToString(key)
+
+        // Equals saves the score and clears focus, after which the cell shows the saved score instead
+        if (inputView?.hasFocus() != true) return
         inputChangedListener?.invoke(calculatorString, failure)
     }
 
@@ -264,7 +267,8 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
         return (computeString() != null).also { validEquation ->
             calculatorFailed = !validEquation
-            inputView?.error =
+            // A cell that lost focus (after equals) shows its saved score, including any mistake, instead
+            inputView?.takeIf { it.hasFocus() }?.error =
                 if (calculatorFailed && key == resources.getString(R.string.equals)) {
                     resources.getString(R.string.incomplete)
                 } else {

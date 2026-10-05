@@ -138,7 +138,8 @@ class GameRepository(val context: Context) {
                 score.id,
                 player,
                 score.score,
-                score.scoreData
+                score.scoreData,
+                score.scoreInput,
             )
         }
     }

@@ -40,12 +40,11 @@ interface RoundDao {
     @Query(
         """
         UPDATE ${ScoreEntity.TABLE_NAME}
-        SET ${ScoreEntity.COLUMN_SCORE} = :score
+        SET ${ScoreEntity.COLUMN_SCORE} = :score, ${ScoreEntity.COLUMN_SCORE_INPUT} = :input
         WHERE ${ScoreEntity.COLUMN_ID} = :id
-        
     """
     )
-    fun updateScore(id: Long, score: Double)
+    fun updateScore(id: Long, score: Double, input: String?)
 
     @Query(
         """

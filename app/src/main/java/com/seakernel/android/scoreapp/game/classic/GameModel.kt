@@ -25,7 +25,7 @@ sealed class GameEvent {
         val roundId: Long,
         val playerId: Long,
         val score: Double,
-        val metadata: String
+        val input: String?,
     ) : GameEvent()
 
     data class ScoreFocused(val scoreId: Long) : GameEvent()
@@ -259,7 +259,7 @@ data class GameModel(
                 is GameEvent.UpdateScore -> {
                     val round = model.rounds.firstOrNull { it.id == event.roundId }
                     val score = round?.scores?.firstOrNull { it.player.id == event.playerId }
-                        ?.copy(value = event.score)
+                        ?.copy(value = event.score, input = event.input)
 
                     if (score != null) {
                         Next.dispatch(

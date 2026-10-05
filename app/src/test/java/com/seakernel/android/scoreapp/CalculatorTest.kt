@@ -105,4 +105,18 @@ class CalculatorTest {
         assertEquals(null, CalculatorUtils.eval("1..0"))
         assertEquals(null, CalculatorUtils.eval("1.2.3"))
     }
+
+    @Test
+    fun nonFiniteResultsAreErrors() {
+        assertEquals(null, CalculatorUtils.eval("5 / 0"))
+        assertEquals(null, CalculatorUtils.eval("0 / 0"))
+        assertEquals(null, CalculatorUtils.eval("-5 / 0"))
+    }
+
+    @Test
+    fun largeResultsCanBeReadBack() {
+        assertEquals("3000000000", CalculatorUtils.eval("3000000000"))
+        assertEquals("6000000000", CalculatorUtils.eval("3000000000 x 2"))
+        assertEquals("3000000000.5", CalculatorUtils.eval("3000000000.5"))
+    }
 }

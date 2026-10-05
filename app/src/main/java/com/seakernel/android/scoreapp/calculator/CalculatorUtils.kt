@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.calculator
 import android.content.Context
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.utility.ScoreFormat
+import kotlin.math.abs
 import kotlin.math.pow
 
 /**
@@ -20,6 +21,8 @@ object CalculatorUtils {
     const val MULTIPLY = 'x'
     const val DIVIDE = '/'
     const val EXPONENT = '^'
+
+    private const val MAX_WHOLE_NUMBER = 1e18
 
     // Doesn't quite work, splitting by regex will remove the matched patterns
     private val CALCULATOR_REGEX = Regex("(\\d*\\.?\\d+)(?![\\d*\\.?])|([()])|([+\\-x/])(?![+\\-x/])|\\s")
@@ -140,10 +143,26 @@ object CalculatorUtils {
             }
         }.parse() ?: return null
 
-        return if (output.toInt() - output == 0.0) {
-            output.toInt().toString()
+        // Infinity (dividing by zero) and NaN (0/0) aren't scores, so treat them like an incomplete equation
+        if (!output.isFinite()) return null
+
+        // Whole numbers drop the decimal, as a Long so large numbers don't overflow. Others avoid scientific
+        // notation (e.g. "3.0E9"), which can't be read back.
+        return if (output % 1.0 == 0.0 && abs(output) < MAX_WHOLE_NUMBER) {
+            output.toLong().toString()
         } else {
-            output.toString()
+            output.toBigDecimal().toPlainString()
         }
     }
+
+    /**
+     * Converts typed input into the form scores store it in: [DECIMAL] for decimals, [MULTIPLY] for
+     * multiplication, and no spaces. This keeps stored input readable after the language changes.
+     */
+    fun toCanonicalInput(input: String, context: Context): String =
+        normalizeDecimal(sanitize(input, context)).filterNot { it.isWhitespace() }
+
+    /** Shows stored input the way the user types it, the reverse of [toCanonicalInput] */
+    fun toDisplayInput(canonicalInput: String, context: Context): String =
+        toDisplay(canonicalInput).replace(MULTIPLY.toString(), context.getString(R.string.multiply))
 }

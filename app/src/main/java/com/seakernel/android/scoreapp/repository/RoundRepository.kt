@@ -60,7 +60,7 @@ class RoundRepository(val context: Context) {
     }
 
     fun updateScore(score: Score): Score {
-        roundDao.updateScore(score.id, score.value)
+        roundDao.updateScore(score.id, score.value, score.input)
         roundDao.updateLastPlayedForScore(
             score.id,
             ZonedDateTime.now().format(GameSettings.DATE_FORMATTER)
@@ -89,7 +89,8 @@ class RoundRepository(val context: Context) {
                 it.player.id!!,
                 round.id,
                 it.value,
-                it.metadata
+                it.metadata,
+                it.input,
             )
         }.toTypedArray())
         return round.copy()
@@ -113,6 +114,7 @@ class RoundRepository(val context: Context) {
                 roundId,
                 it.value,
                 it.metadata,
+                it.input,
             )
         }.toTypedArray())
         return round.copy(

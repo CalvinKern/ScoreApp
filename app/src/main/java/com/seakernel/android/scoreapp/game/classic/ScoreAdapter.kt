@@ -222,6 +222,13 @@ class ScoreViewHolder(
     private var _focusedScoreId: Long? = null
     private var _isGoalReached: Boolean = false
 
+    /** The text shown and the score saved when the cell gained focus, so unchanged text never rewrites the score */
+    private var textOnFocus: String? = null
+    private var scoreOnFocus: Score? = null
+
+    /** Text set by the app (instead of typed) shouldn't be saved as a new score */
+    private var isSettingText = false
+
     fun bind(
         hasDealer: Boolean,
         useCalculator: Boolean,
@@ -259,16 +266,15 @@ class ScoreViewHolder(
         }
 
         if (!binding.playerScore.hasFocus()) {
-            // Hack to get score view to stay selected on next focus after an update occurs
-            binding.playerScore.setText(formatScore(score.value))
+            // Leave the text alone while it's being edited
+            showSavedScore(score)
         }
         binding.playerScore.isEnabled = true
         binding.playerScore.isFocusable = true
-        binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
         binding.playerScore.setOnEditorActionListener { _, code, _ ->
             when (code) {
                 CalculatorKeyboardView.KEYCODE_EQUALS -> {
-                    updateScore(eventConsumer, round, score)
+                    updateScore(commit = true)
                     binding.playerScore.clearFocus()
                 }
                 CalculatorKeyboardView.KEYCODE_NEXT -> {
@@ -287,17 +293,15 @@ class ScoreViewHolder(
         }
 
         binding.playerScore.setOnFocusChangeListener { _, hasFocus ->
-            val scoreId = _score?.id ?: return@setOnFocusChangeListener
-            val scoreValue = _score?.value ?: return@setOnFocusChangeListener
+            val focusedScore = _score ?: return@setOnFocusChangeListener
+            val scoreId = focusedScore.id
 
             if (!hasFocus) {
-                updateScore(
-                    _eventConsumer,
-                    _round ?: return@setOnFocusChangeListener,
-                    _score ?: return@setOnFocusChangeListener,
-                )
+                updateScore(commit = true)
                 binding.playerScore.error = null // Clear error state when losing focus
-                binding.playerScore.setText(formatScore(scoreValue))
+                textOnFocus = null
+                scoreOnFocus = null
+                showSavedScore(focusedScore)
 
                 // Notify Mobius that focus is lost so we don't "sticky focus" on scroll back
                 if (scoreId == _focusedScoreId) {
@@ -305,7 +309,16 @@ class ScoreViewHolder(
                     _eventConsumer?.accept(GameEvent.ScoreFocusLost(scoreId))
                 }
             } else {
-                // Newly gained focus = open calculator/keyboard
+                // Show what was typed (e.g. "10/3") so it can be edited, instead of the rounded score
+                val editText = editableText(focusedScore)
+                textOnFocus = editText
+                scoreOnFocus = focusedScore
+                setScoreText(editText)
+                binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
+                // Start at the end of the score (makes quick edits/additions easier), tapping moves the cursor
+                binding.playerScore.setSelection(editText.length)
+
+                // Newly gained focus = open calculator/keyboard, which starts from the text set above
                 showCalculatorKeyboardCallback?.invoke(binding.playerScore)
 
                 if (scoreId != _focusedScoreId) {
@@ -316,13 +329,6 @@ class ScoreViewHolder(
                             _eventConsumer?.accept(GameEvent.ScoreFocused(scoreId))
                         }
                     }
-                }
-
-                // Set the selection to the end of the score (makes quick edits/additions easier)
-                if (scoreValue == 0.0) {
-                    binding.playerScore.setText(R.string.emptyString)
-                } else {
-                    binding.playerScore.setSelection(binding.playerScore.text.length)
                 }
             }
         }
@@ -359,6 +365,8 @@ class ScoreViewHolder(
         _round = null
         _eventConsumer = null
         _focusedScoreId = null
+        textOnFocus = null
+        scoreOnFocus = null
     }
 
     fun bindTotal(score: Double, isLeader: Boolean) {
@@ -367,36 +375,79 @@ class ScoreViewHolder(
 
         if (isLeader) {
             binding.playerBorder.setBackgroundResource(R.drawable.border_winner)
-            binding.playerScore.setTextColor(
-                itemView.context.themeColor(R.attr.colorOnSurface)
-            )
         } else {
             binding.playerBorder.setBackgroundResource(0)
-            binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
         }
-        binding.playerScore.setText(formatScore(score))
+        binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
+        setScoreText(formatScore(score))
     }
 
     private fun formatScore(score: Double) = ScoreFormat.format(score)
 
-    private fun updateScore(eventConsumer: Consumer<GameEvent>?, round: Round, score: Score) {
-        val updatedScore = if (binding.playerScore.text.isNotBlank()) {
-            CalculatorUtils.eval(binding.playerScore.text.toString(), itemView.context)
-                ?.toDoubleOrNull()
-                ?: score.value
+    private fun setScoreText(text: CharSequence) {
+        isSettingText = true
+        binding.playerScore.setText(text)
+        isSettingText = false
+    }
+
+    /**
+     * Shows the saved score, or what was typed when it couldn't be calculated (e.g. dividing by zero). Those are
+     * saved as 0, and showing the input in the error color makes the mistake easy to spot and fix.
+     */
+    private fun showSavedScore(score: Score) {
+        val input = score.input
+        val hasInvalidInput = input != null && CalculatorUtils.eval(input) == null
+        if (hasInvalidInput) {
+            setScoreText(CalculatorUtils.toDisplayInput(input, itemView.context))
+            binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorError))
         } else {
-            0.0
+            setScoreText(formatScore(score.value))
+            binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
+        }
+    }
+
+    /** The text to edit: what was typed for the score, or the score itself for scores saved before input was kept */
+    private fun editableText(score: Score): String = when {
+        score.input != null -> CalculatorUtils.toDisplayInput(score.input, itemView.context)
+        score.value == 0.0 -> ""
+        else -> formatScore(score.value)
+    }
+
+    /**
+     * Saves the typed text as the score.
+     *
+     * @param commit whether editing is done. While typing, an incomplete calculation keeps the previous score.
+     * Once done, a calculation that can't be completed is saved as 0, keeping the input so it can be fixed.
+     */
+    private fun updateScore(commit: Boolean) {
+        val round = _round ?: return
+        val score = _score ?: return
+        val text = binding.playerScore.text.toString()
+        val originalScore = scoreOnFocus
+
+        val (value, input) = if (originalScore != null && text == textOnFocus) {
+            // Back to what was shown, so keep what was saved instead of reading back the rounded text
+            originalScore.value to originalScore.input
+        } else if (text.isBlank()) {
+            0.0 to null
+        } else {
+            val typedInput = CalculatorUtils.toCanonicalInput(text, itemView.context)
+            val result = CalculatorUtils.eval(typedInput)?.toDoubleOrNull()
+            when {
+                result != null -> result to typedInput
+                commit -> 0.0 to typedInput
+                else -> return // Still typing
+            }
         }
 
-        if (score.value == updatedScore) return
+        if (score.value == value && score.input == input) return
 
-        // Update the score
-        eventConsumer?.accept(
+        _eventConsumer?.accept(
             GameEvent.UpdateScore(
                 round.id!!,
                 score.player.id!!,
-                updatedScore,
-                score.metadata
+                value,
+                input,
             )
         )
     }
@@ -421,10 +472,8 @@ class ScoreViewHolder(
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
     override fun afterTextChanged(s: Editable?) {
-        _round?.let { round ->
-            _score?.let { score ->
-                updateScore(_eventConsumer, round, score)
-            }
-        }
+        // Only text typed into the focused cell is a new score, and it updates the total immediately
+        if (isSettingText || !binding.playerScore.hasFocus()) return
+        updateScore(commit = false)
     }
 }
