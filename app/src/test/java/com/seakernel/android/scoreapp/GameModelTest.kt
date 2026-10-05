@@ -152,4 +152,13 @@ class GameModelTest {
         assertFalse(next.hasModel())
         assertTrue(next.effects().isEmpty())
     }
+
+    @Test
+    fun requestNewGameWithoutPlayersHasNoNextDealer() {
+        // Every player was deleted, so the rounds have no scores left
+        val model = loadGame(settings().copy(players = emptyList(), initialDealerId = null), emptyList())
+        val next = GameModel.update(model, GameEvent.RequestNewGame)
+
+        assertEquals(setOf(GameEffect.NewGame(1, null)), next.effects())
+    }
 }

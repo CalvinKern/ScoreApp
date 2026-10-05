@@ -3,12 +3,16 @@ package com.seakernel.android.scoreapp.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withStarted
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
 import com.spotify.mobius.Mobius
 import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.Update
 import com.spotify.mobius.functions.Consumer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Fragments that inherit from this will have to provide initialization for a MobiusLoop.Builder and a
@@ -54,6 +58,17 @@ abstract class MobiusFragment<M, E, F> : Fragment() {
     abstract fun initMobius(model: M): First<M, F>
     abstract fun connectViews(eventConsumer: Consumer<E>): Connection<M>
     abstract fun effectHandler(eventConsumer: Consumer<E>): Connection<F>
+
+    /**
+     * Effect handlers run on a background thread, so UI work (like navigation or dialogs) has to move to the
+     * main thread. It waits until the fragment is started, so fragment transactions can't happen after the
+     * state is saved, and is dropped if the fragment is destroyed first.
+     */
+    protected fun runWhenStarted(block: () -> Unit) {
+        lifecycleScope.launch(Dispatchers.Main) {
+            lifecycle.withStarted { block() }
+        }
+    }
 
     /** Builds the loop so that errors in [update] or [effectHandler] are reported instead of silently dropped */
     protected fun createLoop(update: Update<M, E, F>): MobiusLoop.Builder<M, E, F> =

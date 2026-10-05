@@ -50,6 +50,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         fun onGameSettingsSelected(gameId: Long)
         fun onGraphSelected(gameId: Long)
         fun onNewGame(gameId: Long, initialDealerId: Long?)
+        fun onGameHasNoPlayers(gameId: Long)
     }
 
     private var listener: GameListener? = null
@@ -386,7 +387,10 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     is GameEffect.FetchData -> {
                         val gameId = arguments?.getLong(ARG_GAME_ID, 0) ?: 0
                         gameRepository?.loadFullGame(gameId)?.let { game ->
-                            if (game.rounds.isEmpty()) {
+                            if (game.settings.players.isEmpty()) {
+                                // Every player in the game was deleted, so it needs new players before it can be played
+                                runWhenStarted { listener?.onGameHasNoPlayers(gameId) }
+                            } else if (game.rounds.isEmpty()) {
                                 // If we load a game that has no rounds, we need to fix it
                                 roundRepository?.addOrUpdateRound(gameId, createFirstRound(game))
                                     ?.let { round ->

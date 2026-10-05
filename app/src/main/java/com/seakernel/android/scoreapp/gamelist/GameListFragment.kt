@@ -37,6 +37,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     interface GameListListener {
         fun onShowGameScreen(gameId: Long)
+        fun onShowGameSetupScreen(gameId: Long)
         fun onShowCreateGameScreen()
         fun onShowSettingsScreen()
     }
@@ -156,6 +157,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 when (effect) {
                     is ListEffect.ShowCreateGameScreen -> listener?.onShowCreateGameScreen()
                     is ListEffect.ShowGameScreen -> listener?.onShowGameScreen(effect.gameId)
+                    is ListEffect.ShowGameSetupScreen -> runWhenStarted { listener?.onShowGameSetupScreen(effect.gameId) }
                     is ListEffect.ShowGameRowDialog -> {
                         showDeleteGameDialog(eventConsumer, effect.gameId)
                     }

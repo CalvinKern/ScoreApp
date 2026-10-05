@@ -91,6 +91,19 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
         showFragment(GameFragment.newInstance(gameId), GameFragment::class.java.name)
     }
 
+    override fun onShowGameSetupScreen(gameId: Long) {
+        showFragment(
+            GameSetupFragment.newInstance(gameId, openGameOnSave = true),
+            GameSetupFragment::class.java.name
+        )
+    }
+
+    override fun onGameHasNoPlayers(gameId: Long) {
+        // Swap the unplayable game for its setup, which opens the game again once players are added
+        popBackStackIfFound(GameFragment::class)
+        onShowGameSetupScreen(gameId)
+    }
+
     override fun onShowCreateGameScreen() {
         showFragment(GameSetupFragment.newInstance(), GameSetupFragment::class.java.name)
     }

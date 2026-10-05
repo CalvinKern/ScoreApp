@@ -54,7 +54,13 @@ class GameSetupFragment : Fragment() {
     private var maxScoreTextWatcher: TextWatcher? = null
     private var maxRoundsTextWatcher: TextWatcher? = null
 
-    private val gameUpdatedObserver = Observer<Long> { listener?.onGameUpdated() }
+    private val gameUpdatedObserver = Observer<Long> { gameId ->
+        if (arguments?.getBoolean(ARG_OPEN_GAME_ON_SAVE) == true) {
+            listener?.onShowGameScreen(gameId)
+        } else {
+            listener?.onGameUpdated()
+        }
+    }
     private val gameCreatedObserver =
         Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
     private val saveObserver =
@@ -397,12 +403,18 @@ class GameSetupFragment : Fragment() {
         private const val ARG_GAME_ID = "game_id"
         private const val ARG_GAME_COPY = "game_id_copy"
         private const val ARG_GAME_INITIAL_DEALER_ID = "initial_dealer_id"
+        private const val ARG_OPEN_GAME_ON_SAVE = "open_game_on_save"
 
-        fun newInstance(gameId: Long? = null): GameSetupFragment {
+        /**
+         * @param openGameOnSave show the game once it's saved instead of going back, used when a game has to
+         * be set up again before it can be played (e.g. all of its players were deleted)
+         */
+        fun newInstance(gameId: Long? = null, openGameOnSave: Boolean = false): GameSetupFragment {
             return GameSetupFragment().apply {
                 gameId?.let {
                     arguments = Bundle().apply {
                         putLong(ARG_GAME_ID, it)
+                        putBoolean(ARG_OPEN_GAME_ON_SAVE, openGameOnSave)
                     }
                 }
             }

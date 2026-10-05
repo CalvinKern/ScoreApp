@@ -124,6 +124,8 @@ data class GameModel(
             if (model.rounds.isEmpty()) return null
 
             val lastRound = model.rounds.last()
+            if (lastRound.scores.isEmpty()) return null // No players left in the game
+
             val nextIndex =
                 (lastRound.scores.indexOfFirst { it.player == lastRound.dealer } + 1) % lastRound.scores.size
             return lastRound.scores[nextIndex].player

@@ -21,6 +21,7 @@ sealed class ListEvent {
 sealed class ListEffect {
     data object ShowCreateGameScreen : ListEffect()
     data class ShowGameScreen(val gameId: Long) : ListEffect()
+    data class ShowGameSetupScreen(val gameId: Long) : ListEffect()
     data class ShowGameRowDialog(val gameId: Long) : ListEffect()
     data class ShowDeleteSnackbar(val gameId: Long, val gameName: String?) : ListEffect()
     data object FetchData : ListEffect()
@@ -41,7 +42,16 @@ data class ListModel(
                 is ListEvent.Loaded -> Next.next(model.copy(gameList = event.games, isLoading = false))
                 is ListEvent.LoadData -> Next.next(model.copy(isLoading = true), Effects.effects(ListEffect.FetchData))
                 is ListEvent.AddGameClicked -> Next.dispatch(Effects.effects(ListEffect.ShowCreateGameScreen))
-                is ListEvent.GameRowClicked -> Next.dispatch(Effects.effects(ListEffect.ShowGameScreen(event.gameId)))
+                is ListEvent.GameRowClicked -> {
+                    // A game whose players were all deleted can't be played, so set up its players first
+                    val hasNoPlayers = model.gameList.find { it.id == event.gameId }?.players?.isEmpty() == true
+                    val effect = if (hasNoPlayers) {
+                        ListEffect.ShowGameSetupScreen(event.gameId)
+                    } else {
+                        ListEffect.ShowGameScreen(event.gameId)
+                    }
+                    Next.dispatch(Effects.effects(effect))
+                }
                 is ListEvent.GameRowLongPressed -> Next.dispatch(Effects.effects(ListEffect.ShowGameRowDialog(event.gameId)))
                 is ListEvent.GameDeleteSuccessful -> {
                     val name = model.gameList.find { it.id == event.gameId }?.name
