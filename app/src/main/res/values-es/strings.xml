@@ -105,4 +105,5 @@
     <string name="calculatorNextDescription">Siguiente</string>
     <string name="calculatorMultiplyDescription">Multiplicar</string>
     <string name="calculatorDivideDescription">Dividir</string>
+    <string name="editPlayer">Editar a %s</string>
 </resources>

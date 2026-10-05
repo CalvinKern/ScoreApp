@@ -106,6 +106,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         // Setup views
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_player_select)
+        (binding.toolbar.menu.findItem(R.id.actionSearch).actionView as? SearchView)?.queryHint =
+            getString(R.string.playerName)
         binding.toolbar.setOptionalIconsVisible()
         binding.playerRecycler.layoutManager = LinearLayoutManager(requireContext())
 

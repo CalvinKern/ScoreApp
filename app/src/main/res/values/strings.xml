@@ -119,6 +119,8 @@
 
     <!--Player dialog-->
     <string name="playerName">Player Name</string>
+    <!-- Spoken by screen readers for the edit button next to a player, e.g. "Edit Alice" -->
+    <string name="editPlayer">Edit %s</string>
 
     <!--Game List Delete Dialog-->
     <string name="deleteGameConfirmation">Do you want to delete this game?</string>

@@ -99,4 +99,5 @@
     <string name="calculatorNextDescription">Berikutnya</string>
     <string name="calculatorMultiplyDescription">Kali</string>
     <string name="calculatorDivideDescription">Bagi</string>
+    <string name="editPlayer">Edit %s</string>
 </resources>

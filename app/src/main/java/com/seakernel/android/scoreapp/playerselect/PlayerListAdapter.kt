@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.playerselect
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.HolderPlayerSelectListBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
@@ -54,6 +55,8 @@ class PlayerListViewHolder(parent: ViewGroup) :
 
     fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<PlayerEvent>) {
         binding.playerNameHolder.text = player.name
+        binding.playerNameSettings.contentDescription =
+            itemView.context.getString(R.string.editPlayer, player.name)
 
         binding.playerCheckHolder.setOnCheckedChangeListener(null)
         binding.playerCheckHolder.isChecked = isSelected

@@ -99,4 +99,5 @@
     <string name="calculatorNextDescription">下一個</string>
     <string name="calculatorMultiplyDescription">乘</string>
     <string name="calculatorDivideDescription">除</string>
+    <string name="editPlayer">編輯%s</string>
 </resources>
