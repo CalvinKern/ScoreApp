@@ -79,7 +79,7 @@ class RoundRepository(val context: Context) {
             RoundEntity(
                 round.id!!,
                 gameId,
-                round.dealer?.id ?: 0,
+                round.dealer?.id, // No dealer is stored as null, 0 would break the players foreign key
                 round.number
             )
         )
@@ -101,7 +101,7 @@ class RoundRepository(val context: Context) {
                 RoundEntity(
                     0,
                     gameId,
-                    round.dealer?.id ?: 0,
+                    round.dealer?.id, // No dealer is stored as null, 0 would break the players foreign key
                     round.number
                 )
             )
