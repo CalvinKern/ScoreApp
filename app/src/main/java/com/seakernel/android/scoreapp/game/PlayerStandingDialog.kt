@@ -63,8 +63,10 @@ class PlayerStandingDialog : DialogFragment() {
             }
             .create()
 
+        // The context can't be read off the main thread, the dialog may have closed by then
+        val appContext = requireContext().applicationContext
         lifecycleScope.launch(Dispatchers.IO) {
-            val game = GameRepository(requireContext()).loadFullGame(gameId)
+            val game = GameRepository(appContext).loadFullGame(gameId) ?: return@launch
             val scoreMap = mutableMapOf<Long, Double>()
             game.rounds.forEach { round ->
                 round.scores.forEach { score ->

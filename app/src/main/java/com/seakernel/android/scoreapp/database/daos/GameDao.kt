@@ -46,7 +46,7 @@ interface GameDao {
 
     @Transaction
     @Query("SELECT * FROM ${GameEntity.TABLE_NAME} WHERE ${GameEntity.COLUMN_ID}=:gameId")
-    fun getFullGame(gameId: Long): FullGameEntity
+    fun getFullGame(gameId: Long): FullGameEntity? // Null when the game was deleted
 
     @Transaction
     @Query("SELECT * FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID}=:gameId")

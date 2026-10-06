@@ -202,17 +202,14 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
             override fun accept(effect: PlayerEffect) {
                 when (effect) {
-                    is ShowPlayerNameDialog -> {
-                        view?.post {
-                            if (!isDisposed) {
-                                showPlayerNameDialog(eventConsumer, effect) { isDisposed }
-                            }
-                        }
+                    // Effects run in the background, so anything touching the screen moves to the main thread
+                    is ShowPlayerNameDialog -> runWhenStarted {
+                        if (!isDisposed) showPlayerNameDialog(eventConsumer, effect) { isDisposed }
                     }
                     is ShowDeletePlayerSnackbar -> {
                         playerRepository?.deleteUser(effect.playerId)
                         eventConsumer.accept(PlayerDeleteSuccessful(effect.playerId))
-                        showDeletePlayerSnackbar(eventConsumer, effect) { isDisposed }
+                        runWhenStarted { showDeletePlayerSnackbar(eventConsumer, effect) { isDisposed } }
                     }
                     is UndoDeletePlayer -> {
                         playerRepository?.undoDelete(effect.playerId)
@@ -229,7 +226,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                             )
                         )
                     }
-                    is DoneSelectingPlayers -> listener?.onPlayersSelected(effect.playerIds)
+                    is DoneSelectingPlayers -> runWhenStarted { listener?.onPlayersSelected(effect.playerIds) }
                 }
             }
 

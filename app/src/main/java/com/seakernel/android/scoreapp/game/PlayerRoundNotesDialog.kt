@@ -71,8 +71,10 @@ class PlayerRoundNotesDialog : DialogFragment() {
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
         binding.dialogPlayerNotesRecycler.adapter = adapter
 
+        // The context can't be read off the main thread, the dialog may have closed by then
+        val appContext = requireContext().applicationContext
         lifecycleScope.launch(Dispatchers.IO) {
-            val roundNotes = RoundRepository(requireContext()).getNotesForPlayer(player, gameId)
+            val roundNotes = RoundRepository(appContext).getNotesForPlayer(player, gameId)
             withContext(Dispatchers.Main) {
                 adapter.setNotes(roundNotes)
             }
@@ -98,9 +100,10 @@ class PlayerRoundNotesDialog : DialogFragment() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         (dialog as? AlertDialog)?.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
+            val appContext = requireContext().applicationContext
             lifecycleScope.launch(Dispatchers.IO) {
                 val playerRounds = adapter.playerRounds
-                RoundRepository(requireContext()).updatePlayerNotes(playerRounds)
+                RoundRepository(appContext).updatePlayerNotes(playerRounds)
                 withContext(Dispatchers.Main) {
                     dialog?.dismiss()
                 }

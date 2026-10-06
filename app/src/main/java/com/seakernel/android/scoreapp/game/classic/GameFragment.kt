@@ -293,8 +293,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     private fun showRoundDeleteDialog(gameId: Long) {
         logEvent(AnalyticsConstants.Event.SHOW_ROUND_DELETE_DIALOG)
+        val appContext = requireContext().applicationContext // Can't be read off the main thread
         lifecycleScope.launch(Dispatchers.IO) {
-            val ids = RoundRepository(requireContext()).getRoundIds(gameId)
+            val ids = RoundRepository(appContext).getRoundIds(gameId)
             withContext(Dispatchers.Main) {
                 val dialog = DeleteRoundDialog.newInstance(ids)
                 dialog.show(parentFragmentManager, DeleteRoundDialog::class.java.name)
@@ -483,31 +484,23 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 when (effect) {
                     is GameEffect.FetchData -> {
                         val gameId = arguments?.getLong(ARG_GAME_ID, 0) ?: 0
-                        gameRepository?.loadFullGame(gameId)?.let { game ->
-                            if (game.settings.players.isEmpty()) {
-                                // Every player in the game was deleted, so it needs new players before it can be played
-                                runWhenStarted { listener?.onGameHasNoPlayers(gameId) }
-                            } else if (game.rounds.isEmpty()) {
-                                // If we load a game that has no rounds, we need to fix it
-                                roundRepository?.addOrUpdateRound(gameId, createFirstRound(game))
-                                    ?.let { round ->
-                                        eventConsumer.accept(
-                                            GameEvent.Loaded(
-                                                game.copy(
-                                                    settings = game.settings,
-                                                    rounds = listOf(round)
-                                                )
-                                            )
-                                        )
-                                    }
-                                    ?: requireActivity().onBackPressedDispatcher.onBackPressed() // TODO: Handle finding game better
-                            } else {
-                                eventConsumer.accept(
-                                    GameEvent.Loaded(game)
-                                )
-                            }
+                        val repository = gameRepository ?: return // The screen closed before the game loaded
+                        val game = repository.loadFullGame(gameId)
+                        when {
+                            // The game was deleted, so there's nothing to show
+                            game == null -> runWhenStarted { requireActivity().onBackPressedDispatcher.onBackPressed() }
+
+                            // Every player in the game was deleted, so it needs new players before it can be played
+                            game.settings.players.isEmpty() -> runWhenStarted { listener?.onGameHasNoPlayers(gameId) }
+
+                            // If we load a game that has no rounds, we need to fix it
+                            game.rounds.isEmpty() ->
+                                roundRepository?.addOrUpdateRound(gameId, createFirstRound(game))?.let { round ->
+                                    eventConsumer.accept(GameEvent.Loaded(game.copy(rounds = listOf(round))))
+                                }
+
+                            else -> eventConsumer.accept(GameEvent.Loaded(game))
                         }
-                            ?: requireActivity().onBackPressedDispatcher.onBackPressed() // TODO: Handle error finding game better
                     }
 
                     is GameEffect.SaveRound -> {
@@ -531,17 +524,14 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         }
                     }
 
-                    is GameEffect.NewGame -> {
+                    is GameEffect.NewGame -> runWhenStarted {
                         listener?.onNewGame(effect.gameId, effect.initialPlayerId)
                         logEvent(AnalyticsConstants.Event.NEW_GAME_CLICKED)
                     }
 
-                    is GameEffect.ShowFinishGame -> {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            if (parentFragmentManager.isStateSaved) return@launch
-                            FinishGameDialog.newInstance()
-                                .show(parentFragmentManager, FinishGameDialog::class.java.name)
-                        }
+                    is GameEffect.ShowFinishGame -> runWhenStarted {
+                        FinishGameDialog.newInstance()
+                            .show(parentFragmentManager, FinishGameDialog::class.java.name)
                     }
                 }.hashCode() // Exhaustive call
             }

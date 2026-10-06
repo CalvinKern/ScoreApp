@@ -155,12 +155,11 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         return object : Connection<ListEffect> {
             override fun accept(effect: ListEffect) {
                 when (effect) {
-                    is ListEffect.ShowCreateGameScreen -> listener?.onShowCreateGameScreen()
-                    is ListEffect.ShowGameScreen -> listener?.onShowGameScreen(effect.gameId)
+                    // Effects run in the background, so anything touching the screen moves to the main thread
+                    is ListEffect.ShowCreateGameScreen -> runWhenStarted { listener?.onShowCreateGameScreen() }
+                    is ListEffect.ShowGameScreen -> runWhenStarted { listener?.onShowGameScreen(effect.gameId) }
                     is ListEffect.ShowGameSetupScreen -> runWhenStarted { listener?.onShowGameSetupScreen(effect.gameId) }
-                    is ListEffect.ShowGameRowDialog -> {
-                        showDeleteGameDialog(eventConsumer, effect.gameId)
-                    }
+                    is ListEffect.ShowGameRowDialog -> runWhenStarted { showDeleteGameDialog(eventConsumer, effect.gameId) }
                     is ListEffect.ShowDeleteSnackbar -> {
                         // TODO: Show a snackbar with an undo for deleted games in a future release. Games are deleted
                         //  right away for now, so undo needs a delay or a way to restore the game first.
@@ -182,15 +181,14 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private fun showDeleteGameDialog(eventConsumer: Consumer<ListEvent>, gameId: Long) {
-        view?.post {
-            val builder = MaterialAlertDialogBuilder(requireContext())
-            builder.setMessage(R.string.deleteGameConfirmation)
-                .setPositiveButton(R.string.delete) { _, _ ->
-                    deleteGameAsync(eventConsumer, gameId)
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-            builder.create().show()
-        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.deleteGameConfirmation)
+            .setPositiveButton(R.string.delete) { _, _ ->
+                deleteGameAsync(eventConsumer, gameId)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+            .show()
     }
 
     private fun deleteGameAsync(eventConsumer: Consumer<ListEvent>, gameId: Long) {

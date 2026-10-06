@@ -32,7 +32,7 @@ class GraphViewModel(application: Application) : AndroidViewModel(application) {
         if (gameData.value?.settings?.id == gameId && !forceRefresh) return
 
         scope.launch {
-            gameRepository.loadFullGame(gameId).let {
+            gameRepository.loadFullGame(gameId)?.let {
                 gameData.safePostValue(it)
             }
         }

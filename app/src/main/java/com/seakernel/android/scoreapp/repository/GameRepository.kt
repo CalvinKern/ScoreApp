@@ -35,8 +35,9 @@ class GameRepository(val context: Context) {
         return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
     }
 
-    fun loadFullGame(gameId: Long): Game {
-        val fullGame = gameDao.getFullGame(gameId)
+    /** @return the game with its rounds, or null when it was deleted */
+    fun loadFullGame(gameId: Long): Game? {
+        val fullGame = gameDao.getFullGame(gameId) ?: return null
         val game = convertToGame(fullGame.game)
         return Game(game, convertToRounds(game, fullGame.rounds))
     }
