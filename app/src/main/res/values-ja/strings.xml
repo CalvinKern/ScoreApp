@@ -100,4 +100,5 @@
     <string name="calculatorMultiplyDescription">掛ける</string>
     <string name="calculatorDivideDescription">割る</string>
     <string name="editPlayer">%sを編集</string>
+    <string name="deleteFailed">削除できませんでした</string>
 </resources>

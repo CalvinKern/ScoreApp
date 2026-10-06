@@ -103,4 +103,5 @@
     <string name="calculatorMultiplyDescription">गुणा करें</string>
     <string name="calculatorDivideDescription">भाग दें</string>
     <string name="editPlayer">%s संपादित करें</string>
+    <string name="deleteFailed">हटाना विफल रहा</string>
 </resources>

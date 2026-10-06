@@ -106,4 +106,5 @@
     <string name="calculatorMultiplyDescription">Multiplicar</string>
     <string name="calculatorDivideDescription">Dividir</string>
     <string name="editPlayer">Editar a %s</string>
+    <string name="deleteFailed">No se pudo eliminar</string>
 </resources>

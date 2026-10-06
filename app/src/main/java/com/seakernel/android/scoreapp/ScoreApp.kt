@@ -28,10 +28,9 @@ class ScoreApp : Application() {
                 .build()
         )
 
+        // Logs only in debug builds, release builds report errors through Crashlytics instead
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        } else {
-            Timber.plant(Timber.DebugTree()) // Just use the debug tree as the production one for now
         }
     }
 }

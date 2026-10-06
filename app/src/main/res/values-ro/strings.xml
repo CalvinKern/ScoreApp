@@ -106,4 +106,5 @@
     <string name="calculatorMultiplyDescription">Înmulțire</string>
     <string name="calculatorDivideDescription">Împărțire</string>
     <string name="editPlayer">Editați %s</string>
+    <string name="deleteFailed">Ștergerea a eșuat</string>
 </resources>

@@ -21,7 +21,6 @@ import nl.dionsegijn.konfetti.core.Position
 import nl.dionsegijn.konfetti.core.emitter.Emitter
 import nl.dionsegijn.konfetti.core.models.Shape
 import nl.dionsegijn.konfetti.core.models.Size
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
@@ -146,7 +145,6 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
 
     // TODO: make first param generic (inheriting from fragment) so that it can be used to generate the tag without resolving the super classes name
     private fun showFragment(fragment: Fragment, tag: String) {
-        Timber.i("Showing fragment: $tag")
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragmentContainer, fragment, tag)

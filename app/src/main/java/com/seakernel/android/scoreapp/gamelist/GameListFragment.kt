@@ -162,6 +162,8 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                         showDeleteGameDialog(eventConsumer, effect.gameId)
                     }
                     is ListEffect.ShowDeleteSnackbar -> {
+                        // TODO: Show a snackbar with an undo for deleted games in a future release. Games are deleted
+                        //  right away for now, so undo needs a delay or a way to restore the game first.
                     }
                     is ListEffect.FetchData -> {
                         eventConsumer.accept(
@@ -199,8 +201,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 if (deleted == true) {
                     eventConsumer.accept(ListEvent.GameDeleteSuccessful(gameId))
                 } else {
-                    // TODO: Show error, shouldn't happen, but why not catch it?
-                    Toast.makeText(requireContext(), R.string.delete, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.deleteFailed, Toast.LENGTH_SHORT).show()
                 }
             }
         }

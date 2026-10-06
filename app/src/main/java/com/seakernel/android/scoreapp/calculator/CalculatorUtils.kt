@@ -75,10 +75,7 @@ object CalculatorUtils {
             fun parse(): Double? {
                 nextChar()
                 val x = parseExpression()
-                if (pos < str.length) {
-                    println("Unexpected: ${ch.toChar()}")
-                    return null
-                }
+                if (pos < str.length) return null // Characters were left over that couldn't be parsed
                 return x
             }
 
@@ -129,14 +126,10 @@ object CalculatorUtils {
 //                            "sin" -> sin(Math.toRadians(x))
 //                            "cos" -> cos(Math.toRadians(x))
 //                            "tan" -> tan(Math.toRadians(x))
-//                            else -> {
-//                                println("Unknown function: $func")
-//                                return null
-//                            }
+//                            else -> return null // Unknown function
 //                        }
                 } else {
-                    println("Unexpected: ${ch.toChar()} ($ch)")
-                    return null
+                    return null // Not a number or an opening parenthesis
                 }
                 if (eat(EXPONENT.code)) x = x.pow(parseFactor() ?: return null) // exponentiation
                 return x

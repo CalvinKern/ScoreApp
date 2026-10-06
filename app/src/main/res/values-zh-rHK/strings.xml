@@ -100,4 +100,5 @@
     <string name="calculatorMultiplyDescription">乘</string>
     <string name="calculatorDivideDescription">除</string>
     <string name="editPlayer">編輯%s</string>
+    <string name="deleteFailed">刪除失敗</string>
 </resources>

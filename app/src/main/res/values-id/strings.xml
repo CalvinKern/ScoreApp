@@ -100,4 +100,5 @@
     <string name="calculatorMultiplyDescription">Kali</string>
     <string name="calculatorDivideDescription">Bagi</string>
     <string name="editPlayer">Edit %s</string>
+    <string name="deleteFailed">Gagal menghapus</string>
 </resources>
