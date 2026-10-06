@@ -104,4 +104,9 @@
     <string name="calculatorDivideDescription">Dividieren</string>
     <string name="editPlayer">%s bearbeiten</string>
     <string name="deleteFailed">Löschen fehlgeschlagen</string>
+    <string name="calculatorOpenParenDescription">Klammer auf</string>
+    <string name="calculatorCloseParenDescription">Klammer zu</string>
+    <string name="calculatorDecimalDescription">Komma</string>
+    <string name="calculatorMinusDescription">Minus</string>
+    <string name="calculatorEqualsDescription">Gleich</string>
 </resources>

@@ -107,4 +107,9 @@
     <string name="calculatorDivideDescription">Împărțire</string>
     <string name="editPlayer">Editați %s</string>
     <string name="deleteFailed">Ștergerea a eșuat</string>
+    <string name="calculatorOpenParenDescription">Paranteză deschisă</string>
+    <string name="calculatorCloseParenDescription">Paranteză închisă</string>
+    <string name="calculatorDecimalDescription">Virgulă</string>
+    <string name="calculatorMinusDescription">Minus</string>
+    <string name="calculatorEqualsDescription">Egal</string>
 </resources>

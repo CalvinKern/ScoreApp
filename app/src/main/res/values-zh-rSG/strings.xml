@@ -101,4 +101,9 @@
     <string name="calculatorDivideDescription">除</string>
     <string name="editPlayer">编辑%s</string>
     <string name="deleteFailed">删除失败</string>
+    <string name="calculatorOpenParenDescription">左括号</string>
+    <string name="calculatorCloseParenDescription">右括号</string>
+    <string name="calculatorDecimalDescription">小数点</string>
+    <string name="calculatorMinusDescription">减</string>
+    <string name="calculatorEqualsDescription">等于</string>
 </resources>

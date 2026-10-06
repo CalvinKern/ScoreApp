@@ -101,4 +101,9 @@
     <string name="calculatorDivideDescription">Bagi</string>
     <string name="editPlayer">Edit %s</string>
     <string name="deleteFailed">Gagal menghapus</string>
+    <string name="calculatorOpenParenDescription">Kurung buka</string>
+    <string name="calculatorCloseParenDescription">Kurung tutup</string>
+    <string name="calculatorDecimalDescription">Koma desimal</string>
+    <string name="calculatorMinusDescription">Kurang</string>
+    <string name="calculatorEqualsDescription">Sama dengan</string>
 </resources>

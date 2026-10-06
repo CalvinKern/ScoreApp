@@ -99,6 +99,11 @@
     <string name="calculatorNextDescription">Next</string>
     <string name="calculatorMultiplyDescription">Multiply</string>
     <string name="calculatorDivideDescription">Divide</string>
+    <string name="calculatorOpenParenDescription">Open parenthesis</string>
+    <string name="calculatorCloseParenDescription">Close parenthesis</string>
+    <string name="calculatorDecimalDescription">Decimal point</string>
+    <string name="calculatorMinusDescription">Minus</string>
+    <string name="calculatorEqualsDescription">Equals</string>
 
     <!--Graph Screen-->
     <string name="graphByRoundsLabel">Score by rounds</string>

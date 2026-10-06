@@ -104,4 +104,9 @@
     <string name="calculatorDivideDescription">भाग दें</string>
     <string name="editPlayer">%s संपादित करें</string>
     <string name="deleteFailed">हटाना विफल रहा</string>
+    <string name="calculatorOpenParenDescription">कोष्ठक खोलें</string>
+    <string name="calculatorCloseParenDescription">कोष्ठक बंद करें</string>
+    <string name="calculatorDecimalDescription">दशमलव</string>
+    <string name="calculatorMinusDescription">घटाएं</string>
+    <string name="calculatorEqualsDescription">बराबर</string>
 </resources>

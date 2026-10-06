@@ -107,4 +107,9 @@
     <string name="calculatorDivideDescription">Dividir</string>
     <string name="editPlayer">Editar a %s</string>
     <string name="deleteFailed">No se pudo eliminar</string>
+    <string name="calculatorOpenParenDescription">Abrir paréntesis</string>
+    <string name="calculatorCloseParenDescription">Cerrar paréntesis</string>
+    <string name="calculatorDecimalDescription">Separador decimal</string>
+    <string name="calculatorMinusDescription">Menos</string>
+    <string name="calculatorEqualsDescription">Igual</string>
 </resources>

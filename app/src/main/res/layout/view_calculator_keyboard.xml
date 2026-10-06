@@ -26,12 +26,14 @@
     <Button
         android:id="@+id/calculatorKeyOpenParen"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorOpenParenDescription"
         android:text="@string/open_paren"
         />
 
     <Button
         android:id="@+id/calculatorKeyCloseParen"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorCloseParenDescription"
         android:text="@string/close_paren"
         />
 
@@ -62,6 +64,7 @@
     <Button
         android:id="@+id/calculatorKeyMinus"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorMinusDescription"
         android:text="@string/minus"
         />
 
@@ -114,12 +117,14 @@
     <Button
         android:id="@+id/calculatorKeyDecimal"
         style="@style/AppTheme.CalculatorButton"
+        android:contentDescription="@string/calculatorDecimalDescription"
         android:text="@string/decimal"
         />
 
     <Button
         android:id="@+id/calculatorKeyEquals"
         style="@style/AppTheme.CalculatorButton.Action"
+        android:contentDescription="@string/calculatorEqualsDescription"
         android:text="@string/equals"
         />
 

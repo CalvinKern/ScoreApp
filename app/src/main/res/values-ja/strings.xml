@@ -101,4 +101,9 @@
     <string name="calculatorDivideDescription">割る</string>
     <string name="editPlayer">%sを編集</string>
     <string name="deleteFailed">削除できませんでした</string>
+    <string name="calculatorOpenParenDescription">左かっこ</string>
+    <string name="calculatorCloseParenDescription">右かっこ</string>
+    <string name="calculatorDecimalDescription">小数点</string>
+    <string name="calculatorMinusDescription">マイナス</string>
+    <string name="calculatorEqualsDescription">イコール</string>
 </resources>
