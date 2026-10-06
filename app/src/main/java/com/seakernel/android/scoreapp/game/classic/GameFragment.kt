@@ -61,7 +61,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
     // The number of players the score table is sized for
     private var tablePlayerCount = 0
-    private var isTableScrollable = false
 
     private var _binding: FragmentGameBinding? = null
 
@@ -238,25 +237,42 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         // Scaled by the font scale directly, since large sp values barely grow with nonlinear font scaling
         val minColumnWidth = MIN_COLUMN_WIDTH_DP * resources.displayMetrics.density * resources.configuration.fontScale
         val tableWidth = max(screenWidth, (tablePlayerCount * minColumnWidth).toInt())
-        val isScrollable = tableWidth > screenWidth
-        if (isScrollable != isTableScrollable) {
-            isTableScrollable = isScrollable
-            binding.scoreRows.adapter?.let { it.notifyItemChanged(it.itemCount - 1) } // Realign the add round button
-        }
         listOf(binding.nameRow, binding.scoreRows, binding.totalsRow).forEach { row ->
             if (row.layoutParams.width != tableWidth) {
                 row.updateLayoutParams { width = tableWidth }
             }
         }
+        centerAddRoundButton()
     }
 
-    /** Keeps the name row and the score table scrolled to the same players */
+    /**
+     * How far the add round button moves from the middle of the table to be in the middle of the screen. Only a
+     * table wider than the screen moves it, following the sideways scroll.
+     */
+    private fun addRoundButtonOffset(): Float {
+        val binding = _binding ?: return 0f
+        val scroll = binding.scoreScroll
+        val screenWidth = scroll.width - scroll.paddingLeft - scroll.paddingRight
+        val tableWidth = binding.scoreRows.layoutParams.width
+        if (screenWidth <= 0 || tableWidth <= screenWidth) return 0f
+        return scroll.scrollX + screenWidth / 2f - tableWidth / 2f
+    }
+
+    private fun centerAddRoundButton() {
+        val rows = _binding?.scoreRows ?: return
+        val lastPosition = (rows.adapter?.itemCount ?: return) - 1
+        (rows.findViewHolderForAdapterPosition(lastPosition) as? AddRoundViewHolder)
+            ?.setHorizontalOffset(addRoundButtonOffset())
+    }
+
+    /** Keeps the name row and the score table scrolled to the same players, with the add round button centered */
     private fun syncHorizontalScroll(first: View, second: View) {
         first.setOnScrollChangeListener { _, scrollX, _, _, _ ->
             if (second.scrollX != scrollX) second.scrollTo(scrollX, 0)
         }
         second.setOnScrollChangeListener { _, scrollX, _, _, _ ->
             if (first.scrollX != scrollX) first.scrollTo(scrollX, 0)
+            centerAddRoundButton()
         }
     }
 
@@ -350,7 +366,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         model.focusedScoreId,
                         model.isGoalReached,
                         eventConsumer,
-                        { isTableScrollable },
+                        ::addRoundButtonOffset,
                     ) { score -> binding.calculatorKeyboard.setInput(score) }, false
                 )
                 val newCount = binding.scoreRows.adapter!!.itemCount

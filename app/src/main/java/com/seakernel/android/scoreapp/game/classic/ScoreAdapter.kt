@@ -2,16 +2,13 @@ package com.seakernel.android.scoreapp.game.classic
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.FrameLayout
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
@@ -45,7 +42,7 @@ class GameScoreAdapter(
     private val focusedScoreId: Long?,
     private val isGoalReached: Boolean = false,
     private val eventConsumer: Consumer<GameEvent>? = null,
-    private val isTableScrollable: () -> Boolean = { false },
+    private val addRoundButtonOffset: () -> Float = { 0f },
     private val showCalculatorKeyboardCallback: CalculatorKeyboardCallback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -88,7 +85,7 @@ class GameScoreAdapter(
                 )
             }
             VIEW_TYPE_ROUND_ADD -> {
-                (holder as AddRoundViewHolder).bind(isGoalReached, eventConsumer, isTableScrollable())
+                (holder as AddRoundViewHolder).bind(isGoalReached, eventConsumer, addRoundButtonOffset())
             }
         }
     }
@@ -219,13 +216,10 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
     )
 ) {
     /**
-     * @param alignStart keeps the button on screen when the table is wider than the screen, where centering
-     * would put it in the middle of the whole table
+     * @param horizontalOffset how far to move the button from the middle of the table, see [setHorizontalOffset]
      */
-    fun bind(isGoalReached: Boolean, eventConsumer: Consumer<GameEvent>?, alignStart: Boolean) {
-        binding.addRoundButton.updateLayoutParams<FrameLayout.LayoutParams> {
-            gravity = if (alignStart) Gravity.START or Gravity.CENTER_VERTICAL else Gravity.CENTER
-        }
+    fun bind(isGoalReached: Boolean, eventConsumer: Consumer<GameEvent>?, horizontalOffset: Float) {
+        setHorizontalOffset(horizontalOffset)
 
         if (isGoalReached) {
             binding.addRoundButton.setText(R.string.finishGame)
@@ -242,6 +236,14 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
                 eventConsumer?.accept(GameEvent.RequestCreateRound)
             }
         }
+    }
+
+    /**
+     * Moves the button sideways from the middle of the table. When the table is wider than the screen, this keeps
+     * it in the middle of the screen as the table scrolls.
+     */
+    fun setHorizontalOffset(offset: Float) {
+        binding.addRoundButton.translationX = offset
     }
 }
 
