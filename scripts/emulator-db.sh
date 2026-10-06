@@ -175,7 +175,8 @@ cmd_seed() {
 
     work="$(mktemp -d)"
     pull_db "$work/$DB_NAME.db"
-    seed_version="$(sed -n 's/^-- schema-version: \([0-9]*\)$/\1/p' "$SEED_SQL")"
+    # Windows checkouts can have \r line endings
+    seed_version="$(tr -d '\r' < "$SEED_SQL" | sed -n 's/^-- schema-version: \([0-9]*\)$/\1/p')"
     [[ "$(db_version "$work/$DB_NAME.db")" == "$seed_version" ]] ||
         die "The app's database is schema v$(db_version "$work/$DB_NAME.db"), but the seed data is for v$seed_version. Update $SEED_SQL."
 
