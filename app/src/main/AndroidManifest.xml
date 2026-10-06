@@ -29,6 +29,10 @@
             android:exported="true"
             android:label="${appName}"
             android:windowSoftInputMode="stateHidden|adjustResize">
+            <!--
+                Any app can open the main screen with this filter. That's low risk, since it only shows the game list
+                and doesn't read anything from the intent, so there's no need to restrict who can launch the app.
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
