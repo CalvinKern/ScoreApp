@@ -49,3 +49,6 @@ app/release/*
 
 # Database backups from scripts/emulator-db.sh
 db-backups/
+
+# Traces from scripts/emulator-perf.sh
+perf-traces/

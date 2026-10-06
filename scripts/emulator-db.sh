@@ -66,6 +66,9 @@ app_schema_version() {
 }
 
 check_device() {
+    if [[ -z "${ANDROID_SERIAL:-}" && "$(adb devices | grep -c $'\tdevice')" -gt 1 ]]; then
+        die "More than one device is connected. Set ANDROID_SERIAL to one from 'adb devices'."
+    fi
     [[ "$(adb get-state 2>/dev/null)" == "device" ]] || die "No device connected (check 'adb devices', or set ANDROID_SERIAL)."
     run_as true 2>/dev/null || die "Can't access $PACKAGE. Is the debug build installed?"
 }
