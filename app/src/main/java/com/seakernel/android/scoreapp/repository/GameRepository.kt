@@ -13,8 +13,9 @@ import com.seakernel.android.scoreapp.database.entities.ScoreEntity
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 class GameRepository(val context: Context) {
-    private val gameDao = AppDatabase.getInstance(context).gameDao()
-    private val gamePlayerDao = AppDatabase.getInstance(context).gamePlayerDao()
+    private val database = AppDatabase.getInstance(context)
+    private val gameDao = database.gameDao()
+    private val gamePlayerDao = database.gamePlayerDao()
 
     fun loadAllGames(): List<GameSettings> {
         return gameDao.getAllWithRoundCount().map {
@@ -43,21 +44,24 @@ class GameRepository(val context: Context) {
     /**
      * @return newly created game id
      */
-    fun createGame(settings: GameSettings): Long {
+    fun createGame(settings: GameSettings): Long = database.runInTransaction<Long> {
+        // All or nothing, so a failure can't leave a game without its players or first round
         val game = settings.toGameEntity()
         val id = gameDao.insertAll(arrayOf(game))[0]
         gamePlayerDao.insertAll(getPlayerJoins(settings.copy(id = id)))
 
         // Create an empty round for ease
-        val dealer = Player(id = settings.initialDealerId ?: settings.players.random().id)
+        val dealerId = settings.initialDealerId ?: settings.players.takeIf { it.isNotEmpty() }?.random()?.id
+        val dealer = dealerId?.let { Player(id = it) }
         val round = List(settings.players.size) {
             Score(player = Player(settings.players[it].id))
         }
         RoundRepository(context).addOrUpdateRound(id, Round(null, dealer, 0, round))
-        return id
+        id
     }
 
-    fun updateGame(settings: GameSettings) {
+    fun updateGame(settings: GameSettings) = database.runInTransaction(Runnable {
+        // All or nothing, so a failure can't leave players without scores for some rounds
         val originalPlayerIds = gamePlayerDao.getPlayersForGame(settings.id!!).map { it.uid }
         val game = settings.toGameEntity()
         gameDao.update(game)
@@ -96,7 +100,7 @@ class GameRepository(val context: Context) {
                 }
             }
         }
-    }
+    })
 
     fun deleteGame(id: Long): Boolean {
         return gameDao.deleteById(id) > 0

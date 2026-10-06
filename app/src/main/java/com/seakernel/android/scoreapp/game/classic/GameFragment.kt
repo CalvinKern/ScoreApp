@@ -465,7 +465,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                                 return player
                             }
                     }
-                    return game.settings.players.random()
+                    return game.settings.players.takeIf { it.isNotEmpty() }?.random()
                 }
 
                 return null

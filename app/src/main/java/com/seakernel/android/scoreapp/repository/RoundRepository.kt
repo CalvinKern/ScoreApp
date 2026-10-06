@@ -15,7 +15,8 @@ import org.threeten.bp.ZonedDateTime
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 class RoundRepository(val context: Context) {
-    private val roundDao = AppDatabase.getInstance(context).roundDao()
+    private val database = AppDatabase.getInstance(context)
+    private val roundDao = database.roundDao()
 
 //    fun getNotesForPlayer(player: Player, gameId: Long): List<Round> {
     fun getNotesForPlayer(player: Player, gameId: Long): List<PlayerRoundNote> {
@@ -49,8 +50,9 @@ class RoundRepository(val context: Context) {
         return roundDao.getRoundIds(gameId)
     }
 
-    fun addOrUpdateRound(gameId: Long, round: Round): Round {
-        return if (round.id == null) {
+    /** Saves the round and its scores together, so a failure can't leave a round with missing scores */
+    fun addOrUpdateRound(gameId: Long, round: Round): Round = database.runInTransaction<Round> {
+        if (round.id == null) {
             createRound(gameId, round)
         } else {
             updateRound(gameId, round)
