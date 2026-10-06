@@ -5,7 +5,7 @@
     <string name="actionSave">speichern</string>
     <string name="actionSearch">Suche</string>
     <string name="addRound">Runde hinzufügen</string>
-    <string name="dealerLabel">Händler</string>
+    <string name="dealerLabel">Geber</string>
     <string name="delete">Löschen</string>
     <string name="deleteGameConfirmation">Möchten Sie dieses Spiel löschen?</string>
     <string name="deleteSuccessful">Gelöscht %s</string>
@@ -20,7 +20,7 @@
     <string name="gameSettingsTitle">Spieleinstellungen</string>
     <string name="graphByRoundsLabel">Ergebnis nach Runden</string>
     <string name="graphSubtitle">Statistiken</string>
-    <string name="makePlayerDealerMessage">%s-Händler für diese Runde machen?</string>
+    <string name="makePlayerDealerMessage">%s in dieser Runde zum Geber machen?</string>
     <string name="pickPlayers">Spieler auswählen</string>
     <string name="playerCreateTitle">Neuer Spieler</string>
     <string name="playerEmptyMessage">Beginnen Sie, indem Sie auf das + unten klicken, um einen neuen Spieler hinzuzufügen!</string>

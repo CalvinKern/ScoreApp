@@ -5,7 +5,7 @@
     <string name="actionSave">保存</string>
     <string name="actionSearch">搜索</string>
     <string name="addRound">添加回合</string>
-    <string name="dealerLabel">經銷商</string>
+    <string name="dealerLabel">發牌人</string>
     <string name="delete">刪除</string>
     <string name="deleteGameConfirmation">您要刪除此遊戲嗎？</string>
     <string name="deleteSuccessful">已刪除%s</string>
@@ -20,7 +20,7 @@
     <string name="gameSettingsTitle">遊戲設置</string>
     <string name="graphByRoundsLabel">逐輪得分</string>
     <string name="graphSubtitle">統計</string>
-    <string name="makePlayerDealerMessage">成為%s經銷商嗎？</string>
+    <string name="makePlayerDealerMessage">讓%s成為本輪的發牌人嗎？</string>
     <string name="pickPlayers">選擇玩家</string>
     <string name="playerCreateTitle">新玩家</string>
     <string name="playerEmptyMessage">首先點擊下面的+按鈕以添加新播放器！</string>

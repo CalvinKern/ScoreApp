@@ -31,7 +31,7 @@
     <string name="playerEmptyMessage">Comece clicando no botão + abaixo para adicionar um novo player!</string>
     <string name="playerCreateTitle">Novo jogador</string>
     <string name="pickPlayers">Escolha jogadores</string>
-    <string name="makePlayerDealerMessage">Fazer revendedor %s para esta rodada?</string>
+    <string name="makePlayerDealerMessage">Fazer de %s o carteador desta rodada?</string>
     <string name="graphSubtitle">Estatisticas</string>
     <string name="graphByRoundsLabel">Pontuação por rodadas</string>
     <string name="gameSettingsTitle">Configurações do jogo</string>
@@ -46,7 +46,7 @@
     <string name="deleteSuccessful">Excluído %s</string>
     <string name="deleteGameConfirmation">Deseja excluir este jogo?</string>
     <string name="delete">Excluir</string>
-    <string name="dealerLabel">Revendedor</string>
+    <string name="dealerLabel">Carteador</string>
     <string name="addRound">Adicionar rodada</string>
     <string name="actionSearch">Procurar</string>
     <string name="actionSave">Salve</string>

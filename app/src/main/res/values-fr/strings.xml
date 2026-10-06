@@ -5,7 +5,7 @@
     <string name="actionSave">sauvegarder</string>
     <string name="actionSearch">Chercher</string>
     <string name="addRound">Ajouter un tour</string>
-    <string name="dealerLabel">Marchand</string>
+    <string name="dealerLabel">Donneur</string>
     <string name="delete">Supprimer</string>
     <string name="deleteGameConfirmation">Voulez-vous supprimer ce jeu?</string>
     <string name="deleteSuccessful">Effacé %s</string>
@@ -20,7 +20,7 @@
     <string name="gameSettingsTitle">Paramètres de jeu</string>
     <string name="graphByRoundsLabel">Score par rounds</string>
     <string name="graphSubtitle">Statistiques</string>
-    <string name="makePlayerDealerMessage">Faire un revendeur %s pour ce tour?</string>
+    <string name="makePlayerDealerMessage">Faire de %s le donneur pour ce tour?</string>
     <string name="pickPlayers">Choisir des joueurs</string>
     <string name="playerCreateTitle">Nouveau joueur</string>
     <string name="playerEmptyMessage">Commencez par cliquer sur le bouton + ci-dessous pour ajouter un nouveau joueur!</string>

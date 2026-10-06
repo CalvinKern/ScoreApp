@@ -5,7 +5,7 @@
     <string name="actionSave">Menyimpan</string>
     <string name="actionSearch">Cari</string>
     <string name="addRound">Tambahkan Round</string>
-    <string name="dealerLabel">Pedagang</string>
+    <string name="dealerLabel">Pembagi kartu</string>
     <string name="delete">Menghapus</string>
     <string name="deleteGameConfirmation">Apakah Anda ingin menghapus game ini?</string>
     <string name="deleteSuccessful">Dihapus %s</string>
@@ -20,7 +20,7 @@
     <string name="gameSettingsTitle">Pengaturan permainan</string>
     <string name="graphByRoundsLabel">Skor dengan putaran</string>
     <string name="graphSubtitle">Statistik</string>
-    <string name="makePlayerDealerMessage">Buat %s dealer untuk putaran ini?</string>
+    <string name="makePlayerDealerMessage">Jadikan %s pembagi kartu untuk putaran ini?</string>
     <string name="pickPlayers">Pilih Pemain</string>
     <string name="playerCreateTitle">Pemain baru</string>
     <string name="playerEmptyMessage">Mulailah dengan mengklik tombol + di bawah untuk menambah pemain baru!</string>

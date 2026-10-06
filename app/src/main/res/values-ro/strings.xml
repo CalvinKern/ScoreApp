@@ -5,7 +5,7 @@
     <string name="actionSave">salva</string>
     <string name="actionSearch">Căutare</string>
     <string name="addRound">Adaugă runda</string>
-    <string name="dealerLabel">comerciant</string>
+    <string name="dealerLabel">Dealer</string>
     <string name="delete">Șterge</string>
     <string name="deleteGameConfirmation">Doriți să ștergeți acest joc?</string>
     <string name="deleteSuccessful">şters %s</string>
@@ -20,7 +20,7 @@
     <string name="gameSettingsTitle">Setările jocului</string>
     <string name="graphByRoundsLabel">Scor după runde</string>
     <string name="graphSubtitle">Statistici</string>
-    <string name="makePlayerDealerMessage">Faceți %s dealer pentru această rundă?</string>
+    <string name="makePlayerDealerMessage">Setați %s ca dealer pentru această rundă?</string>
     <string name="pickPlayers">Alegeți jucători</string>
     <string name="playerCreateTitle">Jucator nou</string>
     <string name="playerEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a adăuga un jucător nou!</string>

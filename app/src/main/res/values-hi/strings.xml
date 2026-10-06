@@ -5,7 +5,7 @@
     <string name="actionSave">सहेजें</string>
     <string name="actionSearch">खोज</string>
     <string name="addRound">राउंड जोड़ें</string>
-    <string name="dealerLabel">विक्रेता</string>
+    <string name="dealerLabel">डीलर</string>
     <string name="delete">हटाएं</string>
     <string name="deleteGameConfirmation">क्या आप इस गेम को हटाना चाहते हैं?</string>
     <string name="deleteSuccessful">हटाए गए %s</string>
@@ -20,7 +20,7 @@
     <string name="gameSettingsTitle">खेल व्यवस्था</string>
     <string name="graphByRoundsLabel">गोल करके स्कोर करें</string>
     <string name="graphSubtitle">आंकड़े</string>
-    <string name="makePlayerDealerMessage">इस दौर के लिए %s डीलर बनाएं?</string>
+    <string name="makePlayerDealerMessage">इस राउंड के लिए %s को डीलर बनाएं?</string>
     <string name="pickPlayers">खिलाड़ियों को चुनें</string>
     <string name="playerCreateTitle">नया खिलाडी</string>
     <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन नीचे क्लिक करके शुरू करें!</string>
