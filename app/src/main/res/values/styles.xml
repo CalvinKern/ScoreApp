@@ -135,9 +135,17 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.Material3Expressive.Button.Filled</item>
     </style>
 
+    <!--
+        Expressive buttons also read checked and unchecked colors (like Material's own button overlays define). Keys
+        can't be checked, so they all match the normal colors.
+    -->
     <style name="ThemeOverlay.App.CalculatorKey" parent="">
         <item name="colorContainer">?attr/colorSurfaceContainerHighest</item>
         <item name="colorOnContainer">?attr/colorOnSurface</item>
+        <item name="colorContainerChecked">?attr/colorSurfaceContainerHighest</item>
+        <item name="colorOnContainerChecked">?attr/colorOnSurface</item>
+        <item name="colorContainerUnchecked">?attr/colorSurfaceContainerHighest</item>
+        <item name="colorOnContainerUnchecked">?attr/colorOnSurface</item>
     </style>
 
     <!-- Settings screen: M3 list subheaders and two-line list items -->
