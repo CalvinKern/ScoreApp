@@ -110,13 +110,13 @@ class GraphFragment : Fragment() {
                     mutableListOf<Entry>()
                 )
             }?.toTypedArray() ?: arrayOf()))
-        game.rounds.forEach { round ->
+        game.rounds.forEachIndexed { roundIndex, round ->
             round.scores.forEach { score ->
                 if (score.player.id != null && scoreMap.containsKey(score.player.id))
                     scoreMap.getValue(score.player.id).also { playerList ->
                         playerList.add(
                             Entry(
-                                round.number.toFloat() + 1,
+                                roundIndex.toFloat() + 1, // Labeled by position, the same as everywhere else
                                 (playerList.lastOrNull()?.y ?: 0f) + score.value.toFloat()
                             )
                         )

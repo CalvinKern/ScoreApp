@@ -119,14 +119,16 @@ class GameRepository(val context: Context) {
     }.toTypedArray()
 
     private fun convertToRounds(settings: GameSettings, rounds: List<GameDao.FulLRoundEntity>): List<Round> {
-        return rounds.map {
-            Round(
-                it.round.id,
-                settings.players.find { player -> player.id == it.round.dealerId },
-                it.round.roundNumber,
-                convertToScores(settings, it.scores)
-            )
-        }
+        return rounds
+            .sortedWith(compareBy({ it.round.roundNumber }, { it.round.id })) // The order they were added in
+            .map {
+                Round(
+                    it.round.id,
+                    settings.players.find { player -> player.id == it.round.dealerId },
+                    it.round.roundNumber,
+                    convertToScores(settings, it.scores)
+                )
+            }
     }
 
     private fun convertToScores(settings: GameSettings, scores: List<ScoreEntity>): List<Score> {

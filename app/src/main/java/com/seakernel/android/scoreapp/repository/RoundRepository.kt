@@ -20,10 +20,11 @@ class RoundRepository(val context: Context) {
 //    fun getNotesForPlayer(player: Player, gameId: Long): List<Round> {
     fun getNotesForPlayer(player: Player, gameId: Long): List<PlayerRoundNote> {
         val rounds = roundDao.getNotesForPlayer(player.id!!, gameId)
-        return rounds.map { round ->
+        return rounds.mapIndexed { index, round ->
             PlayerRoundNote(
                 roundId = round.score.roundId,
-                roundNumber = round.round_number,
+                // Newest first, so the first note is for the last round in the game
+                roundNumber = rounds.size - 1 - index,
                 score = Score(id = round.score.id, player = player, value = round.score.score, metadata = round.score.scoreData)
             )
         }
@@ -132,4 +133,8 @@ class RoundRepository(val context: Context) {
     }
 }
 
+/**
+ * @param roundNumber the round's position in the game, starting at 0. Rounds are labeled by where they are in the game
+ * (instead of their saved number, which keeps gaps after rounds are deleted), the same as everywhere else.
+ */
 data class PlayerRoundNote(val roundId: Long, val roundNumber: Int, val score: Score)
