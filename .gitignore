@@ -46,3 +46,6 @@ app/release/*
 
 # Mac file
 .DS_Store
+
+# Database backups from scripts/emulator-db.sh
+db-backups/
