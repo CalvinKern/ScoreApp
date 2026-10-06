@@ -346,6 +346,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                         // Reset the layout manager if the number of players has changed
                         manager = GridLayoutManager(requireContext(), spanCount)
                         binding.scoreRows.layoutManager = manager
+                        GameScoreAdapter.sizeRecycledViewPool(binding.scoreRows.recycledViewPool, spanCount)
                     }
 
                     if (oldSpanCount != spanCount || model.rounds.size != lastModel?.rounds?.size) {

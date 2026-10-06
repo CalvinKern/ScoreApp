@@ -110,6 +110,17 @@ class GameScoreAdapter(
     companion object {
         private const val VIEW_TYPE_SCORE = 0
         private const val VIEW_TYPE_ROUND_ADD = 1
+
+        // Rows of score cells the recycled view pool keeps for reuse while scrolling
+        private const val RECYCLED_ROWS = 3
+
+        /**
+         * The pool keeps 5 views of a type by default, less than one row in larger games, so most of a row that
+         * scrolled away was thrown out and inflated again for the next one
+         */
+        fun sizeRecycledViewPool(pool: RecyclerView.RecycledViewPool, playerCount: Int) {
+            pool.setMaxRecycledViews(VIEW_TYPE_SCORE, playerCount * RECYCLED_ROWS)
+        }
     }
 }
 
