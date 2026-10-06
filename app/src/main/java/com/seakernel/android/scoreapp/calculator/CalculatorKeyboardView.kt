@@ -232,18 +232,16 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         if (inputView == null) return false
         calculatorString = when (key) {
             resources.getString(R.string.del) -> {
-                if (calculatorString.isEmpty()) {
-                    calculatorString
-                } else {
-                    calculatorEditIndex--
-                    try {
-                        calculatorString.run {
-                            removeRange(calculatorEditIndex, calculatorEditIndex + 1)
-                        }
-                    } catch (_: Throwable) {
-                        // Default to empty string if error removing anything?
-                        // This has been observed in weird selection cases (shouldn't be able to select though)
-                        ""
+                // Works like backspace: removes the selected text, or the character before the cursor
+                calculatorEditIndex = calculatorEditIndex.coerceAtMost(calculatorString.length)
+                val selectionEnd = (inputView?.selectionEnd ?: calculatorEditIndex)
+                    .coerceIn(calculatorEditIndex, calculatorString.length)
+                when {
+                    selectionEnd > calculatorEditIndex -> calculatorString.removeRange(calculatorEditIndex, selectionEnd)
+                    calculatorEditIndex == 0 -> calculatorString // Nothing before the cursor to delete
+                    else -> {
+                        calculatorEditIndex--
+                        calculatorString.removeRange(calculatorEditIndex, calculatorEditIndex + 1)
                     }
                 }
             }
