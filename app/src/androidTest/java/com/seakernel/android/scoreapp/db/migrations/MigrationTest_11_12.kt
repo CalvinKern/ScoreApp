@@ -31,4 +31,21 @@ class MigrationTest_11_12 {
             }
         }
     }
+
+    @Test
+    @Throws(IOException::class)
+    fun migrate11_12_whenColumnAlreadyExists() {
+        DbTestHelper.createDatabaseAndMigrate(helper, 11, 12, Migration_11_12()) { db ->
+            val database = db.openHelper.writableDatabase
+            database.execSQL("UPDATE ${ScoreEntity.TABLE_NAME} SET ${ScoreEntity.COLUMN_SCORE_INPUT} = '1+1'")
+
+            // Running it again skips adding the column instead of failing, and keeps what was stored in it
+            Migration_11_12().migrate(database)
+
+            database.query("SELECT COUNT(*) FROM ${ScoreEntity.TABLE_NAME} WHERE ${ScoreEntity.COLUMN_SCORE_INPUT} = '1+1'").use { cursor ->
+                cursor.moveToFirst()
+                assert(cursor.getInt(0) > 0)
+            }
+        }
+    }
 }
