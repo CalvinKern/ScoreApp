@@ -62,6 +62,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     // The number of players the score table is sized for
     private var tablePlayerCount = 0
 
+    // The window's keyboard mode before this screen hid the keyboard, restored when leaving
+    private var originalSoftInputMode: Int? = null
+
     private var _binding: FragmentGameBinding? = null
 
     // This property is only valid between onCreateView and
@@ -303,7 +306,22 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         super.onResume()
         logScreenView(AnalyticsConstants.ScreenName.GameFragment)
 
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        // Don't open the keyboard when coming back to a game. The window is shared with every other screen, so
+        // only the keyboard state changes here (keeping how the screen resizes for it), and it's put back on pause.
+        activity?.window?.let { window ->
+            val mode = window.attributes.softInputMode
+            originalSoftInputMode = mode
+            window.setSoftInputMode(
+                (mode and WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE.inv()) or
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+            )
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        originalSoftInputMode?.let { activity?.window?.setSoftInputMode(it) }
+        originalSoftInputMode = null
     }
 
     // Mobius functions
