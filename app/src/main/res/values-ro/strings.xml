@@ -71,7 +71,7 @@
     <string name="settingsAppearanceHeader">Aspect</string>
     <string name="settingsAboutHeader">Despre</string>
     <string name="settingsDynamicColorTitle">Culorile imaginii de fundal</string>
-    <string name="settingsDynamicColorSummary">Potriviți culorile aplicației cu imaginea de fundal a dispozitivului</string>
+    <string name="settingsDynamicColorSummary">Potriviți culorile aplicației cu imaginea de fundal a dispozitivului (culori dinamice)</string>
     <string name="settingsTrueBlackTitle">Negru pur</string>
     <string name="settingsTrueBlackSummary">Folosiți un fundal complet negru în modul întunecat</string>
     <string name="settingsGamesHeader">Jocuri</string>

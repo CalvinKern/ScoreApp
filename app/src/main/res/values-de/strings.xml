@@ -66,7 +66,7 @@
     <string name="settingsAppearanceHeader">Darstellung</string>
     <string name="settingsAboutHeader">Info</string>
     <string name="settingsDynamicColorTitle">Hintergrundbild-Farben</string>
-    <string name="settingsDynamicColorSummary">App-Farben an das Hintergrundbild des Geräts anpassen</string>
+    <string name="settingsDynamicColorSummary">App-Farben an das Hintergrundbild des Geräts anpassen (dynamische Farben)</string>
     <string name="settingsTrueBlackTitle">Echtes Schwarz</string>
     <string name="settingsTrueBlackSummary">Im dunklen Modus einen rein schwarzen Hintergrund verwenden</string>
     <string name="settingsGamesHeader">Spiele</string>

@@ -68,7 +68,7 @@
     <string name="settingsAppearanceHeader">दिखावट</string>
     <string name="settingsAboutHeader">ऐप के बारे में</string>
     <string name="settingsDynamicColorTitle">वॉलपेपर रंग</string>
-    <string name="settingsDynamicColorSummary">ऐप के रंगों को डिवाइस के वॉलपेपर से मिलाएँ</string>
+    <string name="settingsDynamicColorSummary">ऐप के रंगों को डिवाइस के वॉलपेपर से मिलाएँ (डायनैमिक कलर)</string>
     <string name="settingsTrueBlackTitle">शुद्ध काला</string>
     <string name="settingsTrueBlackSummary">डार्क मोड में पूरी तरह काली पृष्ठभूमि का उपयोग करें</string>
     <string name="settingsGamesHeader">खेल</string>

@@ -63,7 +63,7 @@
     <string name="settingsAppearanceHeader">外觀</string>
     <string name="settingsAboutHeader">關於</string>
     <string name="settingsDynamicColorTitle">桌布配色</string>
-    <string name="settingsDynamicColorSummary">讓應用程式顏色與裝置桌布相配</string>
+    <string name="settingsDynamicColorSummary">讓應用程式顏色與裝置桌布相配（動態取色）</string>
     <string name="settingsTrueBlackTitle">純黑</string>
     <string name="settingsTrueBlackSummary">在深色模式下使用純黑背景</string>
     <string name="settingsGamesHeader">遊戲</string>

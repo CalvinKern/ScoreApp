@@ -71,7 +71,7 @@
     <string name="settingsAppearanceHeader">Apparence</string>
     <string name="settingsAboutHeader">À propos</string>
     <string name="settingsDynamicColorTitle">Couleurs du fond d\'écran</string>
-    <string name="settingsDynamicColorSummary">Adapter les couleurs de l\'application au fond d\'écran de l\'appareil</string>
+    <string name="settingsDynamicColorSummary">Adapter les couleurs de l\'application au fond d\'écran de l\'appareil (couleurs dynamiques)</string>
     <string name="settingsTrueBlackTitle">Noir pur</string>
     <string name="settingsTrueBlackSummary">Utiliser un fond noir pur en mode sombre</string>
     <string name="settingsGamesHeader">Parties</string>
