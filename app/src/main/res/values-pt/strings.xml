@@ -112,4 +112,5 @@
     <string name="calculatorDecimalDescription">Separador decimal</string>
     <string name="calculatorMinusDescription">Menos</string>
     <string name="calculatorEqualsDescription">Igual</string>
+    <string name="graphDescription">Gráfico de pontuação, %1$s. %2$s</string>
 </resources>

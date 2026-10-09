@@ -109,4 +109,5 @@
     <string name="calculatorDecimalDescription">Komma</string>
     <string name="calculatorMinusDescription">Minus</string>
     <string name="calculatorEqualsDescription">Gleich</string>
+    <string name="graphDescription">Punktediagramm, %1$s. %2$s</string>
 </resources>

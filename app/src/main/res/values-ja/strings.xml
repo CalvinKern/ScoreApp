@@ -106,4 +106,5 @@
     <string name="calculatorDecimalDescription">小数点</string>
     <string name="calculatorMinusDescription">マイナス</string>
     <string name="calculatorEqualsDescription">イコール</string>
+    <string name="graphDescription">スコアのグラフ、%1$s。%2$s</string>
 </resources>

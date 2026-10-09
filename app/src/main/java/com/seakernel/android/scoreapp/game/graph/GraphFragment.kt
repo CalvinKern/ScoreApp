@@ -139,6 +139,17 @@ class GraphFragment : Fragment() {
         data.setValueFormatter(graphEmptyFormatter)
         binding.gameChart.data = data
         binding.gameChart.invalidate()
+        binding.gameChart.contentDescription = describeGraph(game)
+    }
+
+    /** The chart is only drawn, so screen readers get the number of rounds and each player's total instead */
+    private fun describeGraph(game: Game): String {
+        val totals = game.settings.players.joinToString(". ") { player ->
+            val total = game.rounds.sumOf { round -> round.scores.find { it.player.id == player.id }?.value ?: 0.0 }
+            getString(R.string.playerTotalDescription, player.name, ScoreFormat.format(total))
+        }
+        val rounds = resources.getQuantityString(R.plurals.roundsHolder, game.rounds.size, game.rounds.size)
+        return getString(R.string.graphDescription, rounds, totals)
     }
 
     private fun initChartStyle() {

@@ -112,4 +112,5 @@
     <string name="calculatorDecimalDescription">Virgule</string>
     <string name="calculatorMinusDescription">Moins</string>
     <string name="calculatorEqualsDescription">Égal</string>
+    <string name="graphDescription">Graphique des scores, %1$s. %2$s</string>
 </resources>

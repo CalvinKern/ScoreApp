@@ -108,6 +108,8 @@
     <!--Graph Screen-->
     <string name="graphByRoundsLabel">Score by rounds</string>
     <string name="graphSubtitle">Statistics</string>
+    <!-- Spoken by screen readers for the graph, e.g. "Score graph, 3 Rounds. Alice, total 12. Bob, total 9" -->
+    <string name="graphDescription">Score graph, %1$s. %2$s</string>
 
     <!--Player Round Dialog-->
     <string name="playerNotesTitle">Notes for %s</string>

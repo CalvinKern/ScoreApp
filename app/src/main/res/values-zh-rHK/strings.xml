@@ -106,4 +106,5 @@
     <string name="calculatorDecimalDescription">小數點</string>
     <string name="calculatorMinusDescription">減</string>
     <string name="calculatorEqualsDescription">等於</string>
+    <string name="graphDescription">得分圖表，%1$s。%2$s</string>
 </resources>

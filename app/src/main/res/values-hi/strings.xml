@@ -18,7 +18,7 @@
     <string name="gamePlayersEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
     <string name="gamePlayersHeader">खिलाड़ियों</string>
     <string name="gameSettingsTitle">खेल व्यवस्था</string>
-    <string name="graphByRoundsLabel">गोल करके स्कोर करें</string>
+    <string name="graphByRoundsLabel">राउंड के अनुसार स्कोर</string>
     <string name="graphSubtitle">आंकड़े</string>
     <string name="makePlayerDealerMessage">इस राउंड के लिए %s को डीलर बनाएं?</string>
     <string name="pickPlayers">खिलाड़ियों को चुनें</string>
@@ -109,4 +109,5 @@
     <string name="calculatorDecimalDescription">दशमलव</string>
     <string name="calculatorMinusDescription">घटाएं</string>
     <string name="calculatorEqualsDescription">बराबर</string>
+    <string name="graphDescription">स्कोर ग्राफ़, %1$s. %2$s</string>
 </resources>
