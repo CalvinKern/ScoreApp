@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.view.ViewCompat
 import androidx.core.view.ViewGroupCompat
 import androidx.core.view.isVisible
 import androidx.core.view.marginEnd
@@ -120,6 +121,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         binding.bottomContainer.applyWindowInsetsNavigationPadding(includeStart = !keypadBesideTable)
         if (keypadBesideTable) makeRoomForKeypad()
         syncHorizontalScroll(binding.nameScroll, binding.scoreScroll)
+        // Screen readers stop on the totals row as one item, read from its description (see TotalsAdapter)
+        ViewCompat.setScreenReaderFocusable(binding.totalsRow, true)
         binding.scoreScroll.addOnLayoutChangeListener { view, left, _, right, _, oldLeft, _, oldRight, _ ->
             // Fit the table to the new width (e.g. after rotating), after this layout pass finishes
             if (right - left != oldRight - oldLeft) view.post { applyTableWidth() }
@@ -198,7 +201,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         _binding = null
     }
 
-    /** Sets up the player names (which also read out the totals for screen readers) and the totals row */
+    /** Sets up the player names and the totals row */
     private fun setupHeaderAndFooter(model: GameModel) {
         val settings = model.settings
         val players = settings.players
@@ -214,8 +217,6 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         val adapter = PlayersAdapter(
             settings.showRoundNotes,
             players,
-            model.playerTotals,
-            model.leadPlayerIds,
             object :
                 PlayerViewHolder.PlayerHolderClickedListener {
                 override fun playerHolderClicked(player: Player) {
@@ -392,10 +393,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 var manager = binding.scoreRows.layoutManager as? GridLayoutManager
                 val oldSpanCount = manager?.spanCount
                 if (model.settings.players.isNotEmpty()) {
-                    if (model.settings != lastModel?.settings ||
-                        model.playerTotals != lastModel?.playerTotals ||
-                        model.leadPlayerIds != lastModel?.leadPlayerIds
-                    ) {
+                    if (model.settings != lastModel?.settings) {
                         setupHeaderAndFooter(model)
                     }
 
@@ -445,6 +443,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     model.leadPlayerIds,
                 )
                 binding.totalsRow.swapAdapter(totalsAdapter, false)
+                binding.totalsRow.contentDescription = totalsAdapter.describe(requireContext())
                 lastLeadPlayerIds = model.leadPlayerIds
 
                 val currentSingleLeadId = if (lastLeadPlayerIds.size == 1) lastLeadPlayerIds[0] else null

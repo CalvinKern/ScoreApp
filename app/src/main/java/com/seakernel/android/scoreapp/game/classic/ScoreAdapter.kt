@@ -1,5 +1,6 @@
 package com.seakernel.android.scoreapp.game.classic
 
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -127,8 +128,6 @@ class GameScoreAdapter(
 class PlayersAdapter(
     private val showNotes: Boolean,
     private val players: List<Player>,
-    private val playerTotals: Map<Long, Double>,
-    private val leadPlayerIds: List<Long>,
     private val playerHolderClickedListener: PlayerViewHolder.PlayerHolderClickedListener
 ) : RecyclerView.Adapter<PlayerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
@@ -141,14 +140,7 @@ class PlayersAdapter(
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        val player = players[position]
-        holder.bind(
-            showNotes,
-            player,
-            playerTotals[player.id] ?: 0.0,
-            player.id in leadPlayerIds,
-            playerHolderClickedListener,
-        )
+        holder.bind(showNotes, players[position], playerHolderClickedListener)
     }
 }
 
@@ -167,8 +159,11 @@ class TotalsAdapter(
         return position.toLong()
     }
 
+    // Screen readers hear the whole row at once from its description instead of each total on its own
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder =
-        ScoreViewHolder(parent)
+        ScoreViewHolder(parent).apply {
+            itemView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+        }
 
     override fun getItemCount(): Int = players.size
 
@@ -177,6 +172,20 @@ class TotalsAdapter(
         val score = playerTotals[playerId] ?: 0.0
         holder.bindTotal(score, leadPlayerIds.contains(playerId))
     }
+
+    /**
+     * Every player's total in table order, read as one item so it's a single swipe from the add round button,
+     * e.g. "Alice, total 12, Leading. Bob, total 9"
+     */
+    fun describe(context: Context): String =
+        players.joinToString(". ") { player ->
+            val total = context.getString(
+                R.string.playerTotalDescription,
+                player.name,
+                ScoreFormat.format(playerTotals[player.id] ?: 0.0),
+            )
+            if (player.id in leadPlayerIds) "$total, ${context.getString(R.string.leading)}" else total
+        }
 
     fun getPlayerPosition(playerId: Long): Int {
         return players.indexOfFirst { it.id == playerId }
@@ -193,18 +202,13 @@ class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) :
     fun bind(
         showNotes: Boolean,
         player: Player,
-        total: Double,
-        isLeader: Boolean,
         clickListener: PlayerHolderClickedListener,
     ) {
         binding.playerNameHeader.text = player.name
         binding.playerNameNoteIcon.setVisible(showNotes)
 
-        // Screen readers hear each player's total and lead here, at the top of the game, instead of in the totals row
+        // Screen readers hear just the name here, the totals row reads everyone's total and who's leading
         val context = itemView.context
-        itemView.contentDescription =
-            context.getString(R.string.playerTotalDescription, player.name, ScoreFormat.format(total))
-        ViewCompat.setStateDescription(itemView, if (isLeader) context.getString(R.string.leading) else null)
         ViewCompat.replaceAccessibilityAction(
             itemView,
             AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,

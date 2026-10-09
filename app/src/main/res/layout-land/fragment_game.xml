@@ -93,10 +93,10 @@
                 android:layout_height="1dp"
                 />
 
-            <!-- Screen readers hear each total with the player's name at the top instead (see PlayerViewHolder) -->
+            <!-- Screen readers hear all the totals as one item, right after the add round button (see TotalsAdapter) -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/totalsRow"
-                android:importantForAccessibility="noHideDescendants"
+                android:importantForAccessibility="yes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
