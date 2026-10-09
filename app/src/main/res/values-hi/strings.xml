@@ -93,7 +93,7 @@
     <string name="errorGeneric">कुछ गलत हो गया</string>
     <string name="settingsPrivacyHeader">गोपनीयता</string>
     <string name="settingsShareDataTitle">उपयोग डेटा साझा करें</string>
-    <string name="settingsShareDataSummary">ऐप को बेहतर बनाने के लिए उपयोग के आंकड़े भेजें। नाम और स्कोर कभी साझा नहीं किए जाते।</string>
+    <string name="settingsShareDataSummary">ऐप को बेहतर बनाने के लिए उपयोग के आंकड़े और क्रैश रिपोर्ट भेजें। नाम और स्कोर कभी साझा नहीं किए जाते।</string>
     <string name="navigateUp">ऊपर नेविगेट करें</string>
     <string name="scoreCellHint">%1$s, राउंड %2$d</string>
     <string name="playerTotalDescription">%1$s, कुल %2$s</string>
@@ -110,4 +110,8 @@
     <string name="calculatorMinusDescription">घटाएं</string>
     <string name="calculatorEqualsDescription">बराबर</string>
     <string name="graphDescription">स्कोर ग्राफ़, %1$s. %2$s</string>
+    <string name="usageDataConsentTitle">उपयोग डेटा साझा करें?</string>
+    <string name="usageDataConsentMessage">ऐप को बेहतर बनाने में मदद के लिए उपयोग के आंकड़े और क्रैश रिपोर्ट भेजें? इन्हें Google Firebase द्वारा एकत्र किया जाता है। नाम और स्कोर कभी साझा नहीं किए जाते।\n\nआप इसे कभी भी सेटिंग में बदल सकते हैं।</string>
+    <string name="usageDataConsentAllow">अनुमति दें</string>
+    <string name="usageDataConsentDeny">अनुमति न दें</string>
 </resources>

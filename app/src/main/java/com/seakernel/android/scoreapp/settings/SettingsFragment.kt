@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.color.DynamicColors
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.seakernel.android.scoreapp.BuildConfig
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.databinding.FragmentSettingsBinding
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.AppPreferences
+import com.seakernel.android.scoreapp.utility.UsageData
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
@@ -67,8 +67,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setShareUsageDataEnabled(enabled: Boolean) {
-        AppPreferences.setShareUsageDataEnabled(requireContext(), enabled)
-        FirebaseAnalytics.getInstance(requireContext()).setAnalyticsCollectionEnabled(enabled)
+        UsageData.setShareEnabled(requireContext(), enabled)
     }
 
     override fun onResume() {

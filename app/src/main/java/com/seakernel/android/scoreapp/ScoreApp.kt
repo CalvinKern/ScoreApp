@@ -3,9 +3,9 @@ package com.seakernel.android.scoreapp
 import android.app.Application
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.seakernel.android.scoreapp.utility.AppPreferences
+import com.seakernel.android.scoreapp.utility.UsageData
 import timber.log.Timber
 
 /**
@@ -16,8 +16,8 @@ class ScoreApp : Application() {
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
-        FirebaseAnalytics.getInstance(this)
-            .setAnalyticsCollectionEnabled(AppPreferences.isShareUsageDataEnabled(this))
+        // Nothing is shared until the user agrees to it
+        UsageData.apply(this)
 
         // Use wallpaper-based colors on Android 12+ unless the user turned them off; older devices
         // (and users who opt out) keep the app's own color scheme

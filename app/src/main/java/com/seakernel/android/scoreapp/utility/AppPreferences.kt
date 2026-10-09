@@ -37,9 +37,16 @@ object AppPreferences {
     fun setAutoLoadGameSettingsEnabled(context: Context, enabled: Boolean) =
         prefs(context).edit { putBoolean(KEY_AUTO_LOAD_GAME_SETTINGS, enabled) }
 
-    /** Whether usage statistics are sent to Firebase Analytics */
+    /**
+     * Whether usage statistics and crash reports are sent to Firebase, which is never until the user agrees.
+     * Use [UsageData.setShareEnabled] to change it, so the choice is applied too.
+     */
     fun isShareUsageDataEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_SHARE_USAGE_DATA, true)
+        prefs(context).getBoolean(KEY_SHARE_USAGE_DATA, false)
+
+    /** Whether the user has chosen to share usage data or not, either when asked or in settings */
+    fun hasAnsweredShareUsageData(context: Context): Boolean =
+        prefs(context).contains(KEY_SHARE_USAGE_DATA)
 
     fun setShareUsageDataEnabled(context: Context, enabled: Boolean) =
         prefs(context).edit { putBoolean(KEY_SHARE_USAGE_DATA, enabled) }
