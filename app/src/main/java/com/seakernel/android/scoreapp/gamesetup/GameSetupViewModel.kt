@@ -5,6 +5,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.hadilq.liveevent.LiveEvent
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.repository.GameRepository
@@ -12,7 +13,9 @@ import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.utility.safePostValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.threeten.bp.ZonedDateTime
@@ -27,13 +30,30 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     private var playerRepository: PlayerRepository = PlayerRepository(application)
     private val gameSettings = MutableLiveData<GameSettings?>().apply { value = null }
     private val gameCreatedEvent = LiveEvent<Long>()
-    private val gameUpdatedEvent = LiveEvent<Long>()
+    private val gameUpdatedEvent = LiveEvent<GameUpdated>()
+
+    // What's saved for an existing game, to tell whether anything changed
+    private var savedSettings: GameSettings? = null
+
+    // Saves run one at a time in order, so an older save can't finish after a newer one
+    private val saveDispatcher = Dispatchers.IO.limitedParallelism(1)
+
+    // Existing games also save shortly after each change, in case the app is closed without the screen stopping
+    private var autoSaveJob: Job? = null
+    private val autoSaveObserver = Observer<GameSettings?> { settings ->
+        if (savedSettings != null && settings != savedSettings) scheduleAutoSave()
+    }
+
+    init {
+        gameSettings.observeForever(autoSaveObserver)
+    }
     private val gameNamesAutocomplete = MutableLiveData<List<String>?>().apply { value = null }
 
     private val saveProcessing = MutableLiveData<Boolean>().apply { value = false }
 
     override fun onCleared() {
         super.onCleared()
+        gameSettings.removeObserver(autoSaveObserver)
         job.cancel()
     }
 
@@ -43,7 +63,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getGameCreatedEvent(): LiveData<Long> = gameCreatedEvent
 
-    fun getGameUpdatedEvent(): LiveData<Long> = gameUpdatedEvent
+    fun getGameUpdatedEvent(): LiveData<GameUpdated> = gameUpdatedEvent
 
     fun getGameNamesForAutocomplete(): LiveData<List<String>?> = gameNamesAutocomplete
 
@@ -83,6 +103,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         gameSettings.value = gameSettings.value!!.copy(maxRounds = maxRounds?.takeIf { it > 0 })
     }
 
+    /** Creates the new game being set up, existing games save their changes with [saveChanges] instead */
     fun saveGame() {
         if (saveProcessing.value == true) return
 
@@ -90,16 +111,60 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         val settings = gameSettings.value ?: GameSettings()
 
         scope.launch {
-            if (settings.id != null) {
-                gameRepository.updateGame(settings)
-                gameUpdatedEvent.safePostValue(settings.id)
-            } else {
-                val gameId = gameRepository.createGame(settings)
-                gameCreatedEvent.safePostValue(gameId)
-            }
+            val gameId = gameRepository.createGame(settings)
+            gameCreatedEvent.safePostValue(gameId)
             withContext(Dispatchers.Main) {
                 saveProcessing.value = false
             }
+        }
+    }
+
+    /**
+     * Saves any changes to an existing game, which saves automatically instead of with a save button.
+     *
+     * A blank name or no players can't be saved, so those keep what was saved before: the old name, and the old
+     * players (saving no players would remove everyone's scores).
+     *
+     * @param exit whether the screen is closing, it's told when the save finishes (even if nothing changed)
+     */
+    @MainThread
+    fun saveChanges(exit: Boolean) {
+        autoSaveJob?.cancel()
+        autoSaveJob = null
+
+        val saved = savedSettings
+        val current = gameSettings.value
+        if (saved == null || current == null) {
+            // Still loading, so nothing could have changed
+            if (exit) gameUpdatedEvent.value = GameUpdated(saved?.id ?: current?.id ?: 0, exit = true, hasPlayers = false)
+            return
+        }
+
+        val settings = current.copy(
+            name = current.name.takeIf { it.isNotBlank() } ?: saved.name,
+            players = current.players.takeIf { it.isNotEmpty() } ?: saved.players,
+        )
+        val update = GameUpdated(settings.id!!, exit, hasPlayers = settings.players.isNotEmpty())
+        if (settings == saved) {
+            // Wait for any save still running, so the next screen loads what was saved
+            if (exit) scope.launch(saveDispatcher) { gameUpdatedEvent.safePostValue(update) }
+            return
+        }
+
+        savedSettings = settings
+        scope.launch(saveDispatcher) {
+            gameRepository.updateGame(settings)
+            gameUpdatedEvent.safePostValue(update)
+        }
+    }
+
+    @MainThread
+    private fun scheduleAutoSave() {
+        autoSaveJob?.cancel()
+        autoSaveJob = scope.launch(Dispatchers.Main) {
+            delay(AUTO_SAVE_DELAY_MS)
+            autoSaveJob = null
+            saveChanges(exit = false)
         }
     }
 
@@ -145,7 +210,10 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
         scope.launch {
             gameRepository.loadGame(gameId)?.let {
-                gameSettings.safePostValue(it)
+                withContext(Dispatchers.Main) {
+                    savedSettings = it
+                    gameSettings.value = it
+                }
             }
         }
     }
@@ -211,4 +279,16 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
+
+    companion object {
+        private const val AUTO_SAVE_DELAY_MS = 1_500L
+    }
 }
+
+/**
+ * An existing game's changes were saved.
+ *
+ * @param exit whether the screen asked to close once saved
+ * @param hasPlayers whether the game can be played
+ */
+data class GameUpdated(val gameId: Long, val exit: Boolean, val hasPlayers: Boolean)

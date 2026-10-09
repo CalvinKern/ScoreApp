@@ -13,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.ViewGroupCompat
@@ -58,13 +59,26 @@ class GameSetupFragment : Fragment() {
     private var maxScoreTextWatcher: TextWatcher? = null
     private var maxRoundsTextWatcher: TextWatcher? = null
 
-    private val gameUpdatedObserver = Observer<Long> { gameId ->
-        if (arguments?.getBoolean(ARG_OPEN_GAME_ON_SAVE) == true) {
-            listener?.onShowGameScreen(gameId)
+    private val gameUpdatedObserver = Observer<GameUpdated> { update ->
+        if (!update.exit) return@Observer // Saved while the screen stays open
+
+        if (isOpenGameOnSave && update.hasPlayers) {
+            listener?.onShowGameScreen(update.gameId)
         } else {
             listener?.onGameUpdated()
         }
     }
+
+    /** Existing games save their changes when leaving, instead of with a save button */
+    private val saveOnBackCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            isEnabled = false // Leave once, even if back is pressed again while saving
+            viewModel.saveChanges(exit = true)
+        }
+    }
+
+    private val isExistingGame get() = arguments?.containsKey(ARG_GAME_ID) == true
+    private val isOpenGameOnSave get() = arguments?.getBoolean(ARG_OPEN_GAME_ON_SAVE) == true
     private val gameCreatedObserver =
         Observer<Long> { gameId -> listener?.onShowGameScreen(gameId) }
     private val saveObserver =
@@ -157,6 +171,11 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameUpdatedEvent().observe(viewLifecycleOwner, gameUpdatedObserver)
         viewModel.getGameNamesForAutocomplete().observe(viewLifecycleOwner, autocompleteObserver)
 
+        if (isExistingGame) {
+            saveOnBackCallback.isEnabled = true // Turned off after leaving once, and the view is recreated after picking players
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, saveOnBackCallback)
+        }
+
         // Check for copy first, then opening a game
         if (arguments?.containsKey(ARG_GAME_COPY) == true) {
             viewModel.createCopy(
@@ -175,15 +194,27 @@ class GameSetupFragment : Fragment() {
         logScreenView(AnalyticsConstants.ScreenName.GameSetupFragment)
     }
 
+    override fun onStop() {
+        super.onStop()
+        // Also save when the app goes to the background (or another screen opens), in case it's closed from there
+        if (isExistingGame && !requireActivity().isChangingConfigurations) {
+            viewModel.saveChanges(exit = false)
+        }
+    }
+
     fun updateForNewPlayers(playerIds: List<Long>) {
         viewModel.updateForNewPlayers(playerIds)
     }
 
     private fun initToolbar() {
-        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() /* TODO: Verify leaving the new settings? */ }
-        binding.toolbar.setTitle(if (arguments?.containsKey(ARG_GAME_ID) == true) R.string.gameSettingsTitle else R.string.gameCreateTitle)
+        // Leaving an existing game saves its changes (see saveOnBackCallback), leaving a new game discards it
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+        binding.toolbar.setTitle(if (isExistingGame) R.string.gameSettingsTitle else R.string.gameCreateTitle)
         binding.toolbar.inflateMenu(R.menu.menu_game_create)
         binding.toolbar.setOptionalIconsVisible()
+        // New games are created with save. Existing games save on their own, except a game that needs players
+        // before it can be played, where save also opens the game.
+        binding.toolbar.menu.findItem(R.id.actionSave).isVisible = !isExistingGame || isOpenGameOnSave
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> {
@@ -198,7 +229,7 @@ class GameSetupFragment : Fragment() {
                         }
                         return@setOnMenuItemClickListener false
                     }
-                    viewModel.saveGame()
+                    if (isExistingGame) viewModel.saveChanges(exit = true) else viewModel.saveGame()
                     true
                 }
 
