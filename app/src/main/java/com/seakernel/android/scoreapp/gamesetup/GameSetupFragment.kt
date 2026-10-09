@@ -212,9 +212,8 @@ class GameSetupFragment : Fragment() {
         binding.toolbar.setTitle(if (isExistingGame) R.string.gameSettingsTitle else R.string.gameCreateTitle)
         binding.toolbar.inflateMenu(R.menu.menu_game_create)
         binding.toolbar.setOptionalIconsVisible()
-        // New games are created with save. Existing games save on their own, except a game that needs players
-        // before it can be played, where save also opens the game.
-        binding.toolbar.menu.findItem(R.id.actionSave).isVisible = !isExistingGame || isOpenGameOnSave
+        // New games are created with save. Existing games save on their own, but save also saves and goes back
+        // (or opens the game, for a game that needed players before it could be played).
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> {
