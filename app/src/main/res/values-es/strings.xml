@@ -96,7 +96,9 @@
     <string name="errorGeneric">Algo salió mal</string>
     <string name="settingsPrivacyHeader">Privacidad</string>
     <string name="settingsShareDataTitle">Compartir datos de uso</string>
-    <string name="settingsShareDataSummary">Enviar estadísticas de uso e informes de fallos para ayudar a mejorar la aplicación. Los nombres y las puntuaciones nunca se comparten.</string>
+    <string name="settingsShareDataSummary">Enviar estadísticas de uso para ayudar a mejorar la aplicación. Los nombres y las puntuaciones nunca se comparten.</string>
+    <string name="settingsCrashReportsTitle">Enviar informes de fallos</string>
+    <string name="settingsCrashReportsSummary">Enviar un informe cuando la aplicación falle, para ayudar a solucionarlo. Los nombres y las puntuaciones nunca se comparten.</string>
     <string name="navigateUp">Desplazarse hacia arriba</string>
     <string name="scoreCellHint">%1$s, ronda %2$d</string>
     <string name="playerTotalDescription">%1$s, total %2$s</string>
@@ -114,7 +116,7 @@
     <string name="calculatorEqualsDescription">Igual</string>
     <string name="graphDescription">Gráfico de puntuación, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">¿Compartir datos de uso?</string>
-    <string name="usageDataConsentMessage">¿Enviar estadísticas de uso e informes de fallos para ayudar a mejorar la aplicación? Los recopila Google Firebase. Los nombres y las puntuaciones nunca se comparten.\n\nPuede cambiar esto en cualquier momento en Ajustes.</string>
+    <string name="usageDataConsentMessage">¿Enviar estadísticas de uso e informes de fallos para ayudar a mejorar la aplicación? Los recopila Google Firebase. Los nombres y las puntuaciones nunca se comparten.\n\nPuede cambiar cada uno por separado en cualquier momento en Ajustes.</string>
     <string name="usageDataConsentAllow">Permitir</string>
     <string name="usageDataConsentDeny">No permitir</string>
 </resources>

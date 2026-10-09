@@ -96,7 +96,9 @@
     <string name="errorGeneric">A apărut o eroare</string>
     <string name="settingsPrivacyHeader">Confidențialitate</string>
     <string name="settingsShareDataTitle">Partajați datele de utilizare</string>
-    <string name="settingsShareDataSummary">Trimiteți statistici de utilizare și rapoarte de erori pentru a ajuta la îmbunătățirea aplicației. Numele și scorurile nu sunt partajate niciodată.</string>
+    <string name="settingsShareDataSummary">Trimiteți statistici de utilizare pentru a ajuta la îmbunătățirea aplicației. Numele și scorurile nu sunt partajate niciodată.</string>
+    <string name="settingsCrashReportsTitle">Trimiteți rapoarte de erori</string>
+    <string name="settingsCrashReportsSummary">Trimiteți un raport când aplicația se blochează, pentru a ajuta la remedierea problemei. Numele și scorurile nu sunt partajate niciodată.</string>
     <string name="navigateUp">Navigați în sus</string>
     <string name="scoreCellHint">%1$s, runda %2$d</string>
     <string name="playerTotalDescription">%1$s, total %2$s</string>
@@ -114,7 +116,7 @@
     <string name="calculatorEqualsDescription">Egal</string>
     <string name="graphDescription">Graficul scorurilor, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Partajați datele de utilizare?</string>
-    <string name="usageDataConsentMessage">Trimiteți statistici de utilizare și rapoarte de erori pentru a ajuta la îmbunătățirea aplicației? Acestea sunt colectate de Google Firebase. Numele și scorurile nu sunt partajate niciodată.\n\nPuteți modifica oricând această opțiune din Setări.</string>
+    <string name="usageDataConsentMessage">Trimiteți statistici de utilizare și rapoarte de erori pentru a ajuta la îmbunătățirea aplicației? Acestea sunt colectate de Google Firebase. Numele și scorurile nu sunt partajate niciodată.\n\nPuteți modifica oricând fiecare opțiune separat din Setări.</string>
     <string name="usageDataConsentAllow">Permiteți</string>
     <string name="usageDataConsentDeny">Nu permiteți</string>
 </resources>

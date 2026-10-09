@@ -13,7 +13,8 @@ import com.seakernel.android.scoreapp.utility.UsageData
  * Asks once whether to share usage statistics and crash reports, which stay off until the user answers.
  *
  * It can't be dismissed without answering: closing it isn't agreeing, so it would have to stay off and ask again
- * anyway. Both answers are equally easy to pick, and either can be changed later in settings.
+ * anyway. Both answers are equally easy to pick. One answer covers both to keep it simple, and each can be changed
+ * separately later in settings.
  */
 class UsageDataConsentDialog : DialogFragment() {
 

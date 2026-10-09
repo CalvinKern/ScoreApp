@@ -90,7 +90,9 @@
     <string name="errorGeneric">問題が発生しました</string>
     <string name="settingsPrivacyHeader">プライバシー</string>
     <string name="settingsShareDataTitle">使用状況データを共有</string>
-    <string name="settingsShareDataSummary">アプリの改善のために使用状況の統計とクラッシュレポートを送信します。名前とスコアが共有されることはありません。</string>
+    <string name="settingsShareDataSummary">アプリの改善のために使用状況の統計を送信します。名前とスコアが共有されることはありません。</string>
+    <string name="settingsCrashReportsTitle">クラッシュレポートを送信</string>
+    <string name="settingsCrashReportsSummary">アプリがクラッシュしたときに、問題の修正に役立つレポートを送信します。名前とスコアが共有されることはありません。</string>
     <string name="navigateUp">上へ移動</string>
     <string name="scoreCellHint">%1$s、ラウンド%2$d</string>
     <string name="playerTotalDescription">%1$s、合計%2$s</string>
@@ -108,7 +110,7 @@
     <string name="calculatorEqualsDescription">イコール</string>
     <string name="graphDescription">スコアのグラフ、%1$s。%2$s</string>
     <string name="usageDataConsentTitle">使用状況データを共有しますか？</string>
-    <string name="usageDataConsentMessage">アプリの改善のために、使用状況の統計とクラッシュレポートを送信しますか？これらは Google Firebase によって収集されます。名前とスコアが共有されることはありません。\n\nこの設定はいつでも設定画面で変更できます。</string>
+    <string name="usageDataConsentMessage">アプリの改善のために、使用状況の統計とクラッシュレポートを送信しますか？これらは Google Firebase によって収集されます。名前とスコアが共有されることはありません。\n\nそれぞれの設定はいつでも設定画面で個別に変更できます。</string>
     <string name="usageDataConsentAllow">許可</string>
     <string name="usageDataConsentDeny">許可しない</string>
 </resources>

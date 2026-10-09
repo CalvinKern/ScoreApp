@@ -96,7 +96,9 @@
     <string name="errorGeneric">Un problème est survenu</string>
     <string name="settingsPrivacyHeader">Confidentialité</string>
     <string name="settingsShareDataTitle">Partager les données d\'utilisation</string>
-    <string name="settingsShareDataSummary">Envoyer des statistiques d\'utilisation et des rapports de plantage pour aider à améliorer l\'application. Les noms et les scores ne sont jamais partagés.</string>
+    <string name="settingsShareDataSummary">Envoyer des statistiques d\'utilisation pour aider à améliorer l\'application. Les noms et les scores ne sont jamais partagés.</string>
+    <string name="settingsCrashReportsTitle">Envoyer les rapports de plantage</string>
+    <string name="settingsCrashReportsSummary">Envoyer un rapport lorsque l\'application plante, pour aider à corriger le problème. Les noms et les scores ne sont jamais partagés.</string>
     <string name="navigateUp">Revenir en haut de la page</string>
     <string name="scoreCellHint">%1$s, tour %2$d</string>
     <string name="playerTotalDescription">%1$s, total %2$s</string>
@@ -114,7 +116,7 @@
     <string name="calculatorEqualsDescription">Égal</string>
     <string name="graphDescription">Graphique des scores, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Partager les données d\'utilisation ?</string>
-    <string name="usageDataConsentMessage">Envoyer des statistiques d\'utilisation et des rapports de plantage pour aider à améliorer l\'application ? Ils sont collectés par Google Firebase. Les noms et les scores ne sont jamais partagés.\n\nVous pouvez modifier ce choix à tout moment dans les paramètres.</string>
+    <string name="usageDataConsentMessage">Envoyer des statistiques d\'utilisation et des rapports de plantage pour aider à améliorer l\'application ? Ils sont collectés par Google Firebase. Les noms et les scores ne sont jamais partagés.\n\nVous pouvez modifier chacun de ces choix séparément à tout moment dans les paramètres.</string>
     <string name="usageDataConsentAllow">Autoriser</string>
     <string name="usageDataConsentDeny">Ne pas autoriser</string>
 </resources>

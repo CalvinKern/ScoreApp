@@ -93,7 +93,9 @@
     <string name="errorGeneric">Etwas ist schiefgelaufen</string>
     <string name="settingsPrivacyHeader">Datenschutz</string>
     <string name="settingsShareDataTitle">Nutzungsdaten teilen</string>
-    <string name="settingsShareDataSummary">Nutzungsstatistiken und Absturzberichte senden, um die App zu verbessern. Namen und Punktzahlen werden nie geteilt.</string>
+    <string name="settingsShareDataSummary">Nutzungsstatistiken senden, um die App zu verbessern. Namen und Punktzahlen werden nie geteilt.</string>
+    <string name="settingsCrashReportsTitle">Absturzberichte senden</string>
+    <string name="settingsCrashReportsSummary">Einen Bericht senden, wenn die App abstürzt, damit der Fehler behoben werden kann. Namen und Punktzahlen werden nie geteilt.</string>
     <string name="navigateUp">Nach oben</string>
     <string name="scoreCellHint">%1$s, Runde %2$d</string>
     <string name="playerTotalDescription">%1$s, gesamt %2$s</string>
@@ -111,7 +113,7 @@
     <string name="calculatorEqualsDescription">Gleich</string>
     <string name="graphDescription">Punktediagramm, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Nutzungsdaten teilen?</string>
-    <string name="usageDataConsentMessage">Nutzungsstatistiken und Absturzberichte senden, um die App zu verbessern? Sie werden von Google Firebase erfasst. Namen und Punktzahlen werden nie geteilt.\n\nSie können dies jederzeit in den Einstellungen ändern.</string>
+    <string name="usageDataConsentMessage">Nutzungsstatistiken und Absturzberichte senden, um die App zu verbessern? Sie werden von Google Firebase erfasst. Namen und Punktzahlen werden nie geteilt.\n\nSie können beides jederzeit einzeln in den Einstellungen ändern.</string>
     <string name="usageDataConsentAllow">Zulassen</string>
     <string name="usageDataConsentDeny">Nicht zulassen</string>
 </resources>

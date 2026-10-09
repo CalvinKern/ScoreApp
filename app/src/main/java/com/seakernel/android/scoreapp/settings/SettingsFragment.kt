@@ -64,10 +64,18 @@ class SettingsFragment : Fragment() {
         binding.shareUsageDataSwitch.isChecked = AppPreferences.isShareUsageDataEnabled(requireContext())
         binding.shareUsageDataSwitch.setOnCheckedChangeListener { _, isChecked -> setShareUsageDataEnabled(isChecked) }
         binding.shareUsageDataRow.setOnClickListener { binding.shareUsageDataSwitch.toggle() }
+
+        binding.shareCrashReportsSwitch.isChecked = AppPreferences.isShareCrashReportsEnabled(requireContext())
+        binding.shareCrashReportsSwitch.setOnCheckedChangeListener { _, isChecked -> setShareCrashReportsEnabled(isChecked) }
+        binding.shareCrashReportsRow.setOnClickListener { binding.shareCrashReportsSwitch.toggle() }
     }
 
     private fun setShareUsageDataEnabled(enabled: Boolean) {
-        UsageData.setShareEnabled(requireContext(), enabled)
+        UsageData.setUsageStatisticsEnabled(requireContext(), enabled)
+    }
+
+    private fun setShareCrashReportsEnabled(enabled: Boolean) {
+        UsageData.setCrashReportsEnabled(requireContext(), enabled)
     }
 
     override fun onResume() {
