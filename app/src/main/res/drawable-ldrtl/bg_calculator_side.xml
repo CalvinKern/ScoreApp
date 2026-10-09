@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The keypad beside the table, rounded where it meets the name row (mirrored from drawable) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="?attr/colorSurface" />
+    <corners android:topRightRadius="@dimen/calculator_side_corner_radius" />
+</shape>

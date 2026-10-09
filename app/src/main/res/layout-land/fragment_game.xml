@@ -115,8 +115,8 @@
     <!--
         Landscape has little height to share, so the keypad sits beside the table instead of under it, reaching up to
         the toolbar. It covers the end of the name row, which (like the table) makes room for it (see GameFragment).
-        The container shows only together with the keypad. Raised above the (lifting) app bar, without a shadow, and
-        colored like the keypad where it keeps clear of the screen edge.
+        The container shows only together with the keypad. Raised above the (lifting) app bar, without a shadow. It
+        paints the keypad's background, rounding the corner that meets the name row.
     -->
     <LinearLayout
         android:id="@+id/bottomContainer"
@@ -125,7 +125,7 @@
         android:layout_gravity="bottom|end"
         android:elevation="16dp"
         android:outlineProvider="none"
-        android:background="?attr/colorSurface"
+        android:background="@drawable/bg_calculator_side"
         android:orientation="vertical"
         android:visibility="gone"
         >
