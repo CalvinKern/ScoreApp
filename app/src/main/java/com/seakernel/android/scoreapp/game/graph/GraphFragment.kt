@@ -15,9 +15,13 @@ import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -27,7 +31,7 @@ import com.seakernel.android.scoreapp.databinding.FragmentGraphBinding
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.ScoreFormat
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
-import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
+import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.themeColor
 
@@ -82,7 +86,7 @@ class GraphFragment : Fragment() {
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
         binding.graphAppBar.applyWindowInsetsCutout()
-        binding.gameChart.applyWindowInsetsNavigationMargin()
+        binding.graphContainer.applyWindowInsetsNavigationPadding()
 
         viewModel.getGame().observe(viewLifecycleOwner, modelObserver)
         viewModel.loadGame(
@@ -90,6 +94,7 @@ class GraphFragment : Fragment() {
                 ?: throw RuntimeException("No game ID provided to GraphFragment")
         )
 
+        initPodiumStyle()
         initChartStyle()
     }
 
@@ -139,17 +144,84 @@ class GraphFragment : Fragment() {
         data.setValueFormatter(graphEmptyFormatter)
         binding.gameChart.data = data
         binding.gameChart.invalidate()
-        binding.gameChart.contentDescription = describeGraph(game)
+        binding.gameChart.contentDescription = describeGraph(game, scoreMap)
+
+        updatePodium(game)
     }
 
-    /** The chart is only drawn, so screen readers get the number of rounds and each player's total instead */
-    private fun describeGraph(game: Game): String {
-        val totals = game.settings.players.joinToString(". ") { player ->
-            val total = game.rounds.sumOf { round -> round.scores.find { it.player.id == player.id }?.value ?: 0.0 }
-            getString(R.string.playerTotalDescription, player.name, ScoreFormat.format(total))
+    /** The chart is only drawn, so screen readers get each player's running total after every round instead */
+    private fun describeGraph(game: Game, scoreMap: Map<Long, List<Entry>>): String {
+        val runningTotals = game.settings.players.joinToString(". ") { player ->
+            val totals = player.id?.let { scoreMap[it] }.orEmpty().joinToString(", ") { ScoreFormat.format(it.y.toDouble()) }
+            getString(R.string.graphPlayerRoundsDescription, player.name, totals)
         }
-        val rounds = resources.getQuantityString(R.plurals.roundsHolder, game.rounds.size, game.rounds.size)
-        return getString(R.string.graphDescription, rounds, totals)
+        return getString(R.string.graphDescription, describeRounds(game), runningTotals)
+    }
+
+    private fun describeRounds(game: Game) =
+        resources.getQuantityString(R.plurals.roundsHolder, game.rounds.size, game.rounds.size)
+
+    /** Every player's total as a bar, best standing first, in the same colors as the rounds graph */
+    private fun updatePodium(game: Game) {
+        val players = game.settings.players
+        val standings = players
+            .map { player ->
+                player to game.rounds.sumOf { round -> round.scores.find { it.player.id == player.id }?.value ?: 0.0 }
+            }
+            .sortedBy { (_, total) -> total }
+            .let { if (game.settings.reversedScoring) it else it.reversed() }
+
+        val entries = standings.mapIndexed { index, (_, total) -> BarEntry(index.toFloat(), total.toFloat()) }
+        val colors = standings.map { (player, _) ->
+            getColor(requireContext(), graphColors[players.indexOf(player).coerceAtLeast(0) % graphColors.size])
+        }
+        val dataSet = BarDataSet(entries, null).apply {
+            this.colors = colors
+            valueTextSize = 14f
+            valueTextColor = colorOnSurface
+            valueFormatter = podiumValueFormatter
+            isHighlightEnabled = false
+        }
+
+        binding.podiumChart.apply {
+            xAxis.valueFormatter = IndexAxisValueFormatter(standings.map { (player, _) -> player.name })
+            xAxis.labelCount = standings.size
+            // Bars grow from zero, leaving room below any negative totals for their labels
+            axisLeft.axisMinimum = minOf(0f, entries.minOfOrNull { it.y }?.times(PODIUM_NEGATIVE_SPACE) ?: 0f)
+            data = BarData(dataSet)
+            invalidate()
+            contentDescription = getString(
+                R.string.podiumDescription,
+                describeRounds(game),
+                standings.joinToString(". ") { (player, total) ->
+                    getString(R.string.playerTotalDescription, player.name, ScoreFormat.format(total))
+                },
+            )
+        }
+    }
+
+    private fun initPodiumStyle() {
+        binding.podiumChart.apply {
+            axisRight.isEnabled = false
+            legend.isEnabled = false
+            description = Description().also {
+                it.text = ""
+            }
+            setTouchEnabled(false)
+            setFitBars(true)
+            xAxis.also {
+                it.granularity = 1f
+                it.position = XAxis.XAxisPosition.BOTTOM
+                it.textColor = colorOnSurface
+                it.textSize = 12f
+                it.setDrawGridLines(false)
+            }
+            axisLeft.also {
+                it.textColor = colorOnSurface
+                // Room above the tallest bar for its total
+                it.spaceTop = 15f
+            }
+        }
     }
 
     private fun initChartStyle() {
@@ -221,6 +293,11 @@ class GraphFragment : Fragment() {
     companion object {
         private const val ARG_GAME_ID = "game_id"
         private const val DASH_LENGTH = 16f
+        private const val PODIUM_NEGATIVE_SPACE = 1.15f
+
+        private val podiumValueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float) = ScoreFormat.format(value.toDouble())
+        }
 
         private val graphEmptyFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float) = ""

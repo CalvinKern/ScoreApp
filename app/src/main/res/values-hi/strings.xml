@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">खिलाड़ियों</string>
     <string name="gameSettingsTitle">खेल व्यवस्था</string>
     <string name="graphByRoundsLabel">राउंड के अनुसार स्कोर</string>
+    <string name="graphPodiumLabel">पोडियम</string>
     <string name="graphSubtitle">आंकड़े</string>
     <string name="makePlayerDealerMessage">इस राउंड के लिए %s को डीलर बनाएं?</string>
     <string name="pickPlayers">खिलाड़ियों को चुनें</string>
@@ -112,7 +113,9 @@
     <string name="calculatorDecimalDescription">दशमलव</string>
     <string name="calculatorMinusDescription">घटाएं</string>
     <string name="calculatorEqualsDescription">बराबर</string>
-    <string name="graphDescription">स्कोर ग्राफ़, %1$s. %2$s</string>
+    <string name="graphDescription">राउंड के अनुसार स्कोर, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">पोडियम, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">उपयोग डेटा साझा करें?</string>
     <string name="usageDataConsentMessage">ऐप को बेहतर बनाने में मदद के लिए उपयोग के आंकड़े और क्रैश रिपोर्ट भेजें? इन्हें Google Firebase द्वारा एकत्र किया जाता है। नाम और स्कोर कभी साझा नहीं किए जाते।\n\nआप इनमें से हर एक को कभी भी सेटिंग में अलग से बदल सकते हैं।</string>
     <string name="usageDataConsentAllow">अनुमति दें</string>

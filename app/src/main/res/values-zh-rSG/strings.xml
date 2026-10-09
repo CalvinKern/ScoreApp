@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">玩家们</string>
     <string name="gameSettingsTitle">游戏设置</string>
     <string name="graphByRoundsLabel">逐轮得分</string>
+    <string name="graphPodiumLabel">领奖台</string>
     <string name="graphSubtitle">统计</string>
     <string name="makePlayerDealerMessage">让%s成为本轮的发牌人吗？</string>
     <string name="pickPlayers">选择玩家</string>
@@ -109,7 +110,9 @@
     <string name="calculatorDecimalDescription">小数点</string>
     <string name="calculatorMinusDescription">减</string>
     <string name="calculatorEqualsDescription">等于</string>
-    <string name="graphDescription">得分图表，%1$s。%2$s</string>
+    <string name="graphDescription">逐轮得分，%1$s。%2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s：%2$s</string>
+    <string name="podiumDescription">领奖台，%1$s。%2$s</string>
     <string name="usageDataConsentTitle">共享使用情况数据？</string>
     <string name="usageDataConsentMessage">发送使用情况统计信息和崩溃报告以帮助改进应用？这些数据由 Google Firebase 收集。我们绝不会分享姓名和分数。\n\n您可以随时在设置中分别更改这两个选项。</string>
     <string name="usageDataConsentAllow">允许</string>

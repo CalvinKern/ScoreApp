@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">選手</string>
     <string name="gameSettingsTitle">ゲームの設定</string>
     <string name="graphByRoundsLabel">ラウンドによるスコア</string>
+    <string name="graphPodiumLabel">表彰台</string>
     <string name="graphSubtitle">統計</string>
     <string name="makePlayerDealerMessage">%sをこのラウンドのディーラーにしますか？</string>
     <string name="pickPlayers">選手を選ぶ</string>
@@ -109,7 +110,9 @@
     <string name="calculatorDecimalDescription">小数点</string>
     <string name="calculatorMinusDescription">マイナス</string>
     <string name="calculatorEqualsDescription">イコール</string>
-    <string name="graphDescription">スコアのグラフ、%1$s。%2$s</string>
+    <string name="graphDescription">ラウンドによるスコア、%1$s。%2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s：%2$s</string>
+    <string name="podiumDescription">表彰台、%1$s。%2$s</string>
     <string name="usageDataConsentTitle">使用状況データを共有しますか？</string>
     <string name="usageDataConsentMessage">アプリの改善のために、使用状況の統計とクラッシュレポートを送信しますか？これらは Google Firebase によって収集されます。名前とスコアが共有されることはありません。\n\nそれぞれの設定はいつでも設定画面で個別に変更できます。</string>
     <string name="usageDataConsentAllow">許可</string>

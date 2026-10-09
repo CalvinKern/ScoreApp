@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">Pemain</string>
     <string name="gameSettingsTitle">Pengaturan permainan</string>
     <string name="graphByRoundsLabel">Skor dengan putaran</string>
+    <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistik</string>
     <string name="makePlayerDealerMessage">Jadikan %s pembagi kartu untuk putaran ini?</string>
     <string name="pickPlayers">Pilih Pemain</string>
@@ -109,7 +110,9 @@
     <string name="calculatorDecimalDescription">Koma desimal</string>
     <string name="calculatorMinusDescription">Kurang</string>
     <string name="calculatorEqualsDescription">Sama dengan</string>
-    <string name="graphDescription">Grafik skor, %1$s. %2$s</string>
+    <string name="graphDescription">Skor dengan putaran, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Bagikan data penggunaan?</string>
     <string name="usageDataConsentMessage">Kirim statistik penggunaan dan laporan error untuk membantu meningkatkan aplikasi? Data ini dikumpulkan oleh Google Firebase. Nama dan skor tidak pernah dibagikan.\n\nAnda dapat mengubah masing-masing secara terpisah kapan saja di Setelan.</string>
     <string name="usageDataConsentAllow">Izinkan</string>

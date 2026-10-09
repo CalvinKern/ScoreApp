@@ -10,6 +10,9 @@
     <dimen name="image_padding">12dp</dimen>
     <dimen name="image_size">60dp</dimen>
     <dimen name="description_width">300dp</dimen>
+    <!-- The graph screen scrolls, so each chart has a set height: the podium short enough to see the rounds below -->
+    <dimen name="graph_podium_height">300dp</dimen>
+    <dimen name="graph_rounds_height">400dp</dimen>
     <dimen name="empty_margin_vertical">50dp</dimen>
 
     <dimen name="margin_checkbox">8dp</dimen>

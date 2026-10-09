@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">Spieler</string>
     <string name="gameSettingsTitle">Spieleinstellungen</string>
     <string name="graphByRoundsLabel">Ergebnis nach Runden</string>
+    <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistiken</string>
     <string name="makePlayerDealerMessage">%s in dieser Runde zum Geber machen?</string>
     <string name="pickPlayers">Spieler auswählen</string>
@@ -112,7 +113,9 @@
     <string name="calculatorDecimalDescription">Komma</string>
     <string name="calculatorMinusDescription">Minus</string>
     <string name="calculatorEqualsDescription">Gleich</string>
-    <string name="graphDescription">Punktediagramm, %1$s. %2$s</string>
+    <string name="graphDescription">Ergebnis nach Runden, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Nutzungsdaten teilen?</string>
     <string name="usageDataConsentMessage">Nutzungsstatistiken und Absturzberichte senden, um die App zu verbessern? Sie werden von Google Firebase erfasst. Namen und Punktzahlen werden nie geteilt.\n\nSie können beides jederzeit einzeln in den Einstellungen ändern.</string>
     <string name="usageDataConsentAllow">Zulassen</string>

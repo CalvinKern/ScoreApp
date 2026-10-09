@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">Jugadores</string>
     <string name="gameSettingsTitle">Configuraciones de juego</string>
     <string name="graphByRoundsLabel">Puntuación por rondas</string>
+    <string name="graphPodiumLabel">Podio</string>
     <string name="graphSubtitle">Estadísticas</string>
     <string name="makePlayerDealerMessage">¿Hacer que %s sea el repartidor de esta ronda?</string>
     <string name="pickPlayers">Elige jugadores</string>
@@ -115,7 +116,9 @@
     <string name="calculatorDecimalDescription">Separador decimal</string>
     <string name="calculatorMinusDescription">Menos</string>
     <string name="calculatorEqualsDescription">Igual</string>
-    <string name="graphDescription">Gráfico de puntuación, %1$s. %2$s</string>
+    <string name="graphDescription">Puntuación por rondas, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Podio, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">¿Compartir datos de uso?</string>
     <string name="usageDataConsentMessage">¿Enviar estadísticas de uso e informes de fallos para ayudar a mejorar la aplicación? Los recopila Google Firebase. Los nombres y las puntuaciones nunca se comparten.\n\nPuede cambiar cada uno por separado en cualquier momento en Ajustes.</string>
     <string name="usageDataConsentAllow">Permitir</string>

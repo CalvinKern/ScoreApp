@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">Joueurs</string>
     <string name="gameSettingsTitle">Paramètres de jeu</string>
     <string name="graphByRoundsLabel">Score par rounds</string>
+    <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistiques</string>
     <string name="makePlayerDealerMessage">Faire de %s le donneur pour ce tour?</string>
     <string name="pickPlayers">Choisir des joueurs</string>
@@ -115,7 +116,9 @@
     <string name="calculatorDecimalDescription">Virgule</string>
     <string name="calculatorMinusDescription">Moins</string>
     <string name="calculatorEqualsDescription">Égal</string>
-    <string name="graphDescription">Graphique des scores, %1$s. %2$s</string>
+    <string name="graphDescription">Score par rounds, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s : %2$s</string>
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Partager les données d\'utilisation ?</string>
     <string name="usageDataConsentMessage">Envoyer des statistiques d\'utilisation et des rapports de plantage pour aider à améliorer l\'application ? Ils sont collectés par Google Firebase. Les noms et les scores ne sont jamais partagés.\n\nVous pouvez modifier chacun de ces choix séparément à tout moment dans les paramètres.</string>
     <string name="usageDataConsentAllow">Autoriser</string>

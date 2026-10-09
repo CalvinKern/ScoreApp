@@ -19,6 +19,7 @@
     <string name="gamePlayersHeader">Jucători</string>
     <string name="gameSettingsTitle">Setările jocului</string>
     <string name="graphByRoundsLabel">Scor după runde</string>
+    <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistici</string>
     <string name="makePlayerDealerMessage">Setați %s ca dealer pentru această rundă?</string>
     <string name="pickPlayers">Alegeți jucători</string>
@@ -115,7 +116,9 @@
     <string name="calculatorDecimalDescription">Virgulă</string>
     <string name="calculatorMinusDescription">Minus</string>
     <string name="calculatorEqualsDescription">Egal</string>
-    <string name="graphDescription">Graficul scorurilor, %1$s. %2$s</string>
+    <string name="graphDescription">Scor după runde, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Partajați datele de utilizare?</string>
     <string name="usageDataConsentMessage">Trimiteți statistici de utilizare și rapoarte de erori pentru a ajuta la îmbunătățirea aplicației? Acestea sunt colectate de Google Firebase. Numele și scorurile nu sunt partajate niciodată.\n\nPuteți modifica oricând fiecare opțiune separat din Setări.</string>
     <string name="usageDataConsentAllow">Permiteți</string>

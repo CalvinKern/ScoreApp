@@ -34,6 +34,7 @@
     <string name="makePlayerDealerMessage">Fazer de %s o carteador desta rodada?</string>
     <string name="graphSubtitle">Estatisticas</string>
     <string name="graphByRoundsLabel">Pontuação por rodadas</string>
+    <string name="graphPodiumLabel">Pódio</string>
     <string name="gameSettingsTitle">Configurações do jogo</string>
     <string name="gamePlayersHeader">Jogadoras</string>
     <string name="gamePlayersEmptyTitle">Nenhum jogador adicionado</string>
@@ -115,7 +116,9 @@
     <string name="calculatorDecimalDescription">Separador decimal</string>
     <string name="calculatorMinusDescription">Menos</string>
     <string name="calculatorEqualsDescription">Igual</string>
-    <string name="graphDescription">Gráfico de pontuação, %1$s. %2$s</string>
+    <string name="graphDescription">Pontuação por rodadas, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Pódio, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Compartilhar dados de uso?</string>
     <string name="usageDataConsentMessage">Enviar estatísticas de uso e relatórios de falhas para ajudar a melhorar o aplicativo? Eles são coletados pelo Google Firebase. Nomes e pontuações nunca são compartilhados.\n\nVocê pode alterar cada um separadamente a qualquer momento nas Configurações.</string>
     <string name="usageDataConsentAllow">Permitir</string>
