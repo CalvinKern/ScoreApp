@@ -113,6 +113,15 @@
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
     </style>
 
+    <!--
+        Score cells typed on the system keyboard. A short window (e.g. a phone in landscape) has no room for a score
+        above the keyboard, so the table would shrink away and close it again: the keyboard may take the whole
+        screen and show the score itself. Taller windows keep the table in view instead (see values-h480dp).
+    -->
+    <style name="AppTheme.ScoreInput" parent="">
+        <item name="android:imeOptions">actionNext</item>
+    </style>
+
     <!-- Calculator keys: digits on a surface container, operators tonal, actions filled -->
     <style name="AppTheme.CalculatorButton" parent="@style/Widget.Material3Expressive.Button">
         <item name="android:layout_width">0dp</item>

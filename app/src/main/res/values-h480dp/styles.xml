@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tall enough to keep the score table in view above the keyboard (see values) -->
+    <style name="AppTheme.ScoreInput" parent="">
+        <item name="android:imeOptions">actionNext|flagNoExtractUi</item>
+    </style>
+</resources>
