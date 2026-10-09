@@ -71,6 +71,7 @@
     <string name="settingsGamesHeader">游戏</string>
     <string name="settingsAutoLoadSettingsTitle">加载上次设置</string>
     <string name="settingsAutoLoadSettingsSummary">选择以前的游戏名称时，自动填入其上次的设置和玩家</string>
+    <string name="settingsCalculatorDefaultSummary">新游戏默认开启计算器键盘</string>
     <string name="settingsChangelogSummary">查看每个版本的新功能</string>
     <string name="settingsRateSummary">在 Google Play 上留下评价</string>
     <string name="settingsVersionTitle">版本</string>

@@ -71,6 +71,7 @@
     <string name="settingsGamesHeader">ゲーム</string>
     <string name="settingsAutoLoadSettingsTitle">前回の設定を読み込む</string>
     <string name="settingsAutoLoadSettingsSummary">以前のゲーム名を選ぶと、前回の設定とプレイヤーが入力されます</string>
+    <string name="settingsCalculatorDefaultSummary">新しいゲームは電卓キーボードをオンにして始まります</string>
     <string name="settingsChangelogSummary">各リリースの新機能を確認</string>
     <string name="settingsRateSummary">Google Play でレビューを書く</string>
     <string name="settingsVersionTitle">バージョン</string>

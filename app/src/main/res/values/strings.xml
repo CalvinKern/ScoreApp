@@ -42,6 +42,7 @@
     <string name="settingsGamesHeader">Games</string>
     <string name="settingsAutoLoadSettingsTitle">Load Previous Settings</string>
     <string name="settingsAutoLoadSettingsSummary">Picking a previous game name fills in its last settings and players</string>
+    <string name="settingsCalculatorDefaultSummary">New games start with the calculator keyboard turned on</string>
     <string name="settingsPrivacyHeader">Privacy</string>
     <string name="settingsShareDataTitle">Share Usage Data</string>
     <string name="settingsShareDataSummary">Send usage statistics to help improve the app. Names and scores are never shared.</string>

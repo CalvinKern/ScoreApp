@@ -72,6 +72,7 @@
     <string name="settingsGamesHeader">Spiele</string>
     <string name="settingsAutoLoadSettingsTitle">Vorherige Einstellungen laden</string>
     <string name="settingsAutoLoadSettingsSummary">Bei Auswahl eines früheren Spielnamens werden dessen letzte Einstellungen und Spieler übernommen</string>
+    <string name="settingsCalculatorDefaultSummary">Neue Spiele starten mit eingeschalteter Rechner-Tastatur</string>
     <string name="settingsChangelogSummary">Neuerungen in jeder Version ansehen</string>
     <string name="settingsRateSummary">Eine Bewertung bei Google Play abgeben</string>
     <string name="settingsVersionTitle">Version</string>

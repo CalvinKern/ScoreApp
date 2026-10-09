@@ -11,6 +11,7 @@ object AppPreferences {
     private const val KEY_DYNAMIC_COLOR = "dynamic_color_enabled"
     private const val KEY_TRUE_BLACK = "true_black_enabled"
     private const val KEY_AUTO_LOAD_GAME_SETTINGS = "auto_load_game_settings_enabled"
+    private const val KEY_CALCULATOR_DEFAULT = "calculator_default_enabled"
     private const val KEY_SHARE_USAGE_DATA = "share_usage_data_enabled"
     private const val KEY_SHARE_CRASH_REPORTS = "share_crash_reports_enabled"
 
@@ -37,6 +38,13 @@ object AppPreferences {
 
     fun setAutoLoadGameSettingsEnabled(context: Context, enabled: Boolean) =
         prefs(context).edit { putBoolean(KEY_AUTO_LOAD_GAME_SETTINGS, enabled) }
+
+    /** Whether new games start with the calculator keyboard on, each game can still change it */
+    fun isCalculatorDefaultEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_CALCULATOR_DEFAULT, true)
+
+    fun setCalculatorDefaultEnabled(context: Context, enabled: Boolean) =
+        prefs(context).edit { putBoolean(KEY_CALCULATOR_DEFAULT, enabled) }
 
     /**
      * Whether usage statistics are sent to Firebase Analytics, which is never until the user agrees.

@@ -77,6 +77,7 @@
     <string name="settingsGamesHeader">Jocuri</string>
     <string name="settingsAutoLoadSettingsTitle">Încarcă setările anterioare</string>
     <string name="settingsAutoLoadSettingsSummary">Alegerea numelui unui joc anterior completează ultimele setări și jucători ale acestuia</string>
+    <string name="settingsCalculatorDefaultSummary">Jocurile noi pornesc cu tastatura calculator activată</string>
     <string name="settingsChangelogSummary">Vedeți noutățile din fiecare versiune</string>
     <string name="settingsRateSummary">Lăsați o recenzie pe Google Play</string>
     <string name="settingsVersionTitle">Versiune</string>

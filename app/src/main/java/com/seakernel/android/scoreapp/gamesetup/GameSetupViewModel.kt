@@ -10,6 +10,7 @@ import com.hadilq.liveevent.LiveEvent
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
+import com.seakernel.android.scoreapp.utility.AppPreferences
 import com.seakernel.android.scoreapp.utility.safePostValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -267,7 +268,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     @MainThread
     fun initializeGame() {
         if (gameSettings.value == null) {
-            gameSettings.value = GameSettings()
+            gameSettings.value = GameSettings(useCalculator = AppPreferences.isCalculatorDefaultEnabled(getApplication()))
         }
         loadGameNames()
     }

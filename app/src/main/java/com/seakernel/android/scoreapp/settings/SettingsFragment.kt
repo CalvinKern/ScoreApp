@@ -100,6 +100,10 @@ class SettingsFragment : Fragment() {
         binding.autoLoadSettingsSwitch.isChecked = AppPreferences.isAutoLoadGameSettingsEnabled(requireContext())
         binding.autoLoadSettingsSwitch.setOnCheckedChangeListener { _, isChecked -> setAutoLoadSettingsEnabled(isChecked) }
         binding.autoLoadSettingsRow.setOnClickListener { binding.autoLoadSettingsSwitch.toggle() }
+
+        binding.calculatorDefaultSwitch.isChecked = AppPreferences.isCalculatorDefaultEnabled(requireContext())
+        binding.calculatorDefaultSwitch.setOnCheckedChangeListener { _, isChecked -> setCalculatorDefaultEnabled(isChecked) }
+        binding.calculatorDefaultRow.setOnClickListener { binding.calculatorDefaultSwitch.toggle() }
     }
 
     private fun initAbout() {
@@ -132,6 +136,13 @@ class SettingsFragment : Fragment() {
             putBoolean(AnalyticsConstants.Param.ENABLED, enabled)
         }
         AppPreferences.setAutoLoadGameSettingsEnabled(requireContext(), enabled)
+    }
+
+    private fun setCalculatorDefaultEnabled(enabled: Boolean) {
+        logEvent(AnalyticsConstants.Event.TOGGLE_CALCULATOR_DEFAULT) {
+            putBoolean(AnalyticsConstants.Param.ENABLED, enabled)
+        }
+        AppPreferences.setCalculatorDefaultEnabled(requireContext(), enabled)
     }
 
     companion object {
