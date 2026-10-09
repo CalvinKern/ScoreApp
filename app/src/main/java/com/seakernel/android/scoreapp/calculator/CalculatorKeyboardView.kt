@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView.Companion.KEYCODE_NEXT
 import com.seakernel.android.scoreapp.databinding.ViewCalculatorKeyboardBinding
@@ -55,6 +56,15 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
             // Immediately hide if not enabled
             if (!value) visibility = GONE
         }
+
+    /** Called whenever the keypad shows or hides, e.g. to make room for it */
+    var onShownChanged: ((shown: Boolean) -> Unit)? = null
+
+    override fun setVisibility(visibility: Int) {
+        val wasShown = isVisible
+        super.setVisibility(visibility)
+        if (isVisible != wasShown) onShownChanged?.invoke(isVisible)
+    }
 
     private var delayCheckJob: Job? = null
     private var calculatorFailed = false

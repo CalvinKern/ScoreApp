@@ -1,12 +1,15 @@
 package com.seakernel.android.scoreapp.game.classic
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.view.ViewGroupCompat
+import androidx.core.view.isVisible
+import androidx.core.view.marginEnd
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -111,8 +114,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
         binding.appBar.applyWindowInsetsCutout()
-        binding.scoreScroll.applyWindowInsetsNavigationPadding(includeBottom = false)
-        binding.bottomContainer.applyWindowInsetsNavigationPadding()
+        // Landscape puts the keypad beside the table instead of below it (see layout-land/fragment_game)
+        val keypadBesideTable = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        binding.scoreScroll.applyWindowInsetsNavigationPadding(includeBottom = keypadBesideTable)
+        binding.bottomContainer.applyWindowInsetsNavigationPadding(includeStart = !keypadBesideTable)
+        if (keypadBesideTable) makeRoomForKeypad()
         syncHorizontalScroll(binding.nameScroll, binding.scoreScroll)
         binding.scoreScroll.addOnLayoutChangeListener { view, left, _, right, _, oldLeft, _, oldRight, _ ->
             // Fit the table to the new width (e.g. after rotating), after this layout pass finishes
@@ -222,6 +228,39 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private fun updateTableWidth(playerCount: Int) {
         tablePlayerCount = playerCount
         applyTableWidth()
+    }
+
+    /**
+     * For the keypad beside the table: shows its container only together with it (an empty one would still keep
+     * clear of the screen edge), and moves the end of the names and scores to the keypad's side while it shows
+     */
+    private fun makeRoomForKeypad() {
+        val container = binding.bottomContainer
+        val edgeSpacing = resources.getDimensionPixelSize(R.dimen.score_table_edge_spacing)
+        val fitBesideKeypad = fit@{
+            val binding = _binding ?: return@fit
+            // Without the container's padding, since the names and scores already keep clear of the screen edge
+            val marginEnd = edgeSpacing + if (container.isVisible) binding.calculatorKeyboard.width else 0
+            // Both move as far, so each name stays above its scores
+            listOf(binding.nameScroll, binding.scoreScroll).forEach { scroll ->
+                if (scroll.marginEnd != marginEnd) {
+                    scroll.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        // Set again, since a margin set from layout_marginHorizontal is lost once the end one changes
+                        marginStart = edgeSpacing
+                        this.marginEnd = marginEnd
+                    }
+                }
+            }
+        }
+
+        binding.calculatorKeyboard.onShownChanged = { shown ->
+            container.isVisible = shown
+            if (!shown) fitBesideKeypad() // A hidden container isn't laid out again
+        }
+        container.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
+            // After this layout pass finishes
+            view.post(fitBesideKeypad)
+        }
     }
 
     /**

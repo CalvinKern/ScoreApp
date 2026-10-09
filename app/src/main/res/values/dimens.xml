@@ -4,6 +4,8 @@
     <dimen name="min_touch_size">48dp</dimen>
     <dimen name="calculator_button_size">60dp</dimen>
     <dimen name="calculator_button_spacing">3dp</dimen>
+    <!-- Width of the keypad when it sits beside the score table (in landscape) -->
+    <dimen name="calculator_side_width">300dp</dimen>
     <dimen name="image_padding">12dp</dimen>
     <dimen name="image_size">60dp</dimen>
     <dimen name="description_width">300dp</dimen>

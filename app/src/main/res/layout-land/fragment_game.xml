@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!-- The player name row lives in the app bar so it lifts (tints) together with the toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liftOnScrollTargetViewId="@id/scoreRows"
+        >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:navigationContentDescription="@string/navigateUp"
+            />
+
+        <!-- Scrolls together with the score table when there are too many players to fit (see GameFragment) -->
+        <HorizontalScrollView
+            android:id="@+id/nameScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/score_table_edge_spacing"
+            android:requiresFadingEdge="horizontal"
+            android:fadingEdgeLength="@dimen/score_table_fade_length"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            >
+
+            <!-- A scroll view measures its own child as wide as it likes, the frame lets the row keep its set width -->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/nameRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:spanCount="4"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/holder_score_row_header"
+                    />
+            </FrameLayout>
+        </HorizontalScrollView>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/scoreScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/score_table_edge_spacing"
+        android:requiresFadingEdge="horizontal"
+        android:fadingEdgeLength="@dimen/score_table_fade_length"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/scoreRows"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="?attr/colorSurface"
+                android:clipToPadding="false"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:spanCount="4"
+                tools:listitem="@layout/holder_score_row_data"
+                />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                />
+
+            <!-- Screen readers hear each total with the player's name at the top instead (see PlayerViewHolder) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/totalsRow"
+                android:importantForAccessibility="noHideDescendants"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:background="?attr/colorSurface"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:spanCount="4"
+                tools:itemCount="4"
+                tools:listitem="@layout/holder_score_row_data"
+                />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!--
+        Landscape has little height to share, so the keypad sits beside the table instead of under it, reaching up to
+        the toolbar. It covers the end of the name row, which (like the table) makes room for it (see GameFragment).
+        The container shows only together with the keypad. Raised above the (lifting) app bar, without a shadow, and
+        colored like the keypad where it keeps clear of the screen edge.
+    -->
+    <LinearLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:elevation="16dp"
+        android:outlineProvider="none"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
+            android:id="@+id/calculatorKeyboard"
+            android:layout_width="@dimen/calculator_side_width"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -115,7 +115,10 @@ fun View.applyWindowInsetsCutout() {
     }
 }
 
-fun View.applyWindowInsetsNavigationPadding(includeBottom: Boolean = true) {
+/**
+ * @param includeStart false for a view along the end edge of the screen, which has no start side to keep clear
+ */
+fun View.applyWindowInsetsNavigationPadding(includeBottom: Boolean = true, includeStart: Boolean = true) {
     // Cache the padding to reuse in the listener
     val initialPaddingLeft = paddingLeft
     val initialPaddingRight = paddingRight
@@ -128,9 +131,10 @@ fun View.applyWindowInsetsNavigationPadding(includeBottom: Boolean = true) {
                     or WindowInsetsCompat.Type.displayCutout()
         )
 
+        val rtl = v.layoutDirection == View.LAYOUT_DIRECTION_RTL
         v.updatePadding(
-            left = insets.left + initialPaddingLeft,
-            right = insets.right + initialPaddingRight,
+            left = (if (includeStart || rtl) insets.left else 0) + initialPaddingLeft,
+            right = (if (includeStart || !rtl) insets.right else 0) + initialPaddingRight,
         )
         if (includeBottom) {
             v.updatePadding(bottom = insets.bottom + initialPaddingBottom)
