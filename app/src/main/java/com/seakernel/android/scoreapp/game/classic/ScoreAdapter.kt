@@ -393,12 +393,21 @@ class ScoreViewHolder(
             } else {
                 // Show what was typed (e.g. "10/3") so it can be edited, instead of the rounded score
                 val editText = editableText(focusedScore)
+                val shownText = binding.playerScore.text.toString()
                 textOnFocus = editText
                 scoreOnFocus = focusedScore
                 setScoreText(editText)
                 binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
-                // Start at the end of the score (makes quick edits/additions easier), tapping moves the cursor
+                // Start at the end of the score (makes quick edits/additions easier). A tap that focused the cell
+                // places the cursor where it landed afterwards, which is kept when the text is what was tapped on.
                 binding.playerScore.setSelection(editText.length)
+                if (editText != shownText) {
+                    // The tap landed on the shown score (e.g. "55"), not on the typed input that replaced it
+                    // (e.g. "5x4+10+25"), so its spot means nothing. Go back to the end once the tap is handled.
+                    binding.playerScore.post {
+                        if (binding.playerScore.hasFocus()) binding.playerScore.setSelection(binding.playerScore.length())
+                    }
+                }
 
                 // Newly gained focus = open calculator/keyboard, which starts from the text set above
                 showCalculatorKeyboardCallback?.invoke(binding.playerScore)
