@@ -232,21 +232,11 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
     fun bind(isGoalReached: Boolean, eventConsumer: Consumer<GameEvent>?, horizontalOffset: Float) {
         setHorizontalOffset(horizontalOffset)
 
-        if (isGoalReached) {
-            binding.addRoundButton.setText(R.string.finishGame)
-            binding.addRoundButton.setIconResource(R.drawable.ic_trophy)
-        } else {
-            binding.addRoundButton.setText(R.string.addRound)
-            binding.addRoundButton.setIconResource(R.drawable.ic_add_black)
-        }
+        binding.addRoundButton.setVisible(!isGoalReached)
+        binding.finishGameButton.setVisible(isGoalReached)
 
-        binding.addRoundButton.setOnClickListener {
-            if (isGoalReached) {
-                eventConsumer?.accept(GameEvent.RequestFinishGame)
-            } else {
-                eventConsumer?.accept(GameEvent.RequestCreateRound)
-            }
-        }
+        binding.addRoundButton.setOnClickListener { eventConsumer?.accept(GameEvent.RequestCreateRound) }
+        binding.finishGameButton.setOnClickListener { eventConsumer?.accept(GameEvent.RequestFinishGame) }
     }
 
     /**
@@ -255,6 +245,7 @@ class AddRoundViewHolder(parent: ViewGroup) : BaseViewHolder<HolderRoundAddBindi
      */
     fun setHorizontalOffset(offset: Float) {
         binding.addRoundButton.translationX = offset
+        binding.finishGameButton.translationX = offset
     }
 }
 
