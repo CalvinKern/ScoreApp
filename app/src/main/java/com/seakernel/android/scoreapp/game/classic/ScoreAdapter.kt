@@ -442,7 +442,10 @@ class ScoreViewHolder(
                     }
                 }
             }
-        } else if (binding.playerScore.hasFocus()) {
+        } else if (focusedScoreId != null && binding.playerScore.hasFocus()) {
+            // Only give up focus to another score. No focused score means the previous cell's focus loss was
+            // handled after this cell was tapped, and its own focus is still on the way. Clearing it here would
+            // focus it again without the tap, moving the cursor from where it was tapped to the end.
             binding.playerScore.clearFocus()
         }
     }
