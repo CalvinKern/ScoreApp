@@ -3,9 +3,14 @@ package com.seakernel.android.scoreapp.ui
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewGroupCompat
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.transition.MaterialSharedAxis
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.databinding.ActivityMainBinding
 import com.seakernel.android.scoreapp.game.classic.GameFragment
@@ -34,6 +39,27 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
 
     private lateinit var binding: ActivityMainBinding
 
+    /**
+     * Screens slide in and out along the same axis. AndroidX transitions can follow a predictive back gesture, so
+     * swiping back shows the previous screen sliding in as the gesture goes, before letting go. Dialogs keep their
+     * own animations.
+     */
+    private val screenTransitions = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentPreCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
+            if (f is DialogFragment) return
+            f.enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+            f.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+            f.reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+            f.returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+        }
+
+        // Each screen moves as one piece. Otherwise the transition animates every view inside it on its own,
+        // copying each one into a bitmap as it leaves, which takes seconds with a game's score table.
+        override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
+            if (f !is DialogFragment && v is ViewGroup) ViewGroupCompat.setTransitionGroup(v, true)
+        }
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         WindowCompat.getInsetsController(window, window.decorView).apply {
@@ -48,6 +74,8 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
         if (AppPreferences.isTrueBlackEnabled(this)) {
             theme.applyStyle(R.style.ThemeOverlay_App_TrueBlack, true)
         }
+        // Registered before super.onCreate, so screens restored after rotating or process death get them too
+        supportFragmentManager.registerFragmentLifecycleCallbacks(screenTransitions, false)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         WindowCompat.enableEdgeToEdge(window)
@@ -148,8 +176,10 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
 
     // TODO: make first param generic (inheriting from fragment) so that it can be used to generate the tag without resolving the super classes name
     private fun showFragment(fragment: Fragment, tag: String) {
+        // Reordering lets the transitions follow a predictive back gesture (see screenTransitions)
         supportFragmentManager
             .beginTransaction()
+            .setReorderingAllowed(true)
             .replace(R.id.fragmentContainer, fragment, tag)
             .addToBackStack(tag)
             .commit()
