@@ -52,3 +52,6 @@ db-backups/
 
 # Traces from scripts/emulator-perf.sh
 perf-traces/
+
+# Results from the regression plan (regression/README.md)
+regression-results/

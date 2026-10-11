@@ -13,6 +13,9 @@ scripts/emulator-db.sh list               # List the backups
 Backups are ignored by git. A backup from an older schema restores into a newer app, which migrates it on launch,
 so an old backup is also a quick way to test a migration.
 
+The regression plan's [seeded games feature](../../regression/features/13_seeded_games.feature) checks every game
+below opens with the right totals, leader, dealer, and goal state. Update its expected values when this data changes.
+
 ## Games
 
 Scores are realistic for each game. Settings are abbreviated: **dealer**, **low wins** (reversed scoring),
