@@ -44,13 +44,15 @@ import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setBackgroundRipple
 import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
+import com.seakernel.android.scoreapp.utility.setStatusSubtitle
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.seakernel.android.scoreapp.utility.themeColor
 
 class GameSetupFragment : Fragment() {
 
     interface GameSetupListener {
-        fun onShowPlayerSelectScreen(playerIds: List<Long>)
+        /** @param savesAutomatically whether the picks save to the game as they're made (for an existing game) */
+        fun onShowPlayerSelectScreen(playerIds: List<Long>, savesAutomatically: Boolean)
         fun onShowGameScreen(gameId: Long)
         fun onGameUpdated()
     }
@@ -86,6 +88,17 @@ class GameSetupFragment : Fragment() {
         Observer<Boolean?> { saving -> renderSettings(viewModel.getGameSettings().value, saving) }
     private val modelObserver =
         Observer<GameSettings?> { settings -> renderSettings(settings, viewModel.isSaving().value) }
+    private val saveStatusObserver = Observer<SaveStatus?> { status ->
+        val text = when (status) {
+            SaveStatus.SAVING -> R.string.saveStatusSaving
+            SaveStatus.SAVED -> R.string.saveStatusSaved
+            SaveStatus.NAME_NOT_SAVED -> R.string.saveStatusNameNotSaved
+            SaveStatus.PLAYERS_NOT_SAVED -> R.string.saveStatusPlayersNotSaved
+            null -> null
+        }
+        // Only where it ends up is announced, not every time a change starts saving
+        binding.toolbar.setStatusSubtitle(text?.let { getString(it) }, announce = status != SaveStatus.SAVING)
+    }
     private val autocompleteObserver = Observer<List<String>?> { names ->
         binding.gameNameEdit.setAdapter(
             ArrayAdapter(
@@ -114,6 +127,16 @@ class GameSetupFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Picks arrive as they're made, while the picker covers this screen (so it's the activity that has to be
+        // showing), and an existing game saves them right away. A later setup screen replaces this listener.
+        val viewModel = viewModel
+        parentFragmentManager.setFragmentResultListener(PlayerSelectFragment.REQUEST_PLAYERS, requireActivity()) { _, result ->
+            viewModel.updateForNewPlayers(result.getLongArray(PlayerSelectFragment.KEY_PLAYER_IDS)?.toList().orEmpty())
+        }
     }
 
     override fun onCreateView(
@@ -152,6 +175,7 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameCreatedEvent().removeObserver(gameCreatedObserver)
         viewModel.getGameUpdatedEvent().removeObserver(gameUpdatedObserver)
         viewModel.getGameNamesForAutocomplete().removeObserver(autocompleteObserver)
+        viewModel.getSaveStatus().removeObserver(saveStatusObserver)
 
         _binding = null
         _settingsBinding = null
@@ -172,9 +196,7 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameCreatedEvent().observe(viewLifecycleOwner, gameCreatedObserver)
         viewModel.getGameUpdatedEvent().observe(viewLifecycleOwner, gameUpdatedObserver)
         viewModel.getGameNamesForAutocomplete().observe(viewLifecycleOwner, autocompleteObserver)
-        parentFragmentManager.setFragmentResultListener(PlayerSelectFragment.REQUEST_PLAYERS, viewLifecycleOwner) { _, result ->
-            viewModel.updateForNewPlayers(result.getLongArray(PlayerSelectFragment.KEY_PLAYER_IDS)?.toList().orEmpty())
-        }
+        viewModel.getSaveStatus().observe(viewLifecycleOwner, saveStatusObserver)
 
         if (isExistingGame) {
             saveOnBackCallback.isEnabled = true // Turned off after leaving once, and the view is recreated after picking players
@@ -245,7 +267,7 @@ class GameSetupFragment : Fragment() {
         binding.playersHeaderEdit.setOnClickListener {
             val ids =
                 viewModel.getGameSettings().value?.players?.mapNotNull { it.id } ?: emptyList()
-            listener?.onShowPlayerSelectScreen(ids)
+            listener?.onShowPlayerSelectScreen(ids, savesAutomatically = isExistingGame)
         }
         binding.gamePlayersEmptyImage.setOnClickListener {
             binding.playersHeaderEdit.performClick()

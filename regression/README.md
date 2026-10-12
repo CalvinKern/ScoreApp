@@ -123,6 +123,7 @@ defaults:
 |---|---|
 | `Then I see "<text>"` / `Then I don't see "<text>"` | The text is (or isn't) on the screen |
 | `Then the title is "<text>"` | The toolbar title |
+| `Then the subtitle is "<text>"` / `Then there's no subtitle` | The smaller line under the toolbar title |
 | `Then the totals are:` | The totals row at the bottom of the game, one column per player, as shown |
 | `Then the totals read "A 1, B 2"` | The same, written on one line in seat order |
 | `Then the round <n> scores are:` | The scores in that round's row, as shown when not being edited |

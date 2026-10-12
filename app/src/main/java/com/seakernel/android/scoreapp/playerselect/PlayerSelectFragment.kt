@@ -33,6 +33,7 @@ import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
+import com.seakernel.android.scoreapp.utility.setStatusSubtitle
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
@@ -59,6 +60,9 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val savesAutomatically get() = arguments?.getBoolean(ARG_SAVES_AUTOMATICALLY) == true
+    private val initialPlayerIds get() = arguments?.getLongArray(PLAYER_IDS)?.toList().orEmpty()
 
     init {
         loop = createLoop(::update)
@@ -178,13 +182,22 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     ), false
                 )
 
-                // Picks save on their own, so they're kept however the screen is left (back, or save). Results only
-                // reach the game setup once it shows again, so it gets the last picks and its players' new names.
+                // Picks are sent as they're made, so they're kept however the screen is left (back, or save), and an
+                // existing game saves them right away. Renames are sent too, so the game setup shows the new names.
                 val previous = lastModel
                 if (previous != null && !previous.isLoading &&
                     (model.selectedPlayerList != previous.selectedPlayerList || model.allPlayers != previous.allPlayers)
                 ) {
                     setFragmentResult(REQUEST_PLAYERS, bundleOf(KEY_PLAYER_IDS to model.selectedPlayerList.toLongArray()))
+                }
+
+                // An existing game says its picks save on their own, or that none picked keeps its old players
+                if (savesAutomatically && !model.isLoading) {
+                    val playersNotSaved = model.selectedPlayerList.isEmpty() && initialPlayerIds.isNotEmpty()
+                    binding.toolbar.setStatusSubtitle(
+                        getString(if (playersNotSaved) R.string.saveStatusPlayersNotSaved else R.string.saveStatusAutomatic),
+                        announce = true,
+                    )
                 }
 
                 lastModel = model
@@ -319,14 +332,19 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     companion object {
         private const val ARG_SELECTED_IDS = "selected_ids"
         private const val PLAYER_IDS = "game_id"
+        private const val ARG_SAVES_AUTOMATICALLY = "saves_automatically"
 
         /** The picked players, sent with [KEY_PLAYER_IDS] (in seat order) whenever they change */
         const val REQUEST_PLAYERS = "PLAYERS"
         const val KEY_PLAYER_IDS = "player_ids"
 
-        fun newInstance(playerIds: List<Long>): PlayerSelectFragment {
+        /** @param savesAutomatically whether the picks save to the game as they're made, which the screen says */
+        fun newInstance(playerIds: List<Long>, savesAutomatically: Boolean = false): PlayerSelectFragment {
             return PlayerSelectFragment().apply {
-                arguments = Bundle().apply { putLongArray(PLAYER_IDS, playerIds.toLongArray()) }
+                arguments = Bundle().apply {
+                    putLongArray(PLAYER_IDS, playerIds.toLongArray())
+                    putBoolean(ARG_SAVES_AUTOMATICALLY, savesAutomatically)
+                }
             }
         }
     }

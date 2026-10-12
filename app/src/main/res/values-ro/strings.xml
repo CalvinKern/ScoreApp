@@ -75,6 +75,11 @@
     <string name="changelogUnavailable">Nu s-a putut deschide jurnalul de modificări</string>
     <string name="gameNameRequired">Introduceți un nume pentru joc</string>
     <string name="gamePlayersRequired">Adăugați un jucător</string>
+    <string name="saveStatusSaving">Se salvează…</string>
+    <string name="saveStatusSaved">Toate modificările au fost salvate</string>
+    <string name="saveStatusNameNotSaved">Un nume gol nu se salvează</string>
+    <string name="saveStatusPlayersNotSaved">O listă de jucători goală nu se salvează</string>
+    <string name="saveStatusAutomatic">Modificările se salvează automat</string>
     <string name="actionClose">Închide</string>
     <string name="useCalculatorDescription">Utilizați tastatura calculatorului personalizată. Va folosi tastatura de sistem dacă nu este activată.</string>
     <string name="useCalculatorTitle">Tastatură Calculator</string>

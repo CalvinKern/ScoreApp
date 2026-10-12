@@ -75,6 +75,11 @@
     <string name="changelogUnavailable">Impossible d’ouvrir le journal des modifications</string>
     <string name="gameNameRequired">Veuillez saisir un nom pour la partie</string>
     <string name="gamePlayersRequired">Veuillez ajouter un joueur</string>
+    <string name="saveStatusSaving">Enregistrement…</string>
+    <string name="saveStatusSaved">Toutes les modifications sont enregistrées</string>
+    <string name="saveStatusNameNotSaved">Un nom vide n\'est pas enregistré</string>
+    <string name="saveStatusPlayersNotSaved">Une liste de joueurs vide n\'est pas enregistrée</string>
+    <string name="saveStatusAutomatic">Les modifications sont enregistrées automatiquement</string>
     <string name="actionClose">Fermer</string>
     <string name="useCalculatorDescription">Utilisez le clavier personnalisé de la calculatrice. Utilisera le clavier système s\'il n\'est pas activé.</string>
     <string name="useCalculatorTitle">Clavier de la calculatrice</string>

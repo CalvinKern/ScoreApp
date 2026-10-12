@@ -69,6 +69,11 @@
     <string name="changelogUnavailable">Das Änderungsprotokoll konnte nicht geöffnet werden</string>
     <string name="gameNameRequired">Bitte geben Sie einen Namen für das Spiel ein</string>
     <string name="gamePlayersRequired">Bitte fügen Sie einen Spieler hinzu</string>
+    <string name="saveStatusSaving">Wird gespeichert…</string>
+    <string name="saveStatusSaved">Alle Änderungen gespeichert</string>
+    <string name="saveStatusNameNotSaved">Leerer Name wird nicht gespeichert</string>
+    <string name="saveStatusPlayersNotSaved">Leere Spielerliste wird nicht gespeichert</string>
+    <string name="saveStatusAutomatic">Änderungen werden automatisch gespeichert</string>
     <string name="actionClose">Schließen</string>
     <string name="actionPlayerStanding">Stehen</string>
     <string name="playerStandingTitle">Spielerwertung</string>

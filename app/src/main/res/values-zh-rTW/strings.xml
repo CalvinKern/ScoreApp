@@ -66,6 +66,11 @@
     <string name="changelogUnavailable">無法開啟更新日誌</string>
     <string name="gameNameRequired">請輸入遊戲名稱</string>
     <string name="gamePlayersRequired">請新增玩家</string>
+    <string name="saveStatusSaving">正在儲存…</string>
+    <string name="saveStatusSaved">所有變更已儲存</string>
+    <string name="saveStatusNameNotSaved">空白名稱不會儲存</string>
+    <string name="saveStatusPlayersNotSaved">空白玩家清單不會儲存</string>
+    <string name="saveStatusAutomatic">變更會自動儲存</string>
     <string name="actionClose">關</string>
     <string name="actionPlayerStanding">站立</string>
     <string name="playerStandingTitle">球員站立</string>

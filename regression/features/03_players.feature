@@ -103,6 +103,15 @@ Feature: Picking players
     And I tap the toolbar's back arrow
     Then the players are "Kim, Bob"
 
+  Scenario: A new game's screens don't say anything is saved, since it's created with Save
+    Given the players "Calvin" exist
+    And I am picking players for a new game
+    Then there's no subtitle
+    When I pick "Calvin"
+    And I tap "Save"
+    Then the title is "New Game"
+    And there's no subtitle
+
   Scenario: Going back from the player picker without changes keeps the players
     Given the players "Calvin" exist
     And I am picking players for a new game

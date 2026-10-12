@@ -8,12 +8,14 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.children
 import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
@@ -172,4 +174,22 @@ fun View.applyWindowInsetsNavigationMargin() {
 @SuppressLint("RestrictedApi") // MenuBuilder is restricted, but this is the common way to show overflow icons
 fun MaterialToolbar.setOptionalIconsVisible() {
     (menu as? MenuBuilder)?.setOptionalIconsVisible(true)
+}
+
+/**
+ * Shows a status under the title, or hides it when null. Screen readers hear the change when [announce] is true, but
+ * never the first status, which is read along with the rest of the screen.
+ */
+fun MaterialToolbar.setStatusSubtitle(status: CharSequence?, announce: Boolean) {
+    if (subtitle?.toString() == status?.toString()) return
+
+    // The toolbar doesn't share its subtitle view, so it's found by its text. It only announces once it has a status.
+    val current = subtitle?.toString()
+    children.filterIsInstance<TextView>().firstOrNull { current != null && it.text.toString() == current }?.let {
+        ViewCompat.setAccessibilityLiveRegion(
+            it,
+            if (announce) ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE else ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE
+        )
+    }
+    subtitle = status
 }

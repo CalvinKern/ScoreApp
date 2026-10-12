@@ -72,6 +72,11 @@
     <string name="changelogUnavailable">No se pudo abrir el registro de cambios</string>
     <string name="gameNameRequired">Introduzca un nombre para el juego</string>
     <string name="gamePlayersRequired">Agregue un jugador</string>
+    <string name="saveStatusSaving">Guardando…</string>
+    <string name="saveStatusSaved">Todos los cambios guardados</string>
+    <string name="saveStatusNameNotSaved">El nombre vacío no se guarda</string>
+    <string name="saveStatusPlayersNotSaved">La lista de jugadores vacía no se guarda</string>
+    <string name="saveStatusAutomatic">Los cambios se guardan automáticamente</string>
     <string name="actionClose">Cerca</string>
     <string name="actionPlayerStanding">Posiciones</string>
     <string name="playerStandingTitle">Posiciones de los jugadores</string>

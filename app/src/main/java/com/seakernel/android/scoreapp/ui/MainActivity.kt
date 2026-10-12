@@ -93,9 +93,9 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Con
         UsageDataConsentDialog.showIfNeeded(this)
     }
 
-    override fun onShowPlayerSelectScreen(playerIds: List<Long>) {
+    override fun onShowPlayerSelectScreen(playerIds: List<Long>, savesAutomatically: Boolean) {
         showFragment(
-            PlayerSelectFragment.newInstance(playerIds),
+            PlayerSelectFragment.newInstance(playerIds, savesAutomatically),
             PlayerSelectFragment::class.java.name
         )
     }

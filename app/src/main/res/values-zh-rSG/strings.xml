@@ -69,6 +69,11 @@
     <string name="changelogUnavailable">无法打开更新日志</string>
     <string name="gameNameRequired">请输入游戏名称</string>
     <string name="gamePlayersRequired">请添加玩家</string>
+    <string name="saveStatusSaving">正在保存…</string>
+    <string name="saveStatusSaved">所有更改已保存</string>
+    <string name="saveStatusNameNotSaved">空名称不会保存</string>
+    <string name="saveStatusPlayersNotSaved">空玩家列表不会保存</string>
+    <string name="saveStatusAutomatic">更改会自动保存</string>
     <string name="actionClose">关</string>
     <string name="useCalculatorDescription">使用自定义计算器键盘。 如果未启用，将使用系统键盘。</string>
     <string name="useCalculatorTitle">计算器键盘</string>

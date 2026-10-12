@@ -1,6 +1,7 @@
 Feature: Editing a game in progress
   "Edit" in the game menu opens "Game Settings". Changes save on their own (shortly after each change, and when
-  leaving), so going back keeps them. "Save" also saves and goes back. Removing a player removes their scores.
+  leaving), so going back keeps them, and the line under the title says whether they're saved. "Save" also saves and
+  goes back. Players picked in the player picker save as they're picked. Removing a player removes their scores.
 
   @smoke
   Scenario: Game Settings shows the game as it is
@@ -64,6 +65,21 @@ Feature: Editing a game in progress
     And I open the app
     Then I see "Auto Saved"
 
+  @smoke
+  Scenario: Game Settings says whether its changes are saved
+    Given a game "Save Status" with players "Calvin"
+    When I choose "Edit" from the game menu
+    Then the subtitle is "All changes saved"
+    When I tap "Reverse Scoring"
+    Then the subtitle is "Saving…"
+    When I wait 2 seconds
+    Then the subtitle is "All changes saved"
+    When I clear the game name
+    Then the subtitle is "Blank name isn't saved"
+    When I type "Save Status" in the game name
+    And I wait 2 seconds
+    Then the subtitle is "All changes saved"
+
   Scenario: A blank name keeps the old name
     Given a game "Keep Name" with players "Calvin"
     When I choose "Edit" from the game menu
@@ -109,6 +125,31 @@ Feature: Editing a game in progress
     Then the players are "Calvin, Kim, Bob"
     When I go back
     Then the totals read "Calvin 0, Kim 0, Bob 0"
+
+  Scenario: Players picked save while the player picker is still open
+    Given a game "Pick Saves" with players "Calvin"
+    And the players "Kim" exist
+    When I choose "Edit" from the game menu
+    And I tap "EDIT"
+    Then the subtitle is "Changes save automatically"
+    When I pick "Kim"
+    And I wait 2 seconds
+    And I force stop the app
+    And I open the app
+    And I open the game "Pick Saves"
+    Then the totals read "Calvin 0, Kim 0"
+
+  Scenario: Unpicking every player says the players aren't saved
+    Given a game "Keep Both" with players "Calvin, Kim"
+    When I choose "Edit" from the game menu
+    And I tap "EDIT"
+    And I tap the row "Calvin"
+    And I tap the row "Kim"
+    Then the subtitle is "Empty player list isn't saved"
+    When I go back
+    Then the subtitle is "Empty player list isn't saved"
+    When I go back
+    Then the totals read "Calvin 0, Kim 0"
 
   Scenario: Removing a player removes their scores
     Given a game "Remove Player" with players "Calvin, Kim, Bob"

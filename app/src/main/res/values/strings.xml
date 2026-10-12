@@ -78,6 +78,12 @@
     <string name="maxRoundsDescription">Maximum number of rounds to play</string>
     <string name="gameNameRequired">Please enter a name for the game</string>
     <string name="gamePlayersRequired">Please add a player</string>
+    <!--Shown under the title of an existing game's settings and player picker, since they save on their own-->
+    <string name="saveStatusSaving">Saving…</string>
+    <string name="saveStatusSaved">All changes saved</string>
+    <string name="saveStatusNameNotSaved">Blank name isn\'t saved</string>
+    <string name="saveStatusPlayersNotSaved">Empty player list isn\'t saved</string>
+    <string name="saveStatusAutomatic">Changes save automatically</string>
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>

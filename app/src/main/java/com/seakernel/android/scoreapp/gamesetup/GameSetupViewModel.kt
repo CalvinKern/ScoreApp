@@ -18,6 +18,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.threeten.bp.ZonedDateTime
 import java.util.Collections
@@ -43,7 +45,15 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     private var autoSaveJob: Job? = null
     private val autoSaveObserver = Observer<GameSettings?> { settings ->
         if (savedSettings != null && settings != savedSettings) scheduleAutoSave()
+        updateSaveStatus()
     }
+
+    // Tells the screen an existing game saves on its own. Set up before init, since the observer above runs right away
+    private val saveStatus = MutableLiveData<SaveStatus?>().apply { value = null }
+    private var runningSaves = 0
+
+    // Picks are applied one at a time in order, so an older pick can't finish loading after a newer one
+    private val playersLock = Mutex()
 
     init {
         gameSettings.observeForever(autoSaveObserver)
@@ -59,6 +69,9 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun isSaving(): LiveData<Boolean> = saveProcessing
+
+    /** Whether an existing game's changes are saved, or null for a new game (which is created with save) */
+    fun getSaveStatus(): LiveData<SaveStatus?> = saveStatus
 
     fun getGameSettings(): LiveData<GameSettings?> = gameSettings
 
@@ -138,6 +151,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         if (saved == null || current == null) {
             // Still loading, so nothing could have changed
             if (exit) gameUpdatedEvent.value = GameUpdated(saved?.id ?: current?.id ?: 0, exit = true, hasPlayers = false)
+            updateSaveStatus()
             return
         }
 
@@ -149,13 +163,34 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
         if (settings == saved) {
             // Wait for any save still running, so the next screen loads what was saved
             if (exit) scope.launch(saveDispatcher) { gameUpdatedEvent.safePostValue(update) }
+            updateSaveStatus()
             return
         }
 
         savedSettings = settings
+        runningSaves++
+        updateSaveStatus()
         scope.launch(saveDispatcher) {
             gameRepository.updateGame(settings)
             gameUpdatedEvent.safePostValue(update)
+            withContext(Dispatchers.Main) {
+                runningSaves--
+                updateSaveStatus()
+            }
+        }
+    }
+
+    @MainThread
+    private fun updateSaveStatus() {
+        val saved = savedSettings
+        val current = gameSettings.value
+        saveStatus.value = when {
+            saved == null || current == null -> null
+            // These keep what was saved before (see saveChanges)
+            current.name.isBlank() -> SaveStatus.NAME_NOT_SAVED
+            current.players.isEmpty() && saved.players.isNotEmpty() -> SaveStatus.PLAYERS_NOT_SAVED
+            autoSaveJob != null || runningSaves > 0 -> SaveStatus.SAVING
+            else -> SaveStatus.SAVED
         }
     }
 
@@ -174,18 +209,20 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
      * Also need to remove any players that were in the old list but not in the given IDs.
      */
     fun updateForNewPlayers(playerIds: List<Long>) {
-        val settings = gameSettings.value ?: GameSettings()
-
         scope.launch {
-            val dealerId =
-                if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
-            val newPlayers = playerRepository.loadUsers(playerIds)
-            gameSettings.safePostValue(
-                settings.copy(
-                    players = newPlayers,
-                    initialDealerId = dealerId
-                )
-            )
+            playersLock.withLock {
+                val newPlayers = playerRepository.loadUsers(playerIds)
+                withContext(Dispatchers.Main) {
+                    // Picks arrive while the picker is open, so they apply to the settings as they are once loaded
+                    val settings = gameSettings.value ?: GameSettings()
+                    val dealerId =
+                        if (settings.initialDealerId in playerIds) settings.initialDealerId else playerIds.firstOrNull()
+                    gameSettings.value = settings.copy(
+                        players = newPlayers,
+                        initialDealerId = dealerId
+                    )
+                }
+            }
         }
     }
 
@@ -293,3 +330,14 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
  * @param hasPlayers whether the game can be played
  */
 data class GameUpdated(val gameId: Long, val exit: Boolean, val hasPlayers: Boolean)
+
+/** Whether an existing game's changes are saved, shown under the title of its settings */
+enum class SaveStatus {
+    /** A change is waiting to save, or saving */
+    SAVING,
+    SAVED,
+    /** The name is blank, so the old name is kept */
+    NAME_NOT_SAVED,
+    /** No players are picked, so the old players are kept */
+    PLAYERS_NOT_SAVED,
+}

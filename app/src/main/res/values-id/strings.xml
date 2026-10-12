@@ -66,6 +66,11 @@
     <string name="changelogUnavailable">Tidak dapat membuka catatan perubahan</string>
     <string name="gameNameRequired">Silakan masukkan nama permainan</string>
     <string name="gamePlayersRequired">Silakan tambahkan pemain</string>
+    <string name="saveStatusSaving">Menyimpan…</string>
+    <string name="saveStatusSaved">Semua perubahan disimpan</string>
+    <string name="saveStatusNameNotSaved">Nama kosong tidak disimpan</string>
+    <string name="saveStatusPlayersNotSaved">Daftar pemain kosong tidak disimpan</string>
+    <string name="saveStatusAutomatic">Perubahan disimpan otomatis</string>
     <string name="actionClose">Menutup</string>
     <string name="actionPlayerStanding">Klasemen</string>
     <string name="playerStandingTitle">Klasemen Pemain</string>

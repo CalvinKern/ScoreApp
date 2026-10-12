@@ -72,6 +72,11 @@
     <string name="changelogUnavailable">परिवर्तन लॉग नहीं खोला जा सका</string>
     <string name="gameNameRequired">कृपया खेल के लिए एक नाम दर्ज करें</string>
     <string name="gamePlayersRequired">कृपया एक खिलाड़ी जोड़ें</string>
+    <string name="saveStatusSaving">सहेजा जा रहा है…</string>
+    <string name="saveStatusSaved">सभी बदलाव सहेजे गए</string>
+    <string name="saveStatusNameNotSaved">खाली नाम सहेजा नहीं जाता</string>
+    <string name="saveStatusPlayersNotSaved">खाली खिलाड़ी सूची सहेजी नहीं जाती</string>
+    <string name="saveStatusAutomatic">बदलाव अपने आप सहेजे जाते हैं</string>
     <string name="actionClose">बंद करे</string>
     <string name="useCalculatorDescription">कस्टम कैलकुलेटर कीबोर्ड का उपयोग करें। सक्षम नहीं होने पर सिस्टम कीबोर्ड का उपयोग करेगा।</string>
     <string name="useCalculatorTitle">कैलकुलेटर कीबोर्ड</string>
