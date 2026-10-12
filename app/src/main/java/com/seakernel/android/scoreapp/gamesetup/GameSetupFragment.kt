@@ -139,6 +139,7 @@ class GameSetupFragment : Fragment() {
         _settingsBinding?.useCalculatorContainer?.setOnClickListener(null)
         binding.gamePlayersEmptyImage.setOnClickListener(null)
         _binding?.gameNameEdit?.onItemClickListener = null
+        _binding?.gameNameEdit?.setOnEditorActionListener(null)
 
         _binding?.gameNameEdit?.removeTextChangedListener(nameTextWatcher)
         _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)
@@ -293,6 +294,12 @@ class GameSetupFragment : Fragment() {
             val name = parent.getItemAtPosition(position) as? String ?: return@setOnItemClickListener
             logEvent(AnalyticsConstants.Event.GAME_SETTINGS_AUTO_LOADED)
             viewModel.loadPreviousSettings(name)
+        }
+        // The keyboard's action (done, next, ...) finishes the name, so the suggestions shouldn't stay open over the
+        // settings. Not handled, so the action still runs.
+        binding.gameNameEdit.setOnEditorActionListener { _, _, _ ->
+            binding.gameNameEdit.dismissDropDown()
+            false
         }
 
         val settingsBinding = _settingsBinding ?: return

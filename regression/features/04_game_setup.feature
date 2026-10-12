@@ -225,6 +225,17 @@ Feature: Setting up a new game
       | 0      | 0   | 0      | 0     | 0   |
 
   @seed
+  Scenario: The keyboard's done key closes the name suggestions
+    Given the seed data is loaded
+    When I tap the + button
+    And I type "Ticket" as the game name
+    Then "Ticket to Ride" is suggested once
+    When I tap the keyboard's done key
+    Then no suggestions show
+    And the game name is "Ticket"
+    And I see "No players added"
+
+  @seed
   Scenario: Previous settings don't replace players already picked
     Given the seed data is loaded
     When I tap the + button
