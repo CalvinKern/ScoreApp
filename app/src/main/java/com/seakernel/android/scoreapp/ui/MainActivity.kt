@@ -33,8 +33,7 @@ interface ConfettiHost {
     fun celebrateFrom(anchor: View)
 }
 
-class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
-    PlayerSelectFragment.PlayerSelectListener, ConfettiHost,
+class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, ConfettiHost,
     GameSetupFragment.GameSetupListener, GameFragment.GameListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -99,13 +98,6 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener,
 
         // Ask once whether usage data can be shared, nothing is shared until then
         UsageDataConsentDialog.showIfNeeded(this)
-    }
-
-    override fun onPlayersSelected(playerIds: List<Long>) {
-        popBackStackIfFound(PlayerSelectFragment::class)
-        val fragment =
-            supportFragmentManager.findFragmentByTag(GameSetupFragment::class.java.name) as GameSetupFragment
-        fragment.updateForNewPlayers(playerIds)
     }
 
     override fun onShowPlayerSelectScreen(playerIds: List<Long>) {

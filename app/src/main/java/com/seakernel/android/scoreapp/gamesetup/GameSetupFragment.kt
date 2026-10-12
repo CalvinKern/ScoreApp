@@ -32,6 +32,7 @@ import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentGameCreateBinding
 import com.seakernel.android.scoreapp.databinding.HolderGameCreatePlayerBinding
 import com.seakernel.android.scoreapp.databinding.ViewGameSettingsBinding
+import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.AppPreferences
@@ -171,6 +172,9 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameCreatedEvent().observe(viewLifecycleOwner, gameCreatedObserver)
         viewModel.getGameUpdatedEvent().observe(viewLifecycleOwner, gameUpdatedObserver)
         viewModel.getGameNamesForAutocomplete().observe(viewLifecycleOwner, autocompleteObserver)
+        parentFragmentManager.setFragmentResultListener(PlayerSelectFragment.REQUEST_PLAYERS, viewLifecycleOwner) { _, result ->
+            viewModel.updateForNewPlayers(result.getLongArray(PlayerSelectFragment.KEY_PLAYER_IDS)?.toList().orEmpty())
+        }
 
         if (isExistingGame) {
             saveOnBackCallback.isEnabled = true // Turned off after leaving once, and the view is recreated after picking players
@@ -201,10 +205,6 @@ class GameSetupFragment : Fragment() {
         if (isExistingGame && !requireActivity().isChangingConfigurations) {
             viewModel.saveChanges(exit = false)
         }
-    }
-
-    fun updateForNewPlayers(playerIds: List<Long>) {
-        viewModel.updateForNewPlayers(playerIds)
     }
 
     private fun initToolbar() {

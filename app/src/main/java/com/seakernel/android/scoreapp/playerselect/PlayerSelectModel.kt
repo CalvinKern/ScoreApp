@@ -23,7 +23,7 @@ data class PlayerSearchRequest(val playerName: String?) : PlayerEvent()
 data object RequestLoad : PlayerEvent()
 
 sealed class PlayerEffect
-data class DoneSelectingPlayers(val playerIds: List<Long>) : PlayerEffect()
+data object DoneSelectingPlayers : PlayerEffect()
 data class ShowPlayerNameDialog(val playerId: Long?, val playerName: String) : PlayerEffect()
 data class ShowDeletePlayerSnackbar(
     val playerId: Long,
@@ -67,13 +67,7 @@ data class CreateModel(
 
         fun update(model: CreateModel, event: PlayerEvent): Next<CreateModel, PlayerEffect> {
             return when (event) {
-                is DoneSelectingPlayersClicked -> Next.dispatch(
-                    Effects.effects(
-                        DoneSelectingPlayers(
-                            model.selectedPlayerList
-                        )
-                    )
-                )
+                is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects(DoneSelectingPlayers))
                 is RequestLoad -> Next.next(
                     model.copy(isLoading = true), Effects.effects(
                         FetchData

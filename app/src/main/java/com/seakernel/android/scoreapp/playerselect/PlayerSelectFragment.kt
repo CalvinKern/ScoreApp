@@ -13,7 +13,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewGroupCompat
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -47,13 +49,8 @@ import kotlinx.coroutines.withContext
  */
 class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffect>() {
 
-    interface PlayerSelectListener {
-        fun onPlayersSelected(playerIds: List<Long>)
-    }
-
     private var playerRepository: PlayerRepository? = null
     private var gameRepository: GameRepository? = null
-    private var listener: PlayerSelectListener? = null
     private var addPlayerJob: Job? = null
 
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
@@ -71,15 +68,12 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         super.onAttach(context)
         playerRepository = PlayerRepository(requireContext())
         gameRepository = GameRepository(requireContext())
-
-        listener = context as? PlayerSelectListener
     }
 
     override fun onDetach() {
         super.onDetach()
         playerRepository = null
         gameRepository = null
-        listener = null
     }
 
     override fun onCreateView(
@@ -184,6 +178,15 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     ), false
                 )
 
+                // Picks save on their own, so they're kept however the screen is left (back, or save). Results only
+                // reach the game setup once it shows again, so it gets the last picks and its players' new names.
+                val previous = lastModel
+                if (previous != null && !previous.isLoading &&
+                    (model.selectedPlayerList != previous.selectedPlayerList || model.allPlayers != previous.allPlayers)
+                ) {
+                    setFragmentResult(REQUEST_PLAYERS, bundleOf(KEY_PLAYER_IDS to model.selectedPlayerList.toLongArray()))
+                }
+
                 lastModel = model
             }
 
@@ -226,7 +229,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                             )
                         )
                     }
-                    is DoneSelectingPlayers -> runWhenStarted { listener?.onPlayersSelected(effect.playerIds) }
+                    // The picked players were already sent back as they changed (see connectViews)
+                    is DoneSelectingPlayers -> runWhenStarted { parentFragmentManager.popBackStack() }
                 }
             }
 
@@ -324,6 +328,10 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     companion object {
         private const val ARG_SELECTED_IDS = "selected_ids"
         private const val PLAYER_IDS = "game_id"
+
+        /** The picked players, sent with [KEY_PLAYER_IDS] (in seat order) whenever they change */
+        const val REQUEST_PLAYERS = "PLAYERS"
+        const val KEY_PLAYER_IDS = "player_ids"
 
         fun newInstance(playerIds: List<Long>): PlayerSelectFragment {
             return PlayerSelectFragment().apply {

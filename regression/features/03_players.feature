@@ -87,8 +87,8 @@ Feature: Picking players
     And I tap "Save"
     Then the players are "Calvin"
 
-  Scenario: Going back from the player picker keeps the players the game had
-    Given the players "Calvin, Kim" exist
+  Scenario: Going back from the player picker keeps the picks, like Save
+    Given the players "Calvin, Kim, Bob" exist
     And I am picking players for a new game
     When I pick "Calvin"
     And I tap "Save"
@@ -96,7 +96,31 @@ Feature: Picking players
     And I pick "Kim"
     And I go back
     Then the title is "New Game"
-    And the players are "Calvin"
+    And the players are "Calvin, Kim"
+    When I tap "EDIT"
+    And I tap the row "Calvin"
+    And I pick "Bob"
+    And I tap the toolbar's back arrow
+    Then the players are "Kim, Bob"
+
+  Scenario: Going back from the player picker without changes keeps the players
+    Given the players "Calvin" exist
+    And I am picking players for a new game
+    When I pick "Calvin"
+    And I tap "Save"
+    And I tap "EDIT"
+    And I go back
+    Then the players are "Calvin"
+
+  Scenario: A picked player renamed in the player picker shows the new name
+    Given the players "Renamed Pick" exist
+    And I am picking players for a new game
+    When I pick "Renamed Pick"
+    And I long press the row "Renamed Pick"
+    And I replace the name with "Renamed Pick Two"
+    And I tap "OK"
+    And I go back
+    Then the players are "Renamed Pick Two"
 
   Scenario Outline: Renaming a player (<how>)
     Given the players "Renamee" exist

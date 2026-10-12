@@ -78,6 +78,17 @@ Feature: Editing a game in progress
       | Calvin | Kim | Bob |
       | 40     | 60  | 0   |
 
+  Scenario: Players picked and left with back are saved to the game
+    Given a game "Back Pick" with players "Calvin, Kim"
+    And the players "Bob" exist
+    When I choose "Edit" from the game menu
+    And I tap "EDIT"
+    And I pick "Bob"
+    And I go back
+    Then the players are "Calvin, Kim, Bob"
+    When I go back
+    Then the totals read "Calvin 0, Kim 0, Bob 0"
+
   Scenario: Removing a player removes their scores
     Given a game "Remove Player" with players "Calvin, Kim, Bob"
     And I play these rounds:
