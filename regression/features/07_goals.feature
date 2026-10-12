@@ -122,6 +122,36 @@ Feature: Reaching the goal
     When I enter "120" for Calvin in round 1
     Then confetti bursts from Calvin's total
 
+  @visual
+  Scenario: The leader reaching the target score celebrates, once a round
+    Given a game "Confetti Leader" with players "Calvin, Kim" and settings:
+      | Target Score | 100 |
+    And I enter "50" for Kim in round 1
+    And I close and reopen the app
+    And I open the game "Confetti Leader"
+    Then no confetti shows
+    When I tap "Add Round"
+    And I enter "60" for Kim in round 2
+    Then confetti bursts from Kim's total
+    When I enter "70" for Kim in round 2
+    Then no confetti shows
+    When I enter "10" for Kim in round 2
+    And I enter "60" for Kim in round 2
+    Then no confetti shows
+
+  @visual
+  Scenario: Reaching the target score again in a later round celebrates again
+    Given a game "Confetti Again" with players "Calvin, Kim" and settings:
+      | Target Score | 100 |
+    And I enter "110" for Kim in round 1
+    And confetti bursts from Kim's total
+    When I tap "Finish Game"
+    And I tap "Another Round!"
+    And I enter "-60" for Kim in round 2
+    Then no confetti shows
+    When I enter "0" for Kim in round 2
+    Then confetti bursts from Kim's total
+
   @visual @smoke
   Scenario: Finishing the game shoots confetti from the top corners over the standings
     Given a game "Confetti Finish" with players "Calvin, Kim" and settings:

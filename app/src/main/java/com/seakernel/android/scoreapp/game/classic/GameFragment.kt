@@ -381,6 +381,11 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             private var confettiJob: Job? = null
             private var pendingSingleLeadId: Long? = null
 
+            // Whether the target score was reached when confetti was last checked, and the last round it was first
+            // reached in, so reaching it celebrates once a round (not again for each edit to that round)
+            private var wasGoalScoreReached = false
+            private var goalScoreCelebratedRoundId: Long? = null
+
             override fun accept(model: GameModel) {
                 if (model == lastModel) return
                 val isFirstLoad = lastModel?.settings?.id == null
@@ -388,6 +393,8 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 if (model.settings != lastModel?.settings) {
                     binding.toolbar.title = model.settings.name
                     binding.calculatorKeyboard.isCalculatorEnabled = model.settings.useCalculator
+                    // Opening the game, or changing its target, doesn't count as reaching it
+                    wasGoalScoreReached = model.hasReachedGoalScore()
                 }
 
                 var manager = binding.scoreRows.layoutManager as? GridLayoutManager
@@ -470,21 +477,28 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 lastModel = model
             }
 
+            /**
+             * Once the target score is reached, celebrates the leader when someone first reaches it in a round, and
+             * whenever someone else takes the lead
+             */
             private fun triggerConfettiIfChanged() {
-                val leadId = pendingSingleLeadId ?: return
-                if (leadId == lastCelebratedPlayerId) return
-
                 val model = lastModel ?: return
+                val goalReached = model.hasReachedGoalScore()
+                val roundId = model.rounds.lastOrNull()?.id
+                val firstReachedThisRound = goalReached && !wasGoalScoreReached && roundId != goalScoreCelebratedRoundId
+                wasGoalScoreReached = goalReached
 
-                if (model.hasReachedGoalScore()) {
-                    lastCelebratedPlayerId = leadId
+                val leadId = pendingSingleLeadId ?: return
+                if (!goalReached || (leadId == lastCelebratedPlayerId && !firstReachedThisRound)) return
 
-                    val adapter = binding.totalsRow.adapter as? TotalsAdapter
-                    val position = adapter?.getPlayerPosition(leadId) ?: -1
-                    if (position != -1) {
-                        val holder = binding.totalsRow.findViewHolderForAdapterPosition(position) as? ScoreViewHolder
-                        holder?.celebrate()
-                    }
+                lastCelebratedPlayerId = leadId
+                if (firstReachedThisRound) goalScoreCelebratedRoundId = roundId
+
+                val adapter = binding.totalsRow.adapter as? TotalsAdapter
+                val position = adapter?.getPlayerPosition(leadId) ?: -1
+                if (position != -1) {
+                    val holder = binding.totalsRow.findViewHolderForAdapterPosition(position) as? ScoreViewHolder
+                    holder?.celebrate()
                 }
             }
 
