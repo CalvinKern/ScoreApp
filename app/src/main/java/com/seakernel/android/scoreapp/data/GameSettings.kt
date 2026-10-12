@@ -22,7 +22,7 @@ data class GameSettings(
     val maxRounds: Int? = null,
     val showRoundNotes: Boolean = false, // Only shows the notes icon, notes can always be opened from a player's name
     val useCalculator: Boolean = false,
-    val roundCount: Int = 0, // Only loaded for the game list
+    val roundCount: Int = 0, // Only loaded for the game list and game settings
 ) {
 
     constructor(settings: GameEntity, players: List<Player>) : this(

@@ -69,6 +69,9 @@ interface RoundDao {
     )
     fun updateScoreNote(id: Long, notes: String)
 
+    @Query("UPDATE ${RoundEntity.TABLE_NAME} SET ${RoundEntity.COLUMN_DEALER_ID} = :dealerId WHERE ${RoundEntity.COLUMN_ID} = :id")
+    fun updateDealer(id: Long, dealerId: Long)
+
     @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} IN (:ids)")
     fun deleteRoundsById(ids: LongArray)
 

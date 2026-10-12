@@ -11,10 +11,31 @@ Feature: Editing a game in progress
     Then the title is "Game Settings"
     And the game name field shows "Edit Me"
     And the players are "Calvin, Kim"
-    And no player has a dealer radio button
+    And Calvin's dealer radio button is checked, since Calvin deals the only round
     And these settings are shown:
       | Reverse Scoring | on |
       | Target Score    | 50 |
+
+  @smoke
+  Scenario: The first dealer can be changed while the game has one round
+    Given a game "First Dealer" with players "Calvin, Kim, Bob"
+    And I enter "5" for Kim in round 1
+    When I choose "Edit" from the game menu
+    And I tap the row "Bob"
+    And I go back
+    Then Bob is the dealer
+    And the round 1 scores are:
+      | Calvin | Kim | Bob |
+      | 0      | 5   | 0   |
+    When I tap "Add Round"
+    Then Calvin is the dealer
+    And Bob dealt round 1
+
+  Scenario: The first dealer can't be changed once the game has a second round
+    Given a game "Two Rounds" with players "Calvin, Kim"
+    And I tap "Add Round"
+    When I choose "Edit" from the game menu
+    Then no player has a dealer radio button
 
   @smoke
   Scenario: Renaming a game saves when going back

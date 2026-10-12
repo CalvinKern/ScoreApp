@@ -31,8 +31,16 @@ class GameRepository(val context: Context) {
         return gameDao.getMostRecentByName(name)?.let { convertToGame(it) }
     }
 
+    /**
+     * The game's settings, with how many rounds it has. Its first dealer is whoever deals the first round, which can
+     * still change while it's the only round (see [updateGame]).
+     */
     fun loadGame(gameId: Long): GameSettings? {
-        return gameDao.loadAllByIds(longArrayOf(gameId)).firstOrNull()?.let { convertToGame(it) }
+        val game = loadFullGame(gameId) ?: return null
+        return game.settings.copy(
+            roundCount = game.rounds.size,
+            initialDealerId = game.rounds.firstOrNull()?.dealer?.id ?: game.settings.initialDealerId,
+        )
     }
 
     /** @return the game with its rounds, or null when it was deleted */
@@ -82,6 +90,13 @@ class GameRepository(val context: Context) {
         gamePlayerDao.insertAll(newPlayers.toTypedArray())
 
         val rounds = gameDao.getRounds(settings.id)
+        // A game still on its first round can change who deals it
+        val firstRound = rounds.singleOrNull()?.round
+        val dealerId = settings.initialDealerId
+        if (firstRound != null && settings.hasDealer && dealerId != null && firstRound.dealerId != dealerId) {
+            database.roundDao().updateDealer(firstRound.id, dealerId)
+        }
+
         val roundRepository = RoundRepository(context)
         rounds.forEach { fullRound ->
             // Update old rounds to add players

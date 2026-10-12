@@ -340,7 +340,8 @@ class GameSetupFragment : Fragment() {
             PlayerState(
                 it,
                 it.id == settings.initialDealerId,
-                settings.hasDealer && settings.id == null // Don't show dealer for games that have started
+                // The first dealer can change until the game has a second round
+                settings.hasDealer && (settings.id == null || settings.roundCount <= 1)
             )
         }
         (binding.playerRecycler.adapter as? PlayersAdapter)?.submitList(players)
