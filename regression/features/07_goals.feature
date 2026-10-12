@@ -122,6 +122,19 @@ Feature: Reaching the goal
     When I enter "120" for Calvin in round 1
     Then confetti bursts from Calvin's total
 
+  @visual @smoke
+  Scenario: Finishing the game shoots confetti from the top corners over the standings
+    Given a game "Confetti Finish" with players "Calvin, Kim" and settings:
+      | Target Score | 10 |
+    And I enter "12" for Kim in round 1
+    When I tap "Finish Game"
+    And I tap "Finish"
+    Then confetti shoots in from both top corners, over the "Player Standings" dialog
+    When I tap "Close"
+    And I tap the Standings icon
+    Then I see "Player Standings"
+    And no confetti shows
+
   @seed
   Scenario Outline: Seeded games that reached their goal show Finish Game (<game>)
     Given the seed data is loaded

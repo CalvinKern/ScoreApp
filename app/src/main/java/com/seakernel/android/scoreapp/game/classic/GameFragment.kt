@@ -177,7 +177,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 }
                 REQUEST_FINISH_GAME -> {
                     arguments?.getLong(ARG_GAME_ID)?.let { gameId ->
-                        showStandingDialog(gameId)
+                        showStandingDialog(gameId, celebrate = true)
                     }
                 }
                 REQUEST_CONTINUE_GAME -> {
@@ -319,9 +319,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         }
     }
 
-    private fun showStandingDialog(gameId: Long) {
+    private fun showStandingDialog(gameId: Long, celebrate: Boolean = false) {
         logEvent(AnalyticsConstants.Event.SHOW_PLAYER_STANDING_DIALOG)
-        val dialog = PlayerStandingDialog.newInstance(gameId)
+        val dialog = PlayerStandingDialog.newInstance(gameId, celebrate)
         dialog.show(parentFragmentManager, PlayerStandingDialog::class.java.name)
     }
 

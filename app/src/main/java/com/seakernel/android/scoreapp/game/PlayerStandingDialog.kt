@@ -15,6 +15,7 @@ import com.seakernel.android.scoreapp.databinding.HolderPlayerStandingBinding
 import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
+import com.seakernel.android.scoreapp.ui.Confetti
 import com.seakernel.android.scoreapp.utility.ScoreFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,9 +25,13 @@ class PlayerStandingDialog : DialogFragment() {
 
     companion object {
         private const val KEY_GAME_ID = "GAME_ID"
-        fun newInstance(gameId: Long): PlayerStandingDialog {
+        private const val KEY_CELEBRATE = "CELEBRATE"
+
+        /** @param celebrate shoot confetti when it opens, for a game that just finished */
+        fun newInstance(gameId: Long, celebrate: Boolean = false): PlayerStandingDialog {
             val args = Bundle().apply {
                 putLong(KEY_GAME_ID, gameId)
+                putBoolean(KEY_CELEBRATE, celebrate)
             }
 
             val fragment = PlayerStandingDialog()
@@ -44,7 +49,11 @@ class PlayerStandingDialog : DialogFragment() {
 
     private val gameId get() = requireArguments().getLong(KEY_GAME_ID)
 
+    // Only when it first opens, not when it's shown again (e.g. after rotating)
+    private var celebrate = false
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        celebrate = savedInstanceState == null && requireArguments().getBoolean(KEY_CELEBRATE)
         _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)
 
         binding.dialogPlayerRoundRecycler.layoutManager = LinearLayoutManager(requireContext())
@@ -104,6 +113,14 @@ class PlayerStandingDialog : DialogFragment() {
         }
 
         return dialog
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!celebrate) return
+        celebrate = false
+        // Once the dialog's window is showing, so the confetti's window can go above it
+        dialog?.window?.decorView?.let { decor -> decor.post { Confetti.showAbove(decor, Confetti.fromTopCorners()) } }
     }
 
     override fun onDestroyView() {

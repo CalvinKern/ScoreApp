@@ -20,13 +20,6 @@ import com.seakernel.android.scoreapp.gamesetup.GameSetupFragment
 import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment
 import com.seakernel.android.scoreapp.settings.SettingsFragment
 import com.seakernel.android.scoreapp.utility.AppPreferences
-import nl.dionsegijn.konfetti.core.Angle
-import nl.dionsegijn.konfetti.core.Party
-import nl.dionsegijn.konfetti.core.Position
-import nl.dionsegijn.konfetti.core.emitter.Emitter
-import nl.dionsegijn.konfetti.core.models.Shape
-import nl.dionsegijn.konfetti.core.models.Size
-import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
 interface ConfettiHost {
@@ -195,19 +188,6 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Con
         val x = anchorCenterX - konfettiLoc[0]
         val y = anchorCenterY - konfettiLoc[1]
 
-        binding.konfettiView.start(burstParty(x, y))
+        binding.konfettiView.start(Confetti.burst(x, y))
     }
-
-    private fun burstParty(x: Float, y: Float) = Party(
-        speed = 0f,
-        maxSpeed = 30f,
-        damping = 0.9f,
-        spread = 360, // Full circle so it pops out everywhere
-        angle = Angle.TOP, // Biased upward; use with spread
-        colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
-        shapes = listOf(Shape.Square, Shape.Circle),
-        size = listOf(Size.SMALL, Size.MEDIUM),
-        emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(100),
-        position = Position.Absolute(x, y) // Takes Pixels in Konfetti view's coordinate space
-    )
 }
