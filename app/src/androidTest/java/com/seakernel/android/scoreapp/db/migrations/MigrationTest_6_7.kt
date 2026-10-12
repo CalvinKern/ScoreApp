@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.db.migrations
 import com.seakernel.android.scoreapp.database.migrations.Migration_6_7
 import com.seakernel.android.scoreapp.db.DbTestHelper
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
@@ -24,7 +25,9 @@ class MigrationTest_6_7 {
     @Throws(IOException::class)
     fun migrate6To7() {
         DbTestHelper.createDatabaseAndMigrate(helper, 6, 7, Migration_6_7()) { db ->
-            db.gameDao().getFullGame(0).apply {
+            val fullGame = db.gameDao().getFullGame(0)
+            assertNotNull("Game 0 is missing after the migration", fullGame)
+            fullGame!!.apply {
                 assertFalse(game.showRoundNotes)
             }
         }
