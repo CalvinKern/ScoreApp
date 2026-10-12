@@ -36,12 +36,12 @@
     <string name="playerColor">Farbe</string>
     <string name="playerColorInvalid">Gib eine Farbe als 6 Hex-Ziffern ein, z. B. 1E88E5</string>
     <string-array name="seatColorNames">
-        <item>Rot</item>
-        <item>Blau</item>
         <item>Grün</item>
-        <item>Orange</item>
-        <item>Lila</item>
         <item>Cyan</item>
+        <item>Lila</item>
+        <item>Orange</item>
+        <item>Blau</item>
+        <item>Rot</item>
         <item>Braun</item>
         <item>Gelb</item>
         <item>Grau</item>

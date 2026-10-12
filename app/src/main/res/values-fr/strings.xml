@@ -37,12 +37,12 @@
     <string name="playerColor">Couleur</string>
     <string name="playerColorInvalid">Saisissez une couleur en 6 chiffres hexadécimaux, comme 1E88E5</string>
     <string-array name="seatColorNames">
-        <item>Rouge</item>
-        <item>Bleu</item>
         <item>Vert</item>
-        <item>Orange</item>
-        <item>Violet</item>
         <item>Cyan</item>
+        <item>Violet</item>
+        <item>Orange</item>
+        <item>Bleu</item>
+        <item>Rouge</item>
         <item>Marron</item>
         <item>Jaune</item>
         <item>Gris</item>

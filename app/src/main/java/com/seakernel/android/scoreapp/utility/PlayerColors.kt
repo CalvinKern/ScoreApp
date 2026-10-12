@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.utility.PlayerColors.forGame
 
 /**
  * A player can pick their own color for every game. Everyone else gets a color by their seat in the game, so each
@@ -13,12 +14,12 @@ import com.seakernel.android.scoreapp.data.Player
  */
 object PlayerColors {
     private val seatColorIds = intArrayOf(
-        R.color.graphRed,
-        R.color.graphBlue,
         R.color.graphGreen,
-        R.color.graphOrange,
-        R.color.graphPurple,
         R.color.graphCyan,
+        R.color.graphPurple,
+        R.color.graphOrange,
+        R.color.graphBlue,
+        R.color.graphRed,
         R.color.graphBrown,
         R.color.graphYellow,
         R.color.graphGray,

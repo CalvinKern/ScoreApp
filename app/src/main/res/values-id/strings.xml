@@ -35,12 +35,12 @@
     <string name="playerColor">Warna</string>
     <string name="playerColorInvalid">Masukkan warna sebagai 6 digit heksadesimal, seperti 1E88E5</string>
     <string-array name="seatColorNames">
-        <item>Merah</item>
-        <item>Biru</item>
         <item>Hijau</item>
-        <item>Oranye</item>
-        <item>Ungu</item>
         <item>Sian</item>
+        <item>Ungu</item>
+        <item>Oranye</item>
+        <item>Biru</item>
+        <item>Merah</item>
         <item>Cokelat</item>
         <item>Kuning</item>
         <item>Abu-abu</item>

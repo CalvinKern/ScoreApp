@@ -37,12 +37,12 @@
     <string name="playerColor">Culoare</string>
     <string name="playerColorInvalid">Introdu o culoare din 6 cifre hexazecimale, de exemplu 1E88E5</string>
     <string-array name="seatColorNames">
-        <item>Roșu</item>
-        <item>Albastru</item>
         <item>Verde</item>
-        <item>Portocaliu</item>
-        <item>Mov</item>
         <item>Cyan</item>
+        <item>Mov</item>
+        <item>Portocaliu</item>
+        <item>Albastru</item>
+        <item>Roșu</item>
         <item>Maro</item>
         <item>Galben</item>
         <item>Gri</item>

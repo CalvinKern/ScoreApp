@@ -28,12 +28,12 @@
     <string name="playerColor">Cor</string>
     <string name="playerColorInvalid">Digite uma cor com 6 dígitos hexadecimais, como 1E88E5</string>
     <string-array name="seatColorNames">
-        <item>Vermelho</item>
-        <item>Azul</item>
         <item>Verde</item>
-        <item>Laranja</item>
-        <item>Roxo</item>
         <item>Ciano</item>
+        <item>Roxo</item>
+        <item>Laranja</item>
+        <item>Azul</item>
+        <item>Vermelho</item>
         <item>Marrom</item>
         <item>Amarelo</item>
         <item>Cinza</item>
