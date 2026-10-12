@@ -34,6 +34,20 @@
         <item quantity="other">%d Rondas Jugadas</item>
     </plurals>
     <string name="playerName">Nombre del jugador</string>
+    <string name="playerColor">Color</string>
+    <string name="playerColorInvalid">Introduce un color con 6 dígitos hexadecimales, como 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>Rojo</item>
+        <item>Azul</item>
+        <item>Verde</item>
+        <item>Naranja</item>
+        <item>Morado</item>
+        <item>Cian</item>
+        <item>Marrón</item>
+        <item>Amarillo</item>
+        <item>Gris</item>
+        <item>Rosa</item>
+    </string-array>
     <string name="playerNotesTitle">Notas para %s</string>
     <string name="playerRoundNumberFormat">Ronda %d:</string>
     <string name="playerRoundNumberHint">Notas</string>

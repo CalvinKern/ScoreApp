@@ -14,37 +14,23 @@ class PlayerRepository(val context: Context) {
     private val playerDao: PlayerDao = AppDatabase.getInstance(context).playerDao()
 
     fun loadAllUsers(): List<Player> {
-        return playerDao.getAll().map { Player(it.uid, it.name) }.sortedWith(Player.NAME_ORDER)
+        return playerDao.getAll().map { it.toPlayer() }.sortedWith(Player.NAME_ORDER)
     }
 
     fun loadUsers(ids: List<Long>): List<Player> {
         return playerDao.loadAllByIds(ids.toLongArray())
-            .map { Player(it.uid, it.name) }
+            .map { it.toPlayer() }
             .sortedBy { p -> ids.indexOf(p.id) }
     }
 
-    fun addOrUpdateUser(playerId: Long?, playerName: String): Player {
-        return if (playerId == null) {
-            createUser(playerName)
+    fun addOrUpdateUser(playerId: Long?, playerName: String, color: Int?): Player {
+        val id = if (playerId == null) {
+            playerDao.insertAll(arrayOf(PlayerEntity(0, playerName, false, color)))[0]
         } else {
-            updateUser(playerId, playerName)
+            playerDao.updateNameAndColor(playerId, playerName, color)
+            playerId
         }
-    }
-
-    private fun updateUser(playerId: Long, playerName: String): Player {
-        playerDao.updateName(playerId, playerName)
-        return Player(playerId, playerName)
-    }
-
-    private fun createUser(name: String): Player {
-        val player =
-            PlayerEntity(
-                0,
-                name,
-                false,
-            )
-        val id = playerDao.insertAll(arrayOf(player))[0]
-        return Player(id, name)
+        return Player(id, playerName, color = color)
     }
 
     fun deleteUser(id: Long) {
@@ -54,4 +40,6 @@ class PlayerRepository(val context: Context) {
     fun undoDelete(id: Long) {
         playerDao.setArchived(id, false)
     }
+
+    private fun PlayerEntity.toPlayer() = Player(uid, name, color = color)
 }

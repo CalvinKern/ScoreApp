@@ -58,7 +58,8 @@ Scores are realistic for each game. Settings are abbreviated: **dealer**, **low 
 
 The player list includes lowercase names (`alice`) to check sorting ignores case, accented (`José`, `Zoë`), CJK
 (`李雷`), emoji (`🎲 Dice Goblin`), and very long names, two teams, three archived players that never show up,
-and `Never Played`, who is in no games.
+and `Never Played`, who is in no games. `Priya` and `Grandma Jo` picked their own graph colors: Priya typed one in that isn't a graph color, and
+Grandma Jo picked the graph green, so she matches whoever sits third in her games.
 
 ## Rule sources
 

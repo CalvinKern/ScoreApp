@@ -147,6 +147,55 @@ Feature: Picking players
     Then "OK" is disabled
 
   @seed
+  Scenario: The player dialog shows the color of the player's seat until one is picked
+    Given the seed data is loaded
+    When I open the game "Phase 10"
+    And I choose "Edit" from the game menu
+    And I tap "EDIT"
+    And I tap the edit icon next to "Kim"
+    Then the color field shows "1976D2"
+    And the "Blue" swatch is checked
+    When I tap "Cancel"
+    And I tap the + button
+    Then the color field shows "00838F"
+    And the "Cyan" swatch is checked
+
+  @seed @visual
+  Scenario: Picking a player's color
+    Given the seed data is loaded
+    When I open the game "Phase 10"
+    And I choose "Edit" from the game menu
+    And I tap "EDIT"
+    And I tap the edit icon next to "Kim"
+    And I tap the "Orange" swatch
+    Then the color field shows "E65100"
+    And the "Orange" swatch is checked
+    When I replace the color with "ff00aa"
+    Then the color field shows "FF00AA"
+    And no swatch is checked
+    When I tap "OK"
+    And I go back
+    And I go back
+    And I choose "Show Graph" from the game menu
+    Then Kim's line and bar are pink (FF00AA)
+
+  @seed
+  Scenario: A color has to be 6 hex digits, and an empty one follows the seat
+    Given the seed data is loaded
+    When I open the game "Phase 10"
+    And I choose "Edit" from the game menu
+    And I tap "EDIT"
+    And I tap the edit icon next to "Grandma Jo"
+    Then the color field shows "2E7D32"
+    When I replace the color with "1976"
+    Then I see "Enter a color as 6 hex digits, like 1E88E5"
+    And "OK" is disabled
+    When I clear the color
+    Then the color field's hint shows "8E24AA"
+    And the "Purple" swatch is checked
+    And "OK" is enabled
+
+  @seed
   Scenario: A renamed player is renamed in every game
     Given the seed data is loaded
     And I am picking players for a new game

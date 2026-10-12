@@ -3,8 +3,6 @@ package com.seakernel.android.scoreapp.playerselect
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewGroupCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +26,7 @@ import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.PlayerColors
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
@@ -206,8 +206,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             override fun accept(effect: PlayerEffect) {
                 when (effect) {
                     // Effects run in the background, so anything touching the screen moves to the main thread
-                    is ShowPlayerNameDialog -> runWhenStarted {
-                        if (!isDisposed) showPlayerNameDialog(eventConsumer, effect) { isDisposed }
+                    is ShowPlayerDialog -> runWhenStarted {
+                        if (!isDisposed) showPlayerDialog(eventConsumer, effect) { isDisposed }
                     }
                     is ShowDeletePlayerSnackbar -> {
                         playerRepository?.deleteUser(effect.playerId)
@@ -260,67 +260,57 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             .show()
     }
 
-    private fun showPlayerNameDialog(
+    private fun showPlayerDialog(
         eventConsumer: Consumer<PlayerEvent>,
-        effect: ShowPlayerNameDialog,
+        effect: ShowPlayerDialog,
         isDisposed: () -> Boolean
     ) {
-        var name = ""
+        val player = effect.player
         val binding =
             DialogPlayerNameBinding.inflate(LayoutInflater.from(requireContext()), null, false)
+        val name = { binding.playerNameEdit.text?.toString().orEmpty() }
+        lateinit var colorPicker: PlayerColorPicker
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(if (effect.playerId == null) R.string.playerCreateTitle else R.string.playerName)
+            .setTitle(if (player.id == null) R.string.playerCreateTitle else R.string.playerName)
             .setView(binding.root)
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                if (name.isEmpty()) return@setPositiveButton
+                val newName = name()
+                if (newName.isEmpty() || !colorPicker.isValid) return@setPositiveButton
                 // Player names are personal data, so only the event is logged
-                logEvent(if (effect.playerId == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED)
+                logEvent(if (player.id == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED)
                 addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
-                    playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
+                    playerRepository?.addOrUpdateUser(player.id, newName, colorPicker.color)?.let { saved ->
                         if (isDisposed()) return@let
                         withContext(Dispatchers.Main) {
                             if (isDisposed()) return@withContext // Double check we're not disposed
-                            eventConsumer.accept(
-                                PlayerNameChanged(
-                                    player.id!!,
-                                    player.name
-                                )
-                            )
+                            eventConsumer.accept(PlayerSaved(saved))
                         }
                     }
                 }
             }
             .setNegativeButton(android.R.string.cancel, null)
             .also {
-                if (effect.playerId == null) return@also
+                val playerId = player.id ?: return@also
 
                 it.setNeutralButton(R.string.delete) { _, _ ->
                     logEvent(AnalyticsConstants.Event.PLAYER_DELETED)
                     if (!isDisposed()) {
-                        eventConsumer.accept(PlayerDeleteClicked(effect.playerId))
+                        eventConsumer.accept(PlayerDeleteClicked(playerId))
                     }
                 }
             }
             .create()
 
+        // OK needs a name, and a color that can be saved
+        val updateOk = { dialog.getButton(Dialog.BUTTON_POSITIVE)?.isEnabled = name().isNotEmpty() && colorPicker.isValid }
+        colorPicker = PlayerColorPicker(binding, player.color, PlayerColors.forSeat(requireContext(), effect.seat), updateOk)
         binding.playerNameEdit.apply {
-            setText(effect.playerName)
-            setSelection(effect.playerName.length)
-            addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                override fun afterTextChanged(p0: Editable?) {
-                    name = p0?.toString() ?: ""
-                    dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = name.isNotEmpty()
-                }
-            })
+            setText(player.name)
+            setSelection(player.name.length)
+            doAfterTextChanged { updateOk() }
         }
-
-        // Disable "ok" button until there is text in the dialog
-        dialog.setOnShowListener {
-            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = effect.playerName.isNotEmpty()
-        }
+        dialog.setOnShowListener { updateOk() }
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         dialog.show()
     }

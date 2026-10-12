@@ -25,4 +25,8 @@
     <dimen name="score_table_fade_length">16dp</dimen>
     <dimen name="dialog_corner_radius">28dp</dimen>
     <dimen name="popup_item_corner_radius">28dp</dimen>
+    <!-- The player color swatches, with their margins making a 48dp touch target -->
+    <dimen name="color_swatch_size">40dp</dimen>
+    <dimen name="color_swatch_margin">4dp</dimen>
+    <dimen name="color_preview_size">24dp</dimen>
 </resources>

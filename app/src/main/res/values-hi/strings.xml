@@ -33,6 +33,20 @@
         <item quantity="other">%d राउंड खेले गए</item>
     </plurals>
     <string name="playerName">खिलाडि का नाम</string>
+    <string name="playerColor">रंग</string>
+    <string name="playerColorInvalid">रंग को 6 हेक्स अंकों में लिखें, जैसे 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>लाल</item>
+        <item>नीला</item>
+        <item>हरा</item>
+        <item>नारंगी</item>
+        <item>बैंगनी</item>
+        <item>सियान</item>
+        <item>भूरा</item>
+        <item>पीला</item>
+        <item>धूसर</item>
+        <item>गुलाबी</item>
+    </string-array>
     <string name="playerNotesTitle">%s के लिए नोट्स</string>
     <string name="playerRoundNumberFormat">दौर %d:</string>
     <string name="playerRoundNumberHint">टिप्पणियाँ</string>

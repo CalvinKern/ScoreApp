@@ -16,7 +16,7 @@ data class PlayerRowLongClicked(val playerId: Long) : PlayerEvent()
 data class PlayerSelected(val playerId: Long, val selected: Boolean) : PlayerEvent()
 data class PlayerDeleteClicked(val playerId: Long) : PlayerEvent()
 data class PlayerDeleteUndo(val playerId: Long, val playerSelected: Boolean) : PlayerEvent()
-data class PlayerNameChanged(val playerId: Long, val newName: String) : PlayerEvent()
+data class PlayerSaved(val player: Player) : PlayerEvent()
 data class PlayerDeleteSuccessful(val playerId: Long) : PlayerEvent()
 data class PlayersLoaded(val players: List<Player>) : PlayerEvent()
 data class PlayerSearchRequest(val playerName: String?) : PlayerEvent()
@@ -24,7 +24,8 @@ data object RequestLoad : PlayerEvent()
 
 sealed class PlayerEffect
 data object DoneSelectingPlayers : PlayerEffect()
-data class ShowPlayerNameDialog(val playerId: Long?, val playerName: String) : PlayerEffect()
+/** @param seat where the player sits (or would sit) in the game being set up, for their default color */
+data class ShowPlayerDialog(val player: Player, val seat: Int) : PlayerEffect()
 data class ShowDeletePlayerSnackbar(
     val playerId: Long,
     val playerName: String?,
@@ -51,6 +52,9 @@ data class CreateModel(
     fun playerName(playerId: Long): String? {
         return player(playerId)?.name
     }
+
+    /** Where the player sits in the game being set up, or would sit once picked (at the end) */
+    fun seat(playerId: Long?) = selectedPlayerList.indexOf(playerId).takeIf { it >= 0 } ?: selectedPlayerList.size
 
     companion object {
         /** Adds the player before the first player whose name sorts after it */
@@ -80,25 +84,10 @@ data class CreateModel(
                         filteredPlayerList = event.players
                     )
                 )
-                is AddPlayerClicked -> Next.dispatch(
-                    Effects.effects(
-                        ShowPlayerNameDialog(
-                            null,
-                            ""
-                        )
-                    )
-                )
-                is PlayerRowLongClicked -> {
-                    val name = model.playerName(event.playerId)
-                    Next.dispatch(
-                        Effects.effects(
-                            ShowPlayerNameDialog(
-                                event.playerId,
-                                name ?: ""
-                            )
-                        )
-                    )
-                }
+                is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerDialog(Player(), model.seat(null))))
+                is PlayerRowLongClicked -> model.player(event.playerId)
+                    ?.let { Next.dispatch<CreateModel, PlayerEffect>(Effects.effects(ShowPlayerDialog(it, model.seat(it.id)))) }
+                    ?: Next.noChange()
                 is PlayerSelected -> {
                     val selected = model.selectedPlayerList.toMutableList()
                     if (event.selected) {
@@ -134,16 +123,16 @@ data class CreateModel(
 
                     Next.next(nextModel, Effects.effects(UndoDeletePlayer(event.playerId)))
                 }
-                is PlayerNameChanged -> {
-                    val existingPlayer = model.player(event.playerId)
-                    val player = existingPlayer?.copy(name = event.newName) ?: Player(event.playerId, event.newName)
+                is PlayerSaved -> {
+                    val player = event.player
+                    val existingPlayer = model.player(player.id!!)
                     val selected = model.selectedPlayerList.toMutableList()
-                    if (existingPlayer == null) selected.add(event.playerId) // New players are picked right away
+                    if (existingPlayer == null) selected.add(player.id) // New players are picked right away
 
                     // Move the player to where the new name sorts, the same order the players are loaded in
-                    val list = model.allPlayers.filterNot { it.id == event.playerId }.insertSorted(player)
-                    val filteredList = model.filteredPlayerList.filterNot { it.id == event.playerId }.let {
-                        if (event.newName.contains(model.searchTerm, ignoreCase = true)) it.insertSorted(player) else it
+                    val list = model.allPlayers.filterNot { it.id == player.id }.insertSorted(player)
+                    val filteredList = model.filteredPlayerList.filterNot { it.id == player.id }.let {
+                        if (player.name.contains(model.searchTerm, ignoreCase = true)) it.insertSorted(player) else it
                     }
                     Next.next(
                         model.copy(

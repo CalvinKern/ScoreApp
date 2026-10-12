@@ -108,7 +108,7 @@ class GameRepository(val context: Context) {
     }
 
     private fun loadPlayers(gameId: Long): List<Player> {
-        return gamePlayerDao.getPlayersForGame(gameId).map { player -> Player(player.uid, player.name) }
+        return gamePlayerDao.getPlayersForGame(gameId).map { player -> Player(player.uid, player.name, color = player.color) }
     }
 
     private fun convertToGame(game: GameEntity): GameSettings {

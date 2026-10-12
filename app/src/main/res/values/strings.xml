@@ -138,6 +138,22 @@
 
     <!--Player dialog-->
     <string name="playerName">Player Name</string>
+    <!-- The color picked for a player, used for them in the graphs -->
+    <string name="playerColor">Color</string>
+    <string name="playerColorInvalid">Enter a color as 6 hex digits, like 1E88E5</string>
+    <!-- Spoken by screen readers for each color to pick, in the same order as the graph colors -->
+    <string-array name="seatColorNames">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Orange</item>
+        <item>Purple</item>
+        <item>Cyan</item>
+        <item>Brown</item>
+        <item>Yellow</item>
+        <item>Gray</item>
+        <item>Pink</item>
+    </string-array>
     <!-- Spoken by screen readers for the edit button next to a player, e.g. "Edit Alice" -->
     <string name="editPlayer">Edit %s</string>
 

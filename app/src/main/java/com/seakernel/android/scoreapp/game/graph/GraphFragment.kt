@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.Fragment
@@ -27,8 +26,10 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentGraphBinding
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.PlayerColors
 import com.seakernel.android.scoreapp.utility.ScoreFormat
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
@@ -38,23 +39,6 @@ import com.seakernel.android.scoreapp.utility.themeColor
 class GraphFragment : Fragment() {
 
     private val colorOnSurface by lazy { requireContext().themeColor(R.attr.colorOnSurface) }
-
-    /**
-     * Players get colors by their seat in the game, so everyone in a game of up to 10 players has their own color
-     * and keeps it while the game goes on. Larger games repeat the colors, with dashed lines to tell them apart.
-     */
-    private val graphColors = intArrayOf(
-        R.color.graphRed,
-        R.color.graphBlue,
-        R.color.graphGreen,
-        R.color.graphOrange,
-        R.color.graphPurple,
-        R.color.graphCyan,
-        R.color.graphBrown,
-        R.color.graphYellow,
-        R.color.graphGray,
-        R.color.graphPink,
-    )
 
     private val modelObserver = Observer<Game?> { game -> game?.let { updateGraphData(it) } }
 
@@ -132,10 +116,13 @@ class GraphFragment : Fragment() {
         // Convert the entries to line sets (with all that wonderful color info)
         val scoreSets = scoreMap.map { scores ->
             val seat = game.settings.players.indexOfFirst { it.id == scores.key }.coerceAtLeast(0)
-            val playerName = game.settings.players.getOrNull(seat)?.name
-            val playerColor = graphColors[seat % graphColors.size]
-            LineDataSet(scores.value, playerName).also {
-                setDataSetStyle(it, getColor(requireContext(), playerColor), isDashed = seat >= graphColors.size)
+            val player = game.settings.players.getOrNull(seat) ?: Player()
+            LineDataSet(scores.value, player.name).also {
+                setDataSetStyle(
+                    it,
+                    PlayerColors.forPlayer(requireContext(), player, seat),
+                    isDashed = PlayerColors.isRepeated(player, seat),
+                )
             }
         }
 
@@ -173,7 +160,7 @@ class GraphFragment : Fragment() {
 
         val entries = standings.mapIndexed { index, (_, total) -> BarEntry(index.toFloat(), total.toFloat()) }
         val colors = standings.map { (player, _) ->
-            getColor(requireContext(), graphColors[players.indexOf(player).coerceAtLeast(0) % graphColors.size])
+            PlayerColors.forPlayer(requireContext(), player, players.indexOf(player).coerceAtLeast(0))
         }
         val dataSet = BarDataSet(entries, null).apply {
             this.colors = colors

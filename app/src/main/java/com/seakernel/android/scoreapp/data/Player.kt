@@ -11,7 +11,8 @@ import kotlinx.parcelize.Parcelize
 data class Player(
     val id: Long? = null,
     val name: String = "",
-    val archived: Boolean = false
+    val archived: Boolean = false,
+    val color: Int? = null, // An ARGB color, null to use the color of their seat in each game
 ) : Parcelable {
     companion object {
         /** Alphabetical, ignoring case, so "alice" isn't listed after "Zed" */

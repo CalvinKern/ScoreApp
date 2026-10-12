@@ -32,6 +32,20 @@
         <item quantity="other">%dラウンドプレイ済み</item>
     </plurals>
     <string name="playerName">選手の名前</string>
+    <string name="playerColor">色</string>
+    <string name="playerColorInvalid">色を16進数6桁で入力してください（例: 1E88E5）</string>
+    <string-array name="seatColorNames">
+        <item>赤</item>
+        <item>青</item>
+        <item>緑</item>
+        <item>オレンジ</item>
+        <item>紫</item>
+        <item>シアン</item>
+        <item>茶</item>
+        <item>黄</item>
+        <item>グレー</item>
+        <item>ピンク</item>
+    </string-array>
     <string name="playerNotesTitle">%sへのノート</string>
     <string name="playerRoundNumberFormat">ラウンド%d：</string>
     <string name="playerRoundNumberHint">ノート</string>

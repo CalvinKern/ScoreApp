@@ -23,10 +23,10 @@ interface PlayerDao {
 
     @Query("""
         UPDATE ${PlayerEntity.TABLE_NAME}
-        SET ${PlayerEntity.COLUMN_NAME} = :name
+        SET ${PlayerEntity.COLUMN_NAME} = :name, ${PlayerEntity.COLUMN_COLOR} = :color
         WHERE ${PlayerEntity.COLUMN_ID} = :id
     """)
-    fun updateName(id: Long, name: String)
+    fun updateNameAndColor(id: Long, name: String, color: Int?)
 
     @Insert
     fun insertAll(players: Array<PlayerEntity>): LongArray

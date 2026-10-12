@@ -25,6 +25,20 @@
         <item quantity="other">%d Rondas Jogadas</item>
     </plurals>
     <string name="playerName">Nome do jogador</string>
+    <string name="playerColor">Cor</string>
+    <string name="playerColorInvalid">Digite uma cor com 6 dígitos hexadecimais, como 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>Vermelho</item>
+        <item>Azul</item>
+        <item>Verde</item>
+        <item>Laranja</item>
+        <item>Roxo</item>
+        <item>Ciano</item>
+        <item>Marrom</item>
+        <item>Amarelo</item>
+        <item>Cinza</item>
+        <item>Rosa</item>
+    </string-array>
     <string name="playerEmptyTitle">Nenhum jogador adicionado</string>
     <string name="playerEmptySearchTitle">Nenhum jogador corresponde</string>
     <string name="playerEmptySearchMessage">Nenhum jogador corresponde aos critérios de pesquisa atuais. Você pode adicionar um novo jogador clicando no botão + abaixo!</string>

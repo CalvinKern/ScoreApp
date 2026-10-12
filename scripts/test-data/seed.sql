@@ -1,7 +1,7 @@
 -- Test data for the debug app, covering the games and edge cases listed in scripts/test-data/README.md.
 -- Load it with `scripts/emulator-db.sh seed`, which backs up the current data first.
 --
--- schema-version: 12
+-- schema-version: 13
 --
 -- This REPLACES every player, game, round, and score in the database. It only writes to tables the app
 -- created, so Room's schema and identity hash are left alone. If a migration changes these tables, update
@@ -49,6 +49,13 @@ INSERT INTO seed_players VALUES
     (23, 'Moved Away', 1),
     (24, 'Ex-Coworker', 1),
     (25, 'Never Played', 0);                          -- In the player list, but in no games
+
+-- Players who picked their own color for the graphs, as an ARGB int (signed, the way Room stores it). Everyone else
+-- gets the color of their seat in each game.
+CREATE TEMP TABLE seed_player_colors (uid INTEGER, color INTEGER);
+INSERT INTO seed_player_colors VALUES
+    (9, -65366),                                      -- Priya: FF00AA, typed in, not one of the graph colors
+    (11, -13730510);                                  -- Grandma Jo: 2E7D32, the graph green, picked from its swatch
 
 -- Games ---------------------------------------------------------------------------------------------------------------
 --
@@ -344,6 +351,7 @@ WITH RECURSIVE split(game, pos, player, rest) AS (
 INSERT INTO seats SELECT game, pos, player FROM split WHERE pos >= 0;
 
 INSERT INTO players (uid, name, archived) SELECT uid, name, archived FROM seed_players;
+UPDATE players SET color = (SELECT color FROM seed_player_colors WHERE seed_player_colors.uid = players.uid);
 
 INSERT INTO games (uid, name, date, hasDealer, showRounds, reversedScoring, maxScore, maxRounds, showRoundNotes, useCalculator)
 SELECT uid, name, date, has_dealer, legacy, reversed, max_score, max_rounds, show_notes, calculator FROM seed_games;

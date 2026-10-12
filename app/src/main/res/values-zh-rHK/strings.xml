@@ -32,6 +32,20 @@
         <item quantity="other">已進行 %d 輪</item>
     </plurals>
     <string name="playerName">選手姓名</string>
+    <string name="playerColor">顏色</string>
+    <string name="playerColorInvalid">請輸入6位十六進位顏色，例如 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>紅色</item>
+        <item>藍色</item>
+        <item>綠色</item>
+        <item>橙色</item>
+        <item>紫色</item>
+        <item>青色</item>
+        <item>棕色</item>
+        <item>黃色</item>
+        <item>灰色</item>
+        <item>粉紅色</item>
+    </string-array>
     <string name="playerNotesTitle">%s的註釋</string>
     <string name="playerRoundNumberFormat">第%d回合</string>
     <string name="playerRoundNumberHint">筆記</string>

@@ -2,7 +2,7 @@ package com.seakernel.android.scoreapp
 
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.playerselect.CreateModel
-import com.seakernel.android.scoreapp.playerselect.PlayerNameChanged
+import com.seakernel.android.scoreapp.playerselect.PlayerSaved
 import com.seakernel.android.scoreapp.playerselect.PlayerSearchRequest
 import com.seakernel.android.scoreapp.playerselect.PlayersLoaded
 import org.junit.Assert.assertEquals
@@ -23,7 +23,7 @@ class PlayerSelectModelTest {
 
     @Test
     fun newPlayerSortingLastIsAddedAtTheEnd() {
-        val model = CreateModel.update(loaded(), PlayerNameChanged(4, "zed")).modelUnsafe()
+        val model = CreateModel.update(loaded(), PlayerSaved(Player(4, "zed"))).modelUnsafe()
 
         assertEquals(listOf("alice", "Bob", "carol", "zed"), model.names())
         assertEquals(model.allPlayers, model.filteredPlayerList)
@@ -32,14 +32,14 @@ class PlayerSelectModelTest {
 
     @Test
     fun newPlayerIsSortedIgnoringCase() {
-        val model = CreateModel.update(loaded(), PlayerNameChanged(4, "Beth")).modelUnsafe()
+        val model = CreateModel.update(loaded(), PlayerSaved(Player(4, "Beth"))).modelUnsafe()
 
         assertEquals(listOf("alice", "Beth", "Bob", "carol"), model.names())
     }
 
     @Test
     fun renamedPlayerMovesToItsNewPlace() {
-        val model = CreateModel.update(loaded(), PlayerNameChanged(1, "dave")).modelUnsafe()
+        val model = CreateModel.update(loaded(), PlayerSaved(Player(1, "dave"))).modelUnsafe()
 
         assertEquals(listOf("Bob", "carol", "dave"), model.names())
         assertEquals(model.allPlayers, model.filteredPlayerList)
@@ -49,7 +49,7 @@ class PlayerSelectModelTest {
     @Test
     fun searchResultsKeepTheSortOrder() {
         val searched = CreateModel.update(loaded(), PlayerSearchRequest("A")).modelUnsafe()
-        val model = CreateModel.update(searched, PlayerNameChanged(4, "Aaron")).modelUnsafe()
+        val model = CreateModel.update(searched, PlayerSaved(Player(4, "Aaron"))).modelUnsafe()
 
         assertEquals(listOf("Aaron", "alice", "carol"), model.filteredPlayerList.map { it.name })
 

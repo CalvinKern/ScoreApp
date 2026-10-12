@@ -19,7 +19,7 @@ interface GamePlayerJoinDao {
 
     @Query(
         """
-        SELECT ${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}, ${PlayerEntity.COLUMN_ARCHIVED}
+        SELECT ${PlayerEntity.COLUMN_ID}, ${PlayerEntity.COLUMN_NAME}, ${PlayerEntity.COLUMN_ARCHIVED}, ${PlayerEntity.COLUMN_COLOR}
         FROM ${PlayerEntity.TABLE_NAME}
         INNER JOIN ${GamePlayerJoin.TABLE_NAME}
         ON ${PlayerEntity.COLUMN_ID}=${GamePlayerJoin.COLUMN_PLAYER_ID}
