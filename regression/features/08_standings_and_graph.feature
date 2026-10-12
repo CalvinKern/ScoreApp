@@ -127,15 +127,17 @@ Feature: Standings and the graph
     When I open the game "Trivia Night"
     And I choose "Show Graph" from the game menu
     Then the legend shows all 13 player names
-    And the first 10 players have solid lines in their seats' colors, except Grandma Jo, who picked green like alice's
+    And the first 10 players have solid lines in different colors, Grandma Jo in the green she picked
     And the 11th to 13th players (Riley, Avery, Jordan) repeat the first colors with dashed lines
 
   @seed @visual
-  Scenario: A player's own color replaces their seat's in the graph and podium
+  Scenario: A player's own color replaces their seat's, and others skip it
     Given the seed data is loaded
     When I open the game "Phase 10"
     And I choose "Show Graph" from the game menu
-    Then Grandma Jo's line and bar are green (2E7D32), the same as alice's, instead of the fifth seat's purple
+    Then Grandma Jo's line and bar are green (2E7D32), the color she picked
+    And alice, sitting third, skips the picked green: her line and bar are orange, and Bob's are purple
+    And no two players share a color
 
   @seed
   Scenario Outline: Seeded standings (<game>)

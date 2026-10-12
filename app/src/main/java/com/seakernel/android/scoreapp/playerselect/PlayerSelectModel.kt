@@ -24,8 +24,8 @@ data object RequestLoad : PlayerEvent()
 
 sealed class PlayerEffect
 data object DoneSelectingPlayers : PlayerEffect()
-/** @param seat where the player sits (or would sit) in the game being set up, for their default color */
-data class ShowPlayerDialog(val player: Player, val seat: Int) : PlayerEffect()
+/** @param seatedPlayers the game being set up's players in seat order, with [player] in theirs, for its default color */
+data class ShowPlayerDialog(val player: Player, val seatedPlayers: List<Player>) : PlayerEffect()
 data class ShowDeletePlayerSnackbar(
     val playerId: Long,
     val playerName: String?,
@@ -53,8 +53,11 @@ data class CreateModel(
         return player(playerId)?.name
     }
 
-    /** Where the player sits in the game being set up, or would sit once picked (at the end) */
-    fun seat(playerId: Long?) = selectedPlayerList.indexOf(playerId).takeIf { it >= 0 } ?: selectedPlayerList.size
+    /** The picked players in seat order, with [player] in their seat, or in the next one when they aren't picked */
+    fun seatedWith(player: Player): List<Player> {
+        val seated = selectedPlayerList.mapNotNull { id -> if (id == player.id) player else player(id) }
+        return if (player.id in selectedPlayerList) seated else seated + player
+    }
 
     companion object {
         /** Adds the player before the first player whose name sorts after it */
@@ -62,6 +65,9 @@ data class CreateModel(
             val index = indexOfFirst { Player.NAME_ORDER.compare(it, player) > 0 }.let { if (it >= 0) it else size }
             return toMutableList().apply { add(index, player) }
         }
+
+        private fun showPlayerDialog(model: CreateModel, player: Player): Next<CreateModel, PlayerEffect> =
+            Next.dispatch(Effects.effects(ShowPlayerDialog(player, model.seatedWith(player))))
 
         fun createDefault(selectedPlayers: List<Long>?): CreateModel {
             return CreateModel(
@@ -84,10 +90,8 @@ data class CreateModel(
                         filteredPlayerList = event.players
                     )
                 )
-                is AddPlayerClicked -> Next.dispatch(Effects.effects(ShowPlayerDialog(Player(), model.seat(null))))
-                is PlayerRowLongClicked -> model.player(event.playerId)
-                    ?.let { Next.dispatch<CreateModel, PlayerEffect>(Effects.effects(ShowPlayerDialog(it, model.seat(it.id)))) }
-                    ?: Next.noChange()
+                is AddPlayerClicked -> showPlayerDialog(model, Player())
+                is PlayerRowLongClicked -> model.player(event.playerId)?.let { showPlayerDialog(model, it) } ?: Next.noChange()
                 is PlayerSelected -> {
                     val selected = model.selectedPlayerList.toMutableList()
                     if (event.selected) {

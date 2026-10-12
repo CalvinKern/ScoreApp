@@ -26,7 +26,6 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
-import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentGraphBinding
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.PlayerColors
@@ -114,15 +113,12 @@ class GraphFragment : Fragment() {
         }
 
         // Convert the entries to line sets (with all that wonderful color info)
+        val gameColors = PlayerColors.forGame(requireContext(), game.settings.players)
         val scoreSets = scoreMap.map { scores ->
             val seat = game.settings.players.indexOfFirst { it.id == scores.key }.coerceAtLeast(0)
-            val player = game.settings.players.getOrNull(seat) ?: Player()
-            LineDataSet(scores.value, player.name).also {
-                setDataSetStyle(
-                    it,
-                    PlayerColors.forPlayer(requireContext(), player, seat),
-                    isDashed = PlayerColors.isRepeated(player, seat),
-                )
+            val (color, isRepeated) = gameColors.getOrNull(seat) ?: PlayerColors.GameColor(colorOnSurface)
+            LineDataSet(scores.value, game.settings.players.getOrNull(seat)?.name).also {
+                setDataSetStyle(it, color, isDashed = isRepeated)
             }
         }
 
@@ -133,7 +129,7 @@ class GraphFragment : Fragment() {
         binding.gameChart.invalidate()
         binding.gameChart.contentDescription = describeGraph(game, scoreMap)
 
-        updatePodium(game)
+        updatePodium(game, gameColors)
     }
 
     /** The chart is only drawn, so screen readers get each player's running total after every round instead */
@@ -149,7 +145,7 @@ class GraphFragment : Fragment() {
         resources.getQuantityString(R.plurals.roundsHolder, game.rounds.size, game.rounds.size)
 
     /** Every player's total as a bar, best standing first, in the same colors as the rounds graph */
-    private fun updatePodium(game: Game) {
+    private fun updatePodium(game: Game, gameColors: List<PlayerColors.GameColor>) {
         val players = game.settings.players
         val standings = players
             .map { player ->
@@ -159,9 +155,7 @@ class GraphFragment : Fragment() {
             .let { if (game.settings.reversedScoring) it else it.reversed() }
 
         val entries = standings.mapIndexed { index, (_, total) -> BarEntry(index.toFloat(), total.toFloat()) }
-        val colors = standings.map { (player, _) ->
-            PlayerColors.forPlayer(requireContext(), player, players.indexOf(player).coerceAtLeast(0))
-        }
+        val colors = standings.map { (player, _) -> gameColors[players.indexOf(player)].color }
         val dataSet = BarDataSet(entries, null).apply {
             this.colors = colors
             valueTextSize = 14f

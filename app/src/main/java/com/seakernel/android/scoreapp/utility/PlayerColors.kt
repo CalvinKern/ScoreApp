@@ -1,13 +1,15 @@
 package com.seakernel.android.scoreapp.utility
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.core.content.ContextCompat
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 
 /**
- * Players get colors by their seat in the game, so everyone in a game of up to 10 players has their own color and keeps
- * it while the game goes on. Larger games repeat the colors. A player can also pick their own color for every game.
+ * A player can pick their own color for every game. Everyone else gets a color by their seat in the game, so each
+ * keeps it while the game goes on: the seat colors in order, skipping any a player in the game picked, so no two
+ * players share a color until the seat colors run out. Larger games repeat them.
  */
 object PlayerColors {
     private val seatColorIds = intArrayOf(
@@ -23,15 +25,48 @@ object PlayerColors {
         R.color.graphPink,
     )
 
-    /** The colors seats get, in seat order */
+    /** @param isRepeated whether another player in the game has this color, so their line is dashed to tell them apart */
+    data class GameColor(val color: Int, val isRepeated: Boolean = false)
+
+    /** The colors seats get, in order */
     fun seatColors(context: Context) = seatColorIds.map { ContextCompat.getColor(context, it) }
 
-    fun forSeat(context: Context, seat: Int) = ContextCompat.getColor(context, seatColorIds[seat % seatColorIds.size])
+    /** Each player's color in a game, for [players] in seat order */
+    fun forGame(context: Context, players: List<Player>) =
+        forGame(players, seatColors(context), seatColors(inOtherTheme(context)))
 
-    fun forPlayer(context: Context, player: Player, seat: Int) = player.color ?: forSeat(context, seat)
+    /** The color [players][seat] gets from their seat, as if they hadn't picked their own */
+    fun forSeat(context: Context, players: List<Player>, seat: Int): Int {
+        val withoutTheirColor = players.mapIndexed { index, player ->
+            if (index == seat) player.copy(color = null) else player
+        }
+        return forGame(context, withoutTheirColor)[seat].color
+    }
 
-    /** Whether the player shares their seat's color with an earlier seat, so their line is dashed to tell them apart */
-    fun isRepeated(player: Player, seat: Int) = player.color == null && seat >= seatColorIds.size
+    /**
+     * [forGame] with the seat colors in this theme and the other one. Seat colors are lighter in dark mode, and a
+     * color picked from a swatch in either theme still takes that seat color out of the game.
+     */
+    internal fun forGame(players: List<Player>, seatColors: List<Int>, otherThemeSeatColors: List<Int>): List<GameColor> {
+        val picked = players.mapNotNull { it.color }.toSet()
+        val free = seatColors.filterIndexed { index, color -> color !in picked && otherThemeSeatColors[index] !in picked }
+        val pool = free.ifEmpty { seatColors } // Every seat color was picked, so they all repeat
+        val taken = picked.toMutableSet()
+        var next = 0
+        return players.map { player ->
+            player.color?.let { GameColor(it) } ?: pool[next++ % pool.size].let { color ->
+                GameColor(color, isRepeated = free.isEmpty() || !taken.add(color))
+            }
+        }
+    }
+
+    private fun inOtherTheme(context: Context): Context {
+        val config = Configuration(context.resources.configuration)
+        val isNight = config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        val otherNightMode = if (isNight) Configuration.UI_MODE_NIGHT_NO else Configuration.UI_MODE_NIGHT_YES
+        config.uiMode = (config.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or otherNightMode
+        return context.createConfigurationContext(config)
+    }
 
     /** The color as 6 hex digits (RRGGBB), without a # */
     fun toHex(color: Int) = "%06X".format(color and 0xFFFFFF)

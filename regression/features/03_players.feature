@@ -156,6 +156,9 @@ Feature: Picking players
     Then the color field shows "1976D2"
     And the "Blue" swatch is checked
     When I tap "Cancel"
+    And I tap the edit icon next to "alice"
+    Then the color field shows "E65100", since Grandma Jo picked the third seat's green
+    When I tap "Cancel"
     And I tap the + button
     Then the color field shows "00838F"
     And the "Cyan" swatch is checked

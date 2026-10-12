@@ -304,7 +304,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
         // OK needs a name, and a color that can be saved
         val updateOk = { dialog.getButton(Dialog.BUTTON_POSITIVE)?.isEnabled = name().isNotEmpty() && colorPicker.isValid }
-        colorPicker = PlayerColorPicker(binding, player.color, PlayerColors.forSeat(requireContext(), effect.seat), updateOk)
+        val seatColor = effect.seatedPlayers.let { PlayerColors.forSeat(requireContext(), it, it.indexOf(player)) }
+        colorPicker = PlayerColorPicker(binding, player.color, seatColor, updateOk)
         binding.playerNameEdit.apply {
             setText(player.name)
             setSelection(player.name.length)

@@ -17,7 +17,7 @@ import com.seakernel.android.scoreapp.utility.PlayerColors
  * of typing one. A player without a color shows their seat's graph color, and keeps following their seat (in every
  * game) until a color is typed or picked. Clearing the field goes back to following the seat.
  *
- * @param seatColor the graph color of the player's seat in the game being set up
+ * @param seatColor the color the player gets from their seat in the game being set up
  * @param onChanged called when the color or whether it's valid changes
  */
 class PlayerColorPicker(

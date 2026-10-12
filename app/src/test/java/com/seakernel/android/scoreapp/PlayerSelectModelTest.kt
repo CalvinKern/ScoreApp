@@ -47,6 +47,19 @@ class PlayerSelectModelTest {
     }
 
     @Test
+    fun seatedWithPutsPickedPlayersInTheirSeatsAndOthersNext() {
+        val model = CreateModel.update(
+            CreateModel.update(CreateModel.createDefault(listOf(3L, 1L)), PlayersLoaded(players)).modelUnsafe(),
+            PlayerSearchRequest(""),
+        ).modelUnsafe()
+        val renamedCarol = Player(id = 3, name = "Carol", color = 5)
+
+        assertEquals(listOf(renamedCarol, players[0]), model.seatedWith(renamedCarol))
+        assertEquals(listOf(players[2], players[0], players[1]), model.seatedWith(players[1]))
+        assertEquals(listOf(players[2], players[0], Player()), model.seatedWith(Player()))
+    }
+
+    @Test
     fun searchResultsKeepTheSortOrder() {
         val searched = CreateModel.update(loaded(), PlayerSearchRequest("A")).modelUnsafe()
         val model = CreateModel.update(searched, PlayerSaved(Player(4, "Aaron"))).modelUnsafe()
