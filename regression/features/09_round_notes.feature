@@ -5,24 +5,24 @@ Feature: Round notes
 
   @smoke
   Scenario: Writing a note for a round
-    Given a game "Notes" with players "Calvin, Kim" and settings:
+    Given a game "Notes" with players "Calvin, Lindsay" and settings:
       | Show Round Notes | on |
     And I tap "Add Round"
-    When I tap the name "Kim"
-    Then I see "Notes for Kim"
+    When I tap the name "Lindsay"
+    Then I see "Notes for Lindsay"
     And I see "Round 1:" and "Round 2:"
     And "Round 2:" is at the bottom
     When I type "Phase 3 done" into the "Round 2:" note
     And I tap "Save"
-    Then I don't see "Notes for Kim"
-    When I tap the name "Kim"
+    Then I don't see "Notes for Lindsay"
+    When I tap the name "Lindsay"
     Then the "Round 2:" note is "Phase 3 done"
     And the "Round 1:" note is empty
 
   Scenario: Notes belong to one player
-    Given a game "Own Notes" with players "Calvin, Kim"
-    And I tap the name "Kim"
-    And I type "Kim's note" into the "Round 1:" note
+    Given a game "Own Notes" with players "Calvin, Lindsay"
+    And I tap the name "Lindsay"
+    And I type "Lindsay's note" into the "Round 1:" note
     And I tap "Save"
     When I tap the name "Calvin"
     Then the "Round 1:" note is empty
@@ -95,5 +95,5 @@ Feature: Round notes
   Scenario: Seeded notes in a game played as scoring categories
     Given the seed data is loaded
     When I open the game "Wingspan"
-    And I tap the name "Kim"
+    And I tap the name "Lindsay"
     Then the notes for rounds 1 to 6 are "Birds", "Bonus cards", "End-of-round goals", "Eggs", "Cached food", and "Tucked cards"

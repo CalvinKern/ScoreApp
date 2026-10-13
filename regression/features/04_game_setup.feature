@@ -4,21 +4,21 @@ Feature: Setting up a new game
 
   @smoke
   Scenario: Creating a game opens it with one empty round
-    Given the players "Calvin, Kim, Bob" exist
+    Given the players "Calvin, Lindsay, Bob" exist
     And I am on the game list
     When I tap the + button
     Then the title is "New Game"
     And the game name field has the keyboard
     When I type "Setup Test" as the game name
     And I tap "EDIT"
-    And I pick "Calvin", "Kim", and "Bob"
+    And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     And I tap "Save"
     Then the title is "Setup Test"
     And the game has 1 round
     And the totals are:
-      | Calvin | Kim | Bob |
-      | 0      | 0   | 0   |
+      | Calvin | Lindsay | Bob |
+      | 0      | 0       | 0   |
     And nobody is leading
     And the button after the rounds is "Add Round"
     When I go back
@@ -80,14 +80,14 @@ Feature: Setting up a new game
 
   @smoke
   Scenario: Every setting is saved with the game
-    Given a game "All Settings" with players "Calvin, Kim, Bob" and settings:
-      | Dealer             | on  |
-      | First dealer       | Kim |
-      | Reverse Scoring    | on  |
-      | Show Round Notes   | on  |
-      | Calculator Keyboard | off |
-      | Target Score       | 250 |
-      | Target Rounds      | 12  |
+    Given a game "All Settings" with players "Calvin, Lindsay, Bob" and settings:
+      | Dealer              | on      |
+      | First dealer        | Lindsay |
+      | Reverse Scoring     | on      |
+      | Show Round Notes    | on      |
+      | Calculator Keyboard | off     |
+      | Target Score        | 250     |
+      | Target Rounds       | 12      |
     When I choose "Edit" from the game menu
     Then the title is "Game Settings"
     And these settings are shown:
@@ -107,12 +107,12 @@ Feature: Setting up a new game
     Then "Reverse Scoring" is off
 
   Scenario: New games have a dealer, the first player unless another is picked
-    Given the players "Calvin, Kim, Bob" exist
+    Given the players "Calvin, Lindsay, Bob" exist
     And I am on the game list
     When I tap the + button
     Then "Dealer" is on
     When I tap "EDIT"
-    And I pick "Calvin", "Kim", and "Bob"
+    And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     Then each player has a dealer radio button
     And "Calvin" is marked "Dealer"
@@ -122,19 +122,19 @@ Feature: Setting up a new game
 
   @smoke
   Scenario: The picked dealer deals the first round
-    Given a game "Dealer Test" with players "Calvin, Kim, Bob" and settings:
-      | Dealer       | on  |
-      | First dealer | Kim |
-    Then Kim is the dealer
+    Given a game "Dealer Test" with players "Calvin, Lindsay, Bob" and settings:
+      | Dealer       | on      |
+      | First dealer | Lindsay |
+    Then Lindsay is the dealer
 
   Scenario: Without a dealer, no one has the dealer border and no radio buttons show
-    Given the players "Calvin, Kim" exist
+    Given the players "Calvin, Lindsay" exist
     And I am on the game list
     When I tap the + button
     And I tap the row "Dealer"
     Then "Dealer" is off
     When I tap "EDIT"
-    And I pick "Calvin" and "Kim"
+    And I pick "Calvin" and "Lindsay"
     And I tap "Save"
     Then no player has a dealer radio button
     When I type "No Dealer" as the game name
@@ -142,11 +142,11 @@ Feature: Setting up a new game
     Then nobody has the dealer border
 
   Scenario: Removing the picked dealer makes the first player the dealer
-    Given the players "Calvin, Kim, Bob" exist
+    Given the players "Calvin, Lindsay, Bob" exist
     And I am on the game list
     When I tap the + button
     And I tap "EDIT"
-    And I pick "Calvin", "Kim", and "Bob"
+    And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     And I tap the row "Bob"
     And I tap "EDIT"
@@ -155,19 +155,19 @@ Feature: Setting up a new game
     Then "Calvin" is marked "Dealer"
 
   Scenario: Dragging a player changes the seat order
-    Given the players "Calvin, Kim, Bob" exist
+    Given the players "Calvin, Lindsay, Bob" exist
     And I am on the game list
     When I tap the + button
     And I type "Seat Order" as the game name
     And I tap "EDIT"
-    And I pick "Calvin", "Kim", and "Bob"
+    And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     And I drag "Bob" above "Calvin"
-    Then the players are "Bob, Calvin, Kim"
+    Then the players are "Bob, Calvin, Lindsay"
     When I tap "Save"
     Then the totals are:
-      | Bob | Calvin | Kim |
-      | 0   | 0      | 0   |
+      | Bob | Calvin | Lindsay |
+      | 0   | 0      | 0       |
 
   Scenario Outline: A target of 0 means no target
     Given I am on the game list
@@ -210,7 +210,7 @@ Feature: Setting up a new game
     And I type "Ticket" as the game name
     Then "Ticket to Ride" is suggested once
     When I pick the suggestion "Ticket to Ride"
-    Then the players are "Calvin, Kim, Marcus, Priya, Sam"
+    Then the players are "Calvin, Lindsay, Marcus, Priya, Sam"
     And these settings are shown:
       | Dealer              | off |
       | Reverse Scoring     | off |
@@ -221,8 +221,8 @@ Feature: Setting up a new game
     When I tap "Save"
     Then the title is "Ticket to Ride"
     And the totals are:
-      | Calvin | Kim | Marcus | Priya | Sam |
-      | 0      | 0   | 0      | 0     | 0   |
+      | Calvin | Lindsay | Marcus | Priya | Sam |
+      | 0      | 0       | 0      | 0     | 0   |
 
   @seed
   Scenario: The keyboard's done key closes the name suggestions

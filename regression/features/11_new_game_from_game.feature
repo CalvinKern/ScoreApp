@@ -4,15 +4,15 @@ Feature: Starting the next game
 
   @smoke
   Scenario: New Game copies the game's name, players, and settings
-    Given a game "Rematch" with players "Calvin, Kim, Bob" and settings:
+    Given a game "Rematch" with players "Calvin, Lindsay, Bob" and settings:
       | Reverse Scoring  | on  |
       | Show Round Notes | on  |
       | Target Score     | 100 |
-    And I enter "40" for Kim in round 1
+    And I enter "40" for Lindsay in round 1
     When I choose "New Game" from the game menu
     Then the title is "New Game"
     And the game name field shows "Rematch"
-    And the players are "Calvin, Kim, Bob"
+    And the players are "Calvin, Lindsay, Bob"
     And these settings are shown:
       | Reverse Scoring  | on  |
       | Show Round Notes | on  |
@@ -20,13 +20,13 @@ Feature: Starting the next game
     When I tap "Save"
     Then the title is "Rematch"
     And the totals are:
-      | Calvin | Kim | Bob |
-      | 0      | 0   | 0   |
+      | Calvin | Lindsay | Bob |
+      | 0      | 0       | 0   |
 
   @smoke
   Scenario: The new game keeps both games, and back goes to the game list
-    Given a game "Two Games" with players "Calvin, Kim"
-    And I enter "40" for Kim in round 1
+    Given a game "Two Games" with players "Calvin, Lindsay"
+    And I enter "40" for Lindsay in round 1
     When I choose "New Game" from the game menu
     And I tap "Save"
     And I go back
@@ -35,11 +35,11 @@ Feature: Starting the next game
     And the first one shows "1 Round" and today's date
     When I open the game "Two Games" in row 2
     Then the totals are:
-      | Calvin | Kim |
-      | 0      | 40  |
+      | Calvin | Lindsay |
+      | 0      | 40      |
 
   Scenario: The next player after the last dealer deals first
-    Given a game "Next Dealer" with players "Calvin, Kim, Bob" and settings:
+    Given a game "Next Dealer" with players "Calvin, Lindsay, Bob" and settings:
       | Dealer       | on     |
       | First dealer | Calvin |
     And I tap "Add Round"
@@ -49,14 +49,14 @@ Feature: Starting the next game
     Then Bob is the dealer
 
   Scenario: The dealer wraps around to the first player
-    Given a game "Wrap Dealer" with players "Calvin, Kim" and settings:
-      | Dealer       | on     |
-      | First dealer | Kim    |
+    Given a game "Wrap Dealer" with players "Calvin, Lindsay" and settings:
+      | Dealer       | on      |
+      | First dealer | Lindsay |
     When I choose "New Game" from the game menu
     Then "Calvin" is marked "Dealer"
 
   Scenario: New Game from Player Standings
-    Given a game "From Standings" with players "Calvin, Kim" and settings:
+    Given a game "From Standings" with players "Calvin, Lindsay" and settings:
       | Target Score | 10 |
     And I enter "10" for Calvin in round 1
     When I tap "Finish Game"
@@ -66,7 +66,7 @@ Feature: Starting the next game
     And the game name field shows "From Standings"
 
   Scenario: Changing the new game's setup leaves the old game alone
-    Given a game "Original" with players "Calvin, Kim" and settings:
+    Given a game "Original" with players "Calvin, Lindsay" and settings:
       | Target Score | 100 |
     When I choose "New Game" from the game menu
     And I replace the game name with "Original II"

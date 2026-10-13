@@ -5,13 +5,13 @@ Feature: Editing a game in progress
 
   @smoke
   Scenario: Game Settings shows the game as it is
-    Given a game "Edit Me" with players "Calvin, Kim" and settings:
+    Given a game "Edit Me" with players "Calvin, Lindsay" and settings:
       | Reverse Scoring | on |
       | Target Score    | 50 |
     When I choose "Edit" from the game menu
     Then the title is "Game Settings"
     And the game name field shows "Edit Me"
-    And the players are "Calvin, Kim"
+    And the players are "Calvin, Lindsay"
     And Calvin's dealer radio button is checked, since Calvin deals the only round
     And these settings are shown:
       | Reverse Scoring | on |
@@ -19,21 +19,21 @@ Feature: Editing a game in progress
 
   @smoke
   Scenario: The first dealer can be changed while the game has one round
-    Given a game "First Dealer" with players "Calvin, Kim, Bob"
-    And I enter "5" for Kim in round 1
+    Given a game "First Dealer" with players "Calvin, Lindsay, Bob"
+    And I enter "5" for Lindsay in round 1
     When I choose "Edit" from the game menu
     And I tap the row "Bob"
     And I go back
     Then Bob is the dealer
     And the round 1 scores are:
-      | Calvin | Kim | Bob |
-      | 0      | 5   | 0   |
+      | Calvin | Lindsay | Bob |
+      | 0      | 5       | 0   |
     When I tap "Add Round"
     Then Calvin is the dealer
     And Bob dealt round 1
 
   Scenario: The first dealer can't be changed once the game has a second round
-    Given a game "Two Rounds" with players "Calvin, Kim"
+    Given a game "Two Rounds" with players "Calvin, Lindsay"
     And I tap "Add Round"
     When I choose "Edit" from the game menu
     Then no player has a dealer radio button
@@ -97,11 +97,11 @@ Feature: Editing a game in progress
 
   @smoke
   Scenario: Adding a player gives them 0 in every round
-    Given a game "Add Player" with players "Calvin, Kim"
+    Given a game "Add Player" with players "Calvin, Lindsay"
     And I play these rounds:
-      | Calvin | Kim |
-      | 10     | 20  |
-      | 30     | 40  |
+      | Calvin | Lindsay |
+      | 10     | 20      |
+      | 30     | 40      |
     And the players "Bob" exist
     When I choose "Edit" from the game menu
     And I tap "EDIT"
@@ -109,56 +109,56 @@ Feature: Editing a game in progress
     And I tap "Save"
     And I go back
     Then the round 1 scores are:
-      | Calvin | Kim | Bob |
-      | 10     | 20  | 0   |
+      | Calvin | Lindsay | Bob |
+      | 10     | 20      | 0   |
     And the totals are:
-      | Calvin | Kim | Bob |
-      | 40     | 60  | 0   |
+      | Calvin | Lindsay | Bob |
+      | 40     | 60      | 0   |
 
   Scenario: Players picked and left with back are saved to the game
-    Given a game "Back Pick" with players "Calvin, Kim"
+    Given a game "Back Pick" with players "Calvin, Lindsay"
     And the players "Bob" exist
     When I choose "Edit" from the game menu
     And I tap "EDIT"
     And I pick "Bob"
     And I go back
-    Then the players are "Calvin, Kim, Bob"
+    Then the players are "Calvin, Lindsay, Bob"
     When I go back
-    Then the totals read "Calvin 0, Kim 0, Bob 0"
+    Then the totals read "Calvin 0, Lindsay 0, Bob 0"
 
   Scenario: Players picked save while the player picker is still open
     Given a game "Pick Saves" with players "Calvin"
-    And the players "Kim" exist
+    And the players "Lindsay" exist
     When I choose "Edit" from the game menu
     And I tap "EDIT"
     Then the subtitle is "Changes save automatically"
-    When I pick "Kim"
+    When I pick "Lindsay"
     And I wait 2 seconds
     And I force stop the app
     And I open the app
     And I open the game "Pick Saves"
-    Then the totals read "Calvin 0, Kim 0"
+    Then the totals read "Calvin 0, Lindsay 0"
 
   Scenario: Unpicking every player says the players aren't saved
-    Given a game "Keep Both" with players "Calvin, Kim"
+    Given a game "Keep Both" with players "Calvin, Lindsay"
     When I choose "Edit" from the game menu
     And I tap "EDIT"
     And I tap the row "Calvin"
-    And I tap the row "Kim"
+    And I tap the row "Lindsay"
     Then the subtitle is "Empty player list isn't saved"
     When I go back
     Then the subtitle is "Empty player list isn't saved"
     When I go back
-    Then the totals read "Calvin 0, Kim 0"
+    Then the totals read "Calvin 0, Lindsay 0"
 
   Scenario: Removing a player removes their scores
-    Given a game "Remove Player" with players "Calvin, Kim, Bob"
+    Given a game "Remove Player" with players "Calvin, Lindsay, Bob"
     And I play these rounds:
-      | Calvin | Kim | Bob |
-      | 10     | 20  | 30  |
+      | Calvin | Lindsay | Bob |
+      | 10     | 20      | 30  |
     When I choose "Edit" from the game menu
     And I tap "EDIT"
-    And I tap the row "Kim"
+    And I tap the row "Lindsay"
     And I tap "Save"
     And I go back
     Then the totals are:
@@ -167,44 +167,44 @@ Feature: Editing a game in progress
     And Bob is leading
 
   Scenario: Removing every player keeps the players the game had
-    Given a game "Keep Players" with players "Calvin, Kim"
-    And I enter "5" for Kim in round 1
+    Given a game "Keep Players" with players "Calvin, Lindsay"
+    And I enter "5" for Lindsay in round 1
     When I choose "Edit" from the game menu
     And I tap "EDIT"
     And I tap the row "Calvin"
-    And I tap the row "Kim"
+    And I tap the row "Lindsay"
     And I tap "Save"
     And I go back
     Then the totals are:
-      | Calvin | Kim |
-      | 0      | 5   |
+      | Calvin | Lindsay |
+      | 0      | 5       |
 
   Scenario: Reordering players moves their columns and scores together
-    Given a game "Reorder" with players "Calvin, Kim, Bob"
+    Given a game "Reorder" with players "Calvin, Lindsay, Bob"
     And I play these rounds:
-      | Calvin | Kim | Bob |
-      | 1      | 2   | 3   |
+      | Calvin | Lindsay | Bob |
+      | 1      | 2       | 3   |
     When I choose "Edit" from the game menu
     And I drag "Bob" above "Calvin"
     And I go back
     Then the round 1 scores are:
-      | Bob | Calvin | Kim |
-      | 3   | 1      | 2   |
+      | Bob | Calvin | Lindsay |
+      | 3   | 1      | 2       |
 
   @visual
   Scenario: Turning on Reverse Scoring changes who is leading
-    Given a game "Flip Scoring" with players "Calvin, Kim"
+    Given a game "Flip Scoring" with players "Calvin, Lindsay"
     And I play these rounds:
-      | Calvin | Kim |
-      | 10     | 20  |
-    And Kim is leading
+      | Calvin | Lindsay |
+      | 10     | 20      |
+    And Lindsay is leading
     When I choose "Edit" from the game menu
     And I tap the row "Reverse Scoring"
     And I go back
     Then Calvin is leading
 
   Scenario: A target that's already been passed finishes the game
-    Given a game "Late Target" with players "Calvin, Kim"
+    Given a game "Late Target" with players "Calvin, Lindsay"
     And I enter "80" for Calvin in round 1
     When I choose "Edit" from the game menu
     And I type "50" into "Target Score"
@@ -232,7 +232,7 @@ Feature: Editing a game in progress
 
   @visual
   Scenario: Turning off the dealer hides the dealer borders
-    Given a game "Drop Dealer" with players "Calvin, Kim" and settings:
+    Given a game "Drop Dealer" with players "Calvin, Lindsay" and settings:
       | Dealer | on |
     And Calvin is the dealer
     When I choose "Edit" from the game menu
@@ -249,5 +249,5 @@ Feature: Editing a game in progress
     And I go back
     Then the title is "Hand and Foot (edited)"
     And the totals are:
-      | Team Red (Calvin & Kim) | Team Blue (Bob & alice) |
-      | 3550                    | 2730                    |
+      | Team Red (Calvin & Lindsay) | Team Blue (Bob & alice) |
+      | 3550                        | 2730                    |

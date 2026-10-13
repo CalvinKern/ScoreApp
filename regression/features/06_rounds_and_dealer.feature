@@ -4,7 +4,7 @@ Feature: Rounds and the dealer
 
   @smoke
   Scenario: Add Round adds a round and starts on its first score
-    Given a game "Add Rounds" with players "Calvin, Kim, Bob"
+    Given a game "Add Rounds" with players "Calvin, Lindsay, Bob"
     When I tap "Add Round"
     Then the game has 2 rounds
     And the round 2 score for Calvin is being edited
@@ -12,38 +12,38 @@ Feature: Rounds and the dealer
 
   @calculator @smoke
   Scenario: The next arrow moves through the scores, and adds a round after the last one
-    Given a game "Next Arrow" with players "Calvin, Kim"
+    Given a game "Next Arrow" with players "Calvin, Lindsay"
     When I tap the round 1 score for Calvin
     And I type "5" on the calculator
     And I tap "->"
-    Then the round 1 score for Kim is being edited
+    Then the round 1 score for Lindsay is being edited
     When I type "7" on the calculator
     And I tap "->"
     Then the game has 2 rounds
     And the round 2 score for Calvin is being edited
     And the totals are:
-      | Calvin | Kim |
-      | 5      | 7   |
+      | Calvin | Lindsay |
+      | 5      | 7       |
 
   @calculator
   Scenario: The previous arrow moves back a score
-    Given a game "Prev Arrow" with players "Calvin, Kim"
-    When I tap the round 1 score for Kim
+    Given a game "Prev Arrow" with players "Calvin, Lindsay"
+    When I tap the round 1 score for Lindsay
     And I tap "<-"
     Then the round 1 score for Calvin is being edited
 
   @calculator
   Scenario: Scores can be entered for a whole game with only the keypad
-    Given a game "Keypad Only" with players "Calvin, Kim"
+    Given a game "Keypad Only" with players "Calvin, Lindsay"
     When I tap the round 1 score for Calvin
     And I type these on the calculator, tapping "->" after each: "10", "20", "30", "40", "50", "60"
     Then the game has 4 rounds
     And the totals are:
-      | Calvin | Kim |
-      | 90     | 120 |
+      | Calvin | Lindsay |
+      | 90     | 120     |
 
   Scenario: The scores scroll to the newest round when a game opens
-    Given a game "Long Game" with players "Calvin, Kim"
+    Given a game "Long Game" with players "Calvin, Lindsay"
     And I tap "Add Round" 14 times
     When I go back
     And I open the game "Long Game"
@@ -56,7 +56,7 @@ Feature: Rounds and the dealer
     When I open the game "Scrabble"
     Then I see "Add Round"
     When I scroll to the top
-    Then the round 1 score for Kim shows "22"
+    Then the round 1 score for Lindsay shows "22"
 
   @seed @visual
   Scenario: A game with many players scrolls sideways, keeping names over their scores
@@ -70,12 +70,12 @@ Feature: Rounds and the dealer
 
   @smoke
   Scenario: Deleting a round removes its scores from the totals
-    Given a game "Delete Round" with players "Calvin, Kim"
+    Given a game "Delete Round" with players "Calvin, Lindsay"
     And I play these rounds:
-      | Calvin | Kim |
-      | 10     | 1   |
-      | 20     | 2   |
-      | 30     | 3   |
+      | Calvin | Lindsay |
+      | 10     | 1       |
+      | 20     | 2       |
+      | 30     | 3       |
     When I choose "Delete Rounds" from the game menu
     Then I see "Delete Rounds"
     And I see "Round 1", "Round 2", and "Round 3"
@@ -83,11 +83,11 @@ Feature: Rounds and the dealer
     And I tap "Delete"
     Then the game has 2 rounds
     And the round 2 scores are:
-      | Calvin | Kim |
-      | 30     | 3   |
+      | Calvin | Lindsay |
+      | 30     | 3       |
     And the totals are:
-      | Calvin | Kim |
-      | 40     | 4   |
+      | Calvin | Lindsay |
+      | 40     | 4       |
 
   Scenario: Deleting several rounds at once
     Given a game "Delete Several" with players "Calvin"
@@ -106,19 +106,19 @@ Feature: Rounds and the dealer
       | 5      |
 
   Scenario: Deleting every round leaves a new empty round
-    Given a game "Delete All" with players "Calvin, Kim"
+    Given a game "Delete All" with players "Calvin, Lindsay"
     And I play these rounds:
-      | Calvin | Kim |
-      | 10     | 1   |
-      | 20     | 2   |
+      | Calvin | Lindsay |
+      | 10     | 1       |
+      | 20     | 2       |
     When I choose "Delete Rounds" from the game menu
     And I check "Round 1"
     And I check "Round 2"
     And I tap "Delete"
     Then the game has 1 round
     And the totals are:
-      | Calvin | Kim |
-      | 0      | 0   |
+      | Calvin | Lindsay |
+      | 0      | 0       |
 
   Scenario: Closing Delete Rounds, or deleting nothing, keeps every round
     Given a game "Delete None" with players "Calvin"
@@ -136,19 +136,19 @@ Feature: Rounds and the dealer
 
   @visual @smoke
   Scenario: The dealer moves one seat each round and wraps around
-    Given a game "Dealer Moves" with players "Calvin, Kim, Bob" and settings:
+    Given a game "Dealer Moves" with players "Calvin, Lindsay, Bob" and settings:
       | Dealer       | on     |
       | First dealer | Calvin |
     When I tap "Add Round" 3 times
     Then Calvin dealt round 1
-    And Kim dealt round 2
+    And Lindsay dealt round 2
     And Bob dealt round 3
     And Calvin is the dealer
     And the past dealers' borders are lighter than the current dealer's
 
   @visual
   Scenario: Long pressing a score makes that player the round's dealer
-    Given a game "Change Dealer" with players "Calvin, Kim, Bob" and settings:
+    Given a game "Change Dealer" with players "Calvin, Lindsay, Bob" and settings:
       | Dealer       | on     |
       | First dealer | Calvin |
     When I long press the round 1 score for Bob
@@ -159,28 +159,28 @@ Feature: Rounds and the dealer
     Then Calvin is the dealer
 
   Scenario: Cancelling the dealer change keeps the dealer
-    Given a game "Keep Dealer" with players "Calvin, Kim" and settings:
+    Given a game "Keep Dealer" with players "Calvin, Lindsay" and settings:
       | Dealer       | on     |
       | First dealer | Calvin |
-    When I long press the round 1 score for Kim
+    When I long press the round 1 score for Lindsay
     And I tap "Cancel"
     Then Calvin is the dealer
 
   @visual
   Scenario: A past round's dealer can be changed too
-    Given a game "Past Dealer" with players "Calvin, Kim, Bob" and settings:
+    Given a game "Past Dealer" with players "Calvin, Lindsay, Bob" and settings:
       | Dealer       | on     |
       | First dealer | Calvin |
     And I tap "Add Round"
     When I long press the round 1 score for Bob
     And I tap "Dealer"
     Then Bob dealt round 1
-    And Kim is the dealer
+    And Lindsay is the dealer
 
   Scenario: Games without a dealer don't ask about the dealer
-    Given a game "No Dealer Press" with players "Calvin, Kim" and settings:
+    Given a game "No Dealer Press" with players "Calvin, Lindsay" and settings:
       | Dealer | off |
-    When I long press the round 1 score for Kim
+    When I long press the round 1 score for Lindsay
     Then I don't see "dealer for this round?"
 
   @seed @visual
@@ -189,7 +189,7 @@ Feature: Rounds and the dealer
     When I open the game "Gin Rummy"
     Then Calvin is the dealer
     When I tap "Add Round"
-    Then Kim is the dealer
+    Then Lindsay is the dealer
 
   @seed @visual
   Scenario: An old game with no saved dealer starts the next round with the first player

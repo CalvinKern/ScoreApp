@@ -4,22 +4,22 @@ Feature: Device changes
 
   @landscape
   Scenario: Rotating keeps the scores, including one still being typed
-    Given a game "Rotate" with players "Calvin, Kim"
+    Given a game "Rotate" with players "Calvin, Lindsay"
     And I enter "15" for Calvin in round 1
-    When I tap the round 1 score for Kim
+    When I tap the round 1 score for Lindsay
     And I type "7" on the calculator
     And I rotate the device to landscape
     Then the totals are:
-      | Calvin | Kim |
-      | 15     | 7   |
+      | Calvin | Lindsay |
+      | 15     | 7       |
     When I rotate the device to portrait
     Then the totals are:
-      | Calvin | Kim |
-      | 15     | 7   |
+      | Calvin | Lindsay |
+      | 15     | 7       |
 
   @landscape @visual @calculator
   Scenario: In landscape the keypad sits beside the scores
-    Given a game "Landscape Keys" with players "Calvin, Kim, Bob"
+    Given a game "Landscape Keys" with players "Calvin, Lindsay, Bob"
     And I rotate the device to landscape
     When I tap the round 1 score for Calvin
     Then the calculator keyboard is beside the score table, not below it
@@ -63,15 +63,15 @@ Feature: Device changes
     And no keyboard shows
 
   Scenario: The app comes back to the same game after the system closes it in the background
-    Given a game "Process Death" with players "Calvin, Kim"
-    And I enter "8" for Kim in round 1
+    Given a game "Process Death" with players "Calvin, Lindsay"
+    And I enter "8" for Lindsay in round 1
     When I press Home
     And the system kills the app in the background (adb shell am kill com.seakernel.scorepad.debug)
     And I return to the app from recents
     Then the title is "Process Death"
     And the totals are:
-      | Calvin | Kim |
-      | 0      | 8   |
+      | Calvin | Lindsay |
+      | 0      | 8       |
     When I go back
     Then the title is "Games"
 
@@ -118,14 +118,14 @@ Feature: Device changes
   @locale
   Scenario: Languages that write decimals with a comma
     Given the device language is Deutsch (Deutschland)
-    And a game "Komma" with players "Calvin, Kim"
+    And a game "Komma" with players "Calvin, Lindsay"
     When I tap the round 1 score for Calvin
     Then the calculator's decimal key shows ","
     When I type "2,5" on the calculator
     And I tap "="
     Then the round 1 score for Calvin shows "2,5"
-    When I enter "10/4" for Kim in round 1
-    Then the round 1 score for Kim shows "2,5"
+    When I enter "10/4" for Lindsay in round 1
+    Then the round 1 score for Lindsay shows "2,5"
     When I tap the round 1 score for Calvin
     Then the score being edited shows "2,5"
 
@@ -160,9 +160,9 @@ Feature: Device changes
   @visual
   Scenario: Right-to-left layouts mirror the table and the arrows
     Given "Force RTL layout direction" is on in Developer options
-    And a game "RTL" with players "Calvin, Kim"
+    And a game "RTL" with players "Calvin, Lindsay"
     Then Calvin's column is on the right
-    When I tap the round 1 score for Kim
+    When I tap the round 1 score for Lindsay
     And I tap "<-"
     Then the round 1 score for Calvin is being edited
 

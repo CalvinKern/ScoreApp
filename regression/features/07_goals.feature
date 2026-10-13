@@ -4,7 +4,7 @@ Feature: Reaching the goal
 
   @smoke
   Scenario: Reaching the target score shows Finish Game
-    Given a game "Score Goal" with players "Calvin, Kim" and settings:
+    Given a game "Score Goal" with players "Calvin, Lindsay" and settings:
       | Target Score | 100 |
     When I enter "99" for Calvin in round 1
     Then the button after the rounds is "Add Round"
@@ -20,18 +20,18 @@ Feature: Reaching the goal
     Then the button after the rounds is "Add Round"
 
   Scenario: With Reverse Scoring, the game still ends when someone reaches the target score
-    Given a game "Reverse Goal" with players "Calvin, Kim" and settings:
+    Given a game "Reverse Goal" with players "Calvin, Lindsay" and settings:
       | Reverse Scoring | on  |
       | Target Score    | 100 |
     When I play these rounds:
-      | Calvin | Kim |
-      | 40     | 104 |
+      | Calvin | Lindsay |
+      | 40     | 104     |
     Then the button after the rounds is "Finish Game"
     And Calvin is leading
 
   @smoke
   Scenario: Reaching the target rounds shows Finish Game as soon as the last round is added
-    Given a game "Round Goal" with players "Calvin, Kim" and settings:
+    Given a game "Round Goal" with players "Calvin, Lindsay" and settings:
       | Target Rounds | 3 |
     When I tap "Add Round"
     Then the button after the rounds is "Add Round"
@@ -40,30 +40,30 @@ Feature: Reaching the goal
     And the button after the rounds is "Finish Game"
 
   Scenario: A target of one round finishes from the start
-    Given a game "One Round" with players "Calvin, Kim" and settings:
+    Given a game "One Round" with players "Calvin, Lindsay" and settings:
       | Target Rounds | 1 |
     Then the button after the rounds is "Finish Game"
 
   @smoke
   Scenario: Finish Game asks, and Finish shows the standings
-    Given a game "Finish It" with players "Calvin, Kim" and settings:
+    Given a game "Finish It" with players "Calvin, Lindsay" and settings:
       | Target Score | 10 |
-    And I enter "12" for Kim in round 1
+    And I enter "12" for Lindsay in round 1
     When I tap "Finish Game"
     Then I see "Goal Reached!"
     And I see "Would you like to finish the game and see the standings?"
     When I tap "Finish"
     Then I see "Player Standings"
     And the standings are:
-      | place | player | total |
-      | #1    | Kim    | 12    |
-      | #2    | Calvin | 0     |
+      | place | player  | total |
+      | #1    | Lindsay | 12    |
+      | #2    | Calvin  | 0     |
 
   @smoke
   Scenario: Another Round keeps playing past a target score
-    Given a game "Keep Going" with players "Calvin, Kim" and settings:
+    Given a game "Keep Going" with players "Calvin, Lindsay" and settings:
       | Target Score | 10 |
-    And I enter "12" for Kim in round 1
+    And I enter "12" for Lindsay in round 1
     When I tap "Finish Game"
     And I tap "Another Round!"
     Then the game has 2 rounds
@@ -81,7 +81,7 @@ Feature: Reaching the goal
 
   @calculator
   Scenario: The next arrow on the last score asks to finish once the goal is reached
-    Given a game "Arrow Finish" with players "Calvin, Kim" and settings:
+    Given a game "Arrow Finish" with players "Calvin, Lindsay" and settings:
       | Target Score | 50 |
     When I tap the round 1 score for Calvin
     And I type "60" on the calculator
@@ -101,62 +101,62 @@ Feature: Reaching the goal
 
   @visual @smoke
   Scenario: Reaching the target score celebrates the leader with confetti
-    Given a game "Confetti" with players "Calvin, Kim" and settings:
+    Given a game "Confetti" with players "Calvin, Lindsay" and settings:
       | Target Score | 100 |
-    When I enter "100" for Kim in round 1
-    Then confetti bursts from Kim's total
+    When I enter "100" for Lindsay in round 1
+    Then confetti bursts from Lindsay's total
 
   @visual
   Scenario: No confetti for reaching the target rounds
-    Given a game "No Confetti Rounds" with players "Calvin, Kim" and settings:
+    Given a game "No Confetti Rounds" with players "Calvin, Lindsay" and settings:
       | Target Rounds | 1 |
-    When I enter "10" for Kim in round 1
+    When I enter "10" for Lindsay in round 1
     Then no confetti shows
 
   @visual
   Scenario: Confetti again when the lead changes after the goal
-    Given a game "Confetti Twice" with players "Calvin, Kim" and settings:
+    Given a game "Confetti Twice" with players "Calvin, Lindsay" and settings:
       | Target Score | 100 |
-    And I enter "100" for Kim in round 1
-    And confetti bursts from Kim's total
+    And I enter "100" for Lindsay in round 1
+    And confetti bursts from Lindsay's total
     When I enter "120" for Calvin in round 1
     Then confetti bursts from Calvin's total
 
   @visual
   Scenario: The leader reaching the target score celebrates, once a round
-    Given a game "Confetti Leader" with players "Calvin, Kim" and settings:
+    Given a game "Confetti Leader" with players "Calvin, Lindsay" and settings:
       | Target Score | 100 |
-    And I enter "50" for Kim in round 1
+    And I enter "50" for Lindsay in round 1
     And I close and reopen the app
     And I open the game "Confetti Leader"
     Then no confetti shows
     When I tap "Add Round"
-    And I enter "60" for Kim in round 2
-    Then confetti bursts from Kim's total
-    When I enter "70" for Kim in round 2
+    And I enter "60" for Lindsay in round 2
+    Then confetti bursts from Lindsay's total
+    When I enter "70" for Lindsay in round 2
     Then no confetti shows
-    When I enter "10" for Kim in round 2
-    And I enter "60" for Kim in round 2
+    When I enter "10" for Lindsay in round 2
+    And I enter "60" for Lindsay in round 2
     Then no confetti shows
 
   @visual
   Scenario: Reaching the target score again in a later round celebrates again
-    Given a game "Confetti Again" with players "Calvin, Kim" and settings:
+    Given a game "Confetti Again" with players "Calvin, Lindsay" and settings:
       | Target Score | 100 |
-    And I enter "110" for Kim in round 1
-    And confetti bursts from Kim's total
+    And I enter "110" for Lindsay in round 1
+    And confetti bursts from Lindsay's total
     When I tap "Finish Game"
     And I tap "Another Round!"
-    And I enter "-60" for Kim in round 2
+    And I enter "-60" for Lindsay in round 2
     Then no confetti shows
-    When I enter "0" for Kim in round 2
-    Then confetti bursts from Kim's total
+    When I enter "0" for Lindsay in round 2
+    Then confetti bursts from Lindsay's total
 
   @visual @smoke
   Scenario: Finishing the game shoots confetti from the top corners over the standings
-    Given a game "Confetti Finish" with players "Calvin, Kim" and settings:
+    Given a game "Confetti Finish" with players "Calvin, Lindsay" and settings:
       | Target Score | 10 |
-    And I enter "12" for Kim in round 1
+    And I enter "12" for Lindsay in round 1
     When I tap "Finish Game"
     And I tap "Finish"
     Then confetti shoots in from both top corners, over the "Player Standings" dialog

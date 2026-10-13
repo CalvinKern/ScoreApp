@@ -73,7 +73,7 @@ either.
 
 Steps use the words on the screen, quoted exactly (`"Add Round"`, `"Goal Reached!"`), and a step always means the
 same thing. These are the ones most scenarios share; any other step means just what it says. Player names in steps
-are the names shown in the game, unquoted when a step names a player (`Kim is leading`).
+are the names shown in the game, unquoted when a step names a player (`Lindsay is leading`).
 
 ### Setting up
 

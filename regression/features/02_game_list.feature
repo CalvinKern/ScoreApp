@@ -49,14 +49,14 @@ Feature: Game list
 
   @smoke
   Scenario: Tapping a game opens it
-    Given a game "List Open Test" with players "Calvin, Kim"
+    Given a game "List Open Test" with players "Calvin, Lindsay"
     And I go back
     When I open the game "List Open Test"
     Then the title is "List Open Test"
     And I see "Add Round"
 
   Scenario: A new game goes to the top of the list
-    Given a game "Newest Game" with players "Calvin, Kim"
+    Given a game "Newest Game" with players "Calvin, Lindsay"
     When I go back
     Then the title is "Games"
     And the first game is "Newest Game"
@@ -66,7 +66,7 @@ Feature: Game list
   Scenario: Entering a score moves the game to the top
     Given the seed data is loaded
     When I open the game "Catan"
-    And I enter "9" for Kim in round 1
+    And I enter "9" for Lindsay in round 1
     And I go back
     Then the first game is "Catan"
     And the first game shows today's date
@@ -80,7 +80,7 @@ Feature: Game list
 
   @smoke
   Scenario: Long pressing a game deletes it after asking
-    Given a game "Delete Me" with players "Calvin, Kim"
+    Given a game "Delete Me" with players "Calvin, Lindsay"
     And I go back
     When I long press the game "Delete Me"
     Then I see "Do you want to delete this game?"
@@ -90,7 +90,7 @@ Feature: Game list
     Then I don't see "Delete Me"
 
   Scenario: Cancelling a delete keeps the game
-    Given a game "Keep Me" with players "Calvin, Kim"
+    Given a game "Keep Me" with players "Calvin, Lindsay"
     And I go back
     When I long press the game "Keep Me"
     And I tap "Cancel"
@@ -111,14 +111,14 @@ Feature: Game list
     Then the title is "Game Settings"
     And I see "No players added"
     When I tap "EDIT"
-    And I pick "Calvin" and "Kim"
+    And I pick "Calvin" and "Lindsay"
     And I tap "Save"
-    Then the players are "Calvin" and "Kim"
+    Then the players are "Calvin" and "Lindsay"
     When I tap "Save"
     Then the title is "Game Night (players gone)"
     And the totals are:
-      | Calvin | Kim |
-      | 0      | 0   |
+      | Calvin | Lindsay |
+      | 0      | 0       |
     When I go back
     Then the title is "Games"
 
@@ -128,8 +128,8 @@ Feature: Game list
     When I open the game "Quick Game (no rounds)"
     Then the game has 1 round
     And the totals are:
-      | Morgan | Riley | Avery |
-      | 0      | 0     | 0     |
+      | Morgan | Riley | Padfoot |
+      | 0      | 0     | 0       |
     When I go back
     Then the game "Quick Game (no rounds)" shows "1 Round"
 

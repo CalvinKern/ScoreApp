@@ -37,10 +37,10 @@ Feature: Picking players
     And I am picking players for a new game
     Then the first players listed are:
       | alice                                 |
-      | Avery                                 |
       | Bartholomew Fitzgerald-Montgomery III |
       | Bob                                   |
       | Calvin                                |
+      | Grandma Jo                            |
     And the last players listed are:
       | 李雷           |
       | 🎲 Dice Goblin |
@@ -57,7 +57,7 @@ Feature: Picking players
 
   @smoke
   Scenario: Tapping a row or its checkbox picks and unpicks the player
-    Given the players "Calvin, Kim" exist
+    Given the players "Calvin, Lindsay" exist
     And I am picking players for a new game
     When I tap the row "Calvin"
     Then "Calvin" is checked
@@ -65,43 +65,43 @@ Feature: Picking players
     Then "Calvin" is not checked
 
   Scenario: Players keep their order, and new picks go at the end
-    Given the players "Calvin, Kim, Bob" exist
+    Given the players "Calvin, Lindsay, Bob" exist
     And I am picking players for a new game
-    When I pick "Kim"
+    When I pick "Lindsay"
     And I pick "Calvin"
     And I tap "Save"
-    Then the players are "Kim, Calvin"
+    Then the players are "Lindsay, Calvin"
     When I tap "EDIT"
-    Then "Kim" and "Calvin" are checked
+    Then "Lindsay" and "Calvin" are checked
     When I pick "Bob"
     And I tap "Save"
-    Then the players are "Kim, Calvin, Bob"
+    Then the players are "Lindsay, Calvin, Bob"
 
   Scenario: Unpicking a player removes them from the game being set up
-    Given the players "Calvin, Kim" exist
+    Given the players "Calvin, Lindsay" exist
     And I am picking players for a new game
-    When I pick "Calvin" and "Kim"
+    When I pick "Calvin" and "Lindsay"
     And I tap "Save"
     And I tap "EDIT"
-    And I tap the row "Kim"
+    And I tap the row "Lindsay"
     And I tap "Save"
     Then the players are "Calvin"
 
   Scenario: Going back from the player picker keeps the picks, like Save
-    Given the players "Calvin, Kim, Bob" exist
+    Given the players "Calvin, Lindsay, Bob" exist
     And I am picking players for a new game
     When I pick "Calvin"
     And I tap "Save"
     And I tap "EDIT"
-    And I pick "Kim"
+    And I pick "Lindsay"
     And I go back
     Then the title is "New Game"
-    And the players are "Calvin, Kim"
+    And the players are "Calvin, Lindsay"
     When I tap "EDIT"
     And I tap the row "Calvin"
     And I pick "Bob"
     And I tap the toolbar's back arrow
-    Then the players are "Kim, Bob"
+    Then the players are "Lindsay, Bob"
 
   Scenario: A new game's screens don't say anything is saved, since it's created with Save
     Given the players "Calvin" exist
@@ -161,7 +161,7 @@ Feature: Picking players
     When I open the game "Phase 10"
     And I choose "Edit" from the game menu
     And I tap "EDIT"
-    And I tap the edit icon next to "Kim"
+    And I tap the edit icon next to "Lindsay"
     Then the color field shows "8E24AA"
     And the "Purple" swatch is checked
     When I tap "Cancel"
@@ -178,7 +178,7 @@ Feature: Picking players
     When I open the game "Phase 10"
     And I choose "Edit" from the game menu
     And I tap "EDIT"
-    And I tap the edit icon next to "Kim"
+    And I tap the edit icon next to "Lindsay"
     And I tap the "Orange" swatch
     Then the color field shows "E65100"
     And the "Orange" swatch is checked
@@ -189,7 +189,7 @@ Feature: Picking players
     And I go back
     And I go back
     And I choose "Show Graph" from the game menu
-    Then Kim's line and bar are pink (FF00AA)
+    Then Lindsay's line and bar are pink (FF00AA)
 
   @seed
   Scenario: A color has to be 6 hex digits, and an empty one follows the seat
@@ -261,13 +261,13 @@ Feature: Picking players
       | 253 | 283    |
 
   Scenario: Searching filters the players by any part of the name, ignoring case
-    Given the players "Calvin, Kim, Marcus" exist
+    Given the players "Calvin, Lindsay, Marcus" exist
     And I am picking players for a new game
     When I tap the search icon
-    And I type "A"
+    And I type "C"
     Then I see "Calvin"
     And I see "Marcus"
-    And I don't see the row "Kim"
+    And I don't see the row "Lindsay"
 
   Scenario: A search with no matches says so
     Given the players "Calvin" exist

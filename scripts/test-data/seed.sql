@@ -25,7 +25,7 @@ DELETE FROM sqlite_sequence WHERE name IN ('scores', 'rounds', 'games', 'players
 CREATE TEMP TABLE seed_players (uid INTEGER, name TEXT, archived INTEGER);
 INSERT INTO seed_players VALUES
     (1, 'Calvin', 0),
-    (2, 'Kim', 0),
+    (2, 'Lindsay', 0),
     (3, 'alice', 0),                                  -- Lowercase, sorts with "Asdf"-style names ignoring case
     (4, 'Bob', 0),
     (5, 'Zed', 0),
@@ -37,13 +37,13 @@ INSERT INTO seed_players VALUES
     (11, 'Grandma Jo', 0),
     (12, 'Bartholomew Fitzgerald-Montgomery III', 0), -- Long name
     (13, '🎲 Dice Goblin', 0),                         -- Emoji name
-    (14, 'Team Red (Calvin & Kim)', 0),               -- Partnership games use a team as a player
+    (14, 'Team Red (Calvin & Lindsay)', 0),               -- Partnership games use a team as a player
     (15, 'Team Blue (Bob & alice)', 0),
     (16, 'Sam', 0),
     (17, 'Taylor', 0),
     (18, 'Morgan', 0),
     (19, 'Riley', 0),
-    (20, 'Avery', 0),
+    (20, 'Padfoot', 0),
     (21, 'Jordan', 0),
     (22, 'Old Roommate', 1),                          -- Archived: hidden from games and the player list
     (23, 'Moved Away', 1),
@@ -192,7 +192,7 @@ INSERT INTO seed_scores VALUES
     (6, 0, 1, 29, '41-12', 'Knock'), (6, 1, 2, 63, '25+38', 'Gin'), (6, 2, 1, 9, '18-9', 'Knock'),
     (6, 3, 2, 29, '25+4', 'Undercut'), (6, 4, 1, 56, '25+31', 'Gin'),
 
-    -- Wingspan: one final scoring, each "round" is a scoring category (named in Kim's notes)
+    -- Wingspan: one final scoring, each "round" is a scoring category (named in Lindsay's notes)
     (7, 0, 2, 56, '9+5+7+4+3+6+8+2+5+4+3', 'Birds'), (7, 0, 9, 49, '6+8+9+5+4+3+7+2+5', NULL),
     (7, 0, 18, 51, '4+3+5+6+9+2+1+7+5+3+4+2', NULL), (7, 0, 19, 42, '8+7+6+5+4+9+3', NULL),
     (7, 1, 2, 10, '7+3', 'Bonus cards'), (7, 1, 9, 6, NULL, NULL), (7, 1, 18, 8, '4+4', NULL), (7, 1, 19, 9, NULL, NULL),

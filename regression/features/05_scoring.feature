@@ -5,35 +5,35 @@ Feature: Entering scores
 
   @calculator @smoke
   Scenario: The calculator opens for a score, and = saves it
-    Given a game "Calc Basics" with players "Calvin, Kim"
+    Given a game "Calc Basics" with players "Calvin, Lindsay"
     When I tap the round 1 score for Calvin
     Then the calculator keyboard shows
     And the system keyboard doesn't show
     When I tap "1", "2", and "="
     Then the calculator keyboard hides
     And the round 1 scores are:
-      | Calvin | Kim |
-      | 12     | 0   |
+      | Calvin | Lindsay |
+      | 12     | 0       |
     And the totals are:
-      | Calvin | Kim |
-      | 12     | 0   |
+      | Calvin | Lindsay |
+      | 12     | 0       |
 
   @calculator
   Scenario: The total changes while typing, before = is pressed
-    Given a game "Live Total" with players "Calvin, Kim"
+    Given a game "Live Total" with players "Calvin, Lindsay"
     When I tap the round 1 score for Calvin
     And I tap "4" and "0"
     Then the totals are:
-      | Calvin | Kim |
-      | 40     | 0   |
+      | Calvin | Lindsay |
+      | 40     | 0       |
     When I tap "+"
     Then the totals are:
-      | Calvin | Kim |
-      | 40     | 0   |
+      | Calvin | Lindsay |
+      | 40     | 0       |
     When I tap "2"
     Then the totals are:
-      | Calvin | Kim |
-      | 42     | 0   |
+      | Calvin | Lindsay |
+      | 42     | 0       |
 
   @calculator @smoke
   Scenario Outline: Calculations are saved as their result (<input>)
@@ -110,14 +110,14 @@ Feature: Entering scores
 
   @calculator @visual
   Scenario Outline: A calculation that can't be finished is saved as 0 and shown in red (<input>)
-    Given a game "Bad Input" with players "Calvin, Kim"
+    Given a game "Bad Input" with players "Calvin, Lindsay"
     When I tap the round 1 score for Calvin
     And I type "<input>" on the calculator
     And I tap "="
     Then the round 1 score for Calvin shows "<input>" in red
     And the totals are:
-      | Calvin | Kim |
-      | 0      | 0   |
+      | Calvin | Lindsay |
+      | 0      | 0       |
     When I tap the round 1 score for Calvin
     Then the score being edited shows "<input>"
     When I clear the score and type "20" on the calculator
@@ -142,21 +142,21 @@ Feature: Entering scores
 
   @system-keyboard @smoke
   Scenario: Without the calculator, scores use the system's number keyboard
-    Given a game "System Keys" with players "Calvin, Kim" and settings:
+    Given a game "System Keys" with players "Calvin, Lindsay" and settings:
       | Calculator Keyboard | off |
     When I tap the round 1 score for Calvin
     Then the system number keyboard shows
     And the calculator keyboard doesn't show
     When I type "7.5"
-    And I tap the round 1 score for Kim
+    And I tap the round 1 score for Lindsay
     And I type "-3"
     And I hide the keyboard
     Then the round 1 scores are:
-      | Calvin | Kim |
-      | 7.5    | -3  |
+      | Calvin | Lindsay |
+      | 7.5    | -3      |
     And the totals are:
-      | Calvin | Kim |
-      | 7.5    | -3  |
+      | Calvin | Lindsay |
+      | 7.5    | -3      |
 
   @system-keyboard
   Scenario: The system keyboard only types numbers
@@ -168,50 +168,50 @@ Feature: Entering scores
 
   @smoke
   Scenario: Totals add up every round
-    Given a game "Totals" with players "Calvin, Kim, Bob"
+    Given a game "Totals" with players "Calvin, Lindsay, Bob"
     When I play these rounds:
-      | Calvin | Kim | Bob |
-      | 10     | 20  | 5   |
-      | 15     | -5  | 30  |
-      | 2.5    | 0   | 0.25 |
+      | Calvin | Lindsay | Bob  |
+      | 10     | 20      | 5    |
+      | 15     | -5      | 30   |
+      | 2.5    | 0       | 0.25 |
     Then the game has 3 rounds
     And the totals are:
-      | Calvin | Kim | Bob   |
-      | 27.5   | 15  | 35.25 |
+      | Calvin | Lindsay | Bob   |
+      | 27.5   | 15      | 35.25 |
 
   @visual @smoke
   Scenario: The highest total is leading
-    Given a game "Leader High" with players "Calvin, Kim, Bob"
+    Given a game "Leader High" with players "Calvin, Lindsay, Bob"
     When I play these rounds:
-      | Calvin | Kim | Bob |
-      | 10     | 30  | 20  |
-    Then Kim is leading
+      | Calvin | Lindsay | Bob |
+      | 10     | 30      | 20  |
+    Then Lindsay is leading
     When I enter "35" for Bob in round 1
     Then Bob is leading
 
   @visual
   Scenario: With Reverse Scoring, the lowest total is leading
-    Given a game "Leader Low" with players "Calvin, Kim, Bob" and settings:
+    Given a game "Leader Low" with players "Calvin, Lindsay, Bob" and settings:
       | Reverse Scoring | on |
     When I play these rounds:
-      | Calvin | Kim | Bob |
-      | 10     | 30  | 20  |
+      | Calvin | Lindsay | Bob |
+      | 10     | 30      | 20  |
     Then Calvin is leading
 
   @visual
   Scenario: Players tied for the lead are all leading
-    Given a game "Leader Tie" with players "Calvin, Kim, Bob"
+    Given a game "Leader Tie" with players "Calvin, Lindsay, Bob"
     When I play these rounds:
-      | Calvin | Kim | Bob |
-      | 30     | 30  | 20  |
-    Then Calvin and Kim are leading
+      | Calvin | Lindsay | Bob |
+      | 30     | 30      | 20  |
+    Then Calvin and Lindsay are leading
 
   @visual
   Scenario: Nobody is leading when everyone is tied
-    Given a game "All Tied" with players "Calvin, Kim, Bob"
+    Given a game "All Tied" with players "Calvin, Lindsay, Bob"
     When I play these rounds:
-      | Calvin | Kim | Bob |
-      | 10     | 10  | 10  |
+      | Calvin | Lindsay | Bob |
+      | 10     | 10      | 10  |
     Then nobody is leading
 
   @visual
@@ -222,23 +222,23 @@ Feature: Entering scores
 
   @visual
   Scenario: Negative totals lead correctly
-    Given a game "Negatives" with players "Calvin, Kim"
+    Given a game "Negatives" with players "Calvin, Lindsay"
     When I play these rounds:
-      | Calvin | Kim |
-      | -10    | -20 |
+      | Calvin | Lindsay |
+      | -10    | -20     |
     Then Calvin is leading
     And the totals are:
-      | Calvin | Kim |
-      | -10    | -20 |
+      | Calvin | Lindsay |
+      | -10    | -20     |
 
   Scenario: Scores are saved right away
-    Given a game "Saved" with players "Calvin, Kim"
-    When I enter "42" for Kim in round 1
+    Given a game "Saved" with players "Calvin, Lindsay"
+    When I enter "42" for Lindsay in round 1
     And I close and reopen the app
     And I open the game "Saved"
     Then the totals are:
-      | Calvin | Kim |
-      | 0      | 42  |
+      | Calvin | Lindsay |
+      | 0      | 42      |
 
   @seed @calculator
   Scenario: Seeded calculations show their result, and what was typed when edited
