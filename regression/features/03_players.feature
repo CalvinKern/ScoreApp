@@ -1,8 +1,8 @@
 Feature: Picking players
-  "Pick Players" opens from "EDIT" on a game's setup. Players are shared by every game, and listed by name ignoring
+  "Pick Players" opens from "Edit" on a game's setup. Players are shared by every game, and listed by name ignoring
   case. Deleting a player archives them: they leave the list and every game, and their scores are kept.
 
-  "I am picking players for a new game" means: from the game list, tap +, then "EDIT".
+  "I am picking players for a new game" means: from the game list, tap +, then "Edit".
 
   @smoke
   Scenario: Adding a new player picks them right away
@@ -71,7 +71,7 @@ Feature: Picking players
     And I pick "Calvin"
     And I tap "Save"
     Then the players are "Lindsay, Calvin"
-    When I tap "EDIT"
+    When I tap "Edit"
     Then "Lindsay" and "Calvin" are checked
     When I pick "Bob"
     And I tap "Save"
@@ -82,7 +82,7 @@ Feature: Picking players
     And I am picking players for a new game
     When I pick "Calvin" and "Lindsay"
     And I tap "Save"
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the row "Lindsay"
     And I tap "Save"
     Then the players are "Calvin"
@@ -92,12 +92,12 @@ Feature: Picking players
     And I am picking players for a new game
     When I pick "Calvin"
     And I tap "Save"
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Lindsay"
     And I go back
     Then the title is "New Game"
     And the players are "Calvin, Lindsay"
-    When I tap "EDIT"
+    When I tap "Edit"
     And I tap the row "Calvin"
     And I pick "Bob"
     And I tap the toolbar's back arrow
@@ -117,7 +117,7 @@ Feature: Picking players
     And I am picking players for a new game
     When I pick "Calvin"
     And I tap "Save"
-    And I tap "EDIT"
+    And I tap "Edit"
     And I go back
     Then the players are "Calvin"
 
@@ -160,7 +160,7 @@ Feature: Picking players
     Given the seed data is loaded
     When I open the game "Phase 10"
     And I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the edit icon next to "Lindsay"
     Then the color field shows "8E24AA"
     And the "Purple" swatch is checked
@@ -177,7 +177,7 @@ Feature: Picking players
     Given the seed data is loaded
     When I open the game "Phase 10"
     And I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the edit icon next to "Lindsay"
     And I tap the "Orange" swatch
     Then the color field shows "E65100"
@@ -196,7 +196,7 @@ Feature: Picking players
     Given the seed data is loaded
     When I open the game "Phase 10"
     And I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the edit icon next to "Grandma Jo"
     Then the color field shows "2E7D32"
     When I replace the color with "1976"

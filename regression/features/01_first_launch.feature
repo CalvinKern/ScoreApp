@@ -46,7 +46,7 @@ Feature: First launch
   Scenario: The player list starts empty
     Given a fresh install with the usage data question answered
     When I tap the + button
-    And I tap "EDIT"
+    And I tap "Edit"
     Then the title is "Pick Players"
     And I see "No players added"
     And I see "Start by clicking the + button down below to add a new player!"

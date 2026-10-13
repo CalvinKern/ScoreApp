@@ -10,7 +10,7 @@ Feature: Setting up a new game
     Then the title is "New Game"
     And the game name field has the keyboard
     When I type "Setup Test" as the game name
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     And I tap "Save"
@@ -28,7 +28,7 @@ Feature: Setting up a new game
     Given I am on the game list
     When I tap the + button
     Then I see "No players added"
-    And I see the message that players are added with the "EDIT" button
+    And I see the message that players are added with the "Edit" button
 
   Scenario: The empty players picture also opens the player picker
     Given I am on the game list
@@ -40,7 +40,7 @@ Feature: Setting up a new game
     Given the players "Calvin" exist
     And I am on the game list
     When I tap the + button
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Calvin"
     And I tap "Save"
     And I tap "Save"
@@ -52,7 +52,7 @@ Feature: Setting up a new game
     And I am on the game list
     When I tap the + button
     And I type "   " as the game name
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Calvin"
     And I tap "Save"
     And I tap "Save"
@@ -71,7 +71,7 @@ Feature: Setting up a new game
     And I am on the game list
     When I tap the + button
     And I type "Never Saved" as the game name
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Calvin"
     And I tap "Save"
     And I go back
@@ -111,7 +111,7 @@ Feature: Setting up a new game
     And I am on the game list
     When I tap the + button
     Then "Dealer" is on
-    When I tap "EDIT"
+    When I tap "Edit"
     And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     Then each player has a dealer radio button
@@ -133,7 +133,7 @@ Feature: Setting up a new game
     When I tap the + button
     And I tap the row "Dealer"
     Then "Dealer" is off
-    When I tap "EDIT"
+    When I tap "Edit"
     And I pick "Calvin" and "Lindsay"
     And I tap "Save"
     Then no player has a dealer radio button
@@ -145,11 +145,11 @@ Feature: Setting up a new game
     Given the players "Calvin, Lindsay, Bob" exist
     And I am on the game list
     When I tap the + button
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     And I tap the row "Bob"
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the row "Bob"
     And I tap "Save"
     Then "Calvin" is marked "Dealer"
@@ -159,7 +159,7 @@ Feature: Setting up a new game
     And I am on the game list
     When I tap the + button
     And I type "Seat Order" as the game name
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Calvin", "Lindsay", and "Bob"
     And I tap "Save"
     And I drag "Bob" above "Calvin"
@@ -239,7 +239,7 @@ Feature: Setting up a new game
   Scenario: Previous settings don't replace players already picked
     Given the seed data is loaded
     When I tap the + button
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Zed"
     And I tap "Save"
     And I type "Ticket" as the game name

@@ -84,8 +84,8 @@ are the names shown in the game, unquoted when a step names a player (`Lindsay i
 | `Given the seed data is loaded` | `scripts/emulator-db.sh seed`, then open the app on the game list |
 | `Given I am on the game list` | Open the app, or go back until the "Games" screen shows |
 | `Given the players "A, B" exist` | Add any of them that aren't already in the player list (from any game's player picker) |
-| `Given a game "<name>" with players "A, B"` | Create it: + on the game list, type the name, "EDIT", pick the players in that order (adding any that don't exist), save the players, set the settings in the table if one follows, then "Save". The game opens. |
-| `Given I am picking players for a new game` | On the game list, tap +, then "EDIT" |
+| `Given a game "<name>" with players "A, B"` | Create it: + on the game list, type the name, "Edit", pick the players in that order (adding any that don't exist), save the players, set the settings in the table if one follows, then "Save". The game opens. |
+| `Given I am picking players for a new game` | On the game list, tap +, then "Edit" |
 
 The settings table under a game uses the setting names from the New Game screen. Settings left out keep their
 defaults:
@@ -148,7 +148,7 @@ steps talk about. Each is under `com.seakernel.scorepad.debug:id/`.
 | Screen | Ids |
 |---|---|
 | Game list | `gameRecycler`, each row's `gameNameHolder`, `gameDateHolder`, `gamePlayersHolder`, `gameRoundsHolder`; `fab` (+); `gameListEmptyGroup` |
-| New Game, Game Settings | `gameNameEdit`, `playersHeaderEdit` ("EDIT"), `playerRecycler` with `playerNameHolder` and `playerDealerBox`; `hasDealerCheckbox`, `reversedScoringCheckbox`, `showNotesCheckbox`, `useCalculatorCheckbox`, `maxScoreEdit`, `maxRoundsEdit` |
+| New Game, Game Settings | `gameNameEdit`, `playersHeaderEdit` ("Edit"), `playerRecycler` with `playerNameHolder` and `playerDealerBox`; `hasDealerCheckbox`, `reversedScoringCheckbox`, `showNotesCheckbox`, `useCalculatorCheckbox`, `maxScoreEdit`, `maxRoundsEdit` |
 | Pick Players | `playerRecycler` with `playerNameHolder`, `playerCheckHolder`, `playerNameSettings` (edit icon); `fab` (+); `actionSearch`; the player dialog's `playerNameEdit`, `playerColorEdit` (hex, without the #), and `playerColorSwatches` (a swatch per graph color, named by color, like "Green") |
 | Game | `nameRow` with `playerNameHeader`; `scoreRows` with a `playerScore` per score (left to right, then top to bottom); `addRoundButton`, `finishGameButton`; `totalsRow` with a `playerScore` per total; `calculatorKeyboard` with `calculatorKeyOne` … `calculatorKeyZero`, `calculatorKeyPlus`, `calculatorKeyMinus`, `calculatorKeyMultiply`, `calculatorKeyDivide`, `calculatorKeyDecimal`, `calculatorKeyOpenParen`, `calculatorKeyCloseParen`, `calculatorKeyDelete`, `calculatorKeyEquals`, `calculatorKeyNext` ("->") |
 | Player Standings | `dialogPlayerRoundSubheader`, `dialogPlayerRoundRecycler` with `playerStandingHolder`, `playerNameHolder`, `playerScoreHolder` |
@@ -196,10 +196,10 @@ Things that trip up a run:
   system keyboard, send `adb shell input keyevent KEYCODE_MOVE_END` before deleting. With the calculator,
   `KEYCODE_MOVE_END` and `KEYCODE_DEL` from adb don't reach the score, so tap near the right edge of the score (past
   the text, so the cursor lands at the end) and clear it with the calculator's DEL key.
-- The keyboard covers the bottom of the screen (including "EDIT" on New Game). Hide it with `KEYCODE_BACK`, but only
+- The keyboard covers the bottom of the screen (including "Edit" on New Game). Hide it with `KEYCODE_BACK`, but only
   once it's showing (`adb shell dumpsys input_method | grep mInputShown=true`), or back leaves the screen instead.
 - The game name suggestions are a popup window that `uiautomator dump` doesn't include. Tap them from a screenshot.
-  While it's open it covers the settings below the name (and "EDIT" once the keyboard is hidden), and the first
+  While it's open it covers the settings below the name (and "Edit" once the keyboard is hidden), and the first
   `KEYCODE_BACK` only closes the popup, so check the keyboard again before tapping on. The keyboard's done key closes
   it too. Names that start like an earlier game's (like "Calc 0" after "Calc 0.3") open it too.
 - Scrolling with a swipe while the keyboard is up can land on the keyboard and glide-type into the focused field.

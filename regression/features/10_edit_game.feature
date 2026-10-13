@@ -105,7 +105,7 @@ Feature: Editing a game in progress
       | 30     | 40      |
     And the players "Bob" exist
     When I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Bob"
     And I tap "Save"
     And I go back
@@ -120,7 +120,7 @@ Feature: Editing a game in progress
     Given a game "Back Pick" with players "Calvin, Lindsay"
     And the players "Bob" exist
     When I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I pick "Bob"
     And I go back
     Then the players are "Calvin, Lindsay, Bob"
@@ -131,7 +131,7 @@ Feature: Editing a game in progress
     Given a game "Pick Saves" with players "Calvin"
     And the players "Lindsay" exist
     When I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     Then the subtitle is "Changes save automatically"
     When I pick "Lindsay"
     And I wait 2 seconds
@@ -143,7 +143,7 @@ Feature: Editing a game in progress
   Scenario: Unpicking every player says the players aren't saved
     Given a game "Keep Both" with players "Calvin, Lindsay"
     When I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     # Picks save about 1.5 s after each change, so a slower second tap first saves Lindsay alone
     And I tap the rows "Calvin" and "Lindsay" quickly
     Then the subtitle is "Empty player list isn't saved"
@@ -158,7 +158,7 @@ Feature: Editing a game in progress
       | Calvin | Lindsay | Bob |
       | 10     | 20      | 30  |
     When I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the row "Lindsay"
     And I tap "Save"
     And I go back
@@ -175,7 +175,7 @@ Feature: Editing a game in progress
       | 10     | 20      | 30  |
       | 5      | 15      | 25  |
     When I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the row "Bob"
     And I wait 2 seconds
     And I go back
@@ -183,7 +183,7 @@ Feature: Editing a game in progress
     Then the totals read "Calvin 15, Lindsay 35"
     When I tap "Add Round"
     And I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     And I tap the row "Bob"
     And I go back
     And I go back
@@ -200,7 +200,7 @@ Feature: Editing a game in progress
     Given a game "Keep Players" with players "Calvin, Lindsay"
     And I enter "5" for Lindsay in round 1
     When I choose "Edit" from the game menu
-    And I tap "EDIT"
+    And I tap "Edit"
     # Picks save about 1.5 s after each change, so a slower second tap first saves Lindsay alone
     And I tap the rows "Calvin" and "Lindsay" quickly
     And I tap "Save"

@@ -111,7 +111,7 @@ Feature: Game list
     Then the title is "Game Settings"
     And the subtitle is "Please add a player"
     And I see "No players added"
-    When I tap "EDIT"
+    When I tap "Edit"
     And I pick "Calvin" and "Lindsay"
     And I tap "Save"
     Then the players are "Calvin" and "Lindsay"
