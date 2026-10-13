@@ -139,6 +139,8 @@ defaults:
 | `Then <player> dealt round <n>` | That round's score for that player has the dealer border (a lighter one for past rounds) |
 | `Then the current dealer is "<player>"` | The same as `<player> is the dealer`, or "nobody" when no score has the dealer border |
 | `Then the standings are:` | The Player Standings dialog lists these places, players, and totals in order. Tied players share a place and can be in either order. |
+| `Then the calculator keyboard shows` / `doesn't show` | The calculator's keys (`calculatorKeyboard`) are on the screen, or aren't |
+| `Then the system number keyboard shows` / `Then the system keyboard doesn't show` | `adb shell dumpsys input_method` has `mInputShown=true` (or `false`). Check that instead of looking, since an emulator with a hardware keyboard attached never draws the system keyboard, even while it's showing for a score. |
 
 ### Finding things on screen
 
