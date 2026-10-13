@@ -205,9 +205,11 @@ class GameSetupFragment : Fragment() {
 
         // Check for copy first, then opening a game
         if (arguments?.containsKey(ARG_GAME_COPY) == true) {
+            val args = requireArguments()
             viewModel.createCopy(
-                requireArguments().getLong(ARG_GAME_COPY),
-                requireArguments().getLong(ARG_GAME_INITIAL_DEALER_ID)
+                args.getLong(ARG_GAME_COPY),
+                // Left out when there's no dealer, which getLong would read as player 0
+                args.getLong(ARG_GAME_INITIAL_DEALER_ID).takeIf { args.containsKey(ARG_GAME_INITIAL_DEALER_ID) },
             )
         } else if (arguments?.containsKey(ARG_GAME_ID) == true) {
             viewModel.loadGame(requireArguments().getLong(ARG_GAME_ID))

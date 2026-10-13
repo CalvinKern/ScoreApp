@@ -60,7 +60,10 @@ class GameRepository(val context: Context) {
         gamePlayerDao.insertAll(getPlayerJoins(settings.copy(id = id)))
 
         // Create an empty round for ease
-        val dealerId = settings.initialDealerId ?: settings.players.takeIf { it.isNotEmpty() }?.random()?.id
+        // Only a player in the game can deal, anyone else (like a missing dealer saved as 0) would break the round's
+        // players foreign key, so someone is picked instead
+        val dealerId = settings.initialDealerId?.takeIf { id -> settings.players.any { it.id == id } }
+            ?: settings.players.takeIf { it.isNotEmpty() }?.random()?.id
         val dealer = dealerId?.let { Player(id = it) }
         val round = List(settings.players.size) {
             Score(player = Player(settings.players[it].id))
