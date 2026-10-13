@@ -1,5 +1,5 @@
 Feature: Rounds and the dealer
-  "Add Round" adds a row of scores, the calculator's arrows move between scores, and "Delete Rounds" removes rows.
+  "Add Round" adds a row of scores, the calculator's "->" moves to the next score, and "Delete Rounds" removes rows.
   In games with a dealer, the dealer moves one seat each round and can be changed for any round.
 
   @smoke
@@ -24,13 +24,6 @@ Feature: Rounds and the dealer
     And the totals are:
       | Calvin | Lindsay |
       | 5      | 7       |
-
-  @calculator
-  Scenario: The previous arrow moves back a score
-    Given a game "Prev Arrow" with players "Calvin, Lindsay"
-    When I tap the round 1 score for Lindsay
-    And I tap "<-"
-    Then the round 1 score for Calvin is being edited
 
   @calculator
   Scenario: Scores can be entered for a whole game with only the keypad

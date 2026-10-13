@@ -158,13 +158,13 @@ Feature: Device changes
     And the totals show "5" for Calvin
 
   @visual
-  Scenario: Right-to-left layouts mirror the table and the arrows
+  Scenario: Right-to-left layouts mirror the table
     Given "Force RTL layout direction" is on in Developer options
     And a game "RTL" with players "Calvin, Lindsay"
     Then Calvin's column is on the right
-    When I tap the round 1 score for Lindsay
-    And I tap "<-"
-    Then the round 1 score for Calvin is being edited
+    When I tap the round 1 score for Calvin
+    And I tap "->"
+    Then the round 1 score for Lindsay is being edited
 
   @visual
   Scenario Outline: Light and dark mode (<mode>)
