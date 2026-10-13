@@ -22,6 +22,7 @@
     <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistici</string>
     <string name="makePlayerDealerMessage">Setați %s ca dealer pentru această rundă?</string>
+    <string name="setDealer">Setați ca dealer</string>
     <string name="pickPlayers">Alegeți jucători</string>
     <string name="playerCreateTitle">Jucator nou</string>
     <string name="playerEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a adăuga un jucător nou!</string>

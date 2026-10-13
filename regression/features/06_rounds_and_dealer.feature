@@ -153,7 +153,7 @@ Feature: Rounds and the dealer
       | First dealer | Calvin |
     When I long press the round 1 score for Bob
     Then I see "Make Bob dealer for this round?"
-    When I tap "Dealer"
+    When I tap "Set Dealer"
     Then Bob is the dealer
     When I tap "Add Round"
     Then Calvin is the dealer
@@ -173,7 +173,7 @@ Feature: Rounds and the dealer
       | First dealer | Calvin |
     And I tap "Add Round"
     When I long press the round 1 score for Bob
-    And I tap "Dealer"
+    And I tap "Set Dealer"
     Then Bob dealt round 1
     And Lindsay is the dealer
 

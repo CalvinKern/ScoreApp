@@ -571,7 +571,7 @@ class ScoreViewHolder(
         val dialog = MaterialAlertDialogBuilder(itemView.context)
             .setMessage(itemView.context.getString(R.string.makePlayerDealerMessage, player.name))
             .setNegativeButton(android.R.string.cancel, null)
-            .setPositiveButton(R.string.dealerLabel) { _, _ ->
+            .setPositiveButton(R.string.setDealer) { _, _ ->
                 eventConsumer?.accept(GameEvent.RequestSaveRound(round.copy(dealer = player)))
             }
             .create()

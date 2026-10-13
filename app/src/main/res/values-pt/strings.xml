@@ -46,6 +46,7 @@
     <string name="playerCreateTitle">Novo jogador</string>
     <string name="pickPlayers">Escolha jogadores</string>
     <string name="makePlayerDealerMessage">Fazer de %s o carteador desta rodada?</string>
+    <string name="setDealer">Definir carteador</string>
     <string name="graphSubtitle">Estatisticas</string>
     <string name="graphByRoundsLabel">Pontuação por rodadas</string>
     <string name="graphPodiumLabel">Pódio</string>

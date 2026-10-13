@@ -22,6 +22,7 @@
     <string name="graphPodiumLabel">Podio</string>
     <string name="graphSubtitle">Estadísticas</string>
     <string name="makePlayerDealerMessage">¿Hacer que %s sea el repartidor de esta ronda?</string>
+    <string name="setDealer">Hacer repartidor</string>
     <string name="pickPlayers">Elige jugadores</string>
     <string name="playerCreateTitle">Nuevo jugador</string>
     <string name="playerEmptyMessage">¡Comienza haciendo clic en el botón + abajo para agregar un nuevo jugador!</string>

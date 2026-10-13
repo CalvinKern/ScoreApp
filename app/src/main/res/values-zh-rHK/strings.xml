@@ -22,6 +22,7 @@
     <string name="graphPodiumLabel">頒獎台</string>
     <string name="graphSubtitle">統計</string>
     <string name="makePlayerDealerMessage">讓%s成為本輪的發牌人嗎？</string>
+    <string name="setDealer">設為發牌人</string>
     <string name="pickPlayers">選擇玩家</string>
     <string name="playerCreateTitle">新玩家</string>
     <string name="playerEmptyMessage">首先點擊下面的+按鈕以添加新播放器！</string>

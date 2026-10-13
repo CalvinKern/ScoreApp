@@ -22,6 +22,7 @@
     <string name="graphPodiumLabel">पोडियम</string>
     <string name="graphSubtitle">आंकड़े</string>
     <string name="makePlayerDealerMessage">इस राउंड के लिए %s को डीलर बनाएं?</string>
+    <string name="setDealer">डीलर बनाएं</string>
     <string name="pickPlayers">खिलाड़ियों को चुनें</string>
     <string name="playerCreateTitle">नया खिलाडी</string>
     <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन नीचे क्लिक करके शुरू करें!</string>
