@@ -190,15 +190,26 @@ Things that trip up a run:
 
 - Screens slide in, so wait about a second after navigating before reading the screen or tapping, and about two
   seconds before typing into a field that just opened (typing sooner can scramble the text).
-- Tapping a score puts the cursor where the tap landed. Send `adb shell input keyevent KEYCODE_MOVE_END` before
-  deleting what's there, or DEL only clears the part before the cursor.
+- Tapping a score puts the cursor where the tap landed, and DEL only clears the part before the cursor. With the
+  system keyboard, send `adb shell input keyevent KEYCODE_MOVE_END` before deleting. With the calculator,
+  `KEYCODE_MOVE_END` and `KEYCODE_DEL` from adb don't reach the score, so tap near the right edge of the score (past
+  the text, so the cursor lands at the end) and clear it with the calculator's DEL key.
 - The keyboard covers the bottom of the screen (including "EDIT" on New Game). Hide it with `KEYCODE_BACK`, but only
   once it's showing (`adb shell dumpsys input_method | grep mInputShown=true`), or back leaves the screen instead.
 - The game name suggestions are a popup window that `uiautomator dump` doesn't include. Tap them from a screenshot.
+  While it's open it covers the settings below the name (and "EDIT" once the keyboard is hidden), and the first
+  `KEYCODE_BACK` only closes the popup, so check the keyboard again before tapping on. Names that start like an
+  earlier game's (like "Calc 0" after "Calc 0.3") open it too.
+- Scrolling with a swipe while the keyboard is up can land on the keyboard and glide-type into the focused field.
+  Hide the keyboard first.
+- The "Deleted <name>" snackbar on Pick Players goes away after about two seconds, so tap "Undo" from the same dump
+  that found it.
 - Only the rows on screen are in the dump. With the keyboard up, the newest round is the lowest row of `playerScore`
   cells inside `scoreRows`.
 - Confetti lasts about a second. Catch it with a burst of on-device screenshots started just before the step:
-  `adb shell 'for i in 1 2 3 4 5 6 7 8; do screencap -p /sdcard/c$i.png; done' &`
+  `adb shell 'for i in 1 2 3 4 5 6 7 8; do screencap -p /sdcard/c$i.png; done' &`. Totals update while a score is
+  typed, so it bursts as soon as a total reaches the goal, on the key that gets it there (like the last digit of
+  `50+20+6`), not when `=` is pressed. Start the burst before that key.
 
 ## Recording a run
 
