@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.game.classic
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -348,15 +349,28 @@ class ScoreViewHolder(
         }
         binding.playerScore.isEnabled = true
         binding.playerScore.isFocusable = true
-        binding.playerScore.setOnEditorActionListener { _, code, _ ->
+        binding.playerScore.setOnEditorActionListener { _, code, event ->
             when (code) {
                 CalculatorKeyboardView.KEYCODE_EQUALS -> {
                     updateScore(commit = true)
                     binding.playerScore.clearFocus()
                 }
                 CalculatorKeyboardView.KEYCODE_NEXT -> {
+                    val isLastScore = score.id == rounds.last().scores.last().id
+                    if (event != null) {
+                        // A hardware keyboard's enter key sends the action when it's pressed and again when it's
+                        // released. Only the release counts: keeping the press sends the release here too, where
+                        // moving on at the press would send it to the next score, which moves down a round.
+                        if (event.action != KeyEvent.ACTION_UP) return@setOnEditorActionListener true
+                        if (!isLastScore) {
+                            // On to the next score, like the on-screen key (which the system handles below)
+                            binding.playerScore.focusSearch(View.FOCUS_FORWARD)?.requestFocus()
+                            return@setOnEditorActionListener true
+                        }
+                    }
+
                     // Add a new round only when we're the last round, otherwise let the action propagate to the system
-                    if (score.id != rounds.last().scores.last().id) return@setOnEditorActionListener false
+                    if (!isLastScore) return@setOnEditorActionListener false
 
                     if (isGoalReached) {
                         eventConsumer?.accept(GameEvent.RequestFinishGame)
