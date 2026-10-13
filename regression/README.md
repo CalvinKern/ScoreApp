@@ -198,8 +198,8 @@ Things that trip up a run:
   once it's showing (`adb shell dumpsys input_method | grep mInputShown=true`), or back leaves the screen instead.
 - The game name suggestions are a popup window that `uiautomator dump` doesn't include. Tap them from a screenshot.
   While it's open it covers the settings below the name (and "EDIT" once the keyboard is hidden), and the first
-  `KEYCODE_BACK` only closes the popup, so check the keyboard again before tapping on. Names that start like an
-  earlier game's (like "Calc 0" after "Calc 0.3") open it too.
+  `KEYCODE_BACK` only closes the popup, so check the keyboard again before tapping on. The keyboard's done key closes
+  it too. Names that start like an earlier game's (like "Calc 0" after "Calc 0.3") open it too.
 - Scrolling with a swipe while the keyboard is up can land on the keyboard and glide-type into the focused field.
   Hide the keyboard first.
 - The "Deleted <name>" snackbar on Pick Players goes away after about two seconds, so tap "Undo" from the same dump
@@ -209,7 +209,10 @@ Things that trip up a run:
 - Confetti lasts about a second. Catch it with a burst of on-device screenshots started just before the step:
   `adb shell 'for i in 1 2 3 4 5 6 7 8; do screencap -p /sdcard/c$i.png; done' &`. Totals update while a score is
   typed, so it bursts as soon as a total reaches the goal, on the key that gets it there (like the last digit of
-  `50+20+6`), not when `=` is pressed. Start the burst before that key.
+  `50+20+6`), not when `=` is pressed. Start the burst before that key. Clearing a score with DEL counts too: going
+  from `-60` back to `-6` can bring a total back over the target, so start the burst before clearing. Reaching the
+  target bursts only once a round, so a missed burst can't be caught again by editing the same round. Play it again in
+  a later round or a new game.
 
 ## Recording a run
 
