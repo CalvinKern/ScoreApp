@@ -336,8 +336,9 @@ class ScoreViewHolder(
             binding.playerBorder.setBackgroundResource(0)
         }
 
-        // Make odd rows with a slight gray background to look a little better
-        if (round.number % 2 == 0) {
+        // Make odd rows with a slight gray background to look a little better. By position, since saved round numbers
+        // keep gaps after rounds are deleted.
+        if (roundNumber % 2 == 1) {
             itemView.setBackgroundColor(itemView.context.themeColor(R.attr.colorSurfaceContainer))
         } else {
             itemView.setBackgroundColor(itemView.context.themeColor(R.attr.colorSurface))
