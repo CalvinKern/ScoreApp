@@ -284,7 +284,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         val name = { binding.playerNameEdit.text?.toString().orEmpty() }
         lateinit var colorPicker: PlayerColorPicker
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(if (player.id == null) R.string.playerCreateTitle else R.string.playerName)
+            .setTitle(if (player.id == null) R.string.playerCreateTitle else R.string.playerEditTitle)
             .setView(binding.root)
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->

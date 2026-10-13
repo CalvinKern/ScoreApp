@@ -25,6 +25,7 @@
     <string name="setDealer">Als Geber festlegen</string>
     <string name="pickPlayers">Spieler auswählen</string>
     <string name="playerCreateTitle">Neuer Spieler</string>
+    <string name="playerEditTitle">Spieler bearbeiten</string>
     <string name="playerEmptyMessage">Beginnen Sie, indem Sie auf das + unten klicken, um einen neuen Spieler hinzuzufügen!</string>
     <string name="playerEmptySearchMessage">Kein Spieler entspricht den aktuellen Suchkriterien. Sie können einen neuen Spieler hinzufügen, indem Sie auf das + unten klicken!</string>
     <string name="playerEmptySearchTitle">Keine Spieler passen zusammen</string>

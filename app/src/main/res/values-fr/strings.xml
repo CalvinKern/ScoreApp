@@ -25,6 +25,7 @@
     <string name="setDealer">Désigner le donneur</string>
     <string name="pickPlayers">Choisir des joueurs</string>
     <string name="playerCreateTitle">Nouveau joueur</string>
+    <string name="playerEditTitle">Modifier le joueur</string>
     <string name="playerEmptyMessage">Commencez par cliquer sur le bouton + ci-dessous pour ajouter un nouveau joueur!</string>
     <string name="playerEmptySearchMessage">Aucun joueur ne correspond aux critères de recherche actuels. Vous pouvez ajouter un nouveau joueur en cliquant sur le bouton + ci-dessous!</string>
     <string name="playerEmptySearchTitle">Aucun joueur ne correspond</string>

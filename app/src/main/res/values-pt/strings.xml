@@ -44,6 +44,7 @@
     <string name="playerEmptySearchMessage">Nenhum jogador corresponde aos critérios de pesquisa atuais. Você pode adicionar um novo jogador clicando no botão + abaixo!</string>
     <string name="playerEmptyMessage">Comece clicando no botão + abaixo para adicionar um novo player!</string>
     <string name="playerCreateTitle">Novo jogador</string>
+    <string name="playerEditTitle">Editar jogador</string>
     <string name="pickPlayers">Escolha jogadores</string>
     <string name="makePlayerDealerMessage">Fazer de %s o carteador desta rodada?</string>
     <string name="setDealer">Definir carteador</string>

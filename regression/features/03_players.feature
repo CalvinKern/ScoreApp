@@ -135,7 +135,7 @@ Feature: Picking players
     Given the players "Renamee" exist
     And I am picking players for a new game
     When I <how> "Renamee"
-    Then I see "Player Name"
+    Then I see "Edit Player"
     And the name field shows "Renamee"
     When I replace the name with "Zelda Renamed"
     And I tap "OK"
