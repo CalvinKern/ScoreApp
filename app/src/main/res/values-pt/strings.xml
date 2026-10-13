@@ -52,7 +52,7 @@
     <string name="gameSettingsTitle">Configurações do jogo</string>
     <string name="gamePlayersHeader">Jogadoras</string>
     <string name="gamePlayersEmptyTitle">Nenhum jogador adicionado</string>
-    <string name="gamePlayersEmptyMessage">Para iniciar um jogo, adicione alguns jogadores com o botão \"EDITAR\".</string>
+    <string name="gamePlayersEmptyMessage">Para iniciar um jogo, adicione alguns jogadores com o botão \"Editar\".</string>
     <string name="gameNameHint">Nome do jogo</string>
     <string name="gameListTitle">Jogos</string>
     <string name="gameListEmptyTitle">Nenhum jogo criado</string>

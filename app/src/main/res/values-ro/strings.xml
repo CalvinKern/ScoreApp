@@ -14,7 +14,7 @@
     <string name="gameListEmptyTitle">Nu au fost create jocuri</string>
     <string name="gameListTitle">Jocuri</string>
     <string name="gameNameHint">Numele jocului</string>
-    <string name="gamePlayersEmptyMessage">Pentru a începe un joc, adăugați câțiva jucători cu butonul „EDITĂ”.</string>
+    <string name="gamePlayersEmptyMessage">Pentru a începe un joc, adăugați câțiva jucători cu butonul „Editați”.</string>
     <string name="gamePlayersEmptyTitle">Nu s-au adăugat jucători</string>
     <string name="gamePlayersHeader">Jucători</string>
     <string name="gameSettingsTitle">Setările jocului</string>

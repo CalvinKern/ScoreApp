@@ -14,7 +14,7 @@
     <string name="gameListEmptyTitle">Keine Spiele erstellt</string>
     <string name="gameListTitle">Spiele</string>
     <string name="gameNameHint">Spielname</string>
-    <string name="gamePlayersEmptyMessage">Um ein Spiel zu starten, fügen Sie einige Spieler mit der Schaltfläche \"BEARBEITEN\" hinzu.</string>
+    <string name="gamePlayersEmptyMessage">Um ein Spiel zu starten, fügen Sie einige Spieler mit der Schaltfläche \"Bearbeiten\" hinzu.</string>
     <string name="gamePlayersEmptyTitle">Keine Spieler hinzugefügt</string>
     <string name="gamePlayersHeader">Spieler</string>
     <string name="gameSettingsTitle">Spieleinstellungen</string>

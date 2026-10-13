@@ -64,7 +64,7 @@
     <string name="gameNameHint">Game Name</string>
     <string name="gamePlayersHeader">Players</string>
     <string name="gamePlayersEmptyTitle">No players added</string>
-    <string name="gamePlayersEmptyMessage">To start a game, add some players with the \"EDIT\" button.</string>
+    <string name="gamePlayersEmptyMessage">To start a game, add some players with the \"Edit\" button.</string>
     <string name="dealerLabel">Dealer</string>
     <string name="reversedScoringTitle">Reverse Scoring</string>
     <string name="reversedScoringDescription">The player with the lowest score wins, instead of having the highest score</string>

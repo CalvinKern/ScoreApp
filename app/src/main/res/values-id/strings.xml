@@ -14,7 +14,7 @@
     <string name="gameListEmptyTitle">Tidak ada permainan yang dibuat</string>
     <string name="gameListTitle">permainan</string>
     <string name="gameNameHint">Nama permainan</string>
-    <string name="gamePlayersEmptyMessage">Untuk memulai permainan, tambahkan beberapa pemain dengan tombol \"EDIT\".</string>
+    <string name="gamePlayersEmptyMessage">Untuk memulai permainan, tambahkan beberapa pemain dengan tombol \"Edit\".</string>
     <string name="gamePlayersEmptyTitle">Tidak ada pemain yang ditambahkan</string>
     <string name="gamePlayersHeader">Pemain</string>
     <string name="gameSettingsTitle">Pengaturan permainan</string>

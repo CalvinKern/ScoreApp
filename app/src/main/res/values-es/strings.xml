@@ -14,7 +14,7 @@
     <string name="gameListEmptyTitle">No se crearon juegos</string>
     <string name="gameListTitle">Juegos</string>
     <string name="gameNameHint">Nombre del juego</string>
-    <string name="gamePlayersEmptyMessage">Para comenzar un juego, agregue algunos jugadores con el botón \"EDITAR\".</string>
+    <string name="gamePlayersEmptyMessage">Para comenzar un juego, agregue algunos jugadores con el botón \"Editar\".</string>
     <string name="gamePlayersEmptyTitle">No se agregaron jugadores</string>
     <string name="gamePlayersHeader">Jugadores</string>
     <string name="gameSettingsTitle">Configuraciones de juego</string>
