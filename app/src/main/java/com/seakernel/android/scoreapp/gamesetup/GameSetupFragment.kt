@@ -94,6 +94,7 @@ class GameSetupFragment : Fragment() {
             SaveStatus.SAVED -> R.string.saveStatusSaved
             SaveStatus.NAME_NOT_SAVED -> R.string.saveStatusNameNotSaved
             SaveStatus.PLAYERS_NOT_SAVED -> R.string.saveStatusPlayersNotSaved
+            SaveStatus.PLAYERS_NEEDED -> R.string.gamePlayersRequired
             null -> null
         }
         // Only where it ends up is announced, not every time a change starts saving

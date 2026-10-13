@@ -189,6 +189,8 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
             // These keep what was saved before (see saveChanges)
             current.name.isBlank() -> SaveStatus.NAME_NOT_SAVED
             current.players.isEmpty() && saved.players.isNotEmpty() -> SaveStatus.PLAYERS_NOT_SAVED
+            // Every player was deleted, which is why the game opened here instead
+            current.players.isEmpty() -> SaveStatus.PLAYERS_NEEDED
             autoSaveJob != null || runningSaves > 0 -> SaveStatus.SAVING
             else -> SaveStatus.SAVED
         }
@@ -340,4 +342,6 @@ enum class SaveStatus {
     NAME_NOT_SAVED,
     /** No players are picked, so the old players are kept */
     PLAYERS_NOT_SAVED,
+    /** The game has no players, so it can't be played until some are picked */
+    PLAYERS_NEEDED,
 }

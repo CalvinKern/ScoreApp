@@ -83,6 +83,7 @@ Feature: Seeded games
   Scenario: The game whose players were all deleted opens Game Settings instead
     When I open the game in row 29
     Then the title is "Game Settings"
+    And the subtitle is "Please add a player"
     And the game name field shows "Game Night (players gone)"
     And I see "No players added"
 

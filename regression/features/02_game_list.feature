@@ -109,6 +109,7 @@ Feature: Game list
     Given the seed data is loaded
     When I open the game "Game Night (players gone)"
     Then the title is "Game Settings"
+    And the subtitle is "Please add a player"
     And I see "No players added"
     When I tap "EDIT"
     And I pick "Calvin" and "Lindsay"
