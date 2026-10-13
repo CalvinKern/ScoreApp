@@ -4,7 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.widget.CompoundButton
+import android.widget.Switch
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.ViewGroupCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.color.DynamicColors
 import com.seakernel.android.scoreapp.BuildConfig
@@ -63,11 +69,11 @@ class SettingsFragment : Fragment() {
     private fun initPrivacy() {
         binding.shareUsageDataSwitch.isChecked = AppPreferences.isShareUsageDataEnabled(requireContext())
         binding.shareUsageDataSwitch.setOnCheckedChangeListener { _, isChecked -> setShareUsageDataEnabled(isChecked) }
-        binding.shareUsageDataRow.setOnClickListener { binding.shareUsageDataSwitch.toggle() }
+        binding.shareUsageDataRow.actAsSwitch(binding.shareUsageDataSwitch)
 
         binding.shareCrashReportsSwitch.isChecked = AppPreferences.isShareCrashReportsEnabled(requireContext())
         binding.shareCrashReportsSwitch.setOnCheckedChangeListener { _, isChecked -> setShareCrashReportsEnabled(isChecked) }
-        binding.shareCrashReportsRow.setOnClickListener { binding.shareCrashReportsSwitch.toggle() }
+        binding.shareCrashReportsRow.actAsSwitch(binding.shareCrashReportsSwitch)
     }
 
     private fun setShareUsageDataEnabled(enabled: Boolean) {
@@ -89,21 +95,21 @@ class SettingsFragment : Fragment() {
 
         binding.dynamicColorSwitch.isChecked = AppPreferences.isDynamicColorEnabled(requireContext())
         binding.dynamicColorSwitch.setOnCheckedChangeListener { _, isChecked -> setDynamicColorEnabled(isChecked) }
-        binding.dynamicColorRow.setOnClickListener { binding.dynamicColorSwitch.toggle() }
+        binding.dynamicColorRow.actAsSwitch(binding.dynamicColorSwitch)
 
         binding.trueBlackSwitch.isChecked = AppPreferences.isTrueBlackEnabled(requireContext())
         binding.trueBlackSwitch.setOnCheckedChangeListener { _, isChecked -> setTrueBlackEnabled(isChecked) }
-        binding.trueBlackRow.setOnClickListener { binding.trueBlackSwitch.toggle() }
+        binding.trueBlackRow.actAsSwitch(binding.trueBlackSwitch)
     }
 
     private fun initGames() {
         binding.autoLoadSettingsSwitch.isChecked = AppPreferences.isAutoLoadGameSettingsEnabled(requireContext())
         binding.autoLoadSettingsSwitch.setOnCheckedChangeListener { _, isChecked -> setAutoLoadSettingsEnabled(isChecked) }
-        binding.autoLoadSettingsRow.setOnClickListener { binding.autoLoadSettingsSwitch.toggle() }
+        binding.autoLoadSettingsRow.actAsSwitch(binding.autoLoadSettingsSwitch)
 
         binding.calculatorDefaultSwitch.isChecked = AppPreferences.isCalculatorDefaultEnabled(requireContext())
         binding.calculatorDefaultSwitch.setOnCheckedChangeListener { _, isChecked -> setCalculatorDefaultEnabled(isChecked) }
-        binding.calculatorDefaultRow.setOnClickListener { binding.calculatorDefaultSwitch.toggle() }
+        binding.calculatorDefaultRow.actAsSwitch(binding.calculatorDefaultSwitch)
     }
 
     private fun initAbout() {
@@ -143,6 +149,29 @@ class SettingsFragment : Fragment() {
             putBoolean(AnalyticsConstants.Param.ENABLED, enabled)
         }
         AppPreferences.setCalculatorDefaultEnabled(requireContext(), enabled)
+    }
+
+    /**
+     * Tapping the row toggles its switch, and screen readers hear the row as that switch: its text, then whether it's
+     * on. Otherwise they'd stop on the row without hearing the switch's state, and then on the switch on its own.
+     */
+    private fun View.actAsSwitch(switch: CompoundButton) {
+        setOnClickListener { switch.toggle() }
+        switch.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
+            override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+                super.onInitializeAccessibilityNodeInfo(host, info)
+                info.className = Switch::class.java.name
+                info.isCheckable = true
+                info.isChecked = switch.isChecked
+            }
+
+            // Sent after a tap toggles the switch, so it's announced as on or off
+            override fun onInitializeAccessibilityEvent(host: View, event: AccessibilityEvent) {
+                super.onInitializeAccessibilityEvent(host, event)
+                event.isChecked = switch.isChecked
+            }
+        })
     }
 
     companion object {
