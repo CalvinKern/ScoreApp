@@ -139,7 +139,7 @@ Feature: Reaching the goal
     And I enter "60" for Lindsay in round 2
     Then no confetti shows
 
-  @visual
+  @visual @calculator
   Scenario: Reaching the target score again in a later round celebrates again
     Given a game "Confetti Again" with players "Calvin, Lindsay" and settings:
       | Target Score | 100 |
@@ -149,8 +149,12 @@ Feature: Reaching the goal
     And I tap "Another Round!"
     And I enter "-60" for Lindsay in round 2
     Then no confetti shows
-    When I enter "0" for Lindsay in round 2
-    Then confetti bursts from Lindsay's total
+    # Added to the end rather than cleared, since deleting "-60" back to "-6" would cross the target on the way
+    When I tap the round 2 score for Lindsay
+    And I type "+60" on the calculator, after what's there
+    And I tap "="
+    Then the round 2 score for Lindsay shows "0"
+    And confetti bursts from Lindsay's total
 
   @visual @smoke
   Scenario: Finishing the game shoots confetti from the top corners over the standings
