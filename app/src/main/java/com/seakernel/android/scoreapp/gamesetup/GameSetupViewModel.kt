@@ -137,7 +137,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
      * Saves any changes to an existing game, which saves automatically instead of with a save button.
      *
      * A blank name or no players can't be saved, so those keep what was saved before: the old name, and the old
-     * players (saving no players would remove everyone's scores).
+     * players (saving no players would take everyone out of the game).
      *
      * @param exit whether the screen is closing, it's told when the save finishes (even if nothing changed)
      */

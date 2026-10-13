@@ -75,9 +75,6 @@ interface RoundDao {
     @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} IN (:ids)")
     fun deleteRoundsById(ids: LongArray)
 
-    @Query("DELETE FROM ${ScoreEntity.TABLE_NAME} WHERE ${ScoreEntity.COLUMN_ID} = :id")
-    fun deleteScoreById(id: Long)
-
     class ScoreNoteEntity {
         @Embedded
         lateinit var score: ScoreEntity

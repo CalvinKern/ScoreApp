@@ -97,24 +97,14 @@ class GameRepository(val context: Context) {
             database.roundDao().updateDealer(firstRound.id, dealerId)
         }
 
+        // Removed players keep their scores, which are hidden while they're out of the game (see convertToScores),
+        // so picking them again brings their scores back. New players get a 0 in any round they don't have a score in.
         val roundRepository = RoundRepository(context)
         rounds.forEach { fullRound ->
-            // Update old rounds to add players
-            roundRepository.insertScores(*newPlayers.map {
-                ScoreEntity(
-                    0,
-                    it.playerId,
-                    fullRound.round.id,
-                    0.0,
-                    ""
-                )
-            }.toTypedArray())
-            // Remove scores from players not in the game anymore
-            removedPlayers.forEach { playerId ->
-                fullRound.scores.find { score -> score.playerId == playerId }?.id?.let { scoreId ->
-                    roundRepository.deleteScore(scoreId)
-                }
-            }
+            roundRepository.insertScores(*newPlayers
+                .filter { join -> fullRound.scores.none { it.playerId == join.playerId } }
+                .map { join -> ScoreEntity(0, join.playerId, fullRound.round.id, 0.0, "") }
+                .toTypedArray())
         }
     })
 
@@ -151,6 +141,7 @@ class GameRepository(val context: Context) {
             }
     }
 
+    /** The scores of the players in the game. A player taken out of it keeps theirs, for if they're picked again. */
     private fun convertToScores(settings: GameSettings, scores: List<ScoreEntity>): List<Score> {
         // TODO: Could clean up this logic by removing the embedded objects in `GameDao.kt`, and instead using a bigger SQL query
         val playerIds = settings.players.map { it.id }

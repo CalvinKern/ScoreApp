@@ -129,10 +129,6 @@ class RoundRepository(val context: Context) {
     fun deleteRounds(vararg roundIds: Long) {
         roundDao.deleteRoundsById(longArrayOf(*roundIds))
     }
-
-    fun deleteScore(id: Long) {
-        roundDao.deleteScoreById(id)
-    }
 }
 
 /**

@@ -1,7 +1,8 @@
 Feature: Editing a game in progress
   "Edit" in the game menu opens "Game Settings". Changes save on their own (shortly after each change, and when
   leaving), so going back keeps them, and the line under the title says whether they're saved. "Save" also saves and
-  goes back. Players picked in the player picker save as they're picked. Removing a player removes their scores.
+  goes back. Players picked in the player picker save as they're picked. Removing a player hides their scores, which
+  come back if they're picked again.
 
   @smoke
   Scenario: Game Settings shows the game as it is
@@ -151,7 +152,7 @@ Feature: Editing a game in progress
     When I go back
     Then the totals read "Calvin 0, Lindsay 0"
 
-  Scenario: Removing a player removes their scores
+  Scenario: Removing a player takes their scores out of the game
     Given a game "Remove Player" with players "Calvin, Lindsay, Bob"
     And I play these rounds:
       | Calvin | Lindsay | Bob |
@@ -164,6 +165,35 @@ Feature: Editing a game in progress
     Then the totals are:
       | Calvin | Bob |
       | 10     | 30  |
+    And Bob is leading
+
+  @smoke
+  Scenario: A removed player picked again gets their scores back
+    Given a game "Pick Again" with players "Calvin, Lindsay, Bob"
+    And I play these rounds:
+      | Calvin | Lindsay | Bob |
+      | 10     | 20      | 30  |
+      | 5      | 15      | 25  |
+    When I choose "Edit" from the game menu
+    And I tap "EDIT"
+    And I tap the row "Bob"
+    And I wait 2 seconds
+    And I go back
+    And I go back
+    Then the totals read "Calvin 15, Lindsay 35"
+    When I tap "Add Round"
+    And I choose "Edit" from the game menu
+    And I tap "EDIT"
+    And I tap the row "Bob"
+    And I go back
+    And I go back
+    Then the round 1 scores are:
+      | Calvin | Lindsay | Bob |
+      | 10     | 20      | 30  |
+    And the round 3 scores are:
+      | Calvin | Lindsay | Bob |
+      | 0      | 0       | 0   |
+    And the totals read "Calvin 15, Lindsay 35, Bob 55"
     And Bob is leading
 
   Scenario: Removing every player keeps the players the game had
