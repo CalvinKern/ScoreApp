@@ -161,4 +161,35 @@ class GameModelTest {
 
         assertEquals(setOf(GameEffect.NewGame(1, null)), next.effects())
     }
+
+    @Test
+    fun scoreSavedUpdatesTheTotals() {
+        val model = loadGame(settings(), listOf(1.0, 2.0, 3.0))
+        val score = model.rounds[0].scores[1].copy(value = 20.0)
+        val next = GameModel.update(model, GameEvent.ScoreSaved(roundId = 1, score = score))
+
+        assertEquals(mapOf(1L to 1.0, 2L to 20.0, 3L to 3.0), next.modelUnsafe().playerTotals)
+    }
+
+    @Test
+    fun scoreSavedForADeletedRoundIsIgnored() {
+        // The round was deleted (and the game loaded again) before its score finished saving
+        val model = loadGame(settings(), listOf(1.0, 2.0, 3.0))
+        val score = Score(id = 999, player = bob, value = 20.0)
+        val next = GameModel.update(model, GameEvent.ScoreSaved(roundId = 42, score = score))
+
+        assertFalse(next.hasModel())
+        assertTrue(next.effects().isEmpty())
+    }
+
+    @Test
+    fun scoreSavedForARemovedPlayerIsIgnored() {
+        // The player was taken out of the game before their score finished saving
+        val model = loadGame(settings(), listOf(1.0, 2.0, 3.0))
+        val score = Score(id = 999, player = bob, value = 20.0)
+        val next = GameModel.update(model, GameEvent.ScoreSaved(roundId = 1, score = score))
+
+        assertFalse(next.hasModel())
+        assertTrue(next.effects().isEmpty())
+    }
 }

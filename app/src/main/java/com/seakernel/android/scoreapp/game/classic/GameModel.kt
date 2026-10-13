@@ -240,19 +240,19 @@ data class GameModel(
                     Next.next(newModel)
                 }
                 is GameEvent.ScoreSaved -> {
+                    // The round (or the player) can be gone by the time the save finishes, e.g. deleted rounds
+                    // loading first, and then there's nothing left to update
+                    val index = model.rounds.indexOfFirst { it.id == event.roundId }
+                    val scoreIndex = model.rounds.getOrNull(index)?.scores?.indexOfFirst { it.id == event.score.id }
+                    if (scoreIndex == null || scoreIndex < 0) return Next.noChange()
+
                     val rounds = model.rounds.toMutableList()
-                    val index = rounds.indexOfFirst { it.id == event.roundId }
                     val round = rounds[index].let {
                         val scores = it.scores.toMutableList()
-                        val scoreIndex = scores.indexOfFirst { score -> score.id == event.score.id }
-
-                        scores.removeAt(scoreIndex)
-                        scores.add(scoreIndex, event.score)
+                        scores[scoreIndex] = event.score
                         it.copy(scores = scores)
                     }
-
-                    rounds.removeAt(index)
-                    rounds.add(index, round)
+                    rounds[index] = round
                     val newModel = updateComputedFields(model.copy(rounds = rounds))
                     Next.next(newModel)
                 }
