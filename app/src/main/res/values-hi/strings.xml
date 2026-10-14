@@ -10,7 +10,7 @@
     <string name="deleteGameConfirmation">क्या आप इस गेम को हटाना चाहते हैं?</string>
     <string name="deleteSuccessful">हटाए गए %s</string>
     <string name="gameCreateTitle">नया खेल</string>
-    <string name="gameListEmptyMessage">एक नया गेम बनाने के लिए नीचे दिए गए + बटन पर क्लिक करके शुरू करें!</string>
+    <string name="gameListEmptyMessage">एक नया गेम बनाने के लिए नीचे दिए गए + बटन पर टैप करके शुरू करें!</string>
     <string name="gameListEmptyTitle">कोई गेम नहीं बनाया गया</string>
     <string name="gameListTitle">खेल</string>
     <string name="gameNameHint">खेल का नाम</string>
@@ -26,8 +26,8 @@
     <string name="pickPlayers">खिलाड़ियों को चुनें</string>
     <string name="playerCreateTitle">नया खिलाडी</string>
     <string name="playerEditTitle">खिलाडी संपादित करें</string>
-    <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन नीचे क्लिक करके शुरू करें!</string>
-    <string name="playerEmptySearchMessage">कोई भी खिलाड़ी वर्तमान खोज मापदंड से मेल नहीं खाता है। आप नीचे दिए गए + बटन पर क्लिक करके एक नया खिलाड़ी जोड़ सकते हैं!</string>
+    <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन पर टैप करके शुरू करें!</string>
+    <string name="playerEmptySearchMessage">कोई भी खिलाड़ी वर्तमान खोज मापदंड से मेल नहीं खाता है। आप नीचे दिए गए + बटन पर टैप करके एक नया खिलाड़ी जोड़ सकते हैं!</string>
     <string name="playerEmptySearchTitle">कोई भी खिलाड़ी मैच नहीं करता</string>
     <string name="playerEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
     <plurals name="playerStandingRoundsPlayed">
@@ -64,7 +64,7 @@
     <string name="reversedScoringDescription">उच्चतम स्कोर होने के बजाय सबसे कम स्कोर वाला खिलाड़ी जीतता है</string>
     <string name="reversedScoringTitle">रिवर्स स्कोरिंग</string>
     <string name="scoreHint">स्कोर</string>
-    <string name="showRoundNotesDescription">प्रत्येक दौर के लिए नोट्स देखने और संपादित करने के लिए एक खिलाड़ी के नाम पर क्लिक करें</string>
+    <string name="showRoundNotesDescription">प्रत्येक दौर के लिए नोट्स देखने और संपादित करने के लिए एक खिलाड़ी के नाम पर टैप करें</string>
     <string name="showRoundNotesTitle">राउंड नोट्स दिखाएं</string>
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">खिलाड़ी स्थान</string>

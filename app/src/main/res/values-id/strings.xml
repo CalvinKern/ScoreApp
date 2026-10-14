@@ -10,7 +10,7 @@
     <string name="deleteGameConfirmation">Apakah Anda ingin menghapus game ini?</string>
     <string name="deleteSuccessful">Dihapus %s</string>
     <string name="gameCreateTitle">Permainan baru</string>
-    <string name="gameListEmptyMessage">Mulailah dengan mengklik tombol + di bawah untuk membuat game baru!</string>
+    <string name="gameListEmptyMessage">Mulailah dengan mengetuk tombol + di bawah untuk membuat game baru!</string>
     <string name="gameListEmptyTitle">Tidak ada permainan yang dibuat</string>
     <string name="gameListTitle">permainan</string>
     <string name="gameNameHint">Nama permainan</string>
@@ -26,8 +26,8 @@
     <string name="pickPlayers">Pilih Pemain</string>
     <string name="playerCreateTitle">Pemain baru</string>
     <string name="playerEditTitle">Edit pemain</string>
-    <string name="playerEmptyMessage">Mulailah dengan mengklik tombol + di bawah untuk menambah pemain baru!</string>
-    <string name="playerEmptySearchMessage">Tidak ada pemain yang cocok dengan kriteria pencarian saat ini. Anda dapat menambahkan pemain baru dengan mengeklik tombol + di bawah!</string>
+    <string name="playerEmptyMessage">Mulailah dengan mengetuk tombol + di bawah untuk menambah pemain baru!</string>
+    <string name="playerEmptySearchMessage">Tidak ada pemain yang cocok dengan kriteria pencarian saat ini. Anda dapat menambahkan pemain baru dengan mengetuk tombol + di bawah!</string>
     <string name="playerEmptySearchTitle">Tidak ada pemain yang cocok</string>
     <string name="playerEmptyTitle">Tidak ada pemain yang ditambahkan</string>
     <plurals name="playerStandingRoundsPlayed">
@@ -61,7 +61,7 @@
     <string name="reversedScoringDescription">Pemain dengan skor terendah menang, alih-alih memiliki skor tertinggi</string>
     <string name="reversedScoringTitle">Membalikkan Skor</string>
     <string name="scoreHint">Skor</string>
-    <string name="showRoundNotesDescription">Klik pada nama pemain untuk melihat dan mengedit catatan untuk setiap putaran</string>
+    <string name="showRoundNotesDescription">Ketuk nama pemain untuk melihat dan mengedit catatan untuk setiap putaran</string>
     <string name="showRoundNotesTitle">Tampilkan Catatan Bulat</string>
     <string name="copiedUrl">URL disalin</string>
     <string name="storeToReview">Silakan buka toko aplikasi untuk memberi ulasan</string>

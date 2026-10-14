@@ -10,7 +10,7 @@
     <string name="deleteGameConfirmation">Doriți să ștergeți acest joc?</string>
     <string name="deleteSuccessful">şters %s</string>
     <string name="gameCreateTitle">Joc nou</string>
-    <string name="gameListEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a crea un joc nou!</string>
+    <string name="gameListEmptyMessage">Începeți atingând butonul + de mai jos pentru a crea un joc nou!</string>
     <string name="gameListEmptyTitle">Nu au fost create jocuri</string>
     <string name="gameListTitle">Jocuri</string>
     <string name="gameNameHint">Numele jocului</string>
@@ -26,8 +26,8 @@
     <string name="pickPlayers">Alegeți jucători</string>
     <string name="playerCreateTitle">Jucator nou</string>
     <string name="playerEditTitle">Editați jucătorul</string>
-    <string name="playerEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a adăuga un jucător nou!</string>
-    <string name="playerEmptySearchMessage">Niciun jucător nu corespunde criteriilor de căutare actuale. Puteți adăuga un jucător nou, făcând clic pe butonul + de mai jos!</string>
+    <string name="playerEmptyMessage">Începeți atingând butonul + de mai jos pentru a adăuga un jucător nou!</string>
+    <string name="playerEmptySearchMessage">Niciun jucător nu corespunde criteriilor de căutare actuale. Puteți adăuga un jucător nou atingând butonul + de mai jos!</string>
     <string name="playerEmptySearchTitle">Nu se potrivesc jucători</string>
     <string name="playerEmptyTitle">Nu s-au adăugat jucători</string>
     <plurals name="playerStandingRoundsPlayed">
@@ -67,7 +67,7 @@
     <string name="reversedScoringDescription">Jucătorul cu cel mai mic scor câștigă, în loc să obțină cel mai mare scor</string>
     <string name="reversedScoringTitle">Scoring invers</string>
     <string name="scoreHint">Scor</string>
-    <string name="showRoundNotesDescription">Faceți clic pe numele unui jucător pentru a vizualiza și edita notele pentru fiecare rundă</string>
+    <string name="showRoundNotesDescription">Atingeți numele unui jucător pentru a vizualiza și edita notele pentru fiecare rundă</string>
     <string name="showRoundNotesTitle">Afișează note rotunde</string>
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">Clasamentul jucătorilor</string>

@@ -14,7 +14,7 @@
     </plurals>
     <string name="lastPlayedLabel">Last Played:</string>
     <string name="gameListEmptyTitle">No games created</string>
-    <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
+    <string name="gameListEmptyMessage">Start by tapping the + button down below to create a new game!</string>
     <string name="copiedUrl">Copied URL</string>
     <string name="storeToReview">Please open the app store to review</string>
     <string name="changelogUnavailable">Unable to open the changelog</string>
@@ -69,7 +69,7 @@
     <string name="reversedScoringTitle">Reverse Scoring</string>
     <string name="reversedScoringDescription">The player with the lowest score wins, instead of having the highest score</string>
     <string name="showRoundNotesTitle">Show Round Notes</string>
-    <string name="showRoundNotesDescription">Click on a player\'s name to view and edit notes for each round</string>
+    <string name="showRoundNotesDescription">Tap a player\'s name to view and edit notes for each round</string>
     <string name="useCalculatorTitle">Calculator Keyboard</string>
     <string name="useCalculatorDescription">Use the custom calculator keyboard. Will use the system keyboard if not enabled.</string>
     <string name="maxScoreTitle">Target Score</string>
@@ -90,9 +90,9 @@
     <string name="playerCreateTitle">New Player</string>
     <string name="playerEditTitle">Edit Player</string>
     <string name="playerEmptyTitle">No players added</string>
-    <string name="playerEmptyMessage">Start by clicking the + button down below to add a new player!</string>
+    <string name="playerEmptyMessage">Start by tapping the + button down below to add a new player!</string>
     <string name="playerEmptySearchTitle">No players match</string>
-    <string name="playerEmptySearchMessage">No players match the current search criteria. You can add a new player by clicking the + button down below!</string>
+    <string name="playerEmptySearchMessage">No players match the current search criteria. You can add a new player by tapping the + button down below!</string>
 
     <!--Game Screen-->
     <string name="addRound">Add Round</string>

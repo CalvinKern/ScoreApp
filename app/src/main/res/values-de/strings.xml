@@ -10,7 +10,7 @@
     <string name="deleteGameConfirmation">Möchten Sie dieses Spiel löschen?</string>
     <string name="deleteSuccessful">Gelöscht %s</string>
     <string name="gameCreateTitle">Neues Spiel</string>
-    <string name="gameListEmptyMessage">Beginnen Sie mit einem Klick auf die Schaltfläche + unten, um ein neues Spiel zu erstellen!</string>
+    <string name="gameListEmptyMessage">Beginnen Sie, indem Sie unten auf die Schaltfläche + tippen, um ein neues Spiel zu erstellen!</string>
     <string name="gameListEmptyTitle">Keine Spiele erstellt</string>
     <string name="gameListTitle">Spiele</string>
     <string name="gameNameHint">Spielname</string>
@@ -26,8 +26,8 @@
     <string name="pickPlayers">Spieler auswählen</string>
     <string name="playerCreateTitle">Neuer Spieler</string>
     <string name="playerEditTitle">Spieler bearbeiten</string>
-    <string name="playerEmptyMessage">Beginnen Sie, indem Sie auf das + unten klicken, um einen neuen Spieler hinzuzufügen!</string>
-    <string name="playerEmptySearchMessage">Kein Spieler entspricht den aktuellen Suchkriterien. Sie können einen neuen Spieler hinzufügen, indem Sie auf das + unten klicken!</string>
+    <string name="playerEmptyMessage">Beginnen Sie, indem Sie unten auf das + tippen, um einen neuen Spieler hinzuzufügen!</string>
+    <string name="playerEmptySearchMessage">Kein Spieler entspricht den aktuellen Suchkriterien. Sie können einen neuen Spieler hinzufügen, indem Sie unten auf das + tippen!</string>
     <string name="playerEmptySearchTitle">Keine Spieler passen zusammen</string>
     <string name="playerEmptyTitle">Keine Spieler hinzugefügt</string>
     <plurals name="playerStandingRoundsPlayed">
@@ -64,7 +64,7 @@
     <string name="reversedScoringDescription">Der Spieler mit der niedrigsten Punktzahl gewinnt, anstatt die höchste Punktzahl zu erzielen</string>
     <string name="reversedScoringTitle">Reverse Scoring</string>
     <string name="scoreHint">Ergebnis</string>
-    <string name="showRoundNotesDescription">Klicken Sie auf den Namen eines Spielers, um Notizen für jede Runde anzuzeigen und zu bearbeiten</string>
+    <string name="showRoundNotesDescription">Tippen Sie auf den Namen eines Spielers, um Notizen für jede Runde anzuzeigen und zu bearbeiten</string>
     <string name="showRoundNotesTitle">Runde Noten anzeigen</string>
     <string name="copiedUrl">URL kopiert</string>
     <string name="storeToReview">Bitte öffnen Sie den App-Store, um eine Bewertung abzugeben</string>

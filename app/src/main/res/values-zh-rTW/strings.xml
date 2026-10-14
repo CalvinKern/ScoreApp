@@ -61,7 +61,7 @@
     <string name="reversedScoringDescription">得分最低的玩家獲勝，而不是得分最高的</string>
     <string name="reversedScoringTitle">反向計分</string>
     <string name="scoreHint">得分了</string>
-    <string name="showRoundNotesDescription">單擊玩家的姓名以查看和編輯每一回合的備忘</string>
+    <string name="showRoundNotesDescription">點擊玩家的姓名以查看和編輯每一回合的備忘</string>
     <string name="showRoundNotesTitle">顯示回合筆記</string>
     <string name="copiedUrl">已複製連結</string>
     <string name="storeToReview">請開啟應用程式商店進行評分</string>

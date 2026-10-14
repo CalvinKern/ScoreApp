@@ -36,7 +36,7 @@ Feature: First launch
     Given a fresh install with the usage data question answered
     Then the title is "Games"
     And I see "No games created"
-    And I see "Start by clicking the + button down below to create a new game!"
+    And I see "Start by tapping the + button down below to create a new game!"
 
   Scenario: The empty game list's picture also starts a game
     Given a fresh install with the usage data question answered
@@ -49,4 +49,4 @@ Feature: First launch
     And I tap "Edit"
     Then the title is "Pick Players"
     And I see "No players added"
-    And I see "Start by clicking the + button down below to add a new player!"
+    And I see "Start by tapping the + button down below to add a new player!"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="showRoundNotesTitle">Mostrar notas redondas</string>
-    <string name="showRoundNotesDescription">Clique no nome de um jogador para ver e editar notas para cada rodada</string>
+    <string name="showRoundNotesDescription">Toque no nome de um jogador para ver e editar notas para cada rodada</string>
     <string name="scoreHint">Ponto</string>
     <string name="reversedScoringTitle">Pontuação Reversa</string>
     <string name="reversedScoringDescription">O jogador com a menor pontuação vence, em vez de ter a maior pontuação</string>
@@ -41,8 +41,8 @@
     </string-array>
     <string name="playerEmptyTitle">Nenhum jogador adicionado</string>
     <string name="playerEmptySearchTitle">Nenhum jogador corresponde</string>
-    <string name="playerEmptySearchMessage">Nenhum jogador corresponde aos critérios de pesquisa atuais. Você pode adicionar um novo jogador clicando no botão + abaixo!</string>
-    <string name="playerEmptyMessage">Comece clicando no botão + abaixo para adicionar um novo player!</string>
+    <string name="playerEmptySearchMessage">Nenhum jogador corresponde aos critérios de pesquisa atuais. Você pode adicionar um novo jogador tocando no botão + abaixo!</string>
+    <string name="playerEmptyMessage">Comece tocando no botão + abaixo para adicionar um novo jogador!</string>
     <string name="playerCreateTitle">Novo jogador</string>
     <string name="playerEditTitle">Editar jogador</string>
     <string name="pickPlayers">Escolha jogadores</string>
@@ -58,7 +58,7 @@
     <string name="gameNameHint">Nome do jogo</string>
     <string name="gameListTitle">Jogos</string>
     <string name="gameListEmptyTitle">Nenhum jogo criado</string>
-    <string name="gameListEmptyMessage">Comece clicando no botão + abaixo para criar um novo jogo!</string>
+    <string name="gameListEmptyMessage">Comece tocando no botão + abaixo para criar um novo jogo!</string>
     <string name="gameCreateTitle">Novo jogo</string>
     <string name="deleteSuccessful">Excluído %s</string>
     <string name="deleteGameConfirmation">Deseja excluir este jogo?</string>

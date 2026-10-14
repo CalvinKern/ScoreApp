@@ -10,7 +10,7 @@
     <string name="deleteGameConfirmation">Voulez-vous supprimer ce jeu?</string>
     <string name="deleteSuccessful">Effacé %s</string>
     <string name="gameCreateTitle">Nouveau jeu</string>
-    <string name="gameListEmptyMessage">Commencez par cliquer sur le bouton + ci-dessous pour créer un nouveau jeu!</string>
+    <string name="gameListEmptyMessage">Commencez par appuyer sur le bouton + ci-dessous pour créer un nouveau jeu!</string>
     <string name="gameListEmptyTitle">Aucun jeu créé</string>
     <string name="gameListTitle">Jeux</string>
     <string name="gameNameHint">Nom du jeu</string>
@@ -26,8 +26,8 @@
     <string name="pickPlayers">Choisir des joueurs</string>
     <string name="playerCreateTitle">Nouveau joueur</string>
     <string name="playerEditTitle">Modifier le joueur</string>
-    <string name="playerEmptyMessage">Commencez par cliquer sur le bouton + ci-dessous pour ajouter un nouveau joueur!</string>
-    <string name="playerEmptySearchMessage">Aucun joueur ne correspond aux critères de recherche actuels. Vous pouvez ajouter un nouveau joueur en cliquant sur le bouton + ci-dessous!</string>
+    <string name="playerEmptyMessage">Commencez par appuyer sur le bouton + ci-dessous pour ajouter un nouveau joueur!</string>
+    <string name="playerEmptySearchMessage">Aucun joueur ne correspond aux critères de recherche actuels. Vous pouvez ajouter un nouveau joueur en appuyant sur le bouton + ci-dessous!</string>
     <string name="playerEmptySearchTitle">Aucun joueur ne correspond</string>
     <string name="playerEmptyTitle">Aucun joueur ajouté</string>
     <plurals name="playerStandingRoundsPlayed">
@@ -67,7 +67,7 @@
     <string name="reversedScoringDescription">Le joueur avec le score le plus bas gagne, au lieu d\'avoir le score le plus élevé</string>
     <string name="reversedScoringTitle">Score inversé</string>
     <string name="scoreHint">Score</string>
-    <string name="showRoundNotesDescription">Cliquez sur le nom d\'un joueur pour afficher et modifier les notes de chaque manche</string>
+    <string name="showRoundNotesDescription">Appuyez sur le nom d\'un joueur pour afficher et modifier les notes de chaque manche</string>
     <string name="showRoundNotesTitle">Afficher les notes rondes</string>
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">Classement des joueurs</string>
