@@ -85,17 +85,18 @@ Feature: Device changes
     And Android closes the app in the background
     Then the title is "Pick Players"
     And "Calvin" and "Bob" are picked
-    When I go back
+    When I pick "Lindsay"
+    And I go back
     Then the title is "New Game"
     And the game name field shows "Comes Back"
     And these settings are shown:
       | Reverse Scoring | on |
       | Target Score    | 50 |
-    And the players are "Calvin, Bob"
+    And the players are "Calvin, Bob, Lindsay"
     And Calvin's dealer radio button is checked
     When I tap "Save"
     Then the title is "Comes Back"
-    And the totals read "Calvin 0, Bob 0"
+    And the totals read "Calvin 0, Bob 0, Lindsay 0"
 
   Scenario: A new game comes back after Android closes the app on New Game, with the name still being typed
     Given I am on the game list

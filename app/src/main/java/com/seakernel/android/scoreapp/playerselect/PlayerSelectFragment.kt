@@ -64,6 +64,9 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     private val savesAutomatically get() = arguments?.getBoolean(ARG_SAVES_AUTOMATICALLY) == true
     private val initialPlayerIds get() = arguments?.getLongArray(PLAYER_IDS)?.toList().orEmpty()
 
+    // Whether the picks came back with the screen, to be sent once they load (see connectViews)
+    private var sendPicksOnLoad = false
+
     init {
         loop = createLoop(::update)
     }
@@ -99,6 +102,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             ::initMobius
         )
 
+        sendPicksOnLoad = savedInstanceState != null
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
@@ -185,11 +189,15 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                 // Picks are sent as they're made, so they're kept however the screen is left (back, or save), and an
                 // existing game saves them right away. Renames are sent too, so the game setup shows the new names.
                 val previous = lastModel
-                if (previous != null && !previous.isLoading &&
+                val changed = previous != null && !previous.isLoading &&
                     (model.selectedPlayerList != previous.selectedPlayerList || model.allPlayers != previous.allPlayers)
-                ) {
+                // Picks that came back with the screen (e.g. after Android closed the app) are sent once they load,
+                // in case they were made too late to reach the game setup before the app closed
+                val restoredPicksLoaded = sendPicksOnLoad && previous?.isLoading == true && !model.isLoading
+                if (changed || restoredPicksLoaded) {
                     setFragmentResult(REQUEST_PLAYERS, bundleOf(KEY_PLAYER_IDS to model.selectedPlayerList.toLongArray()))
                 }
+                if (!model.isLoading) sendPicksOnLoad = false
 
                 // An existing game says its picks save on their own, or that none picked keeps its old players
                 if (savesAutomatically && !model.isLoading) {
