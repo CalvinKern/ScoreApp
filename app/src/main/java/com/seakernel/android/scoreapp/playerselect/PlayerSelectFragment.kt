@@ -1,36 +1,30 @@
 package com.seakernel.android.scoreapp.playerselect
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewGroupCompat
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.databinding.DialogPlayerNameBinding
+import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentPlayerSelectBinding
 import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
-import com.seakernel.android.scoreapp.utility.PlayerColors
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
-import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
 import com.seakernel.android.scoreapp.utility.setStatusSubtitle
@@ -66,6 +60,9 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
     // Whether the picks came back with the screen, to be sent once they load (see connectViews)
     private var sendPicksOnLoad = false
+
+    // Set while the screen is connected to the loop, for the player dialog's result
+    private var eventConsumer: Consumer<PlayerEvent>? = null
 
     init {
         loop = createLoop(::update)
@@ -117,6 +114,10 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
         binding.appBar.applyWindowInsetsCutout()
         binding.fab.applyWindowInsetsNavigationMargin()
         binding.playerRecycler.applyWindowInsetsNavigationPadding()
+
+        childFragmentManager.setFragmentResultListener(PlayerDialog.REQUEST_PLAYER, viewLifecycleOwner) { _, result ->
+            onPlayerDialogResult(result)
+        }
     }
 
     override fun onDestroyView() {
@@ -141,6 +142,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     }
 
     override fun connectViews(eventConsumer: Consumer<PlayerEvent>): Connection<CreateModel> {
+        this.eventConsumer = eventConsumer
         toolbarItemClickListener = Toolbar.OnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> eventConsumer.accept(DoneSelectingPlayersClicked)
@@ -213,6 +215,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
             override fun dispose() {
                 // Don't forget to remove listeners when the UI is disconnected
+                this@PlayerSelectFragment.eventConsumer = null
                 binding.fab.setOnClickListener(null)
                 binding.playerEmptyImage.setOnClickListener(null)
                 binding.playerRecycler.swapAdapter(null, true)
@@ -228,7 +231,10 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                 when (effect) {
                     // Effects run in the background, so anything touching the screen moves to the main thread
                     is ShowPlayerDialog -> runWhenStarted {
-                        if (!isDisposed) showPlayerDialog(eventConsumer, effect) { isDisposed }
+                        // One at a time, e.g. when the + button is tapped twice quickly
+                        if (isDisposed || childFragmentManager.findFragmentByTag(PlayerDialog.TAG) != null) return@runWhenStarted
+                        PlayerDialog.newInstance(effect.player, effect.seatedPlayers)
+                            .show(childFragmentManager, PlayerDialog.TAG)
                     }
                     is ShowDeletePlayerSnackbar -> {
                         playerRepository?.deleteUser(effect.playerId)
@@ -281,60 +287,20 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             .show()
     }
 
-    private fun showPlayerDialog(
-        eventConsumer: Consumer<PlayerEvent>,
-        effect: ShowPlayerDialog,
-        isDisposed: () -> Boolean
-    ) {
-        val player = effect.player
-        val binding =
-            DialogPlayerNameBinding.inflate(LayoutInflater.from(requireContext()), null, false)
-        val name = { binding.playerNameEdit.text?.toString().orEmpty() }
-        lateinit var colorPicker: PlayerColorPicker
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(if (player.id == null) R.string.playerCreateTitle else R.string.playerEditTitle)
-            .setView(binding.root)
-            .setCancelable(false)
-            .setPositiveButton(android.R.string.ok) { _, _ ->
-                val newName = name()
-                if (newName.isEmpty() || !colorPicker.isValid) return@setPositiveButton
-                // Player names are personal data, so only the event is logged
-                logEvent(if (player.id == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED)
-                addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
-                    playerRepository?.addOrUpdateUser(player.id, newName, colorPicker.color)?.let { saved ->
-                        if (isDisposed()) return@let
-                        withContext(Dispatchers.Main) {
-                            if (isDisposed()) return@withContext // Double check we're not disposed
-                            eventConsumer.accept(PlayerSaved(saved))
-                        }
-                    }
-                }
-            }
-            .setNegativeButton(android.R.string.cancel, null)
-            .also {
-                val playerId = player.id ?: return@also
-
-                it.setNeutralButton(R.string.delete) { _, _ ->
-                    logEvent(AnalyticsConstants.Event.PLAYER_DELETED)
-                    if (!isDisposed()) {
-                        eventConsumer.accept(PlayerDeleteClicked(playerId))
-                    }
-                }
-            }
-            .create()
-
-        // OK needs a name, and a color that can be saved
-        val updateOk = { dialog.getButton(Dialog.BUTTON_POSITIVE)?.isEnabled = name().isNotEmpty() && colorPicker.isValid }
-        val seatColor = effect.seatedPlayers.let { PlayerColors.forSeat(requireContext(), it, it.indexOf(player)) }
-        colorPicker = PlayerColorPicker(binding, player.color, seatColor, updateOk)
-        binding.playerNameEdit.apply {
-            setText(player.name)
-            setSelection(player.name.length)
-            doAfterTextChanged { updateOk() }
+    /** Saves the player from the player dialog (or deletes them), see [PlayerDialog] */
+    private fun onPlayerDialogResult(result: Bundle) {
+        val player = BundleCompat.getParcelable(result, PlayerDialog.KEY_PLAYER, Player::class.java) ?: return
+        if (result.getBoolean(PlayerDialog.KEY_DELETE)) {
+            player.id?.let { eventConsumer?.accept(PlayerDeleteClicked(it)) }
+            return
         }
-        dialog.setOnShowListener { updateOk() }
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        dialog.show()
+
+        addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
+            val saved = playerRepository?.addOrUpdateUser(player.id, player.name, player.color) ?: return@launch
+            withContext(Dispatchers.Main) {
+                eventConsumer?.accept(PlayerSaved(saved)) // Gone when the screen closed first
+            }
+        }
     }
 
     companion object {

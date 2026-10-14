@@ -131,6 +131,24 @@ Feature: Device changes
     When I go back
     Then the title is "Games"
 
+  @landscape
+  Scenario: The player dialog keeps what's typed through rotating and Android closing the app
+    Given I am picking players for a new game
+    When I tap the + button
+    And I type "Half Typed"
+    And I tap the "Purple" swatch
+    And I rotate the device to landscape
+    Then I see "New Player"
+    And the name field shows "Half Typed"
+    And the color field shows "8E24AA"
+    When I rotate the device to portrait
+    And Android closes the app in the background
+    Then I see "New Player"
+    And the name field shows "Half Typed"
+    And the color field shows "8E24AA"
+    When I tap "OK"
+    Then "Half Typed" is in the list and checked
+
   Scenario: Closing the app from recents starts a new game over
     Given I am on the game list
     When I tap "+"
