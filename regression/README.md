@@ -65,6 +65,10 @@ either.
 ## Device setup
 
 - The debug build (`./gradlew installDebug`, package `com.seakernel.scorepad.debug`) on an emulator or phone
+- An emulator that's been cold booted recently (Device Manager › Cold Boot Now, or `adb emu kill` and start it again
+  with `-no-snapshot-load`). Its graphics slow down over days of heavy use until screens take seconds to open, and
+  `adb reboot` doesn't fix that since it only restarts Android inside the same emulator. Cold boot before a long run,
+  and again if it gets slow partway through.
 - English (United States), so dates read like `Oct 5, 2026` and decimals use a `.`. Only `@locale` scenarios change it.
 - Portrait, unless a scenario rotates it
 - The usage data question answered (either way) unless a scenario says otherwise
