@@ -57,6 +57,7 @@
                     android:imeOptions="actionDone"
                     android:inputType="text|textCapWords"
                     android:lines="1"
+                    android:saveEnabled="false"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 

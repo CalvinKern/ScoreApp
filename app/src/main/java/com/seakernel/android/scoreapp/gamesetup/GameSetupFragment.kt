@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.CheckBox
 import android.widget.CompoundButton.OnCheckedChangeListener
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -115,6 +117,9 @@ class GameSetupFragment : Fragment() {
     private var _settingsBinding: ViewGameSettingsBinding? = null
 
     private var hasFocusedGameName = false
+
+    // Text shown from the game, which the text watchers ignore so it isn't saved back as typed
+    private var isRenderingText = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -291,6 +296,7 @@ class GameSetupFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(text: Editable?) {
+                if (isRenderingText) return
                 viewModel.updateGameName(text.toString())
             }
         }
@@ -299,6 +305,7 @@ class GameSetupFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(text: Editable?) {
+                if (isRenderingText) return
                 viewModel.setMaxScore(ScoreFormat.parse(text.toString()))
             }
         }
@@ -306,9 +313,15 @@ class GameSetupFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(text: Editable?) {
+                if (isRenderingText) return
                 viewModel.setMaxRounds(text.toString().toIntOrNull())
             }
         }
+
+        // Typing updates the game from here on, and the game's text is shown with renderText
+        binding.gameNameEdit.addTextChangedListener(nameTextWatcher)
+        _settingsBinding?.maxScoreEdit?.addTextChangedListener(maxScoreTextWatcher)
+        _settingsBinding?.maxRoundsEdit?.addTextChangedListener(maxRoundsTextWatcher)
 
         // Picking a previous game name for a new game loads that game's settings and players, as long
         // as no players have been added yet
@@ -399,39 +412,49 @@ class GameSetupFragment : Fragment() {
             checkedListener
         )
 
-        // Update game name unless it has focus (being edited)
-        if (!binding.gameNameEdit.hasFocus()) {
-            binding.gameNameEdit.removeTextChangedListener(nameTextWatcher)
-            binding.gameNameEdit.setText(settings.name)
-            binding.gameNameEdit.addTextChangedListener(nameTextWatcher)
+        // Typing keeps the name the same as the game's, so this only changes it when the game changed on its own (e.g.
+        // previous settings loading, or the game coming back after Android closed the app), even while it's focused
+        renderText(binding.gameNameEdit, settings.name)
 
-            // If we haven't focused the game name, focus that unless the other edit texts are focused
-            if (settings.name.isBlank() && !hasFocusedGameName && _settingsBinding?.maxScoreEdit?.hasFocus() != true && _settingsBinding?.maxRoundsEdit?.hasFocus() != true) {
-                hasFocusedGameName = true
-                binding.gameNameEdit.requestFocus()
-                binding.gameNameEdit.post {
-                    val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.showSoftInput(binding.gameNameEdit, 0)
-                }
+        // If we haven't focused the game name, focus that unless an edit text is focused already
+        if (settings.name.isBlank() && !hasFocusedGameName && !binding.gameNameEdit.hasFocus() &&
+            _settingsBinding?.maxScoreEdit?.hasFocus() != true && _settingsBinding?.maxRoundsEdit?.hasFocus() != true
+        ) {
+            hasFocusedGameName = true
+            binding.gameNameEdit.requestFocus()
+            binding.gameNameEdit.post {
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.showSoftInput(binding.gameNameEdit, 0)
             }
         }
 
         renderTargetFields(settings)
     }
 
-    /** Update max score/rounds unless they have focus (being edited) */
+    /**
+     * Shows max score/rounds, but leaves one being typed in alone while it means what's saved (a typed "0" is saved
+     * as no limit, and the field clears once it loses focus)
+     */
     private fun renderTargetFields(settings: GameSettings) {
-        if (_settingsBinding?.maxScoreEdit?.hasFocus() == false) {
-            val score = settings.maxScore?.let { ScoreFormat.format(it) } ?: ""
-            _settingsBinding?.maxScoreEdit?.removeTextChangedListener(maxScoreTextWatcher)
-            _settingsBinding?.maxScoreEdit?.setText(score)
-            _settingsBinding?.maxScoreEdit?.addTextChangedListener(maxScoreTextWatcher)
+        val settingsBinding = _settingsBinding ?: return
+        val score = settingsBinding.maxScoreEdit
+        if (!score.hasFocus() || ScoreFormat.parse(score.text.toString())?.takeIf { it > 0 } != settings.maxScore) {
+            renderText(score, settings.maxScore?.let { ScoreFormat.format(it) } ?: "")
         }
-        if (_settingsBinding?.maxRoundsEdit?.hasFocus() == false) {
-            _settingsBinding?.maxRoundsEdit?.removeTextChangedListener(maxRoundsTextWatcher)
-            _settingsBinding?.maxRoundsEdit?.setText(settings.maxRounds?.toString() ?: "")
-            _settingsBinding?.maxRoundsEdit?.addTextChangedListener(maxRoundsTextWatcher)
+        val rounds = settingsBinding.maxRoundsEdit
+        if (!rounds.hasFocus() || rounds.text.toString().toIntOrNull()?.takeIf { it > 0 } != settings.maxRounds) {
+            renderText(rounds, settings.maxRounds?.toString() ?: "")
         }
+    }
+
+    /** Shows the game's text in a field, without it reading as typed. The fields don't keep their own text (see layouts). */
+    private fun renderText(field: EditText, text: String) {
+        if (field.text.toString() == text) return
+        isRenderingText = true
+        // Without filtering, which would open the game name suggestions
+        if (field is AutoCompleteTextView) field.setText(text, false) else field.setText(text)
+        if (field.hasFocus()) field.setSelection(text.length)
+        isRenderingText = false
     }
 
     // TODO: Handle swipe to remove a player

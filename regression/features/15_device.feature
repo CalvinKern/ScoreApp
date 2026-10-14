@@ -1,6 +1,6 @@
 Feature: Device changes
-  Scores survive rotating, leaving the app, and the system closing it. The layout follows the device's orientation,
-  text size, language, and layout direction.
+  Scores, and a new game being set up, survive rotating, leaving the app, and Android closing it in the background.
+  The layout follows the device's orientation, text size, language, and layout direction.
 
   @landscape
   Scenario: Rotating keeps the scores, including one still being typed
@@ -62,18 +62,81 @@ Feature: Device changes
     Then the title is "No Pop Up"
     And no keyboard shows
 
-  Scenario: The app comes back to the same game after the system closes it in the background
+  Scenario: The app comes back to the same game after Android closes it in the background
     Given a game "Process Death" with players "Calvin, Lindsay"
     And I enter "8" for Lindsay in round 1
-    When I press Home
-    And the system kills the app in the background (adb shell am kill com.seakernel.scorepad.debug)
-    And I return to the app from recents
+    When Android closes the app in the background
     Then the title is "Process Death"
     And the totals are:
       | Calvin | Lindsay |
       | 0      | 8       |
     When I go back
     Then the title is "Games"
+
+  @smoke
+  Scenario: A new game being set up comes back after Android closes the app on the player picker
+    Given I am on the game list
+    When I tap "+"
+    And I type "Comes Back" as the game name
+    And I tap the row "Reverse Scoring"
+    And I type "50" into "Target Score"
+    And I tap "Edit"
+    And I pick "Calvin" and "Bob"
+    And Android closes the app in the background
+    Then the title is "Pick Players"
+    And "Calvin" and "Bob" are picked
+    When I go back
+    Then the title is "New Game"
+    And the game name field shows "Comes Back"
+    And these settings are shown:
+      | Reverse Scoring | on |
+      | Target Score    | 50 |
+    And the players are "Calvin, Bob"
+    And Calvin's dealer radio button is checked
+    When I tap "Save"
+    Then the title is "Comes Back"
+    And the totals read "Calvin 0, Bob 0"
+
+  Scenario: A new game comes back after Android closes the app on New Game, with the name still being typed
+    Given I am on the game list
+    When I tap "+"
+    And I type "Still Typing" as the game name
+    And I tap the row "Show Round Notes"
+    And I tap the game name
+    And Android closes the app in the background
+    Then the title is "New Game"
+    And the game name field shows "Still Typing"
+    And "Show Round Notes" is on
+    When I type " Here" at the end of the game name
+    And I tap "Edit"
+    And I pick "Calvin"
+    And I go back
+    And I tap "Save"
+    Then the title is "Still Typing Here"
+
+  Scenario: A new game from a game comes back after Android closes the app
+    Given a game "Copy Me" with players "Calvin, Lindsay"
+    When I choose "New Game" from the game menu
+    And I replace the game name with "Copy Me Again"
+    And I type "3" into "Target Rounds"
+    And Android closes the app in the background
+    Then the title is "New Game"
+    And the game name field shows "Copy Me Again"
+    And these settings are shown:
+      | Target Rounds | 3 |
+    And the players are "Calvin, Lindsay"
+    When I go back
+    Then the title is "Copy Me"
+    When I go back
+    Then the title is "Games"
+
+  Scenario: Closing the app from recents starts a new game over
+    Given I am on the game list
+    When I tap "+"
+    And I type "Thrown Away" as the game name
+    And I close and reopen the app
+    Then the title is "Games"
+    And I don't see "Thrown Away"
 
   @visual
   Scenario Outline: Swiping back slides back to the previous screen (<screen>)

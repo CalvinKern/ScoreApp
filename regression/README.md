@@ -44,7 +44,7 @@ scenario in the same change.
 | [12_settings](features/12_settings.feature) | Every switch on the Settings screen |
 | [13_seeded_games](features/13_seeded_games.feature) | All 30 games from `scripts/test-data/seed.sql`, with their expected totals |
 | [14_full_games](features/14_full_games.feature) | Real games played from the first round to the standings |
-| [15_device](features/15_device.feature) | Rotation, landscape, leaving the app, back gestures, other languages |
+| [15_device](features/15_device.feature) | Rotation, landscape, leaving the app, Android closing it in the background, back gestures, other languages |
 
 ## Tags
 
@@ -117,6 +117,7 @@ defaults:
 | `When I go back` | The system back gesture or button (`adb shell input keyevent KEYCODE_BACK`) |
 | `When I close and reopen the app` | Swipe it away from recents (or `adb shell am force-stop`), then open it again |
 | `When I force stop the app` | `adb shell am force-stop com.seakernel.scorepad.debug`, without closing any screen first |
+| `When Android closes the app in the background` | Press Home, kill the app while it's in the background, and open it again from its launcher icon (see [Driving the app with adb](#driving-the-app-with-adb)). Android does this on its own to free memory, and the app comes back on the same screen, rebuilt from what it saved. Unlike `I close and reopen the app`, which throws the saved screens away and starts on the game list. |
 
 ### Checking things
 
@@ -170,6 +171,7 @@ than one emulator or phone connected, also `export ANDROID_SERIAL=<one from adb 
 | To | Run |
 |---|---|
 | Open the app | `adb shell am start -n com.seakernel.scorepad.debug/com.seakernel.android.scoreapp.ui.MainActivity` |
+| Open the app from its launcher icon | `adb shell monkey -p com.seakernel.scorepad.debug -c android.intent.category.LAUNCHER 1`. Use this to come back after Android closes the app: `am start -n` opens the screens in a separate task instead of the ones Android saved. |
 | Read the screen | `adb shell uiautomator dump /sdcard/ui.xml >/dev/null && adb exec-out cat /sdcard/ui.xml` |
 | Tap | `adb shell input tap X Y`, the middle of a node's `bounds="[x1,y1][x2,y2]"` |
 | Long press | `adb shell input swipe X Y X Y 800` |
@@ -180,6 +182,7 @@ than one emulator or phone connected, also `export ANDROID_SERIAL=<one from adb 
 | Back button, Home, Recents | `adb shell input keyevent KEYCODE_BACK` / `KEYCODE_HOME` / `KEYCODE_APP_SWITCH` |
 | Screenshot | `adb exec-out screencap -p > name.png` |
 | Force stop, kill in background | `adb shell am force-stop <package>`, `adb shell am kill <package>` |
+| Close the app the way Android does in the background | `KEYCODE_HOME`, wait about two seconds, then `adb shell am kill <package>`. It only kills an app that's in the background, so check `adb shell pidof <package>` prints nothing, or end it with `adb shell run-as <package> kill -9 <pid>`. |
 | Rotate | `adb shell settings put system accelerometer_rotation 0`, then `user_rotation 1` (landscape) or `0` |
 | Dark mode | `adb shell cmd uimode night yes` / `no` |
 | Font size | `adb shell settings put system font_scale 1.3` (`1.0` to reset) |

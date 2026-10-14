@@ -6,12 +6,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import com.hadilq.liveevent.LiveEvent
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.utility.AppPreferences
 import com.seakernel.android.scoreapp.utility.safePostValue
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +26,14 @@ import kotlinx.coroutines.withContext
 import org.threeten.bp.ZonedDateTime
 import java.util.Collections
 
-class GameSetupViewModel(application: Application) : AndroidViewModel(application) {
+/**
+ * @param savedState keeps a new game being set up when Android closes the app in the background (see [NewGameSetup]).
+ * Existing games don't need it, they save to the database when the screen stops.
+ */
+class GameSetupViewModel(
+    application: Application,
+    private val savedState: SavedStateHandle,
+) : AndroidViewModel(application) {
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.Default + job)
@@ -55,8 +64,20 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     // Picks are applied one at a time in order, so an older pick can't finish loading after a newer one
     private val playersLock = Mutex()
 
+    // A new game is kept in the saved state as it changes, to bring it back after Android closes the app
+    private val newGameObserver = Observer<GameSettings?> { settings ->
+        if (settings != null && settings.id == null) savedState[KEY_NEW_GAME] = NewGameSetup.of(settings)
+    }
+
+    // A new game coming back from the saved state, which takes the place of starting one (see initializeGame and
+    // createCopy). Picks wait for it, so they apply to the game that came back.
+    private val restoredNewGame: NewGameSetup? = savedState[KEY_NEW_GAME]
+    private val newGameRestored = CompletableDeferred<Unit>()
+
     init {
         gameSettings.observeForever(autoSaveObserver)
+        gameSettings.observeForever(newGameObserver)
+        restoreNewGame()
     }
     private val gameNamesAutocomplete = MutableLiveData<List<String>?>().apply { value = null }
 
@@ -65,7 +86,24 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     override fun onCleared() {
         super.onCleared()
         gameSettings.removeObserver(autoSaveObserver)
+        gameSettings.removeObserver(newGameObserver)
         job.cancel()
+    }
+
+    /** Brings back a new game from the saved state, with its players as they are now */
+    private fun restoreNewGame() {
+        val setup = restoredNewGame
+        if (setup == null) {
+            newGameRestored.complete(Unit)
+            return
+        }
+        scope.launch {
+            val players = playerRepository.loadActiveUsers(setup.playerIds)
+            withContext(Dispatchers.Main) {
+                gameSettings.value = setup.toSettings(players)
+                newGameRestored.complete(Unit)
+            }
+        }
     }
 
     fun isSaving(): LiveData<Boolean> = saveProcessing
@@ -83,7 +121,8 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     @MainThread
     fun updateGameName(name: String) {
-        gameSettings.value = gameSettings.value!!.copy(name = name)
+        val settings = gameSettings.value ?: return // Not loaded yet, its name shows once it is
+        gameSettings.value = settings.copy(name = name)
     }
 
     @MainThread
@@ -109,12 +148,12 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     @MainThread
     fun setMaxScore(maxScore: Double?) {
         // A limit of 0 would end the game before it starts, so treat it as no limit
-        gameSettings.value = gameSettings.value!!.copy(maxScore = maxScore?.takeIf { it > 0 })
+        gameSettings.value = (gameSettings.value ?: return).copy(maxScore = maxScore?.takeIf { it > 0 })
     }
 
     @MainThread
     fun setMaxRounds(maxRounds: Int?) {
-        gameSettings.value = gameSettings.value!!.copy(maxRounds = maxRounds?.takeIf { it > 0 })
+        gameSettings.value = (gameSettings.value ?: return).copy(maxRounds = maxRounds?.takeIf { it > 0 })
     }
 
     /** Creates the new game being set up, existing games save their changes with [saveChanges] instead */
@@ -213,6 +252,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     fun updateForNewPlayers(playerIds: List<Long>) {
         scope.launch {
             playersLock.withLock {
+                newGameRestored.await()
                 val newPlayers = playerRepository.loadUsers(playerIds)
                 withContext(Dispatchers.Main) {
                     // Picks arrive while the picker is open, so they apply to the settings as they are once loaded
@@ -261,7 +301,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
     fun createCopy(gameId: Long, initialDealerId: Long?) {
         loadGameNames()
 
-        if (gameSettings.value != null) return
+        if (gameSettings.value != null || restoredNewGame != null) return // Opened already, or coming back
 
         scope.launch {
             gameRepository.loadGame(gameId)?.let {
@@ -306,7 +346,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     @MainThread
     fun initializeGame() {
-        if (gameSettings.value == null) {
+        if (gameSettings.value == null && restoredNewGame == null) { // Not opened already, or coming back
             gameSettings.value = GameSettings(useCalculator = AppPreferences.isCalculatorDefaultEnabled(getApplication()))
         }
         loadGameNames()
@@ -322,6 +362,7 @@ class GameSetupViewModel(application: Application) : AndroidViewModel(applicatio
 
     companion object {
         private const val AUTO_SAVE_DELAY_MS = 1_500L
+        private const val KEY_NEW_GAME = "new_game"
     }
 }
 

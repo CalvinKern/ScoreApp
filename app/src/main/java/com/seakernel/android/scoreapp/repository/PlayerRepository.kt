@@ -23,6 +23,14 @@ class PlayerRepository(val context: Context) {
             .sortedBy { p -> ids.indexOf(p.id) }
     }
 
+    /** The players with these ids, in the same order, leaving out any that were deleted */
+    fun loadActiveUsers(ids: List<Long>): List<Player> {
+        return playerDao.loadAllByIds(ids.toLongArray())
+            .filterNot { it.archived }
+            .map { it.toPlayer() }
+            .sortedBy { p -> ids.indexOf(p.id) }
+    }
+
     fun addOrUpdateUser(playerId: Long?, playerName: String, color: Int?): Player {
         val id = if (playerId == null) {
             playerDao.insertAll(arrayOf(PlayerEntity(0, playerName, false, color)))[0]
