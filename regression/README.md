@@ -225,7 +225,8 @@ Things that trip up a run:
 - Confetti lasts about a second. Catch it with a burst of on-device screenshots started just before the step:
   `adb shell 'for i in 1 2 3 4 5 6 7 8; do screencap -p /sdcard/c$i.png; done' &`. Totals update while a score is
   typed, so it bursts as soon as a total reaches the goal, on the key that gets it there (like the last digit of
-  `50+20+6`), not when `=` is pressed. Start the burst before that key. Clearing a score with DEL counts too: going
+  `50+20+6`), not when `=` is pressed. Start the burst before that key. When `=` closes the keypad within about half
+  a second of that key, the burst waits for the keypad to hide and comes from where the total ends up. Clearing a score with DEL counts too: going
   from `-60` back to `-6` can bring a total back over the target, so start the burst before clearing. Reaching the
   target bursts only once a round, so a missed burst can't be caught again by editing the same round. Play it again in
   a later round or a new game.

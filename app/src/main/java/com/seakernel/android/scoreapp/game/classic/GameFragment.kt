@@ -15,6 +15,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
@@ -379,6 +380,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
             private var lastLeadPlayerIds: List<Long> = emptyList()
             private var lastCelebratedPlayerId: Long? = null
             private var confettiJob: Job? = null
+            private var celebrationJob: Job? = null
             private var pendingSingleLeadId: Long? = null
 
             // Whether the target score was reached when confetti was last checked, and the last round it was first
@@ -464,7 +466,9 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
 
                     if (focusLost) {
                         confettiJob?.cancel()
-                        triggerConfettiIfChanged()
+                        // The keypad hides a moment after the score loses focus, moving the totals down, so the
+                        // confetti waits for that to come from where the total ends up
+                        triggerConfettiIfChanged(celebrateAfterMs = CalculatorKeyboardView.HIDE_DELAY_MS)
                     } else if (scoreChanged) {
                         confettiJob?.cancel()
                         confettiJob = lifecycleScope.launch {
@@ -481,7 +485,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
              * Once the target score is reached, celebrates the leader when someone first reaches it in a round, and
              * whenever someone else takes the lead
              */
-            private fun triggerConfettiIfChanged() {
+            private fun triggerConfettiIfChanged(celebrateAfterMs: Long = 0) {
                 val model = lastModel ?: return
                 val goalReached = model.hasReachedGoalScore()
                 val roundId = model.rounds.lastOrNull()?.id
@@ -494,16 +498,25 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 lastCelebratedPlayerId = leadId
                 if (firstReachedThisRound) goalScoreCelebratedRoundId = roundId
 
-                val adapter = binding.totalsRow.adapter as? TotalsAdapter
-                val position = adapter?.getPlayerPosition(leadId) ?: -1
-                if (position != -1) {
-                    val holder = binding.totalsRow.findViewHolderForAdapterPosition(position) as? ScoreViewHolder
-                    holder?.celebrate()
+                celebrationJob?.cancel()
+                celebrationJob = lifecycleScope.launch {
+                    delay(celebrateAfterMs.milliseconds)
+                    // Each model swaps in a new totals adapter, which has no view holders until it lays out, so wait
+                    // for that (losing focus right after the score changes checks before the totals lay out again)
+                    _binding?.totalsRow?.post {
+                        val totalsRow = _binding?.totalsRow ?: return@post
+                        val position = (totalsRow.adapter as? TotalsAdapter)?.getPlayerPosition(leadId) ?: -1
+                        if (position != -1) {
+                            val holder = totalsRow.findViewHolderForAdapterPosition(position) as? ScoreViewHolder
+                            holder?.celebrate()
+                        }
+                    }
                 }
             }
 
             override fun dispose() {
                 confettiJob?.cancel()
+                celebrationJob?.cancel()
             }
         }
     }

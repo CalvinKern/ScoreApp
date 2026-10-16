@@ -41,6 +41,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         // Delay just long enough that they stopped typing so it's not too intrusive
         const val DELAY_VALID_COMPUTATION_MESSAGE = 1150L
 
+        // How long the keypad waits to hide once no score has focus, in case focus is moving to another score
+        const val HIDE_DELAY_MS = 100L
+
         const val KEYCODE_EQUALS = KeyEvent.KEYCODE_EQUALS
         const val KEYCODE_NEXT = EditorInfo.IME_ACTION_NEXT
     }
@@ -109,7 +112,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         if (inputText == null) {
             // Delay hiding slightly to allow for focus transitions between scores (e.g. when adding a round)
             hideJob = GlobalScope.launch(Dispatchers.Main) {
-                delay(100.milliseconds)
+                delay(HIDE_DELAY_MS.milliseconds)
                 if (!isAttachedToWindow) return@launch
 
                 inputView = null
