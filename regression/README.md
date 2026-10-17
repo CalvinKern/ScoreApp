@@ -15,6 +15,7 @@ scenario in the same change.
 2. Get the device ready:
 
    ```bash
+   scripts/emulator-lock.sh acquire Pixel_9a           # Keep other checkouts off it while you test
    ./gradlew installDebug                              # The build under test
    scripts/emulator-db.sh backup before-regression     # Keep the device's own test data
    ```
@@ -22,12 +23,16 @@ scenario in the same change.
    With more than one emulator or phone connected, `export ANDROID_SERIAL=<the one under test>` first. Without it,
    `installDebug` installs on every connected device, and the adb commands fail.
 
+   The lock stops testing from two checkouts (worktrees) at once from installing over each other's build or clearing
+   each other's data. The emulator scripts take it themselves and stop when another checkout holds it, and so do
+   Gradle's install tasks. If it's held, use another emulator (`scripts/emulator-lock.sh status` shows who has what).
+
    Before each `@seed` scenario that changes data, `scripts/emulator-db.sh seed` (it's quick, and a clean seed means
    one scenario can't break the next). Before each `@fresh` scenario, `adb shell pm clear com.seakernel.scorepad.debug`.
 3. Run each scenario's steps as defined below, and record the result (see [Recording a run](#recording-a-run)).
 4. Put the device back: `scripts/emulator-db.sh restore <the before-regression backup>`, and undo anything else that
    changed (rotation, language, font size, dark mode, right to left). `pm clear` also clears the app's settings, so
-   note them first if they matter.
+   note them first if they matter. Then `scripts/emulator-lock.sh release Pixel_9a`.
 
 ## Files
 

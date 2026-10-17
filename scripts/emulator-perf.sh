@@ -12,7 +12,8 @@
 #
 # Works with debug builds only (the app's trace sections need a debuggable app), and in Git Bash on Windows,
 # macOS, and Linux. Set ANDROID_SERIAL to pick a device when more than one is connected, PACKAGE to use another
-# build, and SWIPES to change how many swipes go each way (6 by default).
+# build, and SWIPES to change how many swipes go each way (6 by default). Takes the device's lock first (see
+# emulator-lock.sh), and stops if another checkout holds it.
 
 set -euo pipefail
 
@@ -44,8 +45,11 @@ find_adb() {
 
 ADB="$(find_adb)"
 adb() { "$ADB" "$@"; }
+source "$(dirname "${BASH_SOURCE[0]}")/emulator-lock.sh"
 
 check_device() {
+    # Before touching the device, so it's never one another checkout is testing on
+    lock_acquire_target
     if [[ -z "${ANDROID_SERIAL:-}" && "$(adb devices | grep -c $'\tdevice')" -gt 1 ]]; then
         die "More than one device is connected. Set ANDROID_SERIAL to one from 'adb devices'."
     fi
@@ -175,5 +179,5 @@ case "${1:-}" in
         open_app "$2"
         measure "sideways-$(label_for "$2")" swipes_sideways
         ;;
-    *) sed -n '3,16p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 1 ;;
+    *) sed -n '3,17p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 1 ;;
 esac

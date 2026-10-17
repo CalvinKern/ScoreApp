@@ -61,6 +61,8 @@ kotlin {
     jvmToolchain(21)
 }
 
+apply from: "$rootDir/gradle/emulator-lock.gradle"
+
 ext {
     MOBIUS_VERSION = '2.1.1'
     ROOM_VERSION = '2.8.4'

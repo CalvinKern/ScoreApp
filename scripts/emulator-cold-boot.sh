@@ -7,7 +7,8 @@
 #
 # Finds the running emulator by its AVD name, since emulator-55xx serials can swap when emulators restart, closes
 # it, starts it again with -no-snapshot-load, and waits until Android has finished booting. An AVD that isn't
-# running is just started. Prints the emulator's serial when it's ready, for ANDROID_SERIAL.
+# running is just started. Prints the emulator's serial when it's ready, for ANDROID_SERIAL. Takes the AVD's lock
+# first (see emulator-lock.sh), and stops without touching the emulator if another checkout holds it.
 #
 # Works in Git Bash on Windows, macOS, and Linux. Set BOOT_TIMEOUT to change how many seconds to wait for the
 # boot (300 by default).
@@ -19,6 +20,10 @@ export MSYS_NO_PATHCONV=1
 
 AVD="${1:-Pixel_9a}"
 BOOT_TIMEOUT="${BOOT_TIMEOUT:-300}"
+
+# Before anything else, so an emulator another checkout is testing on is never closed
+source "$(dirname "${BASH_SOURCE[0]}")/emulator-lock.sh"
+lock_acquire "$AVD"
 
 die() { echo "Error: $*" >&2; exit 1; }
 info() { echo "==> $*"; }

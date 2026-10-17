@@ -8,6 +8,7 @@ scripts/emulator-db.sh seed               # Replace the app's data with this tes
 scripts/emulator-db.sh backup [label]     # Save the database to db-backups/
 scripts/emulator-db.sh restore [file]     # Put a backup back, the newest when no file is given
 scripts/emulator-db.sh list               # List the backups
+scripts/emulator-lock.sh status           # Which checkout has locked which device (the db script takes the lock)
 ```
 
 Backups are ignored by git. A backup from an older schema restores into a newer app, which migrates it on launch,

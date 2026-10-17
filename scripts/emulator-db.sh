@@ -10,7 +10,8 @@
 #
 # Works with debug builds only (it uses run-as), and in Git Bash on Windows, macOS, and Linux. Needs adb and
 # sqlite3, which both come with the Android SDK platform-tools. Set ANDROID_SERIAL to pick a device when more
-# than one is connected, and PACKAGE to use another build.
+# than one is connected, and PACKAGE to use another build. Takes the device's lock first (see emulator-lock.sh),
+# and stops if another checkout holds it.
 #
 # A backup from an older schema can be restored into a newer app, which then runs its migrations on launch.
 # A backup from a newer schema can't be, since Room doesn't downgrade.
@@ -52,6 +53,7 @@ SQLITE="$(find_tool sqlite3)"
 
 adb() { "$ADB" "$@"; }
 run_as() { adb shell run-as "$PACKAGE" "$@"; }
+source "$(dirname "${BASH_SOURCE[0]}")/emulator-lock.sh"
 
 # sqlite3 can be a native Windows program that can't read Git Bash paths, so it's always run on a file
 # name inside the file's own folder
@@ -66,6 +68,8 @@ app_schema_version() {
 }
 
 check_device() {
+    # Before touching the device, so it's never one another checkout is testing on
+    lock_acquire_target
     if [[ -z "${ANDROID_SERIAL:-}" && "$(adb devices | grep -c $'\tdevice')" -gt 1 ]]; then
         die "More than one device is connected. Set ANDROID_SERIAL to one from 'adb devices'."
     fi
@@ -203,5 +207,5 @@ case "${1:-}" in
     restore) shift; cmd_restore "$@" ;;
     seed) shift; cmd_seed "$@" ;;
     list) shift; cmd_list "$@" ;;
-    *) sed -n '3,17p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 1 ;;
+    *) sed -n '3,18p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 1 ;;
 esac
