@@ -207,10 +207,8 @@ fun MaterialToolbar.setStatusSubtitle(status: CharSequence?, announce: Boolean) 
     // The toolbar doesn't share its subtitle view, so it's found by its text. It only announces once it has a status.
     val current = subtitle?.toString()
     children.filterIsInstance<TextView>().firstOrNull { current != null && it.text.toString() == current }?.let {
-        ViewCompat.setAccessibilityLiveRegion(
-            it,
-            if (announce) ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE else ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE
-        )
+        it.accessibilityLiveRegion =
+            if (announce) View.ACCESSIBILITY_LIVE_REGION_POLITE else View.ACCESSIBILITY_LIVE_REGION_NONE
     }
     subtitle = status
 }
