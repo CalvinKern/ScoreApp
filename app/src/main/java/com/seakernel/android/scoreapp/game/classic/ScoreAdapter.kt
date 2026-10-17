@@ -364,8 +364,9 @@ class ScoreViewHolder(
                         // moving on at the press would send it to the next score, which moves down a round.
                         if (event.action != KeyEvent.ACTION_UP) return@setOnEditorActionListener true
                         if (!isLastScore) {
-                            // On to the next score, like the on-screen key (which the system handles below)
-                            binding.playerScore.focusSearch(View.FOCUS_FORWARD)?.requestFocus()
+                            // On to the next score, the same way as the on-screen key: without an event, this listener
+                            // lets the action through to the system, which moves focus forward
+                            binding.playerScore.onEditorAction(CalculatorKeyboardView.KEYCODE_NEXT)
                             return@setOnEditorActionListener true
                         }
                     }
