@@ -33,7 +33,7 @@ scenario in the same change.
 
 | Feature | Covers |
 |---|---|
-| [01_first_launch](features/01_first_launch.feature) | The usage data question, the empty game list |
+| [01_first_launch](features/01_first_launch.feature) | The empty game list, the usage data question in it |
 | [02_game_list](features/02_game_list.feature) | Order, row details, opening, deleting, games that need players |
 | [03_players](features/03_players.feature) | Picking, adding, renaming, deleting and restoring, searching players |
 | [04_game_setup](features/04_game_setup.feature) | Creating a game, its settings, the dealer, player order, loading previous settings |
@@ -74,7 +74,7 @@ either.
   and again if it gets slow partway through.
 - English (United States), so dates read like `Oct 5, 2026` and decimals use a `.`. Only `@locale` scenarios change it.
 - Portrait, unless a scenario rotates it
-- The usage data question answered (either way) unless a scenario says otherwise
+- The usage data question answered (either way) unless a scenario says otherwise, so its card isn't in the game list
 
 ## Steps
 
@@ -86,8 +86,8 @@ are the names shown in the game, unquoted when a step names a player (`Lindsay i
 
 | Step | How |
 |---|---|
-| `Given a fresh install` | Clear the app's data and open it. The usage data question shows. |
-| `Given a fresh install with the usage data question answered` | Clear the app's data, open it, and answer "Don't allow" |
+| `Given a fresh install` | Clear the app's data and open it. The game list is empty and nothing is asked. |
+| `Given a fresh install with the usage data question answered` | Clear the app's data, open it, tap the Settings icon, tap the row "Send Crash Reports" twice (on, then off), and go back. Changing a switch answers the question, so its card never shows in the game list. |
 | `Given the seed data is loaded` | `scripts/emulator-db.sh seed`, then open the app on the game list |
 | `Given I am on the game list` | Open the app, or go back until the "Games" screen shows |
 | `Given the players "A, B" exist` | Add any of them that aren't already in the player list (from any game's player picker) |
