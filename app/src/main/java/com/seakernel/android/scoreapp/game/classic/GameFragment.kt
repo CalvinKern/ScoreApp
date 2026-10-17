@@ -12,7 +12,9 @@ import androidx.core.view.ViewGroupCompat
 import androidx.core.view.isVisible
 import androidx.core.view.marginEnd
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView
@@ -63,6 +65,10 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
     private var gameRepository: GameRepository? = null
     private var roundRepository: RoundRepository? = null
     private var eventConsumer: Consumer<GameEvent>? = null
+
+    // The game settings saves already counted when the game last loaded (see GameRepository.gameSettingsSaves)
+    @Volatile
+    private var loadedSettingsSaves = -1L
 
     // The number of players the score table is sized for
     private var tablePlayerCount = 0
@@ -193,6 +199,16 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                 viewLifecycleOwner,
                 resultListener
             )
+        }
+
+        // Coming back from Game Settings shows this screen while its changes are still saving, so load the game again
+        // once a save it missed finishes
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                GameRepository.gameSettingsSaves.collect { saves ->
+                    if (loadedSettingsSaves in 0 until saves) eventConsumer?.accept(GameEvent.RequestLoad)
+                }
+            }
         }
     }
 
@@ -550,6 +566,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
                     is GameEffect.FetchData -> {
                         val gameId = arguments?.getLong(ARG_GAME_ID, 0) ?: 0
                         val repository = gameRepository ?: return // The screen closed before the game loaded
+                        loadedSettingsSaves = GameRepository.gameSettingsSaves.value
                         val game = repository.loadFullGame(gameId)
                         when {
                             // The game was deleted, so there's nothing to show

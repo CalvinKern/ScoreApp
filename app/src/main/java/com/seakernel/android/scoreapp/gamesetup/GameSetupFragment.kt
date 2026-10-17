@@ -75,7 +75,11 @@ class GameSetupFragment : Fragment() {
         }
     }
 
-    /** Existing games save their changes when leaving, instead of with a save button */
+    /**
+     * A game that needed players opens once it's saved, so back saves first and then opens it (see
+     * gameUpdatedObserver). Other existing games save as the screen stops (see onStop), so back leaves right away and
+     * the game slides back in under a back gesture.
+     */
     private val saveOnBackCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             isEnabled = false // Leave once, even if back is pressed again while saving
@@ -205,7 +209,7 @@ class GameSetupFragment : Fragment() {
         viewModel.getGameNamesForAutocomplete().observe(viewLifecycleOwner, autocompleteObserver)
         viewModel.getSaveStatus().observe(viewLifecycleOwner, saveStatusObserver)
 
-        if (isExistingGame) {
+        if (isExistingGame && isOpenGameOnSave) {
             saveOnBackCallback.isEnabled = true // Turned off after leaving once, and the view is recreated after picking players
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, saveOnBackCallback)
         }
@@ -232,14 +236,15 @@ class GameSetupFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        // Also save when the app goes to the background (or another screen opens), in case it's closed from there
+        // Save when leaving with back, and when the app goes to the background (or another screen opens), in case
+        // it's closed from there
         if (isExistingGame && !requireActivity().isChangingConfigurations) {
             viewModel.saveChanges(exit = false)
         }
     }
 
     private fun initToolbar() {
-        // Leaving an existing game saves its changes (see saveOnBackCallback), leaving a new game discards it
+        // Leaving an existing game saves its changes (see onStop and saveOnBackCallback), leaving a new game discards it
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.setTitle(if (isExistingGame) R.string.gameSettingsTitle else R.string.gameCreateTitle)
         binding.toolbar.inflateMenu(R.menu.menu_game_create)

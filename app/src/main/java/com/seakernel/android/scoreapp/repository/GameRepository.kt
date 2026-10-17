@@ -7,6 +7,10 @@ import com.seakernel.android.scoreapp.database.daos.GameDao
 import com.seakernel.android.scoreapp.database.entities.GameEntity
 import com.seakernel.android.scoreapp.database.entities.GamePlayerJoin
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 /**
  * Created by Calvin on 12/21/18.
@@ -72,7 +76,13 @@ class GameRepository(val context: Context) {
         id
     }
 
-    fun updateGame(settings: GameSettings) = database.runInTransaction(Runnable {
+    /** Saves a game's settings and players, and counts the save in [gameSettingsSaves] once it's done */
+    fun updateGame(settings: GameSettings) {
+        saveGame(settings)
+        settingsSaves.update { it + 1 }
+    }
+
+    private fun saveGame(settings: GameSettings) = database.runInTransaction(Runnable {
         // All or nothing, so a failure can't leave players without scores for some rounds
         val originalPlayerIds = gamePlayerDao.getPlayersForGame(settings.id!!).map { it.uid }
         val game = settings.toGameEntity()
@@ -158,5 +168,15 @@ class GameRepository(val context: Context) {
                 score.scoreInput,
             )
         }
+    }
+
+    companion object {
+        private val settingsSaves = MutableStateFlow(0L)
+
+        /**
+         * How many times any game's settings have been saved. Game Settings saves as it closes, so the game it goes
+         * back to can load before the save finishes, and watches this to load again.
+         */
+        val gameSettingsSaves: StateFlow<Long> = settingsSaves.asStateFlow()
     }
 }

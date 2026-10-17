@@ -14,9 +14,11 @@ import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.utility.AppPreferences
 import com.seakernel.android.scoreapp.utility.safePostValue
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -209,12 +211,15 @@ class GameSetupViewModel(
         savedSettings = settings
         runningSaves++
         updateSaveStatus()
-        scope.launch(saveDispatcher) {
-            gameRepository.updateGame(settings)
-            gameUpdatedEvent.safePostValue(update)
-            withContext(Dispatchers.Main) {
-                runningSaves--
-                updateSaveStatus()
+        // Leaving with back saves as the screen stops, right before this is cleared, so the save has to finish anyway
+        scope.launch(saveDispatcher, start = CoroutineStart.ATOMIC) {
+            withContext(NonCancellable) {
+                gameRepository.updateGame(settings)
+                gameUpdatedEvent.safePostValue(update)
+                withContext(Dispatchers.Main) {
+                    runningSaves--
+                    updateSaveStatus()
+                }
             }
         }
     }
