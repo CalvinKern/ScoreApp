@@ -202,6 +202,10 @@ Things that trip up a run:
   it too. Names that start like an earlier game's (like "Calc 0" after "Calc 0.3") open it too.
 - Scrolling with a swipe while the keyboard is up can land on the keyboard and glide-type into the focused field.
   Hide the keyboard first.
+- `input swipe` waits for the app to take each event, and when the app is slow to take the press (a slow emulator
+  still drawing the last tap) it skips every move and lifts at the end. The app sees a tap that lifts far away, which
+  most rows count as a tap on where the swipe started. Pick Players' rows ignore it, other screens don't, so wait a
+  couple of seconds after a tap before scrolling.
 - The "Deleted <name>" snackbar on Pick Players goes away after about two seconds, so tap "Undo" from the same dump
   that found it.
 - Only the rows on screen are in the dump. With the keyboard up, the newest round is the lowest row of `playerScore`

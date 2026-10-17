@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.TextView
@@ -43,6 +45,25 @@ fun View.setVisible(visible: Boolean = true) {
 fun View.setBackgroundRipple() = with(TypedValue()) {
     context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
     setBackgroundResource(resourceId)
+}
+
+/**
+ * Keeps a press that lifts outside this view from counting as a click. A view clicks on any lift after a press, and
+ * only a move outside it cancels the press, so a swipe whose moves never reached the view would click what it started
+ * on. adb's `input swipe` drops all of its moves when the app is slow to take the press.
+ */
+@SuppressLint("ClickableViewAccessibility") // Clicks still go through performClick, only far lifts are cancelled
+fun View.ignoreLiftsOutside() {
+    val slop = ViewConfiguration.get(context).scaledTouchSlop
+    setOnTouchListener { view, event ->
+        val outside = event.x < -slop || event.y < -slop || event.x > view.width + slop || event.y > view.height + slop
+        if (event.actionMasked != MotionEvent.ACTION_UP || !outside) return@setOnTouchListener false
+
+        val cancel = MotionEvent.obtain(event).apply { action = MotionEvent.ACTION_CANCEL }
+        view.onTouchEvent(cancel)
+        cancel.recycle()
+        true
+    }
 }
 
 /** Resolves a color attribute (e.g. `R.attr.colorOnSurface`) from this context's theme */

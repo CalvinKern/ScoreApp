@@ -8,6 +8,7 @@ import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.HolderPlayerSelectListBinding
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.ignoreLiftsOutside
 import com.seakernel.android.scoreapp.utility.logEvent
 import com.spotify.mobius.functions.Consumer
 
@@ -52,6 +53,13 @@ class PlayerListViewHolder(parent: ViewGroup) :
             false
         )
     ) {
+
+    init {
+        // A drag that starts on a row doesn't pick, edit, or check the player
+        itemView.ignoreLiftsOutside()
+        binding.playerCheckHolder.ignoreLiftsOutside()
+        binding.playerNameSettings.ignoreLiftsOutside()
+    }
 
     fun bind(player: Player, isSelected: Boolean, eventConsumer: Consumer<PlayerEvent>) {
         binding.playerNameHolder.text = player.name
