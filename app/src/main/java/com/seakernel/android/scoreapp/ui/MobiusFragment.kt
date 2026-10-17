@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
  * Created by Calvin on 12/21/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
-abstract class MobiusFragment<M, E, F> : Fragment() {
+abstract class MobiusFragment<M : Any, E : Any, F : Any> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

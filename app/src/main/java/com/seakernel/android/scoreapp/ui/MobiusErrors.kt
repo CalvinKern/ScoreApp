@@ -30,7 +30,7 @@ object MobiusErrors {
 }
 
 /** Reports exceptions thrown by a loop's init or update function */
-class ReportingLogger<M, E, F>(private val context: () -> Context?) : MobiusLoop.Logger<M, E, F> {
+class ReportingLogger<M : Any, E : Any, F : Any>(private val context: () -> Context?) : MobiusLoop.Logger<M, E, F> {
     override fun beforeInit(model: M) = Unit
     override fun afterInit(model: M, result: First<M, F>) = Unit
     override fun beforeUpdate(model: M, event: E) = Unit
@@ -44,7 +44,7 @@ class ReportingLogger<M, E, F>(private val context: () -> Context?) : MobiusLoop
 }
 
 /** Reports exceptions thrown while handling an effect */
-fun <F> Connection<F>.reportingErrors(context: () -> Context?): Connection<F> {
+fun <F : Any> Connection<F>.reportingErrors(context: () -> Context?): Connection<F> {
     val connection = this
     return object : Connection<F> {
         override fun accept(value: F) {
