@@ -141,7 +141,7 @@
     <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
     <string name="podiumDescription">Podium, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Partajați datele de utilizare?</string>
-    <string name="usageDataConsentMessage">Trimiteți statistici de utilizare și rapoarte de erori pentru a ajuta la îmbunătățirea aplicației? Acestea sunt colectate de Google Firebase. Numele și scorurile nu sunt partajate niciodată.\n\nPuteți modifica oricând fiecare opțiune separat din Setări.</string>
+    <string name="usageDataConsentMessage">Trimiteți statistici de utilizare și rapoarte de erori pentru a ajuta la îmbunătățirea aplicației? Acestea sunt colectate de Google Firebase. Numele și scorurile nu sunt partajate niciodată.</string>
     <string name="usageDataConsentAllow">Permiteți</string>
     <string name="usageDataConsentDeny">Nu permiteți</string>
 </resources>

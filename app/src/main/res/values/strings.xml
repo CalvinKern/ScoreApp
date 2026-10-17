@@ -50,7 +50,7 @@
     <string name="settingsCrashReportsSummary">Send a report when the app crashes, to help fix it. Names and scores are never shared.</string>
     <!-- Asked once on first launch, nothing is shared until the user answers -->
     <string name="usageDataConsentTitle">Share usage data?</string>
-    <string name="usageDataConsentMessage">Send usage statistics and crash reports to help improve the app? They are collected by Google Firebase. Names and scores are never shared.\n\nYou can change each one separately anytime in Settings.</string>
+    <string name="usageDataConsentMessage">Send usage statistics and crash reports to help improve the app? They are collected by Google Firebase. Names and scores are never shared.</string>
     <string name="usageDataConsentAllow">Allow</string>
     <string name="usageDataConsentDeny">Don\'t allow</string>
     <string name="settingsChangelogSummary">See what\'s new in each release</string>

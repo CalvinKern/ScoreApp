@@ -135,7 +135,7 @@
     <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
     <string name="podiumDescription">Podium, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">Bagikan data penggunaan?</string>
-    <string name="usageDataConsentMessage">Kirim statistik penggunaan dan laporan error untuk membantu meningkatkan aplikasi? Data ini dikumpulkan oleh Google Firebase. Nama dan skor tidak pernah dibagikan.\n\nAnda dapat mengubah masing-masing secara terpisah kapan saja di Setelan.</string>
+    <string name="usageDataConsentMessage">Kirim statistik penggunaan dan laporan error untuk membantu meningkatkan aplikasi? Data ini dikumpulkan oleh Google Firebase. Nama dan skor tidak pernah dibagikan.</string>
     <string name="usageDataConsentAllow">Izinkan</string>
     <string name="usageDataConsentDeny">Jangan izinkan</string>
 </resources>

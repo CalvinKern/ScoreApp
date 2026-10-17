@@ -8,8 +8,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 /**
  * Usage statistics (Analytics) and crash reports (Crashlytics) are shared only with the user's consent, asked for
- * both at once with [com.seakernel.android.scoreapp.ui.UsageDataConsentDialog] and changed separately in settings
- * afterwards. Both are off in the manifest, so nothing is collected before the user answers.
+ * both at once with [com.seakernel.android.scoreapp.gamelist.UsageDataCardAdapter] once a game has been made, and
+ * changed separately in settings afterwards. Both are off in the manifest, so nothing is collected before the user
+ * answers.
  */
 object UsageData {
 

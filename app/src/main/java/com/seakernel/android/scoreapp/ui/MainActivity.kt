@@ -88,9 +88,6 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Con
                 )
                 .commit()
         }
-
-        // Ask once whether usage data can be shared, nothing is shared until then
-        UsageDataConsentDialog.showIfNeeded(this)
     }
 
     override fun onShowPlayerSelectScreen(playerIds: List<Long>, savesAutomatically: Boolean) {

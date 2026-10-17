@@ -141,7 +141,7 @@
     <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
     <string name="podiumDescription">Podio, %1$s. %2$s</string>
     <string name="usageDataConsentTitle">¿Compartir datos de uso?</string>
-    <string name="usageDataConsentMessage">¿Enviar estadísticas de uso e informes de fallos para ayudar a mejorar la aplicación? Los recopila Google Firebase. Los nombres y las puntuaciones nunca se comparten.\n\nPuede cambiar cada uno por separado en cualquier momento en Ajustes.</string>
+    <string name="usageDataConsentMessage">¿Enviar estadísticas de uso e informes de fallos para ayudar a mejorar la aplicación? Los recopila Google Firebase. Los nombres y las puntuaciones nunca se comparten.</string>
     <string name="usageDataConsentAllow">Permitir</string>
     <string name="usageDataConsentDeny">No permitir</string>
 </resources>

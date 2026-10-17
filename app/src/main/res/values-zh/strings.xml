@@ -135,7 +135,7 @@
     <string name="graphPlayerRoundsDescription">%1$s：%2$s</string>
     <string name="podiumDescription">领奖台，%1$s。%2$s</string>
     <string name="usageDataConsentTitle">共享使用情况数据？</string>
-    <string name="usageDataConsentMessage">发送使用情况统计信息和崩溃报告以帮助改进应用？这些数据由 Google Firebase 收集。我们绝不会分享姓名和分数。\n\n您可以随时在设置中分别更改这两个选项。</string>
+    <string name="usageDataConsentMessage">发送使用情况统计信息和崩溃报告以帮助改进应用？这些数据由 Google Firebase 收集。我们绝不会分享姓名和分数。</string>
     <string name="usageDataConsentAllow">允许</string>
     <string name="usageDataConsentDeny">不允许</string>
 </resources>

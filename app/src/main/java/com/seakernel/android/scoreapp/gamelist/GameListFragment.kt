@@ -9,12 +9,15 @@ import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.databinding.FragmentGameListBinding
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.AppPreferences
+import com.seakernel.android.scoreapp.utility.UsageData
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
@@ -43,12 +46,19 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private var gameRepository: GameRepository? = null
+    private var appContext: Context? = null // For effects, which run off the main thread
     private var listener: GameListListener? = null
     private var _binding: FragmentGameListBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    // The usage data card and the games keep their own ids, and their view types never overlap
+    private val listAdapterConfig = ConcatAdapter.Config.Builder()
+        .setIsolateViewTypes(false)
+        .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
+        .build()
 
     init {
         loop = createLoop(ListModel.Companion::update)
@@ -59,6 +69,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         super.onAttach(context)
 
         gameRepository = GameRepository(requireContext())
+        appContext = context.applicationContext
         listener = context as? GameListListener
     }
 
@@ -66,6 +77,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         super.onDetach()
 
         gameRepository = null
+        appContext = null
         listener = null
     }
 
@@ -137,7 +149,11 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 binding.gameListEmptyGroup.setVisible(!model.isLoading && model.gameList.isEmpty())
 
                 binding.gameRecycler.swapAdapter(
-                    GameListAdapter(model.gameList, eventConsumer),
+                    ConcatAdapter(
+                        listAdapterConfig,
+                        UsageDataCardAdapter(model.showUsageDataCard, eventConsumer),
+                        GameListAdapter(model.gameList, eventConsumer)
+                    ),
                     true
                 )
             }
@@ -167,9 +183,13 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                     is ListEffect.FetchData -> {
                         eventConsumer.accept(
                             ListEvent.Loaded(
-                                gameRepository?.loadAllGames() ?: listOf()
+                                gameRepository?.loadAllGames() ?: listOf(),
+                                askUsageData = appContext?.let { !AppPreferences.hasAnsweredShareUsageData(it) } == true
                             )
                         )
+                    }
+                    is ListEffect.SaveUsageDataAnswer -> {
+                        appContext?.let { UsageData.setShareEnabled(it, effect.allowed) }
                     }
                 }
             }
