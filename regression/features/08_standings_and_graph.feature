@@ -82,17 +82,24 @@ Feature: Standings and the graph
     And the rounds along the bottom are numbered from 1
     And the legend names "Calvin" and "Lindsay"
 
+  # Every other round (2, 4, ...) is labeled, so the labels don't crowd each other
   @visual
-  Scenario: Tapping a point shows that player's totals
+  Scenario: Tapping a point shows that player's totals on every other round
     Given a game "Graph Tap" with players "Calvin, Lindsay"
     And I play these rounds:
       | Calvin | Lindsay |
       | 10     | 5       |
       | 10     | 5       |
+      | 10     | 5       |
+      | 10     | 5       |
     When I choose "Show Graph" from the game menu
     And I tap Calvin's point for round 2
-    Then the values "10" and "20" show on Calvin's line
+    Then the values "20" and "40" show on Calvin's line, over rounds 2 and 4
+    And no values show over rounds 1 and 3
     And no values show on Lindsay's line
+    When I tap Lindsay's point for round 3
+    Then the values "10" and "20" show on Lindsay's line, over rounds 2 and 4
+    And no values show on Calvin's line
 
   @smoke @visual
   Scenario: The podium shows totals best first, in the players' colors
