@@ -113,6 +113,7 @@ defaults:
 | `When I type "<input>" on the calculator` | Tap the calculator keys for each character, without pressing `=` |
 | `When I type these on the calculator, tapping "->" after each: ...` | Type each value, then tap `->`, which moves to the next score, and adds a round after the last one |
 | `When I long press <target>` | Hold it for about a second (`adb shell input swipe x y x y 800`) |
+| `When I tap the rows "A" and "B" quickly` | Tap both within about a second (`adb shell "input tap X1 Y1; input tap X2 Y2"`), before the first pick saves |
 | `When I go back` | The system back gesture or button (`adb shell input keyevent KEYCODE_BACK`) |
 | `When I close and reopen the app` | Swipe it away from recents (or `adb shell am force-stop`), then open it again |
 | `When I force stop the app` | `adb shell am force-stop com.seakernel.scorepad.debug`, without closing any screen first |
@@ -161,7 +162,8 @@ running totals and the podium order.
 
 ### Driving the app with adb
 
-For scripts and agents. In Git Bash, `export MSYS_NO_PATHCONV=1` first so device paths aren't rewritten.
+For scripts and agents. In Git Bash, `export MSYS_NO_PATHCONV=1` first so device paths aren't rewritten. With more
+than one emulator or phone connected, also `export ANDROID_SERIAL=<one from adb devices>`, or every adb command fails.
 
 | To | Run |
 |---|---|
@@ -205,9 +207,19 @@ Things that trip up a run:
 - `input swipe` waits for the app to take each event, and when the app is slow to take the press (a slow emulator
   still drawing the last tap) it skips every move and lifts at the end. The app sees a tap that lifts far away, which
   most rows count as a tap on where the swipe started. Pick Players' rows ignore it, other screens don't, so wait a
-  couple of seconds after a tap before scrolling.
+  couple of seconds after a tap before scrolling. A long press can turn into a tap the same way, so check that its
+  dialog opened.
 - The "Deleted <name>" snackbar on Pick Players goes away after about two seconds, so tap "Undo" from the same dump
-  that found it.
+  that found it. On a slow emulator a dump can take longer than the snackbar lasts. Then dump and tap on the device
+  instead: `adb shell 'for i in 1 2 3 4 5 6 7 8; do uiautomator dump /sdcard/u.xml >/dev/null; if grep -q "Deleted
+  Taylor" /sdcard/u.xml; then input tap X Y; break; fi; done'`, with X Y from a screenshot of the snackbar.
+- `uiautomator dump` sometimes fails with "null root node" (often while a screen or dialog is still drawing). Wait a
+  second and dump again.
+- `input text` sometimes drops characters on a slow emulator. Read the field back from a dump, and clear it
+  (`KEYCODE_MOVE_END`, then `KEYCODE_DEL`s) and type again when it doesn't match.
+- Rows partly under the gesture bar at the bottom don't reliably take taps or long presses. Scroll them up first.
+- In the player dialog, the swatch that's picked has `selected="true"` (not `checked`), and an empty color field
+  reads as its label and hint (`Color, 1976D2`).
 - Only the rows on screen are in the dump. With the keyboard up, the newest round is the lowest row of `playerScore`
   cells inside `scoreRows`.
 - Confetti lasts about a second. Catch it with a burst of on-device screenshots started just before the step:

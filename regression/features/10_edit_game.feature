@@ -143,8 +143,8 @@ Feature: Editing a game in progress
     Given a game "Keep Both" with players "Calvin, Lindsay"
     When I choose "Edit" from the game menu
     And I tap "EDIT"
-    And I tap the row "Calvin"
-    And I tap the row "Lindsay"
+    # Picks save about 1.5 s after each change, so a slower second tap first saves Lindsay alone
+    And I tap the rows "Calvin" and "Lindsay" quickly
     Then the subtitle is "Empty player list isn't saved"
     When I go back
     Then the subtitle is "Empty player list isn't saved"
@@ -171,8 +171,8 @@ Feature: Editing a game in progress
     And I enter "5" for Lindsay in round 1
     When I choose "Edit" from the game menu
     And I tap "EDIT"
-    And I tap the row "Calvin"
-    And I tap the row "Lindsay"
+    # Picks save about 1.5 s after each change, so a slower second tap first saves Lindsay alone
+    And I tap the rows "Calvin" and "Lindsay" quickly
     And I tap "Save"
     And I go back
     Then the totals are:
