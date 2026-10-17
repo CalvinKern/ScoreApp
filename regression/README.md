@@ -11,7 +11,8 @@ scenario in the same change.
 
 1. Pick a scope: a tag (`@smoke` before a release), a feature file, or both. `@slow` scenarios can be skipped for a
    quick pass, and `@locale`, `@landscape`, dark mode, and font size scenarios change the device, so run them on
-   purpose.
+   purpose. The plan runs on the debug build. Before a release, also try the release build R8 makes with
+   `scripts/release-check.sh`.
 2. Get the device ready:
 
    ```bash
