@@ -101,7 +101,7 @@ defaults:
 | `Reverse Scoring` | on, off | off |
 | `Show Round Notes` | on, off | off |
 | `Calculator Keyboard` | on, off | on (follows Settings › Calculator Keyboard) |
-| `Target Score` | a number, or blank | blank |
+| `Target Score` | a number (decimals and negatives allowed, a negative one is reached going down), or blank | blank |
 | `Target Rounds` | a number, or blank | blank |
 
 ### Doing things
@@ -111,7 +111,7 @@ defaults:
 | `When I tap "<text>"` | Tap the button, menu item, or row with that text |
 | `When I choose "<item>" from the game menu` | "Standings" is the trophy icon. "Show Graph", "Edit", "Delete Rounds", and "New Game" are in the ⋮ menu. |
 | `When I open the game "<name>"` | Tap its row on the game list (the top one when two have the same name, unless a row number is given) |
-| `When I enter "<input>" for <player> in round <n>` | Tap the score, move the cursor to the end (a tap puts it where the finger landed) and clear it with DEL, type the input, then press `=` on the calculator, or tap outside the score with the system keyboard. Write `×` for multiply; the system keyboard only types digits, `-`, and `.`. |
+| `When I enter "<input>" for <player> in round <n>` | Tap the score, move the cursor to the end (a tap puts it where the finger landed) and clear it with DEL, type the input, then press `=` on the calculator, or with the system keyboard tap the toolbar beside the title (other places outside the score do things: a player's name opens their notes, and the space under the table can be "Add Round"). Write `×` for multiply; the system keyboard only types digits, `-`, and `.`. |
 | `When I play these rounds:` | A table with a column per player and a row per round. Each row is entered into the current round, then "Add Round" is tapped before the next row (not after the last). An empty cell is skipped and stays 0. |
 | `When I tap the round <n> score for <player>` | Tap that player's score in that round (round 1 is the top row) |
 | `When I type "<input>" on the calculator` | Tap the calculator keys for each character, without pressing `=` |
@@ -187,7 +187,7 @@ than one emulator or phone connected, also `export ANDROID_SERIAL=<one from adb 
 | Screenshot | `adb exec-out screencap -p > name.png` |
 | Force stop, kill in background | `adb shell am force-stop <package>`, `adb shell am kill <package>` |
 | Close the app the way Android does in the background | `KEYCODE_HOME`, wait about two seconds, then `adb shell am kill <package>`. It only kills an app that's in the background, so check `adb shell pidof <package>` prints nothing, or end it with `adb shell run-as <package> kill -9 <pid>`. |
-| Rotate | `adb shell settings put system accelerometer_rotation 0`, then `user_rotation 1` (landscape) or `0` |
+| Rotate | `adb shell wm user-rotation lock 1` (landscape) or `lock 0` (portrait), and `wm user-rotation free` to turn auto-rotate back on. Check `adb shell wm user-rotation` first to know what to put back. |
 | Dark mode | `adb shell cmd uimode night yes` / `no` |
 | Font size | `adb shell settings put system font_scale 1.3` (`1.0` to reset) |
 | Right to left | `adb shell settings put global debug.force_rtl 1` (`0` to reset), then restart the app |
@@ -226,6 +226,13 @@ Things that trip up a run:
   second and dump again.
 - `input text` sometimes drops characters on a slow emulator. Read the field back from a dump, and clear it
   (`KEYCODE_MOVE_END`, then `KEYCODE_DEL`s) and type again when it doesn't match.
+- `input text` can't type characters outside ASCII (like "✓" or "李雷"), so type an ASCII stand-in and note it in the
+  results. Text starting with `-` has to be quoted inside the shell command, `adb shell input text "'-50'"`, or
+  `input` reads it as an option.
+- Toasts (like "Please enter a name for the game") aren't in the dump. Take a screenshot right after the tap that
+  shows one, since it's gone in about two seconds.
+- The rotation lock doesn't survive `uiautomator dump`: afterwards `wm user-rotation` reads `free` again and the screen
+  goes back to portrait. Lock it again before each landscape check, and read landscape screens from screenshots.
 - Rows partly under the gesture bar at the bottom don't reliably take taps or long presses. Scroll them up first.
 - In the player dialog, the swatch that's picked has `selected="true"` (not `checked`), and an empty color field
   reads as its label and hint (`Color, 1976D2`).
