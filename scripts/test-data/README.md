@@ -14,6 +14,11 @@ scripts/emulator-lock.sh status           # Which checkout has locked which devi
 Backups are ignored by git. A backup from an older schema restores into a newer app, which migrates it on launch,
 so an old backup is also a quick way to test a migration.
 
+Back up before running the instrumented tests (`./gradlew connectedDebugAndroidTest`, the database migration tests)
+too. Gradle uninstalls the app after them, which deletes its data and settings. `gradle.properties` turns that off
+with `android.injected.androidTest.leaveApksInstalledAfterRun`, but a run without it (an older checkout, or a
+command that overrides it) still uninstalls the app.
+
 The regression plan's [seeded games feature](../../regression/features/13_seeded_games.feature) checks every game
 below opens with the right totals, leader, dealer, and goal state. Update its expected values when this data changes.
 
