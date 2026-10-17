@@ -1,6 +1,7 @@
 Feature: Reaching the goal
   A game's goal is reached when any total reaches the Target Score (in both scoring modes), or when the game has as
-  many rounds as Target Rounds. Then "Finish Game" replaces "Add Round" and asks whether to finish or keep playing.
+  many rounds as Target Rounds. Totals start at 0, so a negative Target Score is reached going down. Then "Finish
+  Game" replaces "Add Round" and asks whether to finish or keep playing. Who wins only depends on Reverse Scoring.
 
   @smoke
   Scenario: Reaching the target score shows Finish Game
@@ -18,6 +19,32 @@ Feature: Reaching the goal
     Then the button after the rounds is "Finish Game"
     When I enter "40" for Calvin in round 1
     Then the button after the rounds is "Add Round"
+
+  Scenario: A negative target score is reached going down, and the highest total still wins
+    Given a game "Negative Goal" with players "Calvin, Lindsay" and settings:
+      | Target Score | -50 |
+    When I enter "-40" for Calvin in round 1
+    Then the button after the rounds is "Add Round"
+    When I enter "-55" for Calvin in round 1
+    Then the button after the rounds is "Finish Game"
+    And Lindsay is leading
+
+  @visual @calculator
+  Scenario: With Reverse Scoring, reaching a negative target score wins with confetti
+    Given a game "Race Down" with players "Calvin, Lindsay" and settings:
+      | Reverse Scoring | on  |
+      | Target Score    | -50 |
+    When I enter "-30" for Lindsay in round 1
+    And I enter "-55" for Calvin in round 1
+    Then the button after the rounds is "Finish Game"
+    And Calvin is leading
+    And confetti bursts from Calvin's total
+    When I tap "Finish Game"
+    And I tap "Finish"
+    Then the standings are:
+      | place | player  | total |
+      | #1    | Calvin  | -55   |
+      | #2    | Lindsay | -30   |
 
   Scenario: With Reverse Scoring, the game still ends when someone reaches the target score
     Given a game "Reverse Goal" with players "Calvin, Lindsay" and settings:

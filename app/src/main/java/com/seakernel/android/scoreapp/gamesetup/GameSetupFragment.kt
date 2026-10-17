@@ -355,8 +355,8 @@ class GameSetupFragment : Fragment() {
         }
         settingsBinding.maxScoreEdit.onFocusChangeListener = targetFocusListener
         settingsBinding.maxRoundsEdit.onFocusChangeListener = targetFocusListener
-        // A target score can have decimals, typed with a '.' or the user's own separator like the scores
-        settingsBinding.maxScoreEdit.keyListener = ScoreKeyListener(signed = false)
+        // A target score is typed like a score, with decimals and a sign (a negative target is reached going down)
+        settingsBinding.maxScoreEdit.keyListener = ScoreKeyListener()
 
         setListenerRow(settingsBinding.hasDealerContainer, settingsBinding.hasDealerCheckbox)
         setListenerRow(
@@ -446,7 +446,7 @@ class GameSetupFragment : Fragment() {
     private fun renderTargetFields(settings: GameSettings) {
         val settingsBinding = _settingsBinding ?: return
         val score = settingsBinding.maxScoreEdit
-        if (!score.hasFocus() || ScoreFormat.parse(score.text.toString())?.takeIf { it > 0 } != settings.maxScore) {
+        if (!score.hasFocus() || ScoreFormat.parse(score.text.toString())?.takeIf { it != 0.0 } != settings.maxScore) {
             renderText(score, settings.maxScore?.let { ScoreFormat.format(it) } ?: "")
         }
         val rounds = settingsBinding.maxRoundsEdit

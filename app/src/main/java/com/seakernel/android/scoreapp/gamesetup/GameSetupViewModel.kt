@@ -150,7 +150,7 @@ class GameSetupViewModel(
     @MainThread
     fun setMaxScore(maxScore: Double?) {
         // A limit of 0 would end the game before it starts, so treat it as no limit
-        gameSettings.value = (gameSettings.value ?: return).copy(maxScore = maxScore?.takeIf { it > 0 })
+        gameSettings.value = (gameSettings.value ?: return).copy(maxScore = maxScore?.takeIf { it != 0.0 })
     }
 
     @MainThread

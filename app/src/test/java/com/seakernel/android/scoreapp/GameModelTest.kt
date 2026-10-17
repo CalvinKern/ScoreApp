@@ -138,6 +138,40 @@ class GameModelTest {
     }
 
     @Test
+    fun negativeGoalNotReachedAtTheStart() {
+        val model = loadGame(settings(maxScore = -50.0), listOf(0.0, 0.0, 0.0))
+
+        assertFalse(model.isGoalReached)
+        assertFalse(model.hasReachedGoalScore())
+    }
+
+    @Test
+    fun negativeGoalReachedWhenAPlayerGoesDownToIt() {
+        assertFalse(loadGame(settings(maxScore = -50.0), listOf(-49.0, 0.0, 10.0)).isGoalReached)
+        assertTrue(loadGame(settings(maxScore = -50.0), listOf(-50.0, 0.0, 10.0)).isGoalReached)
+
+        val model = loadGame(settings(maxScore = -50.0), listOf(-60.0, 0.0, 10.0))
+        assertTrue(model.isGoalReached)
+        // The player that reached it is losing, the highest score is still the leader
+        assertEquals(listOf(carol.id), model.leadPlayerIds)
+    }
+
+    @Test
+    fun reversedNegativeGoalIsWonByThePlayerThatReachesIt() {
+        val model = loadGame(settings(reversedScoring = true, maxScore = -50.0), listOf(-55.0, -10.0, 0.0))
+
+        assertTrue(model.isGoalReached)
+        assertEquals(listOf(alice.id), model.leadPlayerIds)
+    }
+
+    @Test
+    fun goalsAreOnlyReachedInTheirDirection() {
+        // Going down past 0 doesn't reach a positive target, and going up doesn't reach a negative one
+        assertFalse(loadGame(settings(maxScore = 100.0), listOf(-500.0, 0.0, 0.0)).isGoalReached)
+        assertFalse(loadGame(settings(maxScore = -100.0), listOf(500.0, 0.0, 0.0)).isGoalReached)
+    }
+
+    @Test
     fun requestFinishGameShowsFinishDialog() {
         val model = loadGame(settings(maxRounds = 1), listOf(0.0, 0.0, 0.0))
         val next = GameModel.update(model, GameEvent.RequestFinishGame)
