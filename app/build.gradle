@@ -38,7 +38,10 @@ android {
 
             ndk.debugSymbolLevel = 'full'
             firebaseCrashlytics {
-                mappingFileUploadEnabled true
+                // Only signed builds (Android Studio's Generate Signed Bundle / APK) upload R8's mapping file, or any
+                // build with -PuploadCrashlyticsMapping, so test builds of release don't send one for an APK no one runs
+                mappingFileUploadEnabled project.hasProperty('android.injected.signing.store.file') ||
+                    project.hasProperty('uploadCrashlyticsMapping')
             }
         }
         debug {
