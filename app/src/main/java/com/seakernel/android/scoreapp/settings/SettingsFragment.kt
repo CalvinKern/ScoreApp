@@ -163,7 +163,11 @@ class SettingsFragment : Fragment() {
                 super.onInitializeAccessibilityNodeInfo(host, info)
                 info.className = Switch::class.java.name
                 info.isCheckable = true
-                info.isChecked = switch.isChecked
+                info.checked = if (switch.isChecked) {
+                    AccessibilityNodeInfoCompat.CHECKED_STATE_TRUE
+                } else {
+                    AccessibilityNodeInfoCompat.CHECKED_STATE_FALSE
+                }
             }
 
             // Sent after a tap toggles the switch, so it's announced as on or off

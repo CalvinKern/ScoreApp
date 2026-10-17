@@ -611,7 +611,11 @@ private class PlayerViewHolder(parent: ViewGroup, val callback: PlayerAdapterCal
                     if (!state.showDealer) return
                     info.className = RadioButton::class.java.name
                     info.isCheckable = true
-                    info.isChecked = state.isDealer
+                    info.checked = if (state.isDealer) {
+                        AccessibilityNodeInfoCompat.CHECKED_STATE_TRUE
+                    } else {
+                        AccessibilityNodeInfoCompat.CHECKED_STATE_FALSE
+                    }
                     info.hintText = host.context.getString(R.string.dealerLabel)
                 }
             })
