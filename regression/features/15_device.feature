@@ -79,7 +79,7 @@ Feature: Device changes
     When I tap "+"
     And I type "Comes Back" as the game name
     And I tap the row "Reverse Scoring"
-    And I type "50" into "Target Score"
+    And I type "50" into "Finish at Score"
     And I tap "Edit"
     And I pick "Calvin" and "Bob"
     And Android closes the app in the background
@@ -91,7 +91,7 @@ Feature: Device changes
     And the game name field shows "Comes Back"
     And these settings are shown:
       | Reverse Scoring | on |
-      | Target Score    | 50 |
+      | Finish at Score | 50 |
     And the players are "Calvin, Bob, Lindsay"
     And Calvin's dealer radio button is checked
     When I tap "Save"
@@ -119,12 +119,12 @@ Feature: Device changes
     Given a game "Copy Me" with players "Calvin, Lindsay"
     When I choose "New Game" from the game menu
     And I replace the game name with "Copy Me Again"
-    And I type "3" into "Target Rounds"
+    And I type "3" into "Finish After Rounds"
     And Android closes the app in the background
     Then the title is "New Game"
     And the game name field shows "Copy Me Again"
     And these settings are shown:
-      | Target Rounds | 3 |
+      | Finish After Rounds | 3 |
     And the players are "Calvin, Lindsay"
     When I go back
     Then the title is "Copy Me"

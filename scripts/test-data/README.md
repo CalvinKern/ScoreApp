@@ -19,7 +19,7 @@ below opens with the right totals, leader, dealer, and goal state. Update its ex
 ## Games
 
 Scores are realistic for each game. Settings are abbreviated: **dealer**, **low wins** (reversed scoring),
-**goal** (target score), **rounds** (target rounds), **notes** (show round notes), and **calc** (calculator).
+**goal** (finish score), **rounds** (finish rounds), **notes** (show round notes), and **calc** (calculator).
 
 | Game | How it scores | Settings | What it tests |
 |---|---|---|---|
@@ -52,7 +52,7 @@ Scores are realistic for each game. Settings are abbreviated: **dealer**, **low 
 | Phase 10 | Same as above | dealer, low wins | An older game with the same name, saved before typed input was kept |
 | Quick Game (no rounds) | | | A game with no rounds, which the app fixes by adding one |
 | Game Night (players gone) | | | Every player archived, so opening it goes to game setup |
-| Old Hearts Save | | dealer, low wins | Data from old app versions: dealer stored as 0, a target score and rounds of 0 (no limit), the deprecated showRounds flag, one archived player whose scores are hidden, no typed input |
+| Old Hearts Save | | dealer, low wins | Data from old app versions: dealer stored as 0, a finish score and rounds of 0 (no limit), the deprecated showRounds flag, one archived player whose scores are hidden, no typed input |
 
 ## Players
 

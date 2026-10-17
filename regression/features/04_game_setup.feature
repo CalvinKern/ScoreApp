@@ -86,8 +86,8 @@ Feature: Setting up a new game
       | Reverse Scoring     | on      |
       | Show Round Notes    | on      |
       | Calculator Keyboard | off     |
-      | Target Score        | 250     |
-      | Target Rounds       | 12      |
+      | Finish at Score     | 250     |
+      | Finish After Rounds | 12      |
     When I choose "Edit" from the game menu
     Then the title is "Game Settings"
     And these settings are shown:
@@ -95,8 +95,8 @@ Feature: Setting up a new game
       | Reverse Scoring     | on  |
       | Show Round Notes    | on  |
       | Calculator Keyboard | off |
-      | Target Score        | 250 |
-      | Target Rounds       | 12  |
+      | Finish at Score     | 250 |
+      | Finish After Rounds | 12  |
 
   Scenario: Tapping a setting's row or its checkbox both toggle it
     Given I am on the game list
@@ -177,13 +177,13 @@ Feature: Setting up a new game
     Then "<field>" is empty
 
     Examples:
-      | field         |
-      | Target Score  |
-      | Target Rounds |
+      | field               |
+      | Finish at Score     |
+      | Finish After Rounds |
 
-  Scenario: A target score can have decimals
+  Scenario: A finish score can have decimals
     Given a game "Decimal Target" with players "Calvin" and settings:
-      | Target Score | 10.5 |
+      | Finish at Score | 10.5 |
     When I enter "10" for Calvin in round 1
     Then the button after the rounds is "Add Round"
     When I enter "10.5" for Calvin in round 1
@@ -216,8 +216,8 @@ Feature: Setting up a new game
       | Reverse Scoring     | off |
       | Show Round Notes    | on  |
       | Calculator Keyboard | on  |
-      | Target Score        |     |
-      | Target Rounds       | 3   |
+      | Finish at Score     |     |
+      | Finish After Rounds | 3   |
     When I tap "Save"
     Then the title is "Ticket to Ride"
     And the totals are:
@@ -245,7 +245,7 @@ Feature: Setting up a new game
     And I type "Ticket" as the game name
     And I pick the suggestion "Ticket to Ride"
     Then the players are "Zed"
-    And "Target Rounds" is empty
+    And "Finish After Rounds" is empty
 
   @seed
   Scenario: Previous settings aren't loaded when Load Previous Settings is off

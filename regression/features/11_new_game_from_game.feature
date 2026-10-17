@@ -7,7 +7,7 @@ Feature: Starting the next game
     Given a game "Rematch" with players "Calvin, Lindsay, Bob" and settings:
       | Reverse Scoring  | on  |
       | Show Round Notes | on  |
-      | Target Score     | 100 |
+      | Finish at Score  | 100 |
     And I enter "40" for Lindsay in round 1
     When I choose "New Game" from the game menu
     Then the title is "New Game"
@@ -16,7 +16,7 @@ Feature: Starting the next game
     And these settings are shown:
       | Reverse Scoring  | on  |
       | Show Round Notes | on  |
-      | Target Score     | 100 |
+      | Finish at Score  | 100 |
     When I tap "Save"
     Then the title is "Rematch"
     And the totals are:
@@ -57,7 +57,7 @@ Feature: Starting the next game
 
   Scenario: New Game from Player Standings
     Given a game "From Standings" with players "Calvin, Lindsay" and settings:
-      | Target Score | 10 |
+      | Finish at Score | 10 |
     And I enter "10" for Calvin in round 1
     When I tap "Finish Game"
     And I tap "Finish"
@@ -67,16 +67,16 @@ Feature: Starting the next game
 
   Scenario: Changing the new game's setup leaves the old game alone
     Given a game "Original" with players "Calvin, Lindsay" and settings:
-      | Target Score | 100 |
+      | Finish at Score | 100 |
     When I choose "New Game" from the game menu
     And I replace the game name with "Original II"
-    And I clear "Target Score"
+    And I clear "Finish at Score"
     And I tap "Save"
     And I go back
     And I open the game "Original"
     And I choose "Edit" from the game menu
     Then these settings are shown:
-      | Target Score | 100 |
+      | Finish at Score | 100 |
 
   Scenario: Going back from the new game's setup returns to the game, without making a game
     Given a game "Not Yet" with players "Calvin"
@@ -98,4 +98,4 @@ Feature: Starting the next game
     And these settings are shown:
       | Dealer          | on  |
       | Reverse Scoring | on  |
-      | Target Score    | 100 |
+      | Finish at Score | 100 |

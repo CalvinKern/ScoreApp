@@ -104,10 +104,10 @@
     <string name="deleteRounds">राउंड हटाएं</string>
     <string name="deleteRoundItem">राउंड %d</string>
     <string name="incomplete">अधूरा</string>
-    <string name="maxScoreTitle">लक्ष्य स्कोर</string>
-    <string name="maxScoreDescription">स्कोर पूरा होने पर गेम समाप्त करें</string>
-    <string name="maxRoundsTitle">लक्ष्य राउंड</string>
-    <string name="maxRoundsDescription">खेलने के लिए राउंड की अधिकतम संख्या</string>
+    <string name="maxScoreTitle">स्कोर पर समाप्त</string>
+    <string name="maxScoreDescription">किसी खिलाड़ी के यह स्कोर पाने पर समाप्त करने का विकल्प दें</string>
+    <string name="maxRoundsTitle">राउंड के बाद समाप्त</string>
+    <string name="maxRoundsDescription">इतने राउंड के बाद समाप्त करने का विकल्प दें</string>
     <string name="finishGame">गेम समाप्त करें</string>
     <string name="finishGameTitle">लक्ष्य पूरा हुआ!</string>
     <string name="finishGameConfirmation">क्या आप गेम समाप्त करके अंक तालिका देखना चाहेंगे?</string>

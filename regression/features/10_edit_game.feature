@@ -8,7 +8,7 @@ Feature: Editing a game in progress
   Scenario: Game Settings shows the game as it is
     Given a game "Edit Me" with players "Calvin, Lindsay" and settings:
       | Reverse Scoring | on |
-      | Target Score    | 50 |
+      | Finish at Score | 50 |
     When I choose "Edit" from the game menu
     Then the title is "Game Settings"
     And the game name field shows "Edit Me"
@@ -16,7 +16,7 @@ Feature: Editing a game in progress
     And Calvin's dealer radio button is checked, since Calvin deals the only round
     And these settings are shown:
       | Reverse Scoring | on |
-      | Target Score    | 50 |
+      | Finish at Score | 50 |
 
   @smoke
   Scenario: The first dealer can be changed while the game has one round
@@ -237,16 +237,16 @@ Feature: Editing a game in progress
     Given a game "Late Target" with players "Calvin, Lindsay"
     And I enter "80" for Calvin in round 1
     When I choose "Edit" from the game menu
-    And I type "50" into "Target Score"
+    And I type "50" into "Finish at Score"
     And I go back
     Then the button after the rounds is "Finish Game"
 
   Scenario: Clearing the target brings Add Round back
     Given a game "Clear Target" with players "Calvin" and settings:
-      | Target Rounds | 1 |
+      | Finish After Rounds | 1 |
     And the button after the rounds is "Finish Game"
     When I choose "Edit" from the game menu
-    And I clear "Target Rounds"
+    And I clear "Finish After Rounds"
     And I go back
     Then the button after the rounds is "Add Round"
 

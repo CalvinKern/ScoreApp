@@ -72,10 +72,10 @@
     <string name="showRoundNotesDescription">Tap a player\'s name to view and edit notes for each round</string>
     <string name="useCalculatorTitle">Calculator Keyboard</string>
     <string name="useCalculatorDescription">Use the custom calculator keyboard. Will use the system keyboard if not enabled.</string>
-    <string name="maxScoreTitle">Target Score</string>
-    <string name="maxScoreDescription">Finish game once score is reached</string>
-    <string name="maxRoundsTitle">Target Rounds</string>
-    <string name="maxRoundsDescription">Maximum number of rounds to play</string>
+    <string name="maxScoreTitle">Finish at Score</string>
+    <string name="maxScoreDescription">Offer to finish when any player reaches it</string>
+    <string name="maxRoundsTitle">Finish After Rounds</string>
+    <string name="maxRoundsDescription">Offer to finish after this many rounds</string>
     <string name="gameNameRequired">Please enter a name for the game</string>
     <string name="gamePlayersRequired">Please add a player</string>
     <!--Shown under the title of an existing game's settings and player picker, since they save on their own-->

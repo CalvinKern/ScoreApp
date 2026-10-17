@@ -36,7 +36,7 @@ scenario in the same change.
 | [04_game_setup](features/04_game_setup.feature) | Creating a game, its settings, the dealer, player order, loading previous settings |
 | [05_scoring](features/05_scoring.feature) | Entering scores with the calculator and the system keyboard, totals, the leader |
 | [06_rounds_and_dealer](features/06_rounds_and_dealer.feature) | Adding and deleting rounds, moving between scores, the dealer |
-| [07_goals](features/07_goals.feature) | Target score and rounds, Finish Game, Another Round, confetti |
+| [07_goals](features/07_goals.feature) | Finish score and rounds, Finish Game, Another Round, confetti |
 | [08_standings_and_graph](features/08_standings_and_graph.feature) | Player Standings, the rounds graph and podium |
 | [09_round_notes](features/09_round_notes.feature) | Notes for each player's rounds |
 | [10_edit_game](features/10_edit_game.feature) | Changing a game's settings and players while it's being played |
@@ -101,8 +101,8 @@ defaults:
 | `Reverse Scoring` | on, off | off |
 | `Show Round Notes` | on, off | off |
 | `Calculator Keyboard` | on, off | on (follows Settings › Calculator Keyboard) |
-| `Target Score` | a number (decimals and negatives allowed, a negative one is reached going down), or blank | blank |
-| `Target Rounds` | a number, or blank | blank |
+| `Finish at Score` | a number (decimals and negatives allowed, a negative one is reached going down), or blank | blank |
+| `Finish After Rounds` | a number, or blank | blank |
 
 ### Doing things
 
