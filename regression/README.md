@@ -19,6 +19,9 @@ scenario in the same change.
    scripts/emulator-db.sh backup before-regression     # Keep the device's own test data
    ```
 
+   With more than one emulator or phone connected, `export ANDROID_SERIAL=<the one under test>` first. Without it,
+   `installDebug` installs on every connected device, and the adb commands fail.
+
    Before each `@seed` scenario that changes data, `scripts/emulator-db.sh seed` (it's quick, and a clean seed means
    one scenario can't break the next). Before each `@fresh` scenario, `adb shell pm clear com.seakernel.scorepad.debug`.
 3. Run each scenario's steps as defined below, and record the result (see [Recording a run](#recording-a-run)).
