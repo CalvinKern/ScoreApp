@@ -197,7 +197,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                 // in case they were made too late to reach the game setup before the app closed
                 val restoredPicksLoaded = sendPicksOnLoad && previous?.isLoading == true && !model.isLoading
                 if (changed || restoredPicksLoaded) {
-                    setFragmentResult(REQUEST_PLAYERS, bundleOf(KEY_PLAYER_IDS to model.selectedPlayerList.toLongArray()))
+                    val picks = Bundle().apply { putLongArray(KEY_PLAYER_IDS, model.selectedPlayerList.toLongArray()) }
+                    setFragmentResult(REQUEST_PLAYERS, picks)
                 }
                 if (!model.isLoading) sendPicksOnLoad = false
 

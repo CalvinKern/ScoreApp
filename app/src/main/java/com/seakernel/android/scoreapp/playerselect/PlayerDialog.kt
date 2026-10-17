@@ -79,7 +79,13 @@ class PlayerDialog : DialogFragment() {
     }
 
     private fun sendResult(player: Player, delete: Boolean) {
-        setFragmentResult(REQUEST_PLAYER, bundleOf(KEY_PLAYER to player, KEY_DELETE to delete))
+        setFragmentResult(
+            REQUEST_PLAYER,
+            Bundle().apply {
+                putParcelable(KEY_PLAYER, player)
+                putBoolean(KEY_DELETE, delete)
+            },
+        )
     }
 
     companion object {
@@ -98,7 +104,10 @@ class PlayerDialog : DialogFragment() {
          * color
          */
         fun newInstance(player: Player, seatedPlayers: List<Player>) = PlayerDialog().apply {
-            arguments = bundleOf(ARG_PLAYER to player, ARG_SEATED_PLAYERS to ArrayList(seatedPlayers))
+            arguments = Bundle().apply {
+                putParcelable(ARG_PLAYER, player)
+                putParcelableArrayList(ARG_SEATED_PLAYERS, ArrayList(seatedPlayers))
+            }
         }
     }
 }
