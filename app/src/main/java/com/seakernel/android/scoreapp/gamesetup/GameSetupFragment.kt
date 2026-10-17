@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.calculator.ScoreKeyListener
 import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentGameCreateBinding
@@ -349,6 +350,8 @@ class GameSetupFragment : Fragment() {
         }
         settingsBinding.maxScoreEdit.onFocusChangeListener = targetFocusListener
         settingsBinding.maxRoundsEdit.onFocusChangeListener = targetFocusListener
+        // A target score can have decimals, typed with a '.' or the user's own separator like the scores
+        settingsBinding.maxScoreEdit.keyListener = ScoreKeyListener(signed = false)
 
         setListenerRow(settingsBinding.hasDealerContainer, settingsBinding.hasDealerCheckbox)
         setListenerRow(
