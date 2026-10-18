@@ -6,6 +6,7 @@
     <string name="actionSearch">探す</string>
     <string name="addRound">ラウンドを追加</string>
     <string name="dealerLabel">ディーラー</string>
+    <string name="dealerDescription">ヒント：ゲーム中に選手のスコアを長押しすると、そのラウンドのディーラーを変更できます</string>
     <string name="delete">削除する</string>
     <string name="deleteGameConfirmation">このゲームを削除しますか？</string>
     <string name="deleteSuccessful">%s 削除された</string>

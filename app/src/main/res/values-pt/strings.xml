@@ -64,6 +64,7 @@
     <string name="deleteGameConfirmation">Deseja excluir este jogo?</string>
     <string name="delete">Excluir</string>
     <string name="dealerLabel">Carteador</string>
+    <string name="dealerDescription">Dica: toque e segure a pontuação de um jogador no jogo para trocar o carteador dessa rodada</string>
     <string name="addRound">Adicionar rodada</string>
     <string name="actionSearch">Procurar</string>
     <string name="actionSave">Salve</string>

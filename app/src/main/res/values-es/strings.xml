@@ -6,6 +6,7 @@
     <string name="actionSearch">Buscar</string>
     <string name="addRound">Agregar ronda</string>
     <string name="dealerLabel">Repartidor</string>
+    <string name="dealerDescription">Consejo: Mantenga presionado el puntaje de un jugador en el juego para cambiar el repartidor de esa ronda</string>
     <string name="delete">Eliminar</string>
     <string name="deleteGameConfirmation">¿Quieres eliminar este juego?</string>
     <string name="deleteSuccessful">Eliminado %s</string>

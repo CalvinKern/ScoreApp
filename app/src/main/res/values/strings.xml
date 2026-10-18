@@ -66,6 +66,7 @@
     <string name="gamePlayersEmptyTitle">No players added</string>
     <string name="gamePlayersEmptyMessage">To start a game, add some players with the \"Edit\" button.</string>
     <string name="dealerLabel">Dealer</string>
+    <string name="dealerDescription">Tip: Long press a player\'s score in the game to change the dealer for that round</string>
     <string name="reversedScoringTitle">Reverse Scoring</string>
     <string name="reversedScoringDescription">The player with the lowest score wins, instead of having the highest score</string>
     <string name="showRoundNotesTitle">Show Round Notes</string>

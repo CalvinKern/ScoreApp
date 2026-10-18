@@ -6,6 +6,7 @@
     <string name="actionSearch">搜索</string>
     <string name="addRound">添加回合</string>
     <string name="dealerLabel">发牌人</string>
+    <string name="dealerDescription">提示：在游戏中长按玩家的分数，即可更改该轮的发牌人</string>
     <string name="delete">删除</string>
     <string name="deleteGameConfirmation">您要删除此游戏吗？</string>
     <string name="deleteSuccessful">已删除%s</string>

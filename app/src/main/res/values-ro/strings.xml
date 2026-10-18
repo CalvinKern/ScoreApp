@@ -6,6 +6,7 @@
     <string name="actionSearch">Căutare</string>
     <string name="addRound">Adaugă runda</string>
     <string name="dealerLabel">Dealer</string>
+    <string name="dealerDescription">Sfat: atingeți lung scorul unui jucător în joc pentru a schimba dealerul pentru acea rundă</string>
     <string name="delete">Șterge</string>
     <string name="deleteGameConfirmation">Doriți să ștergeți acest joc?</string>
     <string name="deleteSuccessful">şters %s</string>

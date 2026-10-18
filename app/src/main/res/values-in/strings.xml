@@ -6,6 +6,7 @@
     <string name="actionSearch">Cari</string>
     <string name="addRound">Tambahkan Round</string>
     <string name="dealerLabel">Pembagi kartu</string>
+    <string name="dealerDescription">Tips: Tekan lama skor pemain dalam game untuk mengganti pembagi kartu pada putaran itu</string>
     <string name="delete">Menghapus</string>
     <string name="deleteGameConfirmation">Apakah Anda ingin menghapus game ini?</string>
     <string name="deleteSuccessful">Dihapus %s</string>

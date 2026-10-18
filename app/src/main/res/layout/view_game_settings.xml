@@ -9,10 +9,8 @@
         android:id="@+id/hasDealerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
         android:background="?attr/selectableItemBackground"
         android:paddingTop="8dp"
-        android:gravity="end"
         android:minHeight="@dimen/min_touch_size"
         android:orientation="horizontal"
         >
@@ -23,15 +21,30 @@
             android:layout_height="wrap_content"
             />
 
-        <TextView
-            style="@style/AppTheme.TextListHeadline"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
-            android:text="@string/dealerLabel"
-            android:labelFor="@id/hasDealerCheckbox"
-            />
+            android:orientation="vertical"
+            >
 
+            <TextView
+                style="@style/AppTheme.TextListHeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dealerLabel"
+                android:labelFor="@id/hasDealerCheckbox"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/dealerDescription"
+                style="@style/AppTheme.TextListSupporting"
+                />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

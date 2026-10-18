@@ -6,6 +6,7 @@
     <string name="actionSearch">Chercher</string>
     <string name="addRound">Ajouter un tour</string>
     <string name="dealerLabel">Donneur</string>
+    <string name="dealerDescription">Astuce : appuyez longuement sur le score d\'un joueur dans la partie pour changer le donneur de ce tour</string>
     <string name="delete">Supprimer</string>
     <string name="deleteGameConfirmation">Voulez-vous supprimer ce jeu?</string>
     <string name="deleteSuccessful">Effacé %s</string>

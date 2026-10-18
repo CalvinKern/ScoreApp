@@ -6,6 +6,7 @@
     <string name="actionSearch">खोज</string>
     <string name="addRound">राउंड जोड़ें</string>
     <string name="dealerLabel">डीलर</string>
+    <string name="dealerDescription">सुझाव: उस राउंड का डीलर बदलने के लिए गेम में किसी खिलाड़ी के स्कोर को देर तक दबाएं</string>
     <string name="delete">हटाएं</string>
     <string name="deleteGameConfirmation">क्या आप इस गेम को हटाना चाहते हैं?</string>
     <string name="deleteSuccessful">हटाए गए %s</string>
