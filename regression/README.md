@@ -183,8 +183,8 @@ than one emulator or phone connected, also `export ANDROID_SERIAL=<one from adb 
 
 | To                                                   | Run                                                                                                                                                                                                                                        |
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Open the app                                         | `adb shell am start -n com.seakernel.scorepad.debug/com.seakernel.android.scoreapp.ui.MainActivity`                                                                                                                                        |
-| Open the app from its launcher icon                  | `adb shell monkey -p com.seakernel.scorepad.debug -c android.intent.category.LAUNCHER 1`. Use this to come back after Android closes the app: `am start -n` opens the screens in a separate task instead of the ones Android saved.        |
+| Open the app                                         | `adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n com.seakernel.scorepad.debug/com.seakernel.android.scoreapp.launcher`, the same intent as the launcher icon. Without the action and category (a bare `am start -n`), the icon doesn't match the app's task, so opening it from the icon after Android closes the app starts a new game list on top of the screens Android saved. |
+| Open the app from its launcher icon                  | `adb shell monkey -p com.seakernel.scorepad.debug -c android.intent.category.LAUNCHER 1`. Use this to come back after Android closes the app.                                                                                              |
 | Read the screen                                      | `adb shell uiautomator dump /sdcard/ui.xml >/dev/null && adb exec-out cat /sdcard/ui.xml`                                                                                                                                                  |
 | Tap                                                  | `adb shell input tap X Y`, the middle of a node's `bounds="[x1,y1][x2,y2]"`                                                                                                                                                                |
 | Long press                                           | `adb shell input swipe X Y X Y 800`                                                                                                                                                                                                        |
@@ -216,6 +216,9 @@ Things that trip up a run:
   the text, so the cursor lands at the end) and clear it with the calculator's DEL key.
 - The keyboard covers the bottom of the screen (including "Edit" on New Game). Hide it with `KEYCODE_BACK`, but only
   once it's showing (`adb shell dumpsys input_method | grep mInputShown=true`), or back leaves the screen instead.
+  With a hardware keyboard attached (like the Pixel Tablet emulator), the keyboard for a text field is only a floating
+  toolbar. It counts as showing but ignores `KEYCODE_BACK`, which leaves the screen. Send `KEYCODE_ESCAPE` instead,
+  twice when the name suggestions popup is open, since the first only closes the popup.
 - The game name suggestions are a popup window that `uiautomator dump` doesn't include. Tap them from a screenshot.
   While it's open it covers the settings below the name (and "Edit" once the keyboard is hidden), and the first
   `KEYCODE_BACK` only closes the popup, so check the keyboard again before tapping on. The keyboard's done key closes
@@ -230,7 +233,9 @@ Things that trip up a run:
 - The "Deleted <name>" snackbar on Pick Players goes away after about two seconds, so tap "Undo" from the same dump
   that found it. On a slow emulator a dump can take longer than the snackbar lasts. Then dump and tap on the device
   instead: `adb shell 'for i in 1 2 3 4 5 6 7 8; do uiautomator dump /sdcard/u.xml >/dev/null; if grep -q "Deleted
-  Taylor" /sdcard/u.xml; then input tap X Y; break; fi; done'`, with X Y from a screenshot of the snackbar.
+  Taylor" /sdcard/u.xml; then input tap X Y; break; fi; done'`, with X Y from a screenshot of the snackbar, or read
+  from the bounds of `snackbar_action` in the same dump. Where it is depends on the screen: at the right on a phone,
+  centered on a tablet.
 - `uiautomator dump` sometimes fails with "null root node" (often while a screen or dialog is still drawing). Wait a
   second and dump again.
 - `input text` sometimes drops characters on a slow emulator. Read the field back from a dump, and clear it
@@ -247,8 +252,15 @@ Things that trip up a run:
   reads as its label and hint (`Color, 1976D2`).
 - Only the rows on screen are in the dump. With the keyboard up, the newest round is the lowest row of `playerScore`
   cells inside `scoreRows`.
+- The score being edited keeps its focus after going to another screen (like Game Settings) and back, and an empty
+  one reads as its hint, "Score", not 0. On a tablet in landscape the calculator sits beside the scores and stays open,
+  so the first score of a round just added is usually still being edited.
+- A swipe past the top or bottom of a list only stretches it. To scroll to an end, swipe until a dump shows the same
+  rows as before the swipe, and don't swipe a list whose `scrollable` is `false` (everything fits on the screen).
 - Confetti lasts about a second. Catch it with a burst of on-device screenshots started just before the step:
-  `adb shell 'for i in 1 2 3 4 5 6 7 8; do screencap -p /sdcard/c$i.png; done' &`. Totals update while a score is
+  `adb shell 'for i in 1 2 3 4 5 6 7 8; do screencap -p /sdcard/c$i.png; done' &`. When the step is a tap, find what
+  to tap first and send the tap in the same command as the burst (`adb shell 'input tap X Y; for i in ...'`): reading
+  the screen to find it can take longer than the burst, especially on a large screen. Totals update while a score is
   typed, so it bursts as soon as a total reaches the goal, on the key that gets it there (like the last digit of
   `50+20+6`), not when `=` is pressed. Start the burst before that key. When `=` closes the keypad within about half
   a second of that key, the burst waits for the keypad to hide and comes from where the total ends up. Clearing a score with DEL counts too: going
