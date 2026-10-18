@@ -66,6 +66,9 @@ data class CreateModel(
             return toMutableList().apply { add(index, player) }
         }
 
+        /** The players whose names contain the search term, the list shown while searching */
+        private fun List<Player>.matching(searchTerm: String) = filter { it.name.contains(searchTerm, ignoreCase = true) }
+
         private fun showPlayerDialog(model: CreateModel, player: Player): Next<CreateModel, PlayerEffect> =
             Next.dispatch(Effects.effects(ShowPlayerDialog(player, model.seatedWith(player))))
 
@@ -87,7 +90,8 @@ data class CreateModel(
                     model.copy(
                         isLoading = false,
                         allPlayers = event.players,
-                        filteredPlayerList = event.players
+                        // Players load again after undoing a delete, while the search can still be open
+                        filteredPlayerList = event.players.matching(model.searchTerm)
                     )
                 )
                 is AddPlayerClicked -> showPlayerDialog(model, Player())
@@ -164,14 +168,7 @@ data class CreateModel(
                     Next.next(
                         model.copy(
                             searchTerm = event.playerName ?: "",
-                            filteredPlayerList = model.allPlayers.toMutableList().let { list ->
-                                list.filter { player ->
-                                    player.name.contains(
-                                        event.playerName ?: "",
-                                        ignoreCase = true
-                                    )
-                                }
-                            })
+                            filteredPlayerList = model.allPlayers.matching(event.playerName ?: ""))
                     )
                 }
             }

@@ -70,4 +70,14 @@ class PlayerSelectModelTest {
         val searchedAgain = CreateModel.update(model, PlayerSearchRequest("a")).modelUnsafe()
         assertEquals(listOf("Aaron", "alice", "carol"), searchedAgain.filteredPlayerList.map { it.name })
     }
+
+    @Test
+    fun playersLoadedAgainKeepTheSearch() {
+        // Undoing a delete loads every player again while the search is still open
+        val searched = CreateModel.update(loaded(), PlayerSearchRequest("car")).modelUnsafe()
+        val model = CreateModel.update(searched, PlayersLoaded(players)).modelUnsafe()
+
+        assertEquals(listOf("carol"), model.filteredPlayerList.map { it.name })
+        assertEquals(listOf("alice", "Bob", "carol"), model.names())
+    }
 }
