@@ -9,6 +9,8 @@
     android:gravity="center_horizontal"
     >
 
+    <!-- Names shrink to fit their column (see PlayerViewHolder). Hyphens are for names that still don't fit, and for
+         words that share a line, like "Gran-" over "dma Jo" rather than "Grandm" over "a Jo". -->
     <TextView
         android:id="@+id/playerNameHeader"
         android:layout_width="0dp"
@@ -17,6 +19,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:layout_gravity="center"
+        android:hyphenationFrequency="full"
         android:maxLines="3"
         android:padding="8dp"
         tools:text="@tools:sample/full_names"
