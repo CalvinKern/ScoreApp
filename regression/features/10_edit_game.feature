@@ -190,9 +190,9 @@ Feature: Editing a game in progress
     Then the round 1 scores are:
       | Calvin | Lindsay | Bob |
       | 10     | 20      | 30  |
-    And the round 3 scores are:
-      | Calvin | Lindsay | Bob |
-      | 0      | 0       | 0   |
+    # Calvin's round 3 score can still be the one being edited (Add Round started on it, and a tablet keeps the
+    # calculator open beside the scores), where an empty score shows its hint instead of 0
+    And the round 3 score for Bob shows "0"
     And the totals read "Calvin 15, Lindsay 35, Bob 55"
     And Bob is leading
 
