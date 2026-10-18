@@ -284,3 +284,14 @@ Feature: Picking players
     And I type "Zan"
     And I add the player "Zander"
     Then "Zander" is in the list and checked
+
+  Scenario: Undoing a delete during a search keeps the search
+    Given the players "Calvin, Undo Search" exist
+    And I am picking players for a new game
+    When I tap the search icon
+    And I type "Undo"
+    And I long press the row "Undo Search"
+    And I tap "Delete"
+    And I tap "Undo"
+    Then I see "Undo Search"
+    And I don't see the row "Calvin"
