@@ -167,8 +167,12 @@ class GraphFragment : Fragment() {
         binding.podiumChart.apply {
             xAxis.valueFormatter = IndexAxisValueFormatter(standings.map { (player, _) -> player.name })
             xAxis.labelCount = standings.size
-            // Bars grow from zero, leaving room below any negative totals for their labels
-            axisLeft.axisMinimum = minOf(0f, entries.minOfOrNull { it.y }?.times(PODIUM_NEGATIVE_SPACE) ?: 0f)
+            // Bars grow from zero, so the axis always shows it. Past zero, the axis leaves room for the labels: above the
+            // tallest bar (spaceTop), and below the lowest negative one (spaceBottom), both a share of the whole range
+            axisLeft.apply {
+                if (entries.any { it.y < 0f }) resetAxisMinimum() else axisMinimum = 0f
+                if (entries.any { it.y > 0f }) resetAxisMaximum() else axisMaximum = 0f
+            }
             data = BarData(dataSet)
             invalidate()
             contentDescription = getString(
@@ -190,6 +194,8 @@ class GraphFragment : Fragment() {
             }
             setTouchEnabled(false)
             setFitBars(true)
+            // The chart sizes the names' row by the text's height without descenders, cutting off the bottom of "y"
+            extraBottomOffset = PODIUM_DESCENDER_SPACE
             xAxis.also {
                 it.granularity = 1f
                 it.position = XAxis.XAxisPosition.BOTTOM
@@ -199,8 +205,9 @@ class GraphFragment : Fragment() {
             }
             axisLeft.also {
                 it.textColor = colorOnSurface
-                // Room above the tallest bar for its total
-                it.spaceTop = 15f
+                // Room above the tallest bar and below the lowest negative one for their totals
+                it.spaceTop = PODIUM_LABEL_SPACE
+                it.spaceBottom = PODIUM_LABEL_SPACE
             }
         }
     }
@@ -274,7 +281,8 @@ class GraphFragment : Fragment() {
     companion object {
         private const val ARG_GAME_ID = "game_id"
         private const val DASH_LENGTH = 16f
-        private const val PODIUM_NEGATIVE_SPACE = 1.15f
+        private const val PODIUM_LABEL_SPACE = 15f // Percent of the axis's range
+        private const val PODIUM_DESCENDER_SPACE = 4f // dp
 
         private val podiumValueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float) = ScoreFormat.format(value.toDouble())
