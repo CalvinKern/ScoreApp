@@ -50,7 +50,7 @@ abstract class MobiusFragment<M : Any, E : Any, F : Any> : Fragment() {
         controller.stop()
     }
 
-    // Mobius - declarations here to make subclasses easier to implement (so that boiler plate gets generated correctly)
+    // Mobius - declarations here to make subclasses easier to implement (so that boilerplate gets generated correctly)
 
     lateinit var loop: MobiusLoop.Builder<M, E, F>
     lateinit var controller: MobiusLoop.Controller<M, E>

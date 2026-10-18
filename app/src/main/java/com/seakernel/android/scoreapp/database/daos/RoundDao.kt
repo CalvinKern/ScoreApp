@@ -16,7 +16,7 @@ import com.seakernel.android.scoreapp.database.entities.ScoreEntity
  */
 @Dao
 interface RoundDao {
-    @Query("SELECT ${ScoreEntity.QUALIFIED_COLUMNS}, ${RoundEntity.COLUMN_ROUND_NUMBER} FROM ${ScoreEntity.TABLE_NAME} INNER JOIN ${RoundEntity.TABLE_NAME} as ROUND_ ON ROUND_.${RoundEntity.COLUMN_ID}=${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} WHERE ROUND_.${RoundEntity.COLUMN_GAME_ID}=:gameId AND ${ScoreEntity.COLUMN_PLAYER_ID}=:playerId ORDER BY ${RoundEntity.COLUMN_ROUND_NUMBER} DESC, ROUND_.${RoundEntity.COLUMN_ID} DESC")
+    @Query("SELECT ${ScoreEntity.QUALIFIED_COLUMNS} FROM ${ScoreEntity.TABLE_NAME} INNER JOIN ${RoundEntity.TABLE_NAME} as ROUND_ ON ROUND_.${RoundEntity.COLUMN_ID}=${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} WHERE ROUND_.${RoundEntity.COLUMN_GAME_ID}=:gameId AND ${ScoreEntity.COLUMN_PLAYER_ID}=:playerId ORDER BY ${RoundEntity.COLUMN_ROUND_NUMBER} DESC, ROUND_.${RoundEntity.COLUMN_ID} DESC")
     fun getNotesForPlayer(playerId: Long, gameId: Long): List<ScoreNoteEntity>
 
     @Insert
@@ -78,8 +78,6 @@ interface RoundDao {
     class ScoreNoteEntity {
         @Embedded
         lateinit var score: ScoreEntity
-
-        var round_number: Int = 0
     }
 
 }

@@ -8,6 +8,7 @@ import com.seakernel.android.scoreapp.playerselect.PlayersLoaded
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+@Suppress("SpellCheckingInspection")
 class PlayerSelectModelTest {
 
     private val players = listOf(

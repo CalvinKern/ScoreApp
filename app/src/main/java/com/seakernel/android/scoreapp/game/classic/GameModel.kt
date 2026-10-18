@@ -53,7 +53,7 @@ data class GameModel(
     /**
      * Whether any player's total has reached the max score. Totals start at 0, so a positive max score is reached
      * going up and a negative one going down. The game ends when someone reaches it in both scoring modes, reversed
-     * scoring only changes who is winning.
+     * scoring only changes the leader.
      */
     fun hasReachedGoalScore(): Boolean {
         val maxScore = settings.maxScore?.takeIf { it != 0.0 } ?: return false

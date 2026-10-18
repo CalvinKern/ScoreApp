@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), GameListFragment.GameListListener, Con
             f.returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
         }
 
-        // Each screen moves as one piece. Otherwise the transition animates every view inside it on its own,
+        // Each screen moves as one piece. Otherwise, the transition animates every view inside it on its own,
         // copying each one into a bitmap as it leaves, which takes seconds with a game's score table.
         override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
             if (f !is DialogFragment && v is ViewGroup) ViewGroupCompat.setTransitionGroup(v, true)

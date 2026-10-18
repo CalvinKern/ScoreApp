@@ -128,7 +128,7 @@
     <!-- Spoken by screen readers for the rounds graph, e.g. "Score by rounds, 3 Rounds. Alice: 5, 7, 12. Bob: 3, 3, 9" -->
     <string name="graphDescription">Score by rounds, %1$s. %2$s</string>
     <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
-    <!-- Spoken by screen readers for the podium, best first, e.g. "Podium, 3 Rounds. Alice, total 12. Bob, total 9" -->
+    <!-- Spoken by screen readers for the podium, by score, e.g. "Podium, 3 Rounds. Alice, total 12. Bob, total 9" -->
     <string name="podiumDescription">Podium, %1$s. %2$s</string>
 
     <!--Player Round Dialog-->

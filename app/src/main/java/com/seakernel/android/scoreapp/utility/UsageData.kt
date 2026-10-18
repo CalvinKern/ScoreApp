@@ -9,7 +9,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 /**
  * Usage statistics (Analytics) and crash reports (Crashlytics) are shared only with the user's consent, asked for
  * both at once with [com.seakernel.android.scoreapp.gamelist.UsageDataCardAdapter] once a game has been made, and
- * changed separately in settings afterwards. Both are off in the manifest, so nothing is collected before the user
+ * changed separately in settings afterward. Both are off in the manifest, so nothing is collected before the user
  * answers.
  */
 object UsageData {
@@ -60,7 +60,7 @@ object UsageData {
 
     private fun applyCrashReports(context: Context, deleteUnsent: Boolean) {
         FirebaseCrashlytics.getInstance().apply {
-            setCrashlyticsCollectionEnabled(AppPreferences.isShareCrashReportsEnabled(context))
+            isCrashlyticsCollectionEnabled = AppPreferences.isShareCrashReportsEnabled(context)
             // Crash reports kept while waiting for an answer are sent once allowed, and shouldn't be kept otherwise
             if (deleteUnsent) deleteUnsentReports()
         }

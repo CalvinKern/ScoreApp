@@ -1,12 +1,17 @@
 package com.seakernel.android.scoreapp.repository
 
 import android.content.Context
-import com.seakernel.android.scoreapp.data.*
-import com.seakernel.android.scoreapp.database.*
+import com.seakernel.android.scoreapp.data.Game
+import com.seakernel.android.scoreapp.data.GameSettings
+import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.data.Round
+import com.seakernel.android.scoreapp.data.Score
+import com.seakernel.android.scoreapp.database.AppDatabase
 import com.seakernel.android.scoreapp.database.daos.GameDao
 import com.seakernel.android.scoreapp.database.entities.GameEntity
 import com.seakernel.android.scoreapp.database.entities.GamePlayerJoin
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
+import com.seakernel.android.scoreapp.repository.GameRepository.Companion.gameSettingsSaves
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -82,7 +87,7 @@ class GameRepository(val context: Context) {
         settingsSaves.update { it + 1 }
     }
 
-    private fun saveGame(settings: GameSettings) = database.runInTransaction(Runnable {
+    private fun saveGame(settings: GameSettings) = database.runInTransaction {
         // All or nothing, so a failure can't leave players without scores for some rounds
         val originalPlayerIds = gamePlayerDao.getPlayersForGame(settings.id!!).map { it.uid }
         val game = settings.toGameEntity()
@@ -114,12 +119,13 @@ class GameRepository(val context: Context) {
         // so picking them again brings their scores back. New players get a 0 in any round they don't have a score in.
         val roundRepository = RoundRepository(context)
         rounds.forEach { fullRound ->
-            roundRepository.insertScores(*newPlayers
+            roundRepository.insertScores(
+                *newPlayers
                 .filter { join -> fullRound.scores.none { it.playerId == join.playerId } }
                 .map { join -> ScoreEntity(0, join.playerId, fullRound.round.id, 0.0, "") }
                 .toTypedArray())
         }
-    })
+    }
 
     fun deleteGame(id: Long): Boolean {
         return gameDao.deleteById(id) > 0

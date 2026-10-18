@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.BundleCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewGroupCompat
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +17,7 @@ import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentPlayerSelectBinding
 import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
+import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment.Companion.KEY_PLAYER_IDS
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment

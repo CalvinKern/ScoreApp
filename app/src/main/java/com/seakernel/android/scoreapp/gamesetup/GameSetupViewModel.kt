@@ -14,8 +14,8 @@ import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.utility.AppPreferences
 import com.seakernel.android.scoreapp.utility.safePostValue
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,6 +28,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.threeten.bp.ZonedDateTime
 import java.util.Collections
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * @param savedState keeps a new game being set up when Android closes the app in the background (see [NewGameSetup]).
@@ -184,7 +185,7 @@ class GameSetupViewModel(
      * @param exit whether the screen is closing, it's told when the save finishes (even if nothing changed)
      */
     @MainThread
-    @OptIn(DelicateCoroutinesApi::class) // CoroutineStart.ATOMIC, so a save starts even when the scope is cancelled
+    @OptIn(DelicateCoroutinesApi::class) // CoroutineStart.ATOMIC, so a save starts even when the scope is canceled
     fun saveChanges(exit: Boolean) {
         autoSaveJob?.cancel()
         autoSaveJob = null
@@ -246,7 +247,7 @@ class GameSetupViewModel(
     private fun scheduleAutoSave() {
         autoSaveJob?.cancel()
         autoSaveJob = scope.launch(Dispatchers.Main) {
-            delay(AUTO_SAVE_DELAY_MS)
+            delay(AUTO_SAVE_DELAY_MS.milliseconds)
             autoSaveJob = null
             saveChanges(exit = false)
         }

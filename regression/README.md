@@ -37,36 +37,36 @@ scenario in the same change.
 
 ## Files
 
-| Feature | Covers |
-|---|---|
-| [01_first_launch](features/01_first_launch.feature) | The empty game list, the usage data question in it |
-| [02_game_list](features/02_game_list.feature) | Order, row details, opening, deleting, games that need players |
-| [03_players](features/03_players.feature) | Picking, adding, renaming, deleting and restoring, searching players |
-| [04_game_setup](features/04_game_setup.feature) | Creating a game, its settings, the dealer, player order, loading previous settings |
-| [05_scoring](features/05_scoring.feature) | Entering scores with the calculator and the system keyboard, totals, the leader |
-| [06_rounds_and_dealer](features/06_rounds_and_dealer.feature) | Adding and deleting rounds, moving between scores, the dealer |
-| [07_goals](features/07_goals.feature) | Finish score and rounds, Finish Game, Another Round, confetti |
-| [08_standings_and_graph](features/08_standings_and_graph.feature) | Player Standings, the rounds graph and podium |
-| [09_round_notes](features/09_round_notes.feature) | Notes for each player's rounds |
-| [10_edit_game](features/10_edit_game.feature) | Changing a game's settings and players while it's being played |
-| [11_new_game_from_game](features/11_new_game_from_game.feature) | Starting the next game with the same players and settings |
-| [12_settings](features/12_settings.feature) | Every switch on the Settings screen |
-| [13_seeded_games](features/13_seeded_games.feature) | All 30 games from `scripts/test-data/seed.sql`, with their expected totals |
-| [14_full_games](features/14_full_games.feature) | Real games played from the first round to the standings |
-| [15_device](features/15_device.feature) | Rotation, landscape, leaving the app, Android closing it in the background, back gestures, other languages |
+| Feature                                                           | Covers                                                                                                     |
+|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| [01_first_launch](features/01_first_launch.feature)               | The empty game list, the usage data question in it                                                         |
+| [02_game_list](features/02_game_list.feature)                     | Order, row details, opening, deleting, games that need players                                             |
+| [03_players](features/03_players.feature)                         | Picking, adding, renaming, deleting and restoring, searching players                                       |
+| [04_game_setup](features/04_game_setup.feature)                   | Creating a game, its settings, the dealer, player order, loading previous settings                         |
+| [05_scoring](features/05_scoring.feature)                         | Entering scores with the calculator and the system keyboard, totals, the leader                            |
+| [06_rounds_and_dealer](features/06_rounds_and_dealer.feature)     | Adding and deleting rounds, moving between scores, the dealer                                              |
+| [07_goals](features/07_goals.feature)                             | Finish score and rounds, Finish Game, Another Round, confetti                                              |
+| [08_standings_and_graph](features/08_standings_and_graph.feature) | Player Standings, the rounds graph and podium                                                              |
+| [09_round_notes](features/09_round_notes.feature)                 | Notes for each player's rounds                                                                             |
+| [10_edit_game](features/10_edit_game.feature)                     | Changing a game's settings and players while it's being played                                             |
+| [11_new_game_from_game](features/11_new_game_from_game.feature)   | Starting the next game with the same players and settings                                                  |
+| [12_settings](features/12_settings.feature)                       | Every switch on the Settings screen                                                                        |
+| [13_seeded_games](features/13_seeded_games.feature)               | All 30 games from `scripts/test-data/seed.sql`, with their expected totals                                 |
+| [14_full_games](features/14_full_games.feature)                   | Real games played from the first round to the standings                                                    |
+| [15_device](features/15_device.feature)                           | Rotation, landscape, leaving the app, Android closing it in the background, back gestures, other languages |
 
 ## Tags
 
-| Tag | Meaning |
-|---|---|
-| `@smoke` | A quick pass over the main flows, about 40 scenarios. Run it before every release. |
-| `@seed` | Starts from the seed data. Load it with `scripts/emulator-db.sh seed`. |
-| `@fresh` | Starts from a fresh install. Clear the app's data with `adb shell pm clear com.seakernel.scorepad.debug`. |
-| `@calculator` | Uses the calculator keyboard |
-| `@system-keyboard` | Uses the system keyboard (the game's Calculator Keyboard setting is off) |
-| `@visual` | Needs a look at the screen (colors, borders, charts, confetti), not just the text on it |
-| `@landscape`, `@locale` | Changes the device's orientation or language. Put it back afterwards. |
-| `@slow` | Plays a long game, skip it for a quick pass |
+| Tag                     | Meaning                                                                                                   |
+|-------------------------|-----------------------------------------------------------------------------------------------------------|
+| `@smoke`                | A quick pass over the main flows, about 40 scenarios. Run it before every release.                        |
+| `@seed`                 | Starts from the seed data. Load it with `scripts/emulator-db.sh seed`.                                    |
+| `@fresh`                | Starts from a fresh install. Clear the app's data with `adb shell pm clear com.seakernel.scorepad.debug`. |
+| `@calculator`           | Uses the calculator keyboard                                                                              |
+| `@system-keyboard`      | Uses the system keyboard (the game's Calculator Keyboard setting is off)                                  |
+| `@visual`               | Needs a look at the screen (colors, borders, charts, confetti), not just the text on it                   |
+| `@landscape`, `@locale` | Changes the device's orientation or language. Put it back afterwards.                                     |
+| `@slow`                 | Plays a long game, skip it for a quick pass                                                               |
 
 Scenarios without `@seed` or `@fresh` make their own data from whatever is already there, so they can run after
 either.
@@ -90,70 +90,70 @@ are the names shown in the game, unquoted when a step names a player (`Lindsay i
 
 ### Setting up
 
-| Step | How |
-|---|---|
-| `Given a fresh install` | Clear the app's data and open it. The game list is empty and nothing is asked. |
-| `Given a fresh install with the usage data question answered` | Clear the app's data, open it, tap the Settings icon, tap the row "Send Crash Reports" twice (on, then off), and go back. Changing a switch answers the question, so its card never shows in the game list. |
-| `Given the seed data is loaded` | `scripts/emulator-db.sh seed`, then open the app on the game list |
-| `Given I am on the game list` | Open the app, or go back until the "Games" screen shows |
-| `Given the players "A, B" exist` | Add any of them that aren't already in the player list (from any game's player picker) |
-| `Given a game "<name>" with players "A, B"` | Create it: + on the game list, type the name, "Edit", pick the players in that order (adding any that don't exist), save the players, set the settings in the table if one follows, then "Save". The game opens. |
-| `Given I am picking players for a new game` | On the game list, tap +, then "Edit" |
+| Step                                                          | How                                                                                                                                                                                                              |
+|---------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Given a fresh install`                                       | Clear the app's data and open it. The game list is empty and nothing is asked.                                                                                                                                   |
+| `Given a fresh install with the usage data question answered` | Clear the app's data, open it, tap the Settings icon, tap the row "Send Crash Reports" twice (on, then off), and go back. Changing a switch answers the question, so its card never shows in the game list.      |
+| `Given the seed data is loaded`                               | `scripts/emulator-db.sh seed`, then open the app on the game list                                                                                                                                                |
+| `Given I am on the game list`                                 | Open the app, or go back until the "Games" screen shows                                                                                                                                                          |
+| `Given the players "A, B" exist`                              | Add any of them that aren't already in the player list (from any game's player picker)                                                                                                                           |
+| `Given a game "<name>" with players "A, B"`                   | Create it: + on the game list, type the name, "Edit", pick the players in that order (adding any that don't exist), save the players, set the settings in the table if one follows, then "Save". The game opens. |
+| `Given I am picking players for a new game`                   | On the game list, tap +, then "Edit"                                                                                                                                                                             |
 
 The settings table under a game uses the setting names from the New Game screen. Settings left out keep their
 defaults:
 
-| Setting | Values | Default |
-|---|---|---|
-| `Dealer` | on, off | on |
-| `First dealer` | a player's name | the first player |
-| `Reverse Scoring` | on, off | off |
-| `Show Round Notes` | on, off | off |
-| `Calculator Keyboard` | on, off | on (follows Settings › Calculator Keyboard) |
-| `Finish at Score` | a number (decimals and negatives allowed, a negative one is reached going down), or blank | blank |
-| `Finish After Rounds` | a number, or blank | blank |
+| Setting               | Values                                                                                    | Default                                     |
+|-----------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
+| `Dealer`              | on, off                                                                                   | on                                          |
+| `First dealer`        | a player's name                                                                           | the first player                            |
+| `Reverse Scoring`     | on, off                                                                                   | off                                         |
+| `Show Round Notes`    | on, off                                                                                   | off                                         |
+| `Calculator Keyboard` | on, off                                                                                   | on (follows Settings › Calculator Keyboard) |
+| `Finish at Score`     | a number (decimals and negatives allowed, a negative one is reached going down), or blank | blank                                       |
+| `Finish After Rounds` | a number, or blank                                                                        | blank                                       |
 
 ### Doing things
 
-| Step | How |
-|---|---|
-| `When I tap "<text>"` | Tap the button, menu item, or row with that text |
-| `When I choose "<item>" from the game menu` | "Standings" is the trophy icon. "Show Graph", "Edit", "Delete Rounds", and "New Game" are in the ⋮ menu. |
-| `When I open the game "<name>"` | Tap its row on the game list (the top one when two have the same name, unless a row number is given) |
-| `When I enter "<input>" for <player> in round <n>` | Tap the score, move the cursor to the end (a tap puts it where the finger landed) and clear it with DEL, type the input, then press `=` on the calculator, or with the system keyboard tap the toolbar beside the title (other places outside the score do things: a player's name opens their notes, and the space under the table can be "Add Round"). Write `×` for multiply; the system keyboard only types digits, `-`, and `.`. |
-| `When I play these rounds:` | A table with a column per player and a row per round. Each row is entered into the current round, then "Add Round" is tapped before the next row (not after the last). An empty cell is skipped and stays 0. |
-| `When I tap the round <n> score for <player>` | Tap that player's score in that round (round 1 is the top row) |
-| `When I type "<input>" on the calculator` | Tap the calculator keys for each character, without pressing `=` |
-| `When I type these on the calculator, tapping "->" after each: ...` | Type each value, then tap `->`, which moves to the next score, and adds a round after the last one |
-| `When I long press <target>` | Hold it for about a second (`adb shell input swipe x y x y 800`) |
-| `When I tap the rows "A" and "B" quickly` | Tap both within about a second (`adb shell "input tap X1 Y1; input tap X2 Y2"`), before the first pick saves |
-| `When I go back` | The system back gesture or button (`adb shell input keyevent KEYCODE_BACK`) |
-| `When I close and reopen the app` | Swipe it away from recents (or `adb shell am force-stop`), then open it again |
-| `When I force stop the app` | `adb shell am force-stop com.seakernel.scorepad.debug`, without closing any screen first |
-| `When Android closes the app in the background` | Press Home, kill the app while it's in the background, and open it again from its launcher icon (see [Driving the app with adb](#driving-the-app-with-adb)). Android does this on its own to free memory, and the app comes back on the same screen, rebuilt from what it saved. Unlike `I close and reopen the app`, which throws the saved screens away and starts on the game list. |
+| Step                                                                | How                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|---------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `When I tap "<text>"`                                               | Tap the button, menu item, or row with that text                                                                                                                                                                                                                                                                                                                                                                                      |
+| `When I choose "<item>" from the game menu`                         | "Standings" is the trophy icon. "Show Graph", "Edit", "Delete Rounds", and "New Game" are in the ⋮ menu.                                                                                                                                                                                                                                                                                                                              |
+| `When I open the game "<name>"`                                     | Tap its row on the game list (the top one when two have the same name, unless a row number is given)                                                                                                                                                                                                                                                                                                                                  |
+| `When I enter "<input>" for <player> in round <n>`                  | Tap the score, move the cursor to the end (a tap puts it where the finger landed) and clear it with DEL, type the input, then press `=` on the calculator, or with the system keyboard tap the toolbar beside the title (other places outside the score do things: a player's name opens their notes, and the space under the table can be "Add Round"). Write `×` for multiply; the system keyboard only types digits, `-`, and `.`. |
+| `When I play these rounds:`                                         | A table with a column per player and a row per round. Each row is entered into the current round, then "Add Round" is tapped before the next row (not after the last). An empty cell is skipped and stays 0.                                                                                                                                                                                                                          |
+| `When I tap the round <n> score for <player>`                       | Tap that player's score in that round (round 1 is the top row)                                                                                                                                                                                                                                                                                                                                                                        |
+| `When I type "<input>" on the calculator`                           | Tap the calculator keys for each character, without pressing `=`                                                                                                                                                                                                                                                                                                                                                                      |
+| `When I type these on the calculator, tapping "->" after each: ...` | Type each value, then tap `->`, which moves to the next score, and adds a round after the last one                                                                                                                                                                                                                                                                                                                                    |
+| `When I long press <target>`                                        | Hold it for about a second (`adb shell input swipe x y x y 800`)                                                                                                                                                                                                                                                                                                                                                                      |
+| `When I tap the rows "A" and "B" quickly`                           | Tap both within about a second (`adb shell "input tap X1 Y1; input tap X2 Y2"`), before the first pick saves                                                                                                                                                                                                                                                                                                                          |
+| `When I go back`                                                    | The system back gesture or button (`adb shell input keyevent KEYCODE_BACK`)                                                                                                                                                                                                                                                                                                                                                           |
+| `When I close and reopen the app`                                   | Swipe it away from recents (or `adb shell am force-stop`), then open it again                                                                                                                                                                                                                                                                                                                                                         |
+| `When I force stop the app`                                         | `adb shell am force-stop com.seakernel.scorepad.debug`, without closing any screen first                                                                                                                                                                                                                                                                                                                                              |
+| `When Android closes the app in the background`                     | Press Home, kill the app while it's in the background, and open it again from its launcher icon (see [Driving the app with adb](#driving-the-app-with-adb)). Android does this on its own to free memory, and the app comes back on the same screen, rebuilt from what it saved. Unlike `I close and reopen the app`, which throws the saved screens away and starts on the game list.                                                |
 
 ### Checking things
 
-| Step | How |
-|---|---|
-| `Then I see "<text>"` / `Then I don't see "<text>"` | The text is (or isn't) on the screen |
-| `Then the title is "<text>"` | The toolbar title |
-| `Then the subtitle is "<text>"` / `Then there's no subtitle` | The smaller line under the toolbar title |
-| `Then the totals are:` | The totals row at the bottom of the game, one column per player, as shown |
-| `Then the totals read "A 1, B 2"` | The same, written on one line in seat order |
-| `Then the round <n> scores are:` | The scores in that round's row, as shown when not being edited |
-| `Then <player> is leading` / `Then A and B are leading` | Their totals have the leading (winner) border, and no one else's does |
-| `Then nobody is leading` | No total has the leading border |
-| `Then the leading players are "A, B"` | The same as the leading steps above, or "nobody" |
-| `Then the round <n> score for <player> shows "<text>"` | That score as shown when not being edited. "in red" means the error color, used for calculations that couldn't be finished. |
-| `Then the score being edited shows "<text>"` | The text in the focused score, which is what was typed for it (like `5×4+10+25`) |
-| `Then the game has <n> rounds` | The number of rows in the score table |
-| `Then the button after the rounds is "<text>"` | "Add Round" or "Finish Game" |
-| `Then <player> is the dealer` | The current (last) round's score for that player has the dealer border |
-| `Then <player> dealt round <n>` | That round's score for that player has the dealer border (a lighter one for past rounds) |
-| `Then the current dealer is "<player>"` | The same as `<player> is the dealer`, or "nobody" when no score has the dealer border |
-| `Then the standings are:` | The Player Standings dialog lists these places, players, and totals in order. Tied players share a place and can be in either order. |
-| `Then the calculator keyboard shows` / `doesn't show` | The calculator's keys (`calculatorKeyboard`) are on the screen, or aren't |
+| Step                                                                              | How                                                                                                                                                                                                                            |
+|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Then I see "<text>"` / `Then I don't see "<text>"`                               | The text is (or isn't) on the screen                                                                                                                                                                                           |
+| `Then the title is "<text>"`                                                      | The toolbar title                                                                                                                                                                                                              |
+| `Then the subtitle is "<text>"` / `Then there's no subtitle`                      | The smaller line under the toolbar title                                                                                                                                                                                       |
+| `Then the totals are:`                                                            | The totals row at the bottom of the game, one column per player, as shown                                                                                                                                                      |
+| `Then the totals read "A 1, B 2"`                                                 | The same, written on one line in seat order                                                                                                                                                                                    |
+| `Then the round <n> scores are:`                                                  | The scores in that round's row, as shown when not being edited                                                                                                                                                                 |
+| `Then <player> is leading` / `Then A and B are leading`                           | Their totals have the leading (winner) border, and no one else's does                                                                                                                                                          |
+| `Then nobody is leading`                                                          | No total has the leading border                                                                                                                                                                                                |
+| `Then the leading players are "A, B"`                                             | The same as the leading steps above, or "nobody"                                                                                                                                                                               |
+| `Then the round <n> score for <player> shows "<text>"`                            | That score as shown when not being edited. "in red" means the error color, used for calculations that couldn't be finished.                                                                                                    |
+| `Then the score being edited shows "<text>"`                                      | The text in the focused score, which is what was typed for it (like `5×4+10+25`)                                                                                                                                               |
+| `Then the game has <n> rounds`                                                    | The number of rows in the score table                                                                                                                                                                                          |
+| `Then the button after the rounds is "<text>"`                                    | "Add Round" or "Finish Game"                                                                                                                                                                                                   |
+| `Then <player> is the dealer`                                                     | The current (last) round's score for that player has the dealer border                                                                                                                                                         |
+| `Then <player> dealt round <n>`                                                   | That round's score for that player has the dealer border (a lighter one for past rounds)                                                                                                                                       |
+| `Then the current dealer is "<player>"`                                           | The same as `<player> is the dealer`, or "nobody" when no score has the dealer border                                                                                                                                          |
+| `Then the standings are:`                                                         | The Player Standings dialog lists these places, players, and totals in order. Tied players share a place and can be in either order.                                                                                           |
+| `Then the calculator keyboard shows` / `doesn't show`                             | The calculator's keys (`calculatorKeyboard`) are on the screen, or aren't                                                                                                                                                      |
 | `Then the system number keyboard shows` / `Then the system keyboard doesn't show` | `adb shell dumpsys input_method` has `mInputShown=true` (or `false`). Check that instead of looking, since an emulator with a hardware keyboard attached never draws the system keyboard, even while it's showing for a score. |
 
 ### Finding things on screen
@@ -161,16 +161,16 @@ defaults:
 For tools that read the view tree (`adb shell uiautomator dump`, Espresso, Maestro), these view ids find what the
 steps talk about. Each is under `com.seakernel.scorepad.debug:id/`.
 
-| Screen | Ids |
-|---|---|
-| Game list | `gameRecycler`, each row's `gameNameHolder`, `gameDateHolder`, `gamePlayersHolder`, `gameRoundsHolder`; `fab` (+); `gameListEmptyGroup` |
-| New Game, Game Settings | `gameNameEdit`, `playersHeaderEdit` ("Edit"), `playerRecycler` with `playerNameHolder` and `playerDealerBox`; `hasDealerCheckbox`, `reversedScoringCheckbox`, `showNotesCheckbox`, `useCalculatorCheckbox`, `maxScoreEdit`, `maxRoundsEdit` |
-| Pick Players | `playerRecycler` with `playerNameHolder`, `playerCheckHolder`, `playerNameSettings` (edit icon); `fab` (+); `actionSearch`; the player dialog's `playerNameEdit`, `playerColorEdit` (hex, without the #), and `playerColorSwatches` (a swatch per graph color, named by color, like "Green") |
-| Game | `nameRow` with `playerNameHeader`; `scoreRows` with a `playerScore` per score (left to right, then top to bottom); `addRoundButton`, `finishGameButton`; `totalsRow` with a `playerScore` per total; `calculatorKeyboard` with `calculatorKeyOne` … `calculatorKeyZero`, `calculatorKeyPlus`, `calculatorKeyMinus`, `calculatorKeyMultiply`, `calculatorKeyDivide`, `calculatorKeyDecimal`, `calculatorKeyOpenParen`, `calculatorKeyCloseParen`, `calculatorKeyDelete`, `calculatorKeyEquals`, `calculatorKeyNext` ("->") |
-| Player Standings | `dialogPlayerRoundSubheader`, `dialogPlayerRoundRecycler` with `playerStandingHolder`, `playerNameHolder`, `playerScoreHolder` |
-| Notes | `dialogPlayerNotesRecycler` with `playerRoundLabel` and `playerRoundValue` |
-| Graph | `graphToolbar`, `gameChart` (rounds), `podiumChart` |
-| Settings | `autoLoadSettingsSwitch`, `calculatorDefaultSwitch`, `dynamicColorSwitch`, `trueBlackSwitch`, `shareUsageDataSwitch`, `shareCrashReportsSwitch`, `versionText` |
+| Screen                  | Ids                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Game list               | `gameRecycler`, each row's `gameNameHolder`, `gameDateHolder`, `gamePlayersHolder`, `gameRoundsHolder`; `fab` (+); `gameListEmptyGroup`                                                                                                                                                                                                                                                                                                                                                                                   |
+| New Game, Game Settings | `gameNameEdit`, `playersHeaderEdit` ("Edit"), `playerRecycler` with `playerNameHolder` and `playerDealerBox`; `hasDealerCheckbox`, `reversedScoringCheckbox`, `showNotesCheckbox`, `useCalculatorCheckbox`, `maxScoreEdit`, `maxRoundsEdit`                                                                                                                                                                                                                                                                               |
+| Pick Players            | `playerRecycler` with `playerNameHolder`, `playerCheckHolder`, `playerNameSettings` (edit icon); `fab` (+); `actionSearch`; the player dialog's `playerNameEdit`, `playerColorEdit` (hex, without the #), and `playerColorSwatches` (a swatch per graph color, named by color, like "Green")                                                                                                                                                                                                                              |
+| Game                    | `nameRow` with `playerNameHeader`; `scoreRows` with a `playerScore` per score (left to right, then top to bottom); `addRoundButton`, `finishGameButton`; `totalsRow` with a `playerScore` per total; `calculatorKeyboard` with `calculatorKeyOne` … `calculatorKeyZero`, `calculatorKeyPlus`, `calculatorKeyMinus`, `calculatorKeyMultiply`, `calculatorKeyDivide`, `calculatorKeyDecimal`, `calculatorKeyOpenParen`, `calculatorKeyCloseParen`, `calculatorKeyDelete`, `calculatorKeyEquals`, `calculatorKeyNext` ("->") |
+| Player Standings        | `dialogPlayerRoundSubheader`, `dialogPlayerRoundRecycler` with `playerStandingHolder`, `playerNameHolder`, `playerScoreHolder`                                                                                                                                                                                                                                                                                                                                                                                            |
+| Notes                   | `dialogPlayerNotesRecycler` with `playerRoundLabel` and `playerRoundValue`                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Graph                   | `graphToolbar`, `gameChart` (rounds), `podiumChart`                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Settings                | `autoLoadSettingsSwitch`, `calculatorDefaultSwitch`, `dynamicColorSwitch`, `trueBlackSwitch`, `shareUsageDataSwitch`, `shareCrashReportsSwitch`, `versionText`                                                                                                                                                                                                                                                                                                                                                            |
 
 Borders, colors, confetti, and the charts' lines and bars aren't in the view tree, so `@visual` checks need a
 screenshot. The charts describe their data for screen readers, so their content description lists each player's
@@ -181,26 +181,26 @@ running totals and the podium order.
 For scripts and agents. In Git Bash, `export MSYS_NO_PATHCONV=1` first so device paths aren't rewritten. With more
 than one emulator or phone connected, also `export ANDROID_SERIAL=<one from adb devices>`, or every adb command fails.
 
-| To | Run |
-|---|---|
-| Open the app | `adb shell am start -n com.seakernel.scorepad.debug/com.seakernel.android.scoreapp.ui.MainActivity` |
-| Open the app from its launcher icon | `adb shell monkey -p com.seakernel.scorepad.debug -c android.intent.category.LAUNCHER 1`. Use this to come back after Android closes the app: `am start -n` opens the screens in a separate task instead of the ones Android saved. |
-| Read the screen | `adb shell uiautomator dump /sdcard/ui.xml >/dev/null && adb exec-out cat /sdcard/ui.xml` |
-| Tap | `adb shell input tap X Y`, the middle of a node's `bounds="[x1,y1][x2,y2]"` |
-| Long press | `adb shell input swipe X Y X Y 800` |
-| Drag a player | `adb shell input draganddrop X1 Y1 X2 Y2 1500` |
-| Scroll | `adb shell input swipe X1 Y1 X2 Y2 300` |
-| Type on the system keyboard | `adb shell input text "Quinn"` (`%s` for a space) |
-| Back gesture | `adb shell input swipe 2 1300 600 1300 250` (a swipe in from the left edge) |
-| Back button, Home, Recents | `adb shell input keyevent KEYCODE_BACK` / `KEYCODE_HOME` / `KEYCODE_APP_SWITCH` |
-| Screenshot | `adb exec-out screencap -p > name.png` |
-| Force stop, kill in background | `adb shell am force-stop <package>`, `adb shell am kill <package>` |
+| To                                                   | Run                                                                                                                                                                                                                                        |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Open the app                                         | `adb shell am start -n com.seakernel.scorepad.debug/com.seakernel.android.scoreapp.ui.MainActivity`                                                                                                                                        |
+| Open the app from its launcher icon                  | `adb shell monkey -p com.seakernel.scorepad.debug -c android.intent.category.LAUNCHER 1`. Use this to come back after Android closes the app: `am start -n` opens the screens in a separate task instead of the ones Android saved.        |
+| Read the screen                                      | `adb shell uiautomator dump /sdcard/ui.xml >/dev/null && adb exec-out cat /sdcard/ui.xml`                                                                                                                                                  |
+| Tap                                                  | `adb shell input tap X Y`, the middle of a node's `bounds="[x1,y1][x2,y2]"`                                                                                                                                                                |
+| Long press                                           | `adb shell input swipe X Y X Y 800`                                                                                                                                                                                                        |
+| Drag a player                                        | `adb shell input draganddrop X1 Y1 X2 Y2 1500`                                                                                                                                                                                             |
+| Scroll                                               | `adb shell input swipe X1 Y1 X2 Y2 300`                                                                                                                                                                                                    |
+| Type on the system keyboard                          | `adb shell input text "Quinn"` (`%s` for a space)                                                                                                                                                                                          |
+| Back gesture                                         | `adb shell input swipe 2 1300 600 1300 250` (a swipe in from the left edge)                                                                                                                                                                |
+| Back button, Home, Recents                           | `adb shell input keyevent KEYCODE_BACK` / `KEYCODE_HOME` / `KEYCODE_APP_SWITCH`                                                                                                                                                            |
+| Screenshot                                           | `adb exec-out screencap -p > name.png`                                                                                                                                                                                                     |
+| Force stop, kill in background                       | `adb shell am force-stop <package>`, `adb shell am kill <package>`                                                                                                                                                                         |
 | Close the app the way Android does in the background | `KEYCODE_HOME`, wait about two seconds, then `adb shell am kill <package>`. It only kills an app that's in the background, so check `adb shell pidof <package>` prints nothing, or end it with `adb shell run-as <package> kill -9 <pid>`. |
-| Rotate | `adb shell wm user-rotation lock 1` (landscape) or `lock 0` (portrait), and `wm user-rotation free` to turn auto-rotate back on. Check `adb shell wm user-rotation` first to know what to put back. |
-| Dark mode | `adb shell cmd uimode night yes` / `no` |
-| Font size | `adb shell settings put system font_scale 1.3` (`1.0` to reset) |
-| Right to left | `adb shell settings put global debug.force_rtl 1` (`0` to reset), then restart the app |
-| Language | Settings › System › Languages on the device. Put English (United States) back after. |
+| Rotate                                               | `adb shell wm user-rotation lock 1` (landscape) or `lock 0` (portrait), and `wm user-rotation free` to turn auto-rotate back on. Check `adb shell wm user-rotation` first to know what to put back.                                        |
+| Dark mode                                            | `adb shell cmd uimode night yes` / `no`                                                                                                                                                                                                    |
+| Font size                                            | `adb shell settings put system font_scale 1.3` (`1.0` to reset)                                                                                                                                                                            |
+| Right to left                                        | `adb shell settings put global debug.force_rtl 1` (`0` to reset), then restart the app                                                                                                                                                     |
+| Language                                             | Settings › System › Languages on the device. Put English (United States) back after.                                                                                                                                                       |
 
 Calculator keys are tapped by id (`calculatorKeyFive`, `calculatorKeyMultiply`, ...), not typed. The system keyboard
 only types digits, `-`, and `.` into a score. One dump gives the bounds of everything on screen, so several taps can
@@ -240,7 +240,7 @@ Things that trip up a run:
   `input` reads it as an option.
 - Toasts (like "Please enter a name for the game") aren't in the dump. Take a screenshot right after the tap that
   shows one, since it's gone in about two seconds.
-- The rotation lock doesn't survive `uiautomator dump`: afterwards `wm user-rotation` reads `free` again and the screen
+- The rotation lock doesn't survive `uiautomator dump`: afterward `wm user-rotation` reads `free` again and the screen
   goes back to portrait. Lock it again before each landscape check, and read landscape screens from screenshots.
 - Rows partly under the gesture bar at the bottom don't reliably take taps or long presses. Scroll them up first.
 - In the player dialog, the swatch that's picked has `selected="true"` (not `checked`), and an empty color field

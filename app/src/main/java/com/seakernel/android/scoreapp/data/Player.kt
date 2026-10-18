@@ -16,6 +16,7 @@ data class Player(
 ) : Parcelable {
     companion object {
         /** Alphabetical, ignoring case, so "alice" isn't listed after "Zed" */
+        @Suppress("SpellCheckingInspection")
         val NAME_ORDER: Comparator<Player> = compareBy(String.CASE_INSENSITIVE_ORDER) { it.name }
     }
 }

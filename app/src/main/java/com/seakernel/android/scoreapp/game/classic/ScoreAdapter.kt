@@ -410,7 +410,7 @@ class ScoreViewHolder(
                 setScoreText(editText)
                 binding.playerScore.setTextColor(itemView.context.themeColor(R.attr.colorOnSurface))
                 // Start at the end of the score (makes quick edits/additions easier). A tap that focused the cell
-                // places the cursor where it landed afterwards, which is kept when the text is what was tapped on.
+                // places the cursor where it landed afterward, which is kept when the text is what was tapped on.
                 binding.playerScore.setSelection(editText.length)
                 if (editText != shownText) {
                     // The tap landed on the shown score (e.g. "55"), not on the typed input that replaced it

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.os.BundleCompat
-import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -12,6 +11,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.DialogPlayerNameBinding
+import com.seakernel.android.scoreapp.playerselect.PlayerDialog.Companion.KEY_DELETE
+import com.seakernel.android.scoreapp.playerselect.PlayerDialog.Companion.KEY_PLAYER
+import com.seakernel.android.scoreapp.playerselect.PlayerDialog.Companion.REQUEST_PLAYER
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.PlayerColors
 import com.seakernel.android.scoreapp.utility.logEvent

@@ -314,7 +314,7 @@ class GameFragment : MobiusFragment<GameModel, GameEvent, GameEffect>() {
         val scroll = binding.scoreScroll
         val screenWidth = scroll.width - scroll.paddingLeft - scroll.paddingRight
         val tableWidth = binding.scoreRows.layoutParams.width
-        if (screenWidth <= 0 || tableWidth <= screenWidth) return 0f
+        if (screenWidth !in 1..<tableWidth) return 0f
         return scroll.scrollX + screenWidth / 2f - tableWidth / 2f
     }
 

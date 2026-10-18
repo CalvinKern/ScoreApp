@@ -102,7 +102,7 @@ class DbTestHelper {
         }
 
         private fun generateGameData(version: Int, db: SupportSQLiteDatabase, playerCount: Int) {
-            if (version < 4) return;
+            if (version < 4) return
 
             val testN = 1
 

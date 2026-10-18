@@ -29,7 +29,7 @@ object PlayerColors {
     /** @param isRepeated whether another player in the game has this color, so their line is dashed to tell them apart */
     data class GameColor(val color: Int, val isRepeated: Boolean = false)
 
-    /** The colors seats get, in order */
+    /** The colors a seat get, in order */
     fun seatColors(context: Context) = seatColorIds.map { ContextCompat.getColor(context, it) }
 
     /** Each player's color in a game, for [players] in seat order */

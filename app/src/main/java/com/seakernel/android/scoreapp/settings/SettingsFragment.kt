@@ -153,7 +153,7 @@ class SettingsFragment : Fragment() {
 
     /**
      * Tapping the row toggles its switch, and screen readers hear the row as that switch: its text, then whether it's
-     * on. Otherwise they'd stop on the row without hearing the switch's state, and then on the switch on its own.
+     * on. Otherwise, they'd stop on the row without hearing the switch's state, and then on the switch on its own.
      */
     private fun View.actAsSwitch(switch: CompoundButton) {
         setOnClickListener { switch.toggle() }

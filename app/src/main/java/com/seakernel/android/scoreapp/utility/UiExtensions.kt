@@ -52,7 +52,7 @@ fun View.setBackgroundRipple() = with(TypedValue()) {
  * only a move outside it cancels the press, so a swipe whose moves never reached the view would click what it started
  * on. adb's `input swipe` drops all of its moves when the app is slow to take the press.
  */
-@SuppressLint("ClickableViewAccessibility") // Clicks still go through performClick, only far lifts are cancelled
+@SuppressLint("ClickableViewAccessibility") // Clicks still go through performClick, only far lifts are canceled
 fun View.ignoreLiftsOutside() {
     val slop = ViewConfiguration.get(context).scaledTouchSlop
     setOnTouchListener { view, event ->
@@ -192,6 +192,7 @@ fun View.applyWindowInsetsNavigationMargin() {
 }
 
 /** Shows the icons of the menu items in the overflow menu, which the toolbar hides by default */
+@Suppress("UsePropertyAccessSyntax")
 @SuppressLint("RestrictedApi") // MenuBuilder is restricted, but this is the common way to show overflow icons
 fun MaterialToolbar.setOptionalIconsVisible() {
     (menu as? MenuBuilder)?.setOptionalIconsVisible(true)

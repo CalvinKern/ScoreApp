@@ -43,7 +43,7 @@ class PlayerColorsTest {
     }
 
     @Test
-    fun aPickedColorThatIsntASeatColorSkipsNothing() {
+    fun aPickedColorThatIsNotASeatColorSkipsNothing() {
         assertEquals(listOf(GameColor(99), GameColor(1), GameColor(2)), colors(99, null, null))
     }
 

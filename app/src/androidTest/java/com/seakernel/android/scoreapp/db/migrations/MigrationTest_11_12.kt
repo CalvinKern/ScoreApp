@@ -7,7 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
-import kotlin.jvm.Throws
 
 /**
  * Instrumented test for migration from version 11 to 12, which adds the typed input for scores.
@@ -23,7 +22,7 @@ class MigrationTest_11_12 {
     @Throws(IOException::class)
     fun migrate11_12() {
         DbTestHelper.createDatabaseAndMigrate(helper, 11, 12, Migration_11_12()) { db ->
-            // runMigrationsAndValidate already validates the schema, existing scores should have no input yet
+            // runMigrationsAndValidate already validates the schema, existing scores shouldn't have values yet
             db.openHelper.readableDatabase.query("SELECT COUNT(*), COUNT(${ScoreEntity.COLUMN_SCORE_INPUT}) FROM ${ScoreEntity.TABLE_NAME}").use { cursor ->
                 cursor.moveToFirst()
                 assert(cursor.getInt(0) > 0)
