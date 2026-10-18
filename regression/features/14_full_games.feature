@@ -9,7 +9,7 @@ Feature: Full games
       | Dealer              | on     |
       | First dealer        | Calvin |
       | Reverse Scoring     | on     |
-      | Finish at Score     | 100    |
+      | Target Score        | 100    |
       | Calculator Keyboard | off    |
     When I play these rounds:
       | Calvin | Lindsay | Bob | Zed |
@@ -60,7 +60,7 @@ Feature: Full games
   @smoke @calculator
   Scenario: Uno, only the hand's winner scores, first to 500, then one more hand
     Given a game "Uno Night" with players "Lindsay, Bob, Priya" and settings:
-      | Finish at Score | 500 |
+      | Target Score | 500 |
     When I play these rounds:
       | Lindsay            | Bob                  | Priya   |
       | 20+50+7+3          |                      |         |
@@ -94,8 +94,8 @@ Feature: Full games
   @calculator
   Scenario: Spades, partnerships with set bids and bags, first to 500
     Given a game "Spades Night" with players "Us, Them" and settings:
-      | Dealer          | on  |
-      | Finish at Score | 500 |
+      | Dealer       | on  |
+      | Target Score | 500 |
     When I play these rounds:
       | Us     | Them     |
       | 50+1   | 60+1     |
@@ -158,7 +158,7 @@ Feature: Full games
     Given a game "Trivia Night Out" with players "Calvin, Lindsay, Bob" and settings:
       | Dealer              | off |
       | Calculator Keyboard | off |
-      | Finish After Rounds | 4   |
+      | Target Rounds       | 4   |
     When I play these rounds:
       | Calvin | Lindsay | Bob |
       | 7.5    | 8       | 6.5 |
@@ -175,8 +175,8 @@ Feature: Full games
   @calculator
   Scenario: Agricola, everything scored in one calculation
     Given a game "Farm" with players "Calvin, Lindsay" and settings:
-      | Dealer              | off |
-      | Finish After Rounds | 1   |
+      | Dealer        | off |
+      | Target Rounds | 1   |
     Then the button after the rounds is "Finish Game"
     When I enter "2+3+1+1+2+1+1-2+2+5×2+4×3+4+3" for Calvin in round 1
     And I enter "3+2+2+1+1+2+1+5+5×3-3+6" for Lindsay in round 1
@@ -196,9 +196,9 @@ Feature: Full games
   @calculator
   Scenario: Wingspan, each round is a scoring category named in the notes
     Given a game "Birds" with players "Lindsay, Priya" and settings:
-      | Dealer              | off |
-      | Show Round Notes    | on  |
-      | Finish After Rounds | 3   |
+      | Dealer           | off |
+      | Show Round Notes | on  |
+      | Target Rounds    | 3   |
     When I play these rounds:
       | Lindsay | Priya |
       | 9+5+7   | 6+8   |
@@ -221,10 +221,10 @@ Feature: Full games
   @slow @calculator
   Scenario: Golf, nine holes, lowest wins, jokers are -2
     Given a game "Golf Day" with players "Lindsay, Zed, Sam" and settings:
-      | Dealer              | on      |
-      | First dealer        | Lindsay |
-      | Reverse Scoring     | on      |
-      | Finish After Rounds | 9       |
+      | Dealer          | on      |
+      | First dealer    | Lindsay |
+      | Reverse Scoring | on      |
+      | Target Rounds   | 9       |
     When I play these rounds:
       | Lindsay | Zed  | Sam |
       | 10+2    | 20   | 7   |
@@ -254,7 +254,7 @@ Feature: Full games
   @slow @calculator
   Scenario: A game played only with the keypad, from the first score to the standings
     Given a game "Keypad Game" with players "Calvin, Lindsay" and settings:
-      | Finish After Rounds | 3 |
+      | Target Rounds | 3 |
     When I tap the round 1 score for Calvin
     And I type these on the calculator, tapping "->" after each: "10", "20", "30", "40", "50"
     And I type "60" on the calculator

@@ -1,29 +1,28 @@
 Feature: Reaching the goal
-  A game's goal is reached when any total reaches the "Finish at Score" (in both scoring modes), or when the game has
-  as many rounds as "Finish After Rounds". Totals start at 0, so a negative finish score is reached going down. Then
-  "Finish Game" replaces "Add Round" and asks whether to finish or keep playing. Who wins only depends on Reverse
-  Scoring.
+  A game's goal is reached when any total reaches the Target Score (in both scoring modes), or when the game has as
+  many rounds as Target Rounds. Totals start at 0, so a negative Target Score is reached going down. Then "Finish
+  Game" replaces "Add Round" and asks whether to finish or keep playing. Who wins only depends on Reverse Scoring.
 
   @smoke
-  Scenario: Reaching the finish score shows Finish Game
+  Scenario: Reaching the target score shows Finish Game
     Given a game "Score Goal" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 100 |
+      | Target Score | 100 |
     When I enter "99" for Calvin in round 1
     Then the button after the rounds is "Add Round"
     When I enter "100" for Calvin in round 1
     Then the button after the rounds is "Finish Game"
 
-  Scenario: Going back under the finish score brings Add Round back
+  Scenario: Going back under the target score brings Add Round back
     Given a game "Score Undo" with players "Calvin" and settings:
-      | Finish at Score | 50 |
+      | Target Score | 50 |
     When I enter "60" for Calvin in round 1
     Then the button after the rounds is "Finish Game"
     When I enter "40" for Calvin in round 1
     Then the button after the rounds is "Add Round"
 
-  Scenario: A negative finish score is reached going down, and the highest total still wins
+  Scenario: A negative target score is reached going down, and the highest total still wins
     Given a game "Negative Goal" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | -50 |
+      | Target Score | -50 |
     When I enter "-40" for Calvin in round 1
     Then the button after the rounds is "Add Round"
     When I enter "-55" for Calvin in round 1
@@ -31,10 +30,10 @@ Feature: Reaching the goal
     And Lindsay is leading
 
   @visual @calculator
-  Scenario: With Reverse Scoring, reaching a negative finish score wins with confetti
+  Scenario: With Reverse Scoring, reaching a negative target score wins with confetti
     Given a game "Race Down" with players "Calvin, Lindsay" and settings:
       | Reverse Scoring | on  |
-      | Finish at Score | -50 |
+      | Target Score    | -50 |
     When I enter "-30" for Lindsay in round 1
     And I enter "-55" for Calvin in round 1
     Then the button after the rounds is "Finish Game"
@@ -47,10 +46,10 @@ Feature: Reaching the goal
       | #1    | Calvin  | -55   |
       | #2    | Lindsay | -30   |
 
-  Scenario: With Reverse Scoring, the game still ends when someone reaches the finish score
+  Scenario: With Reverse Scoring, the game still ends when someone reaches the target score
     Given a game "Reverse Goal" with players "Calvin, Lindsay" and settings:
       | Reverse Scoring | on  |
-      | Finish at Score | 100 |
+      | Target Score    | 100 |
     When I play these rounds:
       | Calvin | Lindsay |
       | 40     | 104     |
@@ -58,9 +57,9 @@ Feature: Reaching the goal
     And Calvin is leading
 
   @smoke
-  Scenario: Reaching the finish rounds shows Finish Game as soon as the last round is added
+  Scenario: Reaching the target rounds shows Finish Game as soon as the last round is added
     Given a game "Round Goal" with players "Calvin, Lindsay" and settings:
-      | Finish After Rounds | 3 |
+      | Target Rounds | 3 |
     When I tap "Add Round"
     Then the button after the rounds is "Add Round"
     When I tap "Add Round"
@@ -69,13 +68,13 @@ Feature: Reaching the goal
 
   Scenario: A target of one round finishes from the start
     Given a game "One Round" with players "Calvin, Lindsay" and settings:
-      | Finish After Rounds | 1 |
+      | Target Rounds | 1 |
     Then the button after the rounds is "Finish Game"
 
   @smoke
   Scenario: Finish Game asks, and Finish shows the standings
     Given a game "Finish It" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 10 |
+      | Target Score | 10 |
     And I enter "12" for Lindsay in round 1
     When I tap "Finish Game"
     Then I see "Goal Reached!"
@@ -88,9 +87,9 @@ Feature: Reaching the goal
       | #2    | Calvin  | 0     |
 
   @smoke
-  Scenario: Another Round keeps playing past a finish score
+  Scenario: Another Round keeps playing past a target score
     Given a game "Keep Going" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 10 |
+      | Target Score | 10 |
     And I enter "12" for Lindsay in round 1
     When I tap "Finish Game"
     And I tap "Another Round!"
@@ -98,9 +97,9 @@ Feature: Reaching the goal
     And the round 2 score for Calvin is being edited
     And the button after the rounds is "Finish Game"
 
-  Scenario: Another Round keeps playing past the finish rounds
+  Scenario: Another Round keeps playing past the target rounds
     Given a game "Extra Round" with players "Calvin" and settings:
-      | Finish After Rounds | 2 |
+      | Target Rounds | 2 |
     And I tap "Add Round"
     When I tap "Finish Game"
     And I tap "Another Round!"
@@ -110,7 +109,7 @@ Feature: Reaching the goal
   @calculator
   Scenario: The next arrow on the last score asks to finish once the goal is reached
     Given a game "Arrow Finish" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 50 |
+      | Target Score | 50 |
     When I tap the round 1 score for Calvin
     And I type "60" on the calculator
     And I tap "->"
@@ -121,39 +120,39 @@ Feature: Reaching the goal
 
   Scenario: Going back from Goal Reached! keeps the game as it is
     Given a game "Back Out" with players "Calvin" and settings:
-      | Finish After Rounds | 1 |
+      | Target Rounds | 1 |
     When I tap "Finish Game"
     And I go back
     Then I don't see "Goal Reached!"
     And the game has 1 round
 
   @visual @smoke
-  Scenario: Reaching the finish score celebrates the leader with confetti
+  Scenario: Reaching the target score celebrates the leader with confetti
     Given a game "Confetti" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 100 |
+      | Target Score | 100 |
     When I enter "100" for Lindsay in round 1
     Then confetti bursts from Lindsay's total
 
   @visual
-  Scenario: No confetti for reaching the finish rounds
+  Scenario: No confetti for reaching the target rounds
     Given a game "No Confetti Rounds" with players "Calvin, Lindsay" and settings:
-      | Finish After Rounds | 1 |
+      | Target Rounds | 1 |
     When I enter "10" for Lindsay in round 1
     Then no confetti shows
 
   @visual
   Scenario: Confetti again when the lead changes after the goal
     Given a game "Confetti Twice" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 100 |
+      | Target Score | 100 |
     And I enter "100" for Lindsay in round 1
     And confetti bursts from Lindsay's total
     When I enter "120" for Calvin in round 1
     Then confetti bursts from Calvin's total
 
   @visual
-  Scenario: The leader reaching the finish score celebrates, once a round
+  Scenario: The leader reaching the target score celebrates, once a round
     Given a game "Confetti Leader" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 100 |
+      | Target Score | 100 |
     And I enter "50" for Lindsay in round 1
     And I close and reopen the app
     And I open the game "Confetti Leader"
@@ -168,9 +167,9 @@ Feature: Reaching the goal
     Then no confetti shows
 
   @visual @calculator
-  Scenario: Reaching the finish score again in a later round celebrates again
+  Scenario: Reaching the target score again in a later round celebrates again
     Given a game "Confetti Again" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 100 |
+      | Target Score | 100 |
     And I enter "110" for Lindsay in round 1
     And confetti bursts from Lindsay's total
     When I tap "Finish Game"
@@ -187,7 +186,7 @@ Feature: Reaching the goal
   @visual @smoke
   Scenario: Finishing the game shoots confetti from the top corners over the standings
     Given a game "Confetti Finish" with players "Calvin, Lindsay" and settings:
-      | Finish at Score | 10 |
+      | Target Score | 10 |
     And I enter "12" for Lindsay in round 1
     When I tap "Finish Game"
     And I tap "Finish"
@@ -203,14 +202,14 @@ Feature: Reaching the goal
     When I open the game "<game>"
     Then the button after the rounds is "Finish Game"
 
-    Examples: finish score
+    Examples: target score
       | game         |
       | Hearts       |
       | Mille Bornes |
       | Catan        |
       | Cribbage     |
 
-    Examples: finish rounds
+    Examples: target rounds
       | game          |
       | Hand and Foot |
       | Wingspan      |
@@ -219,7 +218,7 @@ Feature: Reaching the goal
       | Mexican Train |
 
   @seed
-  Scenario: A finish score and rounds of 0 saved by old versions mean no target
+  Scenario: A target score and rounds of 0 saved by old versions mean no target
     Given the seed data is loaded
     When I open the game "Old Hearts Save"
     Then the button after the rounds is "Add Round"

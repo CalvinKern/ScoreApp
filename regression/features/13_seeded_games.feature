@@ -5,7 +5,7 @@ Feature: Seeded games
 
   The expected values were computed from the seed with the app's rules: totals are every round added up, the best
   total leads (lowest with Reverse Scoring) unless everyone is tied, and "Finish Game" shows once a total reaches the
-  "Finish at Score" or the game has as many rounds as "Finish After Rounds". Recompute them when the seed changes.
+  Target Score or the game has Target Rounds rounds. Recompute them when the seed changes.
 
   Background:
     Given the seed data is loaded
