@@ -21,7 +21,6 @@ Feature: Settings
 
   Scenario: New installs start with these switches
     Given a fresh install
-    And I tap "Don't allow"
     When I tap the Settings icon
     Then "Load Previous Settings" is on
     And "Calculator Keyboard" is on

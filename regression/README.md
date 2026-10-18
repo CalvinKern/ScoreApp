@@ -199,8 +199,8 @@ than one emulator or phone connected, also `export ANDROID_SERIAL=<one from adb 
 | Rotate                                               | `adb shell wm user-rotation lock 1` (landscape) or `lock 0` (portrait), and `wm user-rotation free` to turn auto-rotate back on. Check `adb shell wm user-rotation` first to know what to put back.                                        |
 | Dark mode                                            | `adb shell cmd uimode night yes` / `no`                                                                                                                                                                                                    |
 | Font size                                            | `adb shell settings put system font_scale 1.3` (`1.0` to reset)                                                                                                                                                                            |
-| Right to left                                        | `adb shell settings put global debug.force_rtl 1` (`0` to reset), then restart the app                                                                                                                                                     |
-| Language                                             | Settings › System › Languages on the device. Put English (United States) back after.                                                                                                                                                       |
+| Right to left                                        | `adb shell "settings put global debug.force_rtl 1; setprop debug.force_rtl 1"` (`0` for both to reset), then restart the app. The setting alone doesn't mirror apps until something else changes the configuration; Developer options sets both. |
+| Language                                             | Settings › System › Languages on the device, and put English (United States) back after. Or set only the app's language: `adb shell cmd locale set-app-locales <package> --locales de-DE`, then restart the app (`--locales ''` to reset). |
 
 Calculator keys are tapped by id (`calculatorKeyFive`, `calculatorKeyMultiply`, ...), not typed. The system keyboard
 only types digits, `-`, and `.` into a score. One dump gives the bounds of everything on screen, so several taps can
@@ -240,6 +240,10 @@ Things that trip up a run:
   second and dump again.
 - `input text` sometimes drops characters on a slow emulator. Read the field back from a dump, and clear it
   (`KEYCODE_MOVE_END`, then `KEYCODE_DEL`s) and type again when it doesn't match.
+- The game name field capitalizes each word, and the keyboard does that to `input text` too: "Hand and Foot" comes
+  out "Hand And Foot". Names in the plan are already in that form, so type them as written.
+- `input swipe` lifts at its end, so a back swipe can't be held partway to see the previous screen slide in under it.
+  Check where back lands, and look at the slide by hand.
 - `input text` can't type characters outside ASCII (like "✓" or "李雷"), so type an ASCII stand-in and note it in the
   results. Text starting with `-` has to be quoted inside the shell command, `adb shell input text "'-50'"`, or
   `input` reads it as an option.
