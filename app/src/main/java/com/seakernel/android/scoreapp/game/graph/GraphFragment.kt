@@ -1,15 +1,18 @@
 package com.seakernel.android.scoreapp.game.graph
 
 import android.graphics.DashPathEffect
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewGroupCompat
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -24,6 +27,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.utils.Utils
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Game
 import com.seakernel.android.scoreapp.databinding.FragmentGraphBinding
@@ -34,6 +38,8 @@ import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.themeColor
+import kotlin.math.cos
+import kotlin.math.sin
 
 class GraphFragment : Fragment() {
 
@@ -158,14 +164,15 @@ class GraphFragment : Fragment() {
         val colors = standings.map { (player, _) -> gameColors[players.indexOf(player)].color }
         val dataSet = BarDataSet(entries, null).apply {
             this.colors = colors
-            valueTextSize = 14f
+            valueTextSize = PODIUM_VALUE_SIZE
             valueTextColor = colorOnSurface
             valueFormatter = podiumValueFormatter
             isHighlightEnabled = false
         }
 
         binding.podiumChart.apply {
-            xAxis.valueFormatter = IndexAxisValueFormatter(standings.map { (player, _) -> player.name })
+            val names = standings.map { (player, _) -> player.name }
+            xAxis.valueFormatter = IndexAxisValueFormatter(names)
             xAxis.labelCount = standings.size
             // Bars grow from zero, so the axis always shows it. Past zero, the axis leaves room for the labels: above the
             // tallest bar (spaceTop), and below the lowest negative one (spaceBottom), both a share of the whole range
@@ -174,6 +181,8 @@ class GraphFragment : Fragment() {
                 if (entries.any { it.y > 0f }) resetAxisMaximum() else axisMaximum = 0f
             }
             data = BarData(dataSet)
+            // The bars' widths are only known once the chart is laid out
+            doOnLayout { fitPodiumLabels(names, standings.map { (_, total) -> ScoreFormat.format(total) }) }
             invalidate()
             contentDescription = getString(
                 R.string.podiumDescription,
@@ -183,6 +192,48 @@ class GraphFragment : Fragment() {
                 },
             )
         }
+    }
+
+    /**
+     * Labels wider than their bar run into each other (a big game's names and totals became unreadable lines). When the
+     * names don't fit side by side they're tilted, upright if even a tilt is too tight, and long ones are shortened, and
+     * the totals get smaller until they fit. Screen readers get the full names from the chart's description.
+     */
+    private fun BarChart.fitPodiumLabels(names: List<String>, totals: List<String>) {
+        val slot = viewPortHandler.contentWidth() / names.size.coerceAtLeast(1)
+        val gap = Utils.convertDpToPixel(PODIUM_LABEL_GAP)
+        // Each label is centered on its bar, so two neighbors touch once half of each fills a slot
+        val widestPair = { widths: List<Int> -> widths.zipWithNext().maxOfOrNull { (a, b) -> (a + b) / 2f } ?: 0f }
+
+        val valuePaint = Paint(renderer.paintValues).apply { textSize = Utils.convertDpToPixel(PODIUM_VALUE_SIZE) }
+        val widestTotals = widestPair(totals.map { Utils.calcTextWidth(valuePaint, it) })
+        val valueSize = if (widestTotals + gap <= slot) PODIUM_VALUE_SIZE else PODIUM_VALUE_SIZE * (slot - gap) / widestTotals
+        data?.setValueTextSize(valueSize.coerceAtLeast(PODIUM_VALUE_MIN_SIZE))
+
+        val paint = rendererXAxis.paintAxisLabels.apply { textSize = xAxis.textSize }
+        val crowded = widestPair(names.map { Utils.calcTextWidth(paint, it) }) + gap > slot
+        // A tilted name's box hangs from the axis, so a long one sits lower than a short neighbor, and their slanted lines
+        // meet when the drop between them uses up the slot. Upright names don't depend on their lengths.
+        val lineHeight = Utils.calcTextHeight(paint, "Ay")
+        val tilt = Math.toRadians(-PODIUM_NAME_TILT.toDouble())
+        val drops = names.map { Utils.calcTextWidth(paint, it.shortened()) * sin(tilt) + lineHeight * cos(tilt) }
+        val tiltFits = drops.zipWithNext().all { (a, b) -> (slot + (b - a) / 2) * sin(tilt) >= lineHeight * PODIUM_NAME_LINES }
+        val angle = when {
+            !crowded -> 0f
+            tiltFits -> PODIUM_NAME_TILT
+            else -> -90f
+        }
+        xAxis.labelRotationAngle = angle
+        xAxis.valueFormatter = IndexAxisValueFormatter(if (angle == 0f) names else names.map { it.shortened() })
+        notifyDataSetChanged()
+        invalidate()
+    }
+
+    private fun String.shortened(): String {
+        if (length <= PODIUM_NAME_MAX_LENGTH) return this
+        var end = PODIUM_NAME_MAX_LENGTH - 1
+        if (Character.isHighSurrogate(this[end - 1])) end-- // Don't split an emoji
+        return take(end).trimEnd() + "…"
     }
 
     private fun initPodiumStyle() {
@@ -283,6 +334,12 @@ class GraphFragment : Fragment() {
         private const val DASH_LENGTH = 16f
         private const val PODIUM_LABEL_SPACE = 15f // Percent of the axis's range
         private const val PODIUM_DESCENDER_SPACE = 4f // dp
+        private const val PODIUM_LABEL_GAP = 8f // dp between neighboring names or totals
+        private const val PODIUM_VALUE_SIZE = 14f // dp, the totals over the bars
+        private const val PODIUM_VALUE_MIN_SIZE = 8f // dp, the smallest the totals get to fit
+        private const val PODIUM_NAME_TILT = -45f // Degrees
+        private const val PODIUM_NAME_LINES = 1.2f // Tilted names need this many line heights between them
+        private const val PODIUM_NAME_MAX_LENGTH = 12 // Characters, once tilted
 
         private val podiumValueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float) = ScoreFormat.format(value.toDouble())
