@@ -3,7 +3,6 @@ package com.seakernel.android.scoreapp.game.classic
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.doOnNextLayout
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.seakernel.android.scoreapp.R
@@ -33,7 +30,6 @@ import com.seakernel.android.scoreapp.utility.setVisible
 import com.seakernel.android.scoreapp.utility.themeColor
 import com.spotify.mobius.functions.Consumer
 import java.security.InvalidParameterException
-import kotlin.math.roundToInt
 
 private typealias CalculatorKeyboardCallback = (scoreView: EditText?) -> Unit
 
@@ -204,39 +200,12 @@ class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) :
         fun playerHolderClicked(player: Player)
     }
 
-    init {
-        // Names too wide for their column shrink, from the theme's size down to a minimum, instead of breaking mid-word
-        val name = binding.playerNameHeader
-        val minSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, MIN_NAME_TEXT_SP, name.resources.displayMetrics)
-        TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
-            name,
-            minSize.roundToInt(),
-            name.textSize.roundToInt().coerceAtLeast(minSize.roundToInt()),
-            1,
-            TypedValue.COMPLEX_UNIT_PX,
-        )
-    }
-
     fun bind(
         showNotes: Boolean,
         player: Player,
         clickListener: PlayerHolderClickedListener,
     ) {
-        // Autosize only shrinks text that runs past its lines, and a word broken onto the next line still counts as
-        // fitting. So a name gets a line per word: a word too wide for the column runs past them and shrinks instead.
-        val name = binding.playerNameHeader
-        name.maxLines = player.name.trim().split(WHITESPACE).size.coerceIn(1, MAX_NAME_LINES)
-        name.text = player.name
-        // A name that's still too wide at the smallest size would lose its end ("Mar…"), so it gets every line back and
-        // breaks with hyphens instead ("Mar-cus")
-        name.doOnNextLayout {
-            val layout = name.layout ?: return@doOnNextLayout
-            val cutOff = (0 until layout.lineCount).any { layout.getEllipsisCount(it) > 0 }
-            // After the table's layout pass, which ignores a child asking for another one
-            if (cutOff) name.post {
-                if (name.text.toString() == player.name && name.maxLines < MAX_NAME_LINES) name.maxLines = MAX_NAME_LINES
-            }
-        }
+        binding.playerNameHeader.text = player.name
         binding.playerNameNoteIcon.setVisible(showNotes)
 
         // Screen readers hear just the name here, the totals row reads everyone's total and who's leading
@@ -252,12 +221,6 @@ class PlayerViewHolder(private val binding: HolderScoreRowHeaderBinding) :
         // way on purpose, so notes are always reachable, even in games that don't use them much.
         itemView.setOnClickListener { clickListener.playerHolderClicked(player) }
         itemView.setOnLongClickListener { clickListener.playerHolderClicked(player); true }
-    }
-
-    companion object {
-        private const val MIN_NAME_TEXT_SP = 11f
-        private const val MAX_NAME_LINES = 3
-        private val WHITESPACE = Regex("\\s+")
     }
 }
 

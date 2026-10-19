@@ -9,9 +9,9 @@
     android:gravity="center_horizontal"
     >
 
-    <!-- Names shrink to fit their column (see PlayerViewHolder). Hyphens are for names that still don't fit, and for
+    <!-- Names shrink to fit their column (see PlayerNameView). Hyphens are for names that still don't fit, and for
          words that share a line, like "Gran-" over "dma Jo" rather than "Grandm" over "a Jo". -->
-    <TextView
+    <com.seakernel.android.scoreapp.game.classic.PlayerNameView
         android:id="@+id/playerNameHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
