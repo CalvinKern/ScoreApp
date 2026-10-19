@@ -275,9 +275,9 @@ Feature: Editing a game in progress
     Given the seed data is loaded
     When I open the game "Hand and Foot"
     And I choose "Edit" from the game menu
-    And I replace the game name with "Hand & Foot Edited"
+    And I replace the game name with "Hand And Foot Edited"
     And I go back
-    Then the title is "Hand & Foot Edited"
+    Then the title is "Hand And Foot Edited"
     And the totals are:
       | Team Red (Calvin & Lindsay) | Team Blue (Bob & alice) |
       | 3550                        | 2730                    |
