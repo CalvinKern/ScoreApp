@@ -156,20 +156,20 @@ Feature: Picking players
     Then "OK" is disabled
 
   @seed
-  Scenario: The player dialog shows the color of the player's seat until one is picked
+  Scenario: The player dialog hints at the color of the player's seat until one is picked
     Given the seed data is loaded
     When I open the game "Phase 10"
     And I choose "Edit" from the game menu
     And I tap "Edit"
     And I tap the edit icon next to "Lindsay"
-    Then the color field shows "8E24AA"
+    Then the color field is empty, with the hint "8E24AA" in the hint color
     And the "Purple" swatch is checked
     When I tap "Cancel"
     And I tap the edit icon next to "alice"
-    Then the color field shows "E65100", since Grandma Jo picked the first seat's green and the others skip it
+    Then the color field's hint shows "E65100", since Grandma Jo picked the first seat's green and the others skip it
     When I tap "Cancel"
     And I tap the + button
-    Then the color field shows "D32F2F"
+    Then the color field's hint shows "D32F2F"
     And the "Red" swatch is checked
 
   @seed @visual

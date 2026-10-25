@@ -14,8 +14,8 @@ import com.seakernel.android.scoreapp.utility.PlayerColors
 
 /**
  * The player dialog's color: a hex field showing the player's color, and a swatch for each graph color to pick instead
- * of typing one. A player without a color shows their seat's graph color, and keeps following their seat (in every
- * game) until a color is typed or picked. Clearing the field goes back to following the seat.
+ * of typing one. A player without a color has an empty field, hinting at their seat's graph color, and keeps following
+ * their seat (in every game) until a color is typed or picked. Clearing the field goes back to following the seat.
  *
  * @param seatColor the color the player gets from their seat in the game being set up
  * @param onChanged called when the color or whether it's valid changes
@@ -46,7 +46,7 @@ class PlayerColorPicker(
         binding.playerColorLayout.setStartIconTintList(null) // The icon is the color itself
         binding.playerColorLayout.placeholderText = PlayerColors.toHex(seatColor)
         binding.playerColorEdit.filters += InputFilter.AllCaps() // Typed like it's shown
-        binding.playerColorEdit.setText(PlayerColors.toHex(color ?: seatColor))
+        color?.let { binding.playerColorEdit.setText(PlayerColors.toHex(it)) }
         binding.playerColorEdit.doAfterTextChanged { text ->
             val typed = PlayerColors.fromHex(text.toString())
             isValid = text.isNullOrEmpty() || typed != null

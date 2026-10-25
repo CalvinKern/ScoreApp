@@ -28,13 +28,15 @@
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- The start icon shows the color, set in code -->
+    <!-- The start icon shows the color, and the placeholder the seat's color, set in code. The label stays up so the
+         placeholder shows without focus. -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/playerColorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/playerColor"
+        app:expandedHintEnabled="false"
         app:prefixText="#"
         >
 
