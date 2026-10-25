@@ -90,6 +90,8 @@
     <string name="pickPlayers">Pick Players</string>
     <string name="playerCreateTitle">New Player</string>
     <string name="playerEditTitle">Edit Player</string>
+    <!-- The player dialog's delete button, named for the player so it isn't read as clearing the color above it -->
+    <string name="playerDelete">Delete Player</string>
     <string name="playerEmptyTitle">No players added</string>
     <string name="playerEmptyMessage">Start by tapping the + button down below to add a new player!</string>
     <string name="playerEmptySearchTitle">No players match</string>

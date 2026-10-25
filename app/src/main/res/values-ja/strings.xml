@@ -27,6 +27,7 @@
     <string name="pickPlayers">選手を選ぶ</string>
     <string name="playerCreateTitle">新しい選手</string>
     <string name="playerEditTitle">選手を編集</string>
+    <string name="playerDelete">選手を削除</string>
     <string name="playerEmptyMessage">新しい選手を追加するには、下の[+]ボタンを押して開始します。</string>
     <string name="playerEmptySearchMessage">現在の検索条件に一致する選手はありません。下の[+]ボタンを押すと、新しい選手を追加できます。</string>
     <string name="playerEmptySearchTitle">一致する選手はありません</string>

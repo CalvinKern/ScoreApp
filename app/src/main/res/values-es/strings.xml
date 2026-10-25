@@ -27,6 +27,7 @@
     <string name="pickPlayers">Elige jugadores</string>
     <string name="playerCreateTitle">Nuevo jugador</string>
     <string name="playerEditTitle">Editar jugador</string>
+    <string name="playerDelete">Eliminar jugador</string>
     <string name="playerEmptyMessage">¡Comienza tocando el botón + abajo para agregar un nuevo jugador!</string>
     <string name="playerEmptySearchMessage">Ningún jugador coincide con el criterio de búsqueda actual. ¡Puedes agregar un nuevo jugador tocando el botón + a continuación!</string>
     <string name="playerEmptySearchTitle">Ningún jugador coincide</string>

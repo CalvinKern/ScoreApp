@@ -45,6 +45,7 @@
     <string name="playerEmptyMessage">Comece tocando no botão + abaixo para adicionar um novo jogador!</string>
     <string name="playerCreateTitle">Novo jogador</string>
     <string name="playerEditTitle">Editar jogador</string>
+    <string name="playerDelete">Excluir jogador</string>
     <string name="pickPlayers">Escolha jogadores</string>
     <string name="makePlayerDealerMessage">Fazer de %s o carteador desta rodada?</string>
     <string name="setDealer">Definir carteador</string>

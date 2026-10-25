@@ -27,6 +27,7 @@
     <string name="pickPlayers">选择玩家</string>
     <string name="playerCreateTitle">新玩家</string>
     <string name="playerEditTitle">编辑玩家</string>
+    <string name="playerDelete">删除玩家</string>
     <string name="playerEmptyMessage">首先点击下面的+按钮以添加新播放器！</string>
     <string name="playerEmptySearchMessage">没有玩家符合当前的搜索条件。 您可以点击下面的+按钮来添加新的播放器！</string>
     <string name="playerEmptySearchTitle">没有球员比赛</string>

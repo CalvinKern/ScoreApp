@@ -27,6 +27,7 @@
     <string name="pickPlayers">Pilih Pemain</string>
     <string name="playerCreateTitle">Pemain baru</string>
     <string name="playerEditTitle">Edit pemain</string>
+    <string name="playerDelete">Hapus pemain</string>
     <string name="playerEmptyMessage">Mulailah dengan mengetuk tombol + di bawah untuk menambah pemain baru!</string>
     <string name="playerEmptySearchMessage">Tidak ada pemain yang cocok dengan kriteria pencarian saat ini. Anda dapat menambahkan pemain baru dengan mengetuk tombol + di bawah!</string>
     <string name="playerEmptySearchTitle">Tidak ada pemain yang cocok</string>

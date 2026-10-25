@@ -27,6 +27,7 @@
     <string name="pickPlayers">खिलाड़ियों को चुनें</string>
     <string name="playerCreateTitle">नया खिलाडी</string>
     <string name="playerEditTitle">खिलाडी संपादित करें</string>
+    <string name="playerDelete">खिलाडी हटाएं</string>
     <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन पर टैप करके शुरू करें!</string>
     <string name="playerEmptySearchMessage">कोई भी खिलाड़ी वर्तमान खोज मापदंड से मेल नहीं खाता है। आप नीचे दिए गए + बटन पर टैप करके एक नया खिलाड़ी जोड़ सकते हैं!</string>
     <string name="playerEmptySearchTitle">कोई भी खिलाड़ी मैच नहीं करता</string>

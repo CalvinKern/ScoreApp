@@ -58,7 +58,7 @@ class PlayerDialog : DialogFragment() {
             .setNegativeButton(android.R.string.cancel, null)
             .also {
                 if (player.id == null) return@also
-                it.setNeutralButton(R.string.delete) { _, _ ->
+                it.setNeutralButton(R.string.playerDelete) { _, _ ->
                     logEvent(AnalyticsConstants.Event.PLAYER_DELETED)
                     sendResult(player, delete = true)
                 }

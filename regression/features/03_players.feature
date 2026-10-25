@@ -227,7 +227,7 @@ Feature: Picking players
     And I am picking players for a new game
     When I pick "Undo Me"
     And I long press the row "Undo Me"
-    And I tap "Delete"
+    And I tap "Delete Player"
     Then I see "Deleted Undo Me"
     And I don't see the row "Undo Me"
     When I tap "Undo"
@@ -238,7 +238,7 @@ Feature: Picking players
     Given the seed data is loaded
     And I am picking players for a new game
     When I long press the row "Taylor"
-    And I tap "Delete"
+    And I tap "Delete Player"
     And I go back to the game list
     Then the game "Darts 301" shows "1 Player"
     When I open the game "Darts 301"
@@ -252,7 +252,7 @@ Feature: Picking players
     Given the seed data is loaded
     And I am picking players for a new game
     When I long press the row "Taylor"
-    And I tap "Delete"
+    And I tap "Delete Player"
     And I tap "Undo"
     And I go back to the game list
     And I open the game "Darts 301"
@@ -291,7 +291,7 @@ Feature: Picking players
     When I tap the search icon
     And I type "Undo"
     And I long press the row "Undo Search"
-    And I tap "Delete"
+    And I tap "Delete Player"
     And I tap "Undo"
     Then I see "Undo Search"
     And I don't see the row "Calvin"
