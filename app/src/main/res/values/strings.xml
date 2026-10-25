@@ -153,15 +153,15 @@
     <!-- Spoken by screen readers for each color to pick, in the same order as the graph colors -->
     <string-array name="seatColorNames">
         <item>Green</item>
-        <item>Cyan</item>
+        <item>Blue</item>
+        <item>Yellow</item>
+        <item>Red</item>
         <item>Purple</item>
         <item>Orange</item>
-        <item>Blue</item>
-        <item>Red</item>
-        <item>Brown</item>
-        <item>Yellow</item>
-        <item>Gray</item>
+        <item>Cyan</item>
         <item>Pink</item>
+        <item>Brown</item>
+        <item>Gray</item>
     </string-array>
     <!-- Spoken by screen readers for the edit button next to a player, e.g. "Edit Alice" -->
     <string name="editPlayer">Edit %s</string>

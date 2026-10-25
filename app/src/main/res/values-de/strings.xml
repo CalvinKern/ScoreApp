@@ -40,15 +40,15 @@
     <string name="playerColorInvalid">Gib eine Farbe als 6 Hex-Ziffern ein, z. B. 1E88E5</string>
     <string-array name="seatColorNames">
         <item>Grün</item>
-        <item>Cyan</item>
+        <item>Blau</item>
+        <item>Gelb</item>
+        <item>Rot</item>
         <item>Lila</item>
         <item>Orange</item>
-        <item>Blau</item>
-        <item>Rot</item>
-        <item>Braun</item>
-        <item>Gelb</item>
-        <item>Grau</item>
+        <item>Cyan</item>
         <item>Rosa</item>
+        <item>Braun</item>
+        <item>Grau</item>
     </string-array>
     <string name="playerNotesTitle">Notizen für %s</string>
     <string name="playerRoundNumberFormat">Runde %d:</string>

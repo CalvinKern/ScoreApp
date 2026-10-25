@@ -14,16 +14,17 @@ import com.seakernel.android.scoreapp.utility.PlayerColors.forGame
  */
 object PlayerColors {
     private val seatColorIds = intArrayOf(
+        // The four colors nearly every game has first, then the usual fifth and sixth, then the rest
         R.color.graphGreen,
-        R.color.graphCyan,
+        R.color.graphBlue,
+        R.color.graphYellow,
+        R.color.graphRed,
         R.color.graphPurple,
         R.color.graphOrange,
-        R.color.graphBlue,
-        R.color.graphRed,
-        R.color.graphBrown,
-        R.color.graphYellow,
-        R.color.graphGray,
+        R.color.graphCyan,
         R.color.graphPink,
+        R.color.graphBrown,
+        R.color.graphGray,
     )
 
     /** @param isRepeated whether another player in the game has this color, so their line is dashed to tell them apart */

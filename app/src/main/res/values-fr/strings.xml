@@ -41,15 +41,15 @@
     <string name="playerColorInvalid">Saisissez une couleur en 6 chiffres hexadécimaux, comme 1E88E5</string>
     <string-array name="seatColorNames">
         <item>Vert</item>
-        <item>Cyan</item>
+        <item>Bleu</item>
+        <item>Jaune</item>
+        <item>Rouge</item>
         <item>Violet</item>
         <item>Orange</item>
-        <item>Bleu</item>
-        <item>Rouge</item>
-        <item>Marron</item>
-        <item>Jaune</item>
-        <item>Gris</item>
+        <item>Cyan</item>
         <item>Rose</item>
+        <item>Marron</item>
+        <item>Gris</item>
     </string-array>
     <string name="playerNotesTitle">Remarques pour %s</string>
     <string name="playerRoundNumberFormat">Tour %d:</string>

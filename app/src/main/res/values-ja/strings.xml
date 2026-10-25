@@ -39,15 +39,15 @@
     <string name="playerColorInvalid">色を16進数6桁で入力してください（例: 1E88E5）</string>
     <string-array name="seatColorNames">
         <item>緑</item>
-        <item>シアン</item>
+        <item>青</item>
+        <item>黄</item>
+        <item>赤</item>
         <item>紫</item>
         <item>オレンジ</item>
-        <item>青</item>
-        <item>赤</item>
-        <item>茶</item>
-        <item>黄</item>
-        <item>グレー</item>
+        <item>シアン</item>
         <item>ピンク</item>
+        <item>茶</item>
+        <item>グレー</item>
     </string-array>
     <string name="playerNotesTitle">%sへのノート</string>
     <string name="playerRoundNumberFormat">ラウンド%d：</string>

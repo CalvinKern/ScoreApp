@@ -39,15 +39,15 @@
     <string name="playerColorInvalid">請輸入6位十六進位顏色，例如 1E88E5</string>
     <string-array name="seatColorNames">
         <item>綠色</item>
-        <item>青色</item>
+        <item>藍色</item>
+        <item>黃色</item>
+        <item>紅色</item>
         <item>紫色</item>
         <item>橙色</item>
-        <item>藍色</item>
-        <item>紅色</item>
-        <item>棕色</item>
-        <item>黃色</item>
-        <item>灰色</item>
+        <item>青色</item>
         <item>粉紅色</item>
+        <item>棕色</item>
+        <item>灰色</item>
     </string-array>
     <string name="playerNotesTitle">%s的註釋</string>
     <string name="playerRoundNumberFormat">第%d回合</string>

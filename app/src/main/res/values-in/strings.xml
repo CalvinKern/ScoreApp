@@ -39,15 +39,15 @@
     <string name="playerColorInvalid">Masukkan warna sebagai 6 digit heksadesimal, seperti 1E88E5</string>
     <string-array name="seatColorNames">
         <item>Hijau</item>
-        <item>Sian</item>
+        <item>Biru</item>
+        <item>Kuning</item>
+        <item>Merah</item>
         <item>Ungu</item>
         <item>Oranye</item>
-        <item>Biru</item>
-        <item>Merah</item>
-        <item>Cokelat</item>
-        <item>Kuning</item>
-        <item>Abu-abu</item>
+        <item>Sian</item>
         <item>Merah muda</item>
+        <item>Cokelat</item>
+        <item>Abu-abu</item>
     </string-array>
     <string name="playerNotesTitle">Catatan untuk %s</string>
     <string name="playerRoundNumberFormat">Babak %d:</string>

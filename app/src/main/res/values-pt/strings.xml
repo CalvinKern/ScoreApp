@@ -29,15 +29,15 @@
     <string name="playerColorInvalid">Digite uma cor com 6 dígitos hexadecimais, como 1E88E5</string>
     <string-array name="seatColorNames">
         <item>Verde</item>
-        <item>Ciano</item>
+        <item>Azul</item>
+        <item>Amarelo</item>
+        <item>Vermelho</item>
         <item>Roxo</item>
         <item>Laranja</item>
-        <item>Azul</item>
-        <item>Vermelho</item>
-        <item>Marrom</item>
-        <item>Amarelo</item>
-        <item>Cinza</item>
+        <item>Ciano</item>
         <item>Rosa</item>
+        <item>Marrom</item>
+        <item>Cinza</item>
     </string-array>
     <string name="playerEmptyTitle">Nenhum jogador adicionado</string>
     <string name="playerEmptySearchTitle">Nenhum jogador corresponde</string>

@@ -41,15 +41,15 @@
     <string name="playerColorInvalid">Introdu o culoare din 6 cifre hexazecimale, de exemplu 1E88E5</string>
     <string-array name="seatColorNames">
         <item>Verde</item>
-        <item>Cyan</item>
+        <item>Albastru</item>
+        <item>Galben</item>
+        <item>Roșu</item>
         <item>Mov</item>
         <item>Portocaliu</item>
-        <item>Albastru</item>
-        <item>Roșu</item>
-        <item>Maro</item>
-        <item>Galben</item>
-        <item>Gri</item>
+        <item>Cyan</item>
         <item>Roz</item>
+        <item>Maro</item>
+        <item>Gri</item>
     </string-array>
     <string name="playerNotesTitle">Note pentru %s</string>
     <string name="playerRoundNumberFormat">Runda %d:</string>

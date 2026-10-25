@@ -143,7 +143,7 @@ Feature: Standings and the graph
     When I open the game "Phase 10"
     And I choose "Show Graph" from the game menu
     Then Grandma Jo's line and bar are green (2E7D32), the color she picked
-    And the others skip the picked green: Calvin is cyan, Lindsay purple, alice orange, and Bob blue
+    And the others skip the picked green: Calvin is blue, Lindsay yellow, alice red, and Bob purple
     And no two players share a color
 
   @seed

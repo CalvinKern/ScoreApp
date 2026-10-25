@@ -162,15 +162,15 @@ Feature: Picking players
     And I choose "Edit" from the game menu
     And I tap "Edit"
     And I tap the edit icon next to "Lindsay"
-    Then the color field is empty, with the hint "8E24AA" in the hint color
-    And the "Purple" swatch is checked
+    Then the color field is empty, with the hint "9C8600" in the hint color
+    And the "Yellow" swatch is checked
     When I tap "Cancel"
     And I tap the edit icon next to "alice"
-    Then the color field's hint shows "E65100", since Grandma Jo picked the first seat's green and the others skip it
+    Then the color field's hint shows "D32F2F", since Grandma Jo picked the first seat's green and the others skip it
     When I tap "Cancel"
     And I tap the + button
-    Then the color field's hint shows "D32F2F"
-    And the "Red" swatch is checked
+    Then the color field's hint shows "E65100"
+    And the "Orange" swatch is checked
 
   @seed @visual
   Scenario: Picking a player's color
@@ -203,8 +203,8 @@ Feature: Picking players
     Then I see "Enter a color as 6 hex digits, like 1E88E5"
     And "OK" is disabled
     When I clear the color
-    Then the color field's hint shows "1976D2"
-    And the "Blue" swatch is checked
+    Then the color field's hint shows "8E24AA"
+    And the "Purple" swatch is checked
     And "OK" is enabled
 
   @seed

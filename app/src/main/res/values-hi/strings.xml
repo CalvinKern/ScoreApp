@@ -40,15 +40,15 @@
     <string name="playerColorInvalid">रंग को 6 हेक्स अंकों में लिखें, जैसे 1E88E5</string>
     <string-array name="seatColorNames">
         <item>हरा</item>
-        <item>सियान</item>
+        <item>नीला</item>
+        <item>पीला</item>
+        <item>लाल</item>
         <item>बैंगनी</item>
         <item>नारंगी</item>
-        <item>नीला</item>
-        <item>लाल</item>
-        <item>भूरा</item>
-        <item>पीला</item>
-        <item>धूसर</item>
+        <item>सियान</item>
         <item>गुलाबी</item>
+        <item>भूरा</item>
+        <item>धूसर</item>
     </string-array>
     <string name="playerNotesTitle">%s के लिए नोट्स</string>
     <string name="playerRoundNumberFormat">दौर %d:</string>
