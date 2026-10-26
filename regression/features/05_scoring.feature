@@ -132,7 +132,9 @@ Feature: Entering scores
 
   @calculator @visual
   Scenario: An unfinished calculation says "Incomplete" while it's being edited
-    Given a game "Incomplete" with players "Calvin"
+    # The error is a popup next to the score, which a view dump doesn't include, so check it from a screenshot. The
+    # game isn't named "Incomplete", so the title can't pass for the error.
+    Given a game "Unfinished Calc" with players "Calvin"
     When I tap the round 1 score for Calvin
     And I type "3×" on the calculator
     And I wait 2 seconds

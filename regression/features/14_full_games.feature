@@ -135,7 +135,8 @@ Feature: Full games
       | 25+25  | 10      | 0       |
     And I tap the name "Lindsay"
     And I type "Phase 1 ✓" into the "Round 1:" note
-    And I type "Phase 2 ✓, went out" into the "Round 2:" note
+    # Notes capitalize each word as they're typed, so the note is written that way
+    And I type "Phase 2 ✓, Went Out" into the "Round 2:" note
     And I tap "Save"
     Then the totals are:
       | Calvin | Lindsay | Bob |
@@ -144,7 +145,7 @@ Feature: Full games
     And Bob is the dealer
     And the button after the rounds is "Add Round"
     When I tap the name "Lindsay"
-    Then the "Round 2:" note is "Phase 2 ✓, went out"
+    Then the "Round 2:" note is "Phase 2 ✓, Went Out"
     When I tap "Cancel"
     And I choose "Standings" from the game menu
     Then the standings are:

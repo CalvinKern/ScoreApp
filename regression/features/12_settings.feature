@@ -100,6 +100,8 @@ Feature: Settings
     And going back returns to Settings
 
   Scenario: Rate App opens the store
+    # Only on an install from Google Play (like the internal testing track). For any other install, Google Play's review
+    # flow quietly shows nothing and the app stays on Settings, so record the scenario as Blocked there.
     Given I am on the game list
     And I tap the Settings icon
     When I tap "Rate App"

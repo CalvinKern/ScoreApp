@@ -248,9 +248,20 @@ Things that trip up a run:
   results. Text starting with `-` has to be quoted inside the shell command, `adb shell input text "'-50'"`, or
   `input` reads it as an option.
 - Toasts (like "Please enter a name for the game") aren't in the dump. Take a screenshot right after the tap that
-  shows one, since it's gone in about two seconds.
-- The rotation lock doesn't survive `uiautomator dump`: afterward `wm user-rotation` reads `free` again and the screen
-  goes back to portrait. Lock it again before each landscape check, and read landscape screens from screenshots.
+  shows one, since it's gone in about two seconds. A score's error ("Incomplete") is a popup that isn't in the dump
+  either, so check it from a screenshot too.
+- On some emulators the rotation lock doesn't survive `uiautomator dump`: afterward `wm user-rotation` reads `free`
+  again and the screen goes back to portrait. On others (the Pixel 9a on Android 16) it holds. Check `wm user-rotation`
+  after a dump, and lock it again when it's `free`.
+- `wm size` reports the portrait size even in landscape. A script that places swipes or checks positions from it has to
+  swap the width and height in landscape, or its swipes land below the screen. Landscape also shows less: the graph
+  shows only the podium until it's scrolled down to the rounds chart.
+- The score table scrolls sideways in `scoreScroll` and up and down in `scoreRows`, which is inside it. With few
+  players `scoreScroll` doesn't scroll at all, so scroll `scoreRows` to reach other rounds.
+- In other languages the titles and the screen reader descriptions are translated too ("Spieler auswählen", and a
+  total reads "Calvin, gesamt 24,83" in German). Find things by id where you can.
+- Text outside ASCII in a command can be mangled on its way through `adb shell` from Windows (like `grep 'Saving…'`).
+  Match an ASCII part of it instead (`grep 'Saving'`).
 - Rows partly under the gesture bar at the bottom don't reliably take taps or long presses. Scroll them up first.
 - In the player dialog, the swatch that's picked has `selected="true"` (not `checked`), and an empty color field
   reads as its label and hint (`Color, 1976D2`).
@@ -264,7 +275,8 @@ Things that trip up a run:
 - Confetti lasts about a second. Catch it with a burst of on-device screenshots started just before the step:
   `adb shell 'for i in 1 2 3 4 5 6 7 8; do screencap -p /sdcard/c$i.png; done' &`. When the step is a tap, find what
   to tap first and send the tap in the same command as the burst (`adb shell 'input tap X Y; for i in ...'`): reading
-  the screen to find it can take longer than the burst, especially on a large screen. Totals update while a score is
+  the screen to find it can take longer than the burst, especially on a large screen. The same goes for a key typed
+  with the system keyboard: send `input text` in the same command as the burst. Totals update while a score is
   typed, so it bursts as soon as a total reaches the goal, on the key that gets it there (like the last digit of
   `50+20+6`), not when `=` is pressed. Start the burst before that key. When `=` closes the keypad within about half
   a second of that key, the burst waits for the keypad to hide and comes from where the total ends up. Clearing a score with DEL counts too: going
