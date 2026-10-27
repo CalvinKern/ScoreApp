@@ -141,6 +141,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorEditIndex = calculatorString.length
 
         inputView = inputText
+        inputText.setOnKeyListener(::onHardwareKey)
 
         val inputString = inputText.text.toString().let {
             if (it.toDoubleOrNull() == 0.0) {
@@ -213,7 +214,55 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         binding.calculatorKeyPrev.setOnClickListener { onPrevClicked() }
     }
 
+    /**
+     * Lets a hardware keyboard type into the calculator the same as its keys: tab and shift+tab move like next and
+     * previous. Keys the calculator doesn't have (e.g. arrows, enter, ctrl+v) are left to the score's text field.
+     */
+    private fun onHardwareKey(view: View, keyCode: Int, event: KeyEvent): Boolean {
+        if (view !== inputView || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed) return false
+
+        val onPress: () -> Unit = when (keyCode) {
+            KeyEvent.KEYCODE_TAB -> if (event.isShiftPressed) ::onPrevClicked else ::onNextClicked
+            else -> calculatorKey(keyCode, event)?.let { key -> { onButtonClicked(key) } } ?: return false
+        }
+
+        // Only the press counts, the release goes to whichever score has focus by then
+        if (event.action == KeyEvent.ACTION_DOWN) onPress()
+        return true
+    }
+
+    /** The calculator key a hardware key stands for, e.g. "×" for '*' or 'x' */
+    private fun calculatorKey(keyCode: Int, event: KeyEvent): String? {
+        if (keyCode == KeyEvent.KEYCODE_DEL) return resources.getString(R.string.del)
+
+        val decimalSeparator = ScoreFormat.decimalSeparator()
+        return when (val char = event.getUnicodeChar(event.metaState).toChar()) {
+            in '0'..'9' -> char.toString()
+            CalculatorUtils.DECIMAL, decimalSeparator -> decimalSeparator.toString()
+            CalculatorUtils.PLUS -> resources.getString(R.string.plus)
+            CalculatorUtils.MINUS -> resources.getString(R.string.minus)
+            '*', 'x', 'X', '×' -> resources.getString(R.string.multiply)
+            CalculatorUtils.DIVIDE, '÷' -> resources.getString(R.string.divide)
+            CalculatorUtils.OPEN_PAREN -> resources.getString(R.string.open_paren)
+            CalculatorUtils.CLOSE_PAREN -> resources.getString(R.string.close_paren)
+            '=' -> resources.getString(R.string.equals)
+            else -> null
+        }
+    }
+
+    /**
+     * Picks up text changed outside the calculator (e.g. a forward delete, or a keyboard app typing for a hardware
+     * keyboard), so the next key edits what's shown instead of putting back the calculator's older text.
+     */
+    private fun syncWithInput() {
+        val text = inputView?.text?.toString() ?: return
+        // A zero score starts the calculator empty (see setInput), which isn't a change
+        if (text == calculatorString || (calculatorString.isEmpty() && text.toDoubleOrNull() == 0.0)) return
+        calculatorString = text
+    }
+
     private fun onButtonClicked(key: String) {
+        syncWithInput()
         calculatorEditIndex = inputView?.selectionStart ?: calculatorEditIndex
 
         val failure = !appendToString(key)
