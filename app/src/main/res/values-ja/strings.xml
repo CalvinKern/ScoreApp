@@ -6,6 +6,7 @@
     <string name="actionSearch">探す</string>
     <string name="addRound">ラウンドを追加</string>
     <string name="dealerLabel">ディーラー</string>
+    <string name="dealerDescription">ヒント：ゲーム中に選手のスコアを長押しすると、そのラウンドのディーラーを変更できます</string>
     <string name="delete">削除する</string>
     <string name="deleteGameConfirmation">このゲームを削除しますか？</string>
     <string name="deleteSuccessful">%s 削除された</string>
@@ -19,20 +20,46 @@
     <string name="gamePlayersHeader">選手</string>
     <string name="gameSettingsTitle">ゲームの設定</string>
     <string name="graphByRoundsLabel">ラウンドによるスコア</string>
+    <string name="graphPodiumLabel">表彰台</string>
     <string name="graphSubtitle">統計</string>
     <string name="makePlayerDealerMessage">%sをこのラウンドのディーラーにしますか？</string>
+    <string name="setDealer">ディーラーにする</string>
     <string name="pickPlayers">選手を選ぶ</string>
     <string name="playerCreateTitle">新しい選手</string>
+    <string name="playerEditTitle">選手を編集</string>
+    <string name="playerDelete">選手を削除</string>
     <string name="playerEmptyMessage">新しい選手を追加するには、下の[+]ボタンを押して開始します。</string>
     <string name="playerEmptySearchMessage">現在の検索条件に一致する選手はありません。下の[+]ボタンを押すと、新しい選手を追加できます。</string>
     <string name="playerEmptySearchTitle">一致する選手はありません</string>
     <string name="playerEmptyTitle">選手は追加されていません</string>
-    <string name="playerIcon">選手アイコン</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">%dラウンドプレイ済み</item>
+    </plurals>
     <string name="playerName">選手の名前</string>
+    <string name="playerColor">色</string>
+    <string name="playerColorInvalid">色を16進数6桁で入力してください（例: 1E88E5）</string>
+    <string-array name="seatColorNames">
+        <item>緑</item>
+        <item>青</item>
+        <item>黄</item>
+        <item>赤</item>
+        <item>紫</item>
+        <item>オレンジ</item>
+        <item>シアン</item>
+        <item>ピンク</item>
+        <item>茶</item>
+        <item>グレー</item>
+    </string-array>
     <string name="playerNotesTitle">%sへのノート</string>
     <string name="playerRoundNumberFormat">ラウンド%d：</string>
     <string name="playerRoundNumberHint">ノート</string>
-    <string name="playersHolder">%d人の選手</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d人の選手</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="other">%dラウンド</item>
+    </plurals>
+    <string name="lastPlayedLabel">最終プレイ:</string>
     <string name="reversedScoringDescription">最高得点ではなく、最低得点の選手が勝ちます</string>
     <string name="reversedScoringTitle">逆スコアリング</string>
     <string name="scoreHint">スコア</string>
@@ -43,13 +70,74 @@
     <string name="actionPlayerStanding">順位</string>
     <string name="copiedUrl">コピーしたURL</string>
     <string name="storeToReview">レビューするにはアプリストアを開いてください</string>
+    <string name="changelogUnavailable">変更履歴を開けませんでした</string>
+    <string name="gameNameRequired">ゲーム名を入力してください</string>
+    <string name="gamePlayersRequired">プレイヤーを追加してください</string>
+    <string name="saveStatusSaving">保存中…</string>
+    <string name="saveStatusSaved">すべての変更を保存しました</string>
+    <string name="saveStatusNameNotSaved">空の名前は保存されません</string>
+    <string name="saveStatusPlayersNotSaved">空のプレイヤーリストは保存されません</string>
+    <string name="saveStatusAutomatic">変更は自動的に保存されます</string>
     <string name="actionClose">閉じる</string>
     <string name="useCalculatorDescription">カスタム電卓キーボードを使用します。 有効になっていない場合は、システムキーボードを使用します。</string>
     <string name="useCalculatorTitle">電卓キーボード</string>
     <string name="actionChangelog">変更ログ</string>
     <string name="actionRateApp">アプリを評価</string>
+    <string name="actionSettings">設定</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">外観</string>
+    <string name="settingsAboutHeader">このアプリについて</string>
+    <string name="settingsDynamicColorTitle">壁紙の色</string>
+    <string name="settingsDynamicColorSummary">アプリの色を壁紙に合わせる（ダイナミックカラー）</string>
+    <string name="settingsTrueBlackTitle">トゥルーブラック</string>
+    <string name="settingsTrueBlackSummary">ダークモードで純黒の背景を使用</string>
+    <string name="settingsGamesHeader">ゲーム</string>
+    <string name="settingsAutoLoadSettingsTitle">前回の設定を読み込む</string>
+    <string name="settingsAutoLoadSettingsSummary">以前のゲーム名を選ぶと、前回の設定とプレイヤーが入力されます</string>
+    <string name="settingsCalculatorDefaultSummary">新しいゲームは電卓キーボードをオンにして始まります</string>
+    <string name="settingsChangelogSummary">各リリースの新機能を確認</string>
+    <string name="settingsRateSummary">Google Play でレビューを書く</string>
+    <string name="settingsVersionTitle">バージョン</string>
     <string name="undo">元に戻す</string>
     <string name="deleteRounds">ラウンドを削除</string>
     <string name="deleteRoundItem">ラウンド%d</string>
     <string name="incomplete">不完全な</string>
+    <string name="maxScoreTitle">目標スコア</string>
+    <string name="maxScoreDescription">スコアに達したらゲームを終了します</string>
+    <string name="maxRoundsTitle">目標ラウンド数</string>
+    <string name="maxRoundsDescription">プレイする最大ラウンド数</string>
+    <string name="finishGame">ゲームを終了</string>
+    <string name="finishGameTitle">目標達成！</string>
+    <string name="finishGameConfirmation">ゲームを終了して順位を表示しますか？</string>
+    <string name="finish">終了</string>
+    <string name="continuePlaying">もう1ラウンド！</string>
+    <string name="errorGeneric">問題が発生しました</string>
+    <string name="settingsPrivacyHeader">プライバシー</string>
+    <string name="settingsShareDataTitle">使用状況データを共有</string>
+    <string name="settingsShareDataSummary">アプリの改善のために使用状況の統計を送信します。名前とスコアが共有されることはありません。</string>
+    <string name="settingsCrashReportsTitle">クラッシュレポートを送信</string>
+    <string name="settingsCrashReportsSummary">アプリがクラッシュしたときに、問題の修正に役立つレポートを送信します。名前とスコアが共有されることはありません。</string>
+    <string name="navigateUp">上へ移動</string>
+    <string name="scoreCellHint">%1$s、ラウンド%2$d</string>
+    <string name="playerTotalDescription">%1$s、合計%2$s</string>
+    <string name="leading">首位</string>
+    <string name="editNotes">ノートを編集</string>
+    <string name="calculatorNextDescription">次へ</string>
+    <string name="calculatorMultiplyDescription">掛ける</string>
+    <string name="calculatorDivideDescription">割る</string>
+    <string name="editPlayer">%sを編集</string>
+    <string name="deleteFailed">削除できませんでした</string>
+    <string name="calculatorOpenParenDescription">左かっこ</string>
+    <string name="calculatorCloseParenDescription">右かっこ</string>
+    <string name="calculatorDecimalDescription">小数点</string>
+    <string name="calculatorMinusDescription">マイナス</string>
+    <string name="calculatorEqualsDescription">イコール</string>
+    <string name="graphDescription">ラウンドによるスコア、%1$s。%2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s：%2$s</string>
+    <string name="podiumDescription">表彰台、%1$s。%2$s</string>
+    <string name="usageDataConsentTitle">使用状況データを共有しますか？</string>
+    <string name="usageDataConsentMessage">アプリの改善のために、使用状況の統計とクラッシュレポートを送信しますか？これらは Google Firebase によって収集されます。名前とスコアが共有されることはありません。</string>
+    <string name="usageDataConsentAllow">許可</string>
+    <string name="usageDataConsentDeny">許可しない</string>
 </resources>

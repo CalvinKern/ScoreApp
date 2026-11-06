@@ -14,11 +14,13 @@ data class PlayerEntity(
     @ColumnInfo(name = COLUMN_ID, index = true) var uid: Long,
     @ColumnInfo(name = COLUMN_NAME) var name: String,
     @ColumnInfo(name = COLUMN_ARCHIVED) var archived: Boolean,
+    @ColumnInfo(name = COLUMN_COLOR) var color: Int? = null, // An ARGB color int, null for the seat's graph color
 ) {
     companion object {
         const val TABLE_NAME = "players"
         const val COLUMN_ID = "uid"
         const val COLUMN_NAME = "name"
         const val COLUMN_ARCHIVED = "archived"
+        const val COLUMN_COLOR = "color"
     }
 }

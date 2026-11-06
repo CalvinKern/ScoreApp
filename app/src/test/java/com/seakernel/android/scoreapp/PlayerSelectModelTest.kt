@@ -1,0 +1,83 @@
+package com.seakernel.android.scoreapp
+
+import com.seakernel.android.scoreapp.data.Player
+import com.seakernel.android.scoreapp.playerselect.CreateModel
+import com.seakernel.android.scoreapp.playerselect.PlayerSaved
+import com.seakernel.android.scoreapp.playerselect.PlayerSearchRequest
+import com.seakernel.android.scoreapp.playerselect.PlayersLoaded
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+@Suppress("SpellCheckingInspection")
+class PlayerSelectModelTest {
+
+    private val players = listOf(
+        Player(id = 1, name = "alice"),
+        Player(id = 2, name = "Bob"),
+        Player(id = 3, name = "carol"),
+    )
+
+    private fun loaded(): CreateModel =
+        CreateModel.update(CreateModel.createDefault(null), PlayersLoaded(players)).modelUnsafe()
+
+    private fun CreateModel.names() = allPlayers.map { it.name }
+
+    @Test
+    fun newPlayerSortingLastIsAddedAtTheEnd() {
+        val model = CreateModel.update(loaded(), PlayerSaved(Player(4, "zed"))).modelUnsafe()
+
+        assertEquals(listOf("alice", "Bob", "carol", "zed"), model.names())
+        assertEquals(model.allPlayers, model.filteredPlayerList)
+        assertEquals(listOf(4L), model.selectedPlayerList)
+    }
+
+    @Test
+    fun newPlayerIsSortedIgnoringCase() {
+        val model = CreateModel.update(loaded(), PlayerSaved(Player(4, "Beth"))).modelUnsafe()
+
+        assertEquals(listOf("alice", "Beth", "Bob", "carol"), model.names())
+    }
+
+    @Test
+    fun renamedPlayerMovesToItsNewPlace() {
+        val model = CreateModel.update(loaded(), PlayerSaved(Player(1, "dave"))).modelUnsafe()
+
+        assertEquals(listOf("Bob", "carol", "dave"), model.names())
+        assertEquals(model.allPlayers, model.filteredPlayerList)
+        assertEquals(emptyList<Long>(), model.selectedPlayerList)
+    }
+
+    @Test
+    fun seatedWithPutsPickedPlayersInTheirSeatsAndOthersNext() {
+        val model = CreateModel.update(
+            CreateModel.update(CreateModel.createDefault(listOf(3L, 1L)), PlayersLoaded(players)).modelUnsafe(),
+            PlayerSearchRequest(""),
+        ).modelUnsafe()
+        val renamedCarol = Player(id = 3, name = "Carol", color = 5)
+
+        assertEquals(listOf(renamedCarol, players[0]), model.seatedWith(renamedCarol))
+        assertEquals(listOf(players[2], players[0], players[1]), model.seatedWith(players[1]))
+        assertEquals(listOf(players[2], players[0], Player()), model.seatedWith(Player()))
+    }
+
+    @Test
+    fun searchResultsKeepTheSortOrder() {
+        val searched = CreateModel.update(loaded(), PlayerSearchRequest("A")).modelUnsafe()
+        val model = CreateModel.update(searched, PlayerSaved(Player(4, "Aaron"))).modelUnsafe()
+
+        assertEquals(listOf("Aaron", "alice", "carol"), model.filteredPlayerList.map { it.name })
+
+        val searchedAgain = CreateModel.update(model, PlayerSearchRequest("a")).modelUnsafe()
+        assertEquals(listOf("Aaron", "alice", "carol"), searchedAgain.filteredPlayerList.map { it.name })
+    }
+
+    @Test
+    fun playersLoadedAgainKeepTheSearch() {
+        // Undoing a delete loads every player again while the search is still open
+        val searched = CreateModel.update(loaded(), PlayerSearchRequest("car")).modelUnsafe()
+        val model = CreateModel.update(searched, PlayersLoaded(players)).modelUnsafe()
+
+        assertEquals(listOf("carol"), model.filteredPlayerList.map { it.name })
+        assertEquals(listOf("alice", "Bob", "carol"), model.names())
+    }
+}

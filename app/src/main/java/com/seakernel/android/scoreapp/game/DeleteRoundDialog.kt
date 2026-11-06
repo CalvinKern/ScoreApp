@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.game
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.seakernel.android.scoreapp.R
@@ -36,7 +37,7 @@ class DeleteRoundDialog : DialogFragment() {
         val rounds = Array(roundIds.size) { i -> getString(R.string.deleteRoundItem, i + 1) }
         val selectedRoundIds = arrayListOf<Long>()
 
-        val alertDialog = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+        val alertDialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.deleteRounds))
             .setView(view)
             .setMultiChoiceItems(rounds, BooleanArray(rounds.size)) { _, which, isChecked ->

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.seakernel.android.scoreapp.database.entities.GameEntity
 import com.seakernel.android.scoreapp.database.entities.RoundEntity
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
 
@@ -15,7 +16,7 @@ import com.seakernel.android.scoreapp.database.entities.ScoreEntity
  */
 @Dao
 interface RoundDao {
-    @Query("SELECT ${ScoreEntity.QUALIFIED_COLUMNS}, ${RoundEntity.COLUMN_ROUND_NUMBER} FROM ${ScoreEntity.TABLE_NAME} INNER JOIN ${RoundEntity.TABLE_NAME} as ROUND_ ON ROUND_.${RoundEntity.COLUMN_ID}=${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} WHERE ROUND_.${RoundEntity.COLUMN_GAME_ID}=:gameId AND ${ScoreEntity.COLUMN_PLAYER_ID}=:playerId ORDER BY ${RoundEntity.COLUMN_ROUND_NUMBER} DESC")
+    @Query("SELECT ${ScoreEntity.QUALIFIED_COLUMNS} FROM ${ScoreEntity.TABLE_NAME} INNER JOIN ${RoundEntity.TABLE_NAME} as ROUND_ ON ROUND_.${RoundEntity.COLUMN_ID}=${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} WHERE ROUND_.${RoundEntity.COLUMN_GAME_ID}=:gameId AND ${ScoreEntity.COLUMN_PLAYER_ID}=:playerId ORDER BY ${RoundEntity.COLUMN_ROUND_NUMBER} DESC, ROUND_.${RoundEntity.COLUMN_ID} DESC")
     fun getNotesForPlayer(playerId: Long, gameId: Long): List<ScoreNoteEntity>
 
     @Insert
@@ -27,7 +28,7 @@ interface RoundDao {
     @Query("SELECT * FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} = :id")
     fun getRound(id: Long): RoundEntity
 
-    @Query("SELECT ${RoundEntity.COLUMN_ID} FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID} = :gameId")
+    @Query("SELECT ${RoundEntity.COLUMN_ID} FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_GAME_ID} = :gameId ORDER BY ${RoundEntity.COLUMN_ROUND_NUMBER}, ${RoundEntity.COLUMN_ID}")
     fun getRoundIds(gameId: Long): List<Long>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
@@ -39,12 +40,25 @@ interface RoundDao {
     @Query(
         """
         UPDATE ${ScoreEntity.TABLE_NAME}
-        SET ${ScoreEntity.COLUMN_SCORE} = :score
+        SET ${ScoreEntity.COLUMN_SCORE} = :score, ${ScoreEntity.COLUMN_SCORE_INPUT} = :input
         WHERE ${ScoreEntity.COLUMN_ID} = :id
-        
     """
     )
-    fun updateScore(id: Long, score: Double)
+    fun updateScore(id: Long, score: Double, input: String?)
+
+    @Query(
+        """
+        UPDATE ${GameEntity.TABLE_NAME}
+        SET ${GameEntity.COLUMN_LAST_PLAYED} = :date
+        WHERE ${GameEntity.COLUMN_ID} = (
+            SELECT ROUND_.${RoundEntity.COLUMN_GAME_ID}
+            FROM ${RoundEntity.TABLE_NAME} AS ROUND_
+            INNER JOIN ${ScoreEntity.TABLE_NAME} ON ${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ROUND_ID} = ROUND_.${RoundEntity.COLUMN_ID}
+            WHERE ${ScoreEntity.TABLE_NAME}.${ScoreEntity.COLUMN_ID} = :scoreId
+        )
+    """
+    )
+    fun updateLastPlayedForScore(scoreId: Long, date: String)
 
     @Query(
         """
@@ -55,17 +69,15 @@ interface RoundDao {
     )
     fun updateScoreNote(id: Long, notes: String)
 
+    @Query("UPDATE ${RoundEntity.TABLE_NAME} SET ${RoundEntity.COLUMN_DEALER_ID} = :dealerId WHERE ${RoundEntity.COLUMN_ID} = :id")
+    fun updateDealer(id: Long, dealerId: Long)
+
     @Query("DELETE FROM ${RoundEntity.TABLE_NAME} WHERE ${RoundEntity.COLUMN_ID} IN (:ids)")
     fun deleteRoundsById(ids: LongArray)
-
-    @Query("DELETE FROM ${ScoreEntity.TABLE_NAME} WHERE ${ScoreEntity.COLUMN_ID} = :id")
-    fun deleteScoreById(id: Long)
 
     class ScoreNoteEntity {
         @Embedded
         lateinit var score: ScoreEntity
-
-        var round_number: Int = 0
     }
 
 }

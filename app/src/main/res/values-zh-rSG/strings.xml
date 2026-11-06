@@ -5,7 +5,8 @@
     <string name="actionGraph">显示图</string>
     <string name="actionSearch">搜索</string>
     <string name="addRound">添加回合</string>
-    <string name="dealerLabel">经销商</string>
+    <string name="dealerLabel">发牌人</string>
+    <string name="dealerDescription">提示：在游戏中长按玩家的分数，即可更改该轮的发牌人</string>
     <string name="delete">删除</string>
     <string name="deleteGameConfirmation">您要删除此游戏吗？</string>
     <string name="deleteSuccessful">已删除%s</string>
@@ -19,37 +20,124 @@
     <string name="gamePlayersHeader">玩家们</string>
     <string name="gameSettingsTitle">游戏设置</string>
     <string name="graphByRoundsLabel">逐轮得分</string>
+    <string name="graphPodiumLabel">领奖台</string>
     <string name="graphSubtitle">统计</string>
-    <string name="makePlayerDealerMessage">成为%s经销商吗？</string>
+    <string name="makePlayerDealerMessage">让%s成为本轮的发牌人吗？</string>
+    <string name="setDealer">设为发牌人</string>
     <string name="pickPlayers">选择玩家</string>
     <string name="playerCreateTitle">新玩家</string>
+    <string name="playerEditTitle">编辑玩家</string>
+    <string name="playerDelete">删除玩家</string>
     <string name="playerEmptyMessage">首先点击下面的+按钮以添加新播放器！</string>
     <string name="playerEmptySearchMessage">没有玩家符合当前的搜索条件。 您可以点击下面的+按钮来添加新的播放器！</string>
     <string name="playerEmptySearchTitle">没有球员比赛</string>
     <string name="playerEmptyTitle">未添加玩家</string>
-    <string name="playerIcon">播放器图标</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">已进行 %d 轮</item>
+    </plurals>
     <string name="playerName">选手姓名</string>
+    <string name="playerColor">颜色</string>
+    <string name="playerColorInvalid">请输入6位十六进制颜色，例如 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>绿色</item>
+        <item>蓝色</item>
+        <item>黄色</item>
+        <item>红色</item>
+        <item>紫色</item>
+        <item>橙色</item>
+        <item>青色</item>
+        <item>粉色</item>
+        <item>棕色</item>
+        <item>灰色</item>
+    </string-array>
     <string name="playerNotesTitle">%s的注释</string>
     <string name="playerRoundNumberHint">笔记</string>
-    <string name="playersHolder">%d人</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d人</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="other">%d轮</item>
+    </plurals>
+    <string name="lastPlayedLabel">上次游玩：</string>
     <string name="playerRoundNumberFormat">第%d回合</string>
     <string name="reversedScoringDescription">得分最低的玩家获胜，而不是得分最高的</string>
     <string name="reversedScoringTitle">反向计分</string>
     <string name="scoreHint">得分了</string>
-    <string name="showRoundNotesDescription">单击玩家的姓名以查看和编辑每一回合的备忘</string>
+    <string name="showRoundNotesDescription">点击玩家的姓名以查看和编辑每一回合的备忘</string>
     <string name="showRoundNotesTitle">显示回合笔记</string>
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">球员站立</string>
     <string name="actionPlayerStanding">站立</string>
     <string name="copiedUrl">已复制网址</string>
     <string name="storeToReview">请打开应用商店撰写评论</string>
+    <string name="changelogUnavailable">无法打开更新日志</string>
+    <string name="gameNameRequired">请输入游戏名称</string>
+    <string name="gamePlayersRequired">请添加玩家</string>
+    <string name="saveStatusSaving">正在保存…</string>
+    <string name="saveStatusSaved">所有更改已保存</string>
+    <string name="saveStatusNameNotSaved">空名称不会保存</string>
+    <string name="saveStatusPlayersNotSaved">空玩家列表不会保存</string>
+    <string name="saveStatusAutomatic">更改会自动保存</string>
     <string name="actionClose">关</string>
     <string name="useCalculatorDescription">使用自定义计算器键盘。 如果未启用，将使用系统键盘。</string>
     <string name="useCalculatorTitle">计算器键盘</string>
     <string name="actionChangelog">变更日志</string>
     <string name="actionRateApp">评价应用</string>
+    <string name="actionSettings">设置</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">外观</string>
+    <string name="settingsAboutHeader">关于</string>
+    <string name="settingsDynamicColorTitle">壁纸配色</string>
+    <string name="settingsDynamicColorSummary">让应用颜色与设备壁纸相匹配（动态取色）</string>
+    <string name="settingsTrueBlackTitle">纯黑</string>
+    <string name="settingsTrueBlackSummary">在深色模式下使用纯黑背景</string>
+    <string name="settingsGamesHeader">游戏</string>
+    <string name="settingsAutoLoadSettingsTitle">加载上次设置</string>
+    <string name="settingsAutoLoadSettingsSummary">选择以前的游戏名称时，自动填入其上次的设置和玩家</string>
+    <string name="settingsCalculatorDefaultSummary">新游戏默认开启计算器键盘</string>
+    <string name="settingsChangelogSummary">查看每个版本的新功能</string>
+    <string name="settingsRateSummary">在 Google Play 上留下评价</string>
+    <string name="settingsVersionTitle">版本</string>
     <string name="undo">撤消</string>
     <string name="deleteRounds">删除回合</string>
     <string name="deleteRoundItem">第 %d 轮</string>
     <string name="incomplete">不完整</string>
+    <string name="maxScoreTitle">目标分数</string>
+    <string name="maxScoreDescription">达到该分数后结束游戏</string>
+    <string name="maxRoundsTitle">目标轮数</string>
+    <string name="maxRoundsDescription">最多进行的轮数</string>
+    <string name="finishGame">结束游戏</string>
+    <string name="finishGameTitle">已达成目标！</string>
+    <string name="finishGameConfirmation">是否结束游戏并查看排行榜？</string>
+    <string name="finish">结束</string>
+    <string name="continuePlaying">再来一局！</string>
+    <string name="errorGeneric">出了点问题</string>
+    <string name="settingsPrivacyHeader">隐私</string>
+    <string name="settingsShareDataTitle">共享使用情况数据</string>
+    <string name="settingsShareDataSummary">发送使用情况统计信息以帮助改进应用。我们绝不会分享姓名和分数。</string>
+    <string name="settingsCrashReportsTitle">发送崩溃报告</string>
+    <string name="settingsCrashReportsSummary">应用崩溃时发送报告，以帮助修复问题。我们绝不会分享姓名和分数。</string>
+    <string name="navigateUp">转到上一层级</string>
+    <string name="scoreCellHint">%1$s，第 %2$d 轮</string>
+    <string name="playerTotalDescription">%1$s，总分 %2$s</string>
+    <string name="leading">领先</string>
+    <string name="editNotes">编辑笔记</string>
+    <string name="calculatorNextDescription">下一个</string>
+    <string name="calculatorMultiplyDescription">乘</string>
+    <string name="calculatorDivideDescription">除</string>
+    <string name="editPlayer">编辑%s</string>
+    <string name="deleteFailed">删除失败</string>
+    <string name="calculatorOpenParenDescription">左括号</string>
+    <string name="calculatorCloseParenDescription">右括号</string>
+    <string name="calculatorDecimalDescription">小数点</string>
+    <string name="calculatorMinusDescription">减</string>
+    <string name="calculatorEqualsDescription">等于</string>
+    <string name="graphDescription">逐轮得分，%1$s。%2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s：%2$s</string>
+    <string name="podiumDescription">领奖台，%1$s。%2$s</string>
+    <string name="usageDataConsentTitle">共享使用情况数据？</string>
+    <string name="usageDataConsentMessage">发送使用情况统计信息和崩溃报告以帮助改进应用？这些数据由 Google Firebase 收集。我们绝不会分享姓名和分数。</string>
+    <string name="usageDataConsentAllow">允许</string>
+    <string name="usageDataConsentDeny">不允许</string>
 </resources>

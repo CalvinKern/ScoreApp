@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFF</color>
-    <color name="black">#000</color>
-    <color name="slightGray">#F5F5F5</color>
-    <color name="gray">#707070</color>
-    <color name="darkGray">#353535</color>
-    <color name="winnerBackground">@color/colorSecondary</color>
-    <color name="winnerText">@color/colorOnPrimary</color>
-    <color name="dealer">@color/colorPrimary</color>
-    <color name="dealerPast">@color/colorPrimaryLight</color>
-    <color name="totalBackground">@color/graphGray</color>
-    <color name="transparent">#00000000</color>
-    <color name="colorSelected">#DADADA</color>
 
-    <!-- Material colors -->
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorPrimaryLight">#4cb5a6</color>
-    <color name="colorOnPrimary">@color/white</color>
-    <color name="colorSecondary">#3f51b5</color> <!--Indigo-500-->
-    <color name="colorOnSecondary">@color/white</color>
-    <color name="colorBackground">@color/white</color>
-    <color name="colorBackgroundPopup">@color/white</color>
+    <!-- Material 3 color scheme. Generated from the brand key colors: primary #008577,
+         secondary #A76362, tertiary #457590 (Material Theme Builder "custom colors" style). -->
+    <color name="md_theme_primary">#006B5F</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#90F4E3</color>
+    <color name="md_theme_onPrimaryContainer">#005047</color>
+    <color name="md_theme_primaryInverse">#73D8C7</color>
+    <color name="md_theme_primaryFixed">#90F4E3</color>
+    <color name="md_theme_primaryFixedDim">#73D8C7</color>
+    <color name="md_theme_onPrimaryFixed">#00201C</color>
+    <color name="md_theme_onPrimaryFixedVariant">#005047</color>
+    <color name="md_theme_secondary">#8B4C4C</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#FFDAD8</color>
+    <color name="md_theme_onSecondaryContainer">#6F3535</color>
+    <color name="md_theme_secondaryFixed">#FFDAD8</color>
+    <color name="md_theme_secondaryFixedDim">#FFB3B1</color>
+    <color name="md_theme_onSecondaryFixed">#390B0D</color>
+    <color name="md_theme_onSecondaryFixedVariant">#6F3535</color>
+    <color name="md_theme_tertiary">#33647E</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#C4E7FF</color>
+    <color name="md_theme_onTertiaryContainer">#154C65</color>
+    <color name="md_theme_tertiaryFixed">#C4E7FF</color>
+    <color name="md_theme_tertiaryFixedDim">#9DCDEB</color>
+    <color name="md_theme_onTertiaryFixed">#001E2C</color>
+    <color name="md_theme_onTertiaryFixedVariant">#154C65</color>
+    <color name="md_theme_error">#BA1A1A</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FFDAD6</color>
+    <color name="md_theme_onErrorContainer">#93000A</color>
+    <color name="md_theme_background">#F4FBF8</color>
+    <color name="md_theme_onBackground">#171D1B</color>
+    <color name="md_theme_surface">#F4FBF8</color>
+    <color name="md_theme_onSurface">#171D1B</color>
+    <color name="md_theme_surfaceVariant">#DAE5E1</color>
+    <color name="md_theme_onSurfaceVariant">#3F4946</color>
+    <color name="md_theme_surfaceInverse">#2B3230</color>
+    <color name="md_theme_onSurfaceInverse">#ECF2EF</color>
+    <color name="md_theme_surfaceBright">#F4FBF8</color>
+    <color name="md_theme_surfaceDim">#D5DBD9</color>
+    <color name="md_theme_surfaceContainerLowest">#FFFFFF</color>
+    <color name="md_theme_surfaceContainerLow">#EFF5F2</color>
+    <color name="md_theme_surfaceContainer">#E9EFEC</color>
+    <color name="md_theme_surfaceContainerHigh">#E3EAE7</color>
+    <color name="md_theme_surfaceContainerHighest">#DDE4E1</color>
+    <color name="md_theme_outline">#6F7976</color>
+    <color name="md_theme_outlineVariant">#BEC9C5</color>
 
-    <!-- Text Colors-->
-    <color name="textBlack">@color/black</color>
-    <color name="textWhite">@color/white</color>
-
-    <!-- Graph Colors-->
-    <color name="graphRed">#f44336</color>
-    <color name="graphPurple">#9c27b0</color>
-    <color name="graphBlue">#2196f3</color>
-    <color name="graphCyan">#00bcd4</color>
-    <color name="graphTeal">#009688</color>
-    <color name="graphGreen">#4caf50</color>
-    <color name="graphYellow">#ffeb3b</color>
-    <color name="graphOrange">#ff9800</color>
+    <!-- Graph colors, all at least 3:1 against the surface and ordered so players next to each other get
+         clearly different colors (see GraphFragment) -->
+    <color name="graphRed">#D32F2F</color>
+    <color name="graphBlue">#1976D2</color>
+    <color name="graphGreen">#2E7D32</color>
+    <color name="graphOrange">#E65100</color>
+    <color name="graphPurple">#8E24AA</color>
+    <color name="graphCyan">#00838F</color>
     <color name="graphBrown">#795548</color>
+    <color name="graphYellow">#9C8600</color>
     <color name="graphGray">#546E7A</color>
+    <color name="graphPink">#C2185B</color>
 </resources>

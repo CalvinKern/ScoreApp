@@ -5,7 +5,8 @@
     <string name="actionSave">保存</string>
     <string name="actionSearch">搜索</string>
     <string name="addRound">添加回合</string>
-    <string name="dealerLabel">經銷商</string>
+    <string name="dealerLabel">發牌人</string>
+    <string name="dealerDescription">提示：在遊戲中長按玩家的分數，即可更改該輪的發牌人</string>
     <string name="delete">刪除</string>
     <string name="deleteGameConfirmation">您要刪除此遊戲嗎？</string>
     <string name="deleteSuccessful">已刪除%s</string>
@@ -19,37 +20,124 @@
     <string name="gamePlayersHeader">玩家們</string>
     <string name="gameSettingsTitle">遊戲設置</string>
     <string name="graphByRoundsLabel">逐輪得分</string>
+    <string name="graphPodiumLabel">頒獎台</string>
     <string name="graphSubtitle">統計</string>
-    <string name="makePlayerDealerMessage">成為%s經銷商嗎？</string>
+    <string name="makePlayerDealerMessage">讓%s成為本輪的發牌人嗎？</string>
+    <string name="setDealer">設為發牌人</string>
     <string name="pickPlayers">選擇玩家</string>
     <string name="playerCreateTitle">新玩家</string>
+    <string name="playerEditTitle">編輯玩家</string>
+    <string name="playerDelete">刪除玩家</string>
     <string name="playerEmptyMessage">首先點擊下面的+按鈕以添加新播放器！</string>
     <string name="playerEmptySearchMessage">沒有玩家符合當前的搜索條件。 您可以點擊下面的+按鈕來添加新的播放器！</string>
     <string name="playerEmptySearchTitle">沒有球員比賽</string>
     <string name="playerEmptyTitle">未添加玩家</string>
-    <string name="playerIcon">播放器圖標</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">已進行 %d 輪</item>
+    </plurals>
     <string name="playerName">選手姓名</string>
+    <string name="playerColor">顏色</string>
+    <string name="playerColorInvalid">請輸入6位十六進位顏色，例如 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>綠色</item>
+        <item>藍色</item>
+        <item>黃色</item>
+        <item>紅色</item>
+        <item>紫色</item>
+        <item>橙色</item>
+        <item>青色</item>
+        <item>粉紅色</item>
+        <item>棕色</item>
+        <item>灰色</item>
+    </string-array>
     <string name="playerNotesTitle">%s的註釋</string>
     <string name="playerRoundNumberFormat">第%d回合</string>
     <string name="playerRoundNumberHint">筆記</string>
-    <string name="playersHolder">%d位玩家</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d位玩家</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="other">%d輪</item>
+    </plurals>
+    <string name="lastPlayedLabel">上次遊玩：</string>
     <string name="reversedScoringDescription">得分最低的玩家獲勝，而不是得分最高的</string>
     <string name="reversedScoringTitle">反向計分</string>
     <string name="scoreHint">得分了</string>
-    <string name="showRoundNotesDescription">單擊玩家的姓名以查看和編輯每一回合的備忘</string>
+    <string name="showRoundNotesDescription">點擊玩家的姓名以查看和編輯每一回合的備忘</string>
     <string name="showRoundNotesTitle">顯示回合筆記</string>
     <string name="copiedUrl">已複製網址</string>
     <string name="storeToReview">請開啟應用程式商店撰寫評論</string>
+    <string name="changelogUnavailable">無法開啟更新日誌</string>
+    <string name="gameNameRequired">請輸入遊戲名稱</string>
+    <string name="gamePlayersRequired">請新增玩家</string>
+    <string name="saveStatusSaving">正在儲存…</string>
+    <string name="saveStatusSaved">所有變更已儲存</string>
+    <string name="saveStatusNameNotSaved">空白名稱不會儲存</string>
+    <string name="saveStatusPlayersNotSaved">空白玩家清單不會儲存</string>
+    <string name="saveStatusAutomatic">變更會自動儲存</string>
     <string name="actionClose">關</string>
     <string name="actionPlayerStanding">站立</string>
     <string name="playerStandingTitle">球員站立</string>
     <string name="playerStanding">#%d</string>
     <string name="actionRateApp">評價應用</string>
     <string name="actionChangelog">變更日誌</string>
+    <string name="actionSettings">設定</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">外觀</string>
+    <string name="settingsAboutHeader">關於</string>
+    <string name="settingsDynamicColorTitle">牆紙配色</string>
+    <string name="settingsDynamicColorSummary">讓應用程式顏色與裝置牆紙相配（動態取色）</string>
+    <string name="settingsTrueBlackTitle">純黑</string>
+    <string name="settingsTrueBlackSummary">在深色模式下使用純黑背景</string>
+    <string name="settingsGamesHeader">遊戲</string>
+    <string name="settingsAutoLoadSettingsTitle">載入上次設定</string>
+    <string name="settingsAutoLoadSettingsSummary">選擇以前的遊戲名稱時，自動填入其上次的設定和玩家</string>
+    <string name="settingsCalculatorDefaultSummary">新遊戲預設開啟計算器鍵盤</string>
+    <string name="settingsChangelogSummary">查看每個版本的新功能</string>
+    <string name="settingsRateSummary">在 Google Play 上留下評價</string>
+    <string name="settingsVersionTitle">版本</string>
     <string name="useCalculatorTitle">計算器鍵盤</string>
     <string name="useCalculatorDescription">使用自定義計算器鍵盤。 如果未啟用，將使用系統鍵盤。</string>
     <string name="undo">撤消</string>
     <string name="deleteRounds">刪除回合</string>
     <string name="deleteRoundItem">第 %d 輪</string>
     <string name="incomplete">不完整</string>
+    <string name="maxScoreTitle">目標分數</string>
+    <string name="maxScoreDescription">達到該分數後結束遊戲</string>
+    <string name="maxRoundsTitle">目標局數</string>
+    <string name="maxRoundsDescription">最多進行的局數</string>
+    <string name="finishGame">結束遊戲</string>
+    <string name="finishGameTitle">已達成目標！</string>
+    <string name="finishGameConfirmation">是否結束遊戲並查看排名？</string>
+    <string name="finish">結束</string>
+    <string name="continuePlaying">再來一局！</string>
+    <string name="errorGeneric">發生錯誤</string>
+    <string name="settingsPrivacyHeader">私隱</string>
+    <string name="settingsShareDataTitle">分享使用情況資料</string>
+    <string name="settingsShareDataSummary">傳送使用情況統計資料以協助改善應用程式。我們絕不會分享名稱和分數。</string>
+    <string name="settingsCrashReportsTitle">傳送當機報告</string>
+    <string name="settingsCrashReportsSummary">應用程式當機時傳送報告，以協助修正問題。我們絕不會分享名稱和分數。</string>
+    <string name="navigateUp">瀏覽首頁</string>
+    <string name="scoreCellHint">%1$s，第 %2$d 輪</string>
+    <string name="playerTotalDescription">%1$s，總分 %2$s</string>
+    <string name="leading">領先</string>
+    <string name="editNotes">編輯筆記</string>
+    <string name="calculatorNextDescription">下一個</string>
+    <string name="calculatorMultiplyDescription">乘</string>
+    <string name="calculatorDivideDescription">除</string>
+    <string name="editPlayer">編輯%s</string>
+    <string name="deleteFailed">刪除失敗</string>
+    <string name="calculatorOpenParenDescription">左括號</string>
+    <string name="calculatorCloseParenDescription">右括號</string>
+    <string name="calculatorDecimalDescription">小數點</string>
+    <string name="calculatorMinusDescription">減</string>
+    <string name="calculatorEqualsDescription">等於</string>
+    <string name="graphDescription">逐輪得分，%1$s。%2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s：%2$s</string>
+    <string name="podiumDescription">頒獎台，%1$s。%2$s</string>
+    <string name="usageDataConsentTitle">分享使用情況資料？</string>
+    <string name="usageDataConsentMessage">傳送使用情況統計資料及當機報告以協助改善應用程式？這些資料由 Google Firebase 收集。我們絕不會分享名稱和分數。</string>
+    <string name="usageDataConsentAllow">允許</string>
+    <string name="usageDataConsentDeny">不允許</string>
 </resources>

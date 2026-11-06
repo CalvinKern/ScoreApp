@@ -1,22 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="?attr/dialogPreferredPadding"
+    android:paddingTop="8dp"
+    android:paddingEnd="?attr/dialogPreferredPadding"
     >
 
-    <EditText
-        android:id="@+id/playerNameEdit"
-        android:orientation="vertical"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:inputType="textCapWords"
         android:hint="@string/playerName"
-        android:importantForAutofill="no"
         >
 
-        <requestFocus />
-    </EditText>
-</FrameLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/playerNameEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords"
+            android:importantForAutofill="no"
+            >
+
+            <requestFocus />
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- The start icon shows the color, and the placeholder the seat's color, set in code. The label stays up so the
+         placeholder shows without focus. -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/playerColorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/playerColor"
+        app:expandedHintEnabled="false"
+        app:prefixText="#"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/playerColorEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789ABCDEFabcdef"
+            android:importantForAutofill="no"
+            android:inputType="textCapCharacters|textNoSuggestions|textVisiblePassword"
+            android:maxLength="6"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- A swatch for each graph color, added in code -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fadingEdgeLength="32dp"
+        android:requiresFadingEdge="horizontal"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:id="@+id/playerColorSwatches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            />
+    </HorizontalScrollView>
+</LinearLayout>

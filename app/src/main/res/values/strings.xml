@@ -4,14 +4,25 @@
 
     <!--Game List Screen-->
     <string name="gameListTitle">Games</string>
-    <string name="playersHolder">%d Players</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d Player</item>
+        <item quantity="other">%d Players</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d Round</item>
+        <item quantity="other">%d Rounds</item>
+    </plurals>
+    <string name="lastPlayedLabel">Last Played:</string>
     <string name="gameListEmptyTitle">No games created</string>
-    <string name="gameListEmptyMessage">Start by clicking the + button down below to create a new game!</string>
+    <string name="gameListEmptyMessage">Start by tapping the + button down below to create a new game!</string>
     <string name="copiedUrl">Copied URL</string>
     <string name="storeToReview">Please open the app store to review</string>
+    <string name="changelogUnavailable">Unable to open the changelog</string>
+    <string name="errorGeneric">Something went wrong</string>
 
     <!--Common Actions-->
     <string name="actionClose">Close</string>
+    <string name="navigateUp">Navigate up</string>
     <string name="actionSave">Save</string>
     <string name="actionEdit">Edit</string>
     <string name="actionSearch">Search</string>
@@ -19,6 +30,33 @@
     <string name="actionPlayerStanding">Standings</string>
     <string name="actionRateApp">Rate App</string>
     <string name="actionChangelog">Changelog</string>
+    <string name="actionSettings">Settings</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">Appearance</string>
+    <string name="settingsAboutHeader">About</string>
+    <string name="settingsDynamicColorTitle">Wallpaper Colors</string>
+    <string name="settingsDynamicColorSummary">Match the app colors to your device wallpaper (dynamic color)</string>
+    <string name="settingsTrueBlackTitle">True Black</string>
+    <string name="settingsTrueBlackSummary">Use a pure black background in dark mode</string>
+    <string name="settingsGamesHeader">Games</string>
+    <string name="settingsAutoLoadSettingsTitle">Load Previous Settings</string>
+    <string name="settingsAutoLoadSettingsSummary">Picking a previous game name fills in its last settings and players</string>
+    <string name="settingsCalculatorDefaultSummary">New games start with the calculator keyboard turned on</string>
+    <string name="settingsPrivacyHeader">Privacy</string>
+    <string name="settingsShareDataTitle">Share Usage Data</string>
+    <string name="settingsShareDataSummary">Send usage statistics to help improve the app. Names and scores are never shared.</string>
+    <string name="settingsCrashReportsTitle">Send Crash Reports</string>
+    <string name="settingsCrashReportsSummary">Send a report when the app crashes, to help fix it. Names and scores are never shared.</string>
+    <!-- Asked once on first launch, nothing is shared until the user answers -->
+    <string name="usageDataConsentTitle">Share usage data?</string>
+    <string name="usageDataConsentMessage">Send usage statistics and crash reports to help improve the app? They are collected by Google Firebase. Names and scores are never shared.</string>
+    <string name="usageDataConsentAllow">Allow</string>
+    <string name="usageDataConsentDeny">Don\'t allow</string>
+    <string name="settingsChangelogSummary">See what\'s new in each release</string>
+    <string name="settingsRateSummary">Leave a review on Google Play</string>
+    <string name="settingsVersionTitle">Version</string>
+    <string name="settingsVersionFormat" translatable="false">%1$s (%2$d)</string>
 
     <!--Create Game Screen-->
     <string name="gameCreateTitle">New Game</string>
@@ -26,33 +64,75 @@
     <string name="gameNameHint">Game Name</string>
     <string name="gamePlayersHeader">Players</string>
     <string name="gamePlayersEmptyTitle">No players added</string>
-    <string name="gamePlayersEmptyMessage">To start a game, add some players with the \"EDIT\" button.</string>
+    <string name="gamePlayersEmptyMessage">To start a game, add some players with the \"Edit\" button.</string>
     <string name="dealerLabel">Dealer</string>
+    <string name="dealerDescription">Tip: Long press a player\'s score in the game to change the dealer for that round</string>
     <string name="reversedScoringTitle">Reverse Scoring</string>
     <string name="reversedScoringDescription">The player with the lowest score wins, instead of having the highest score</string>
     <string name="showRoundNotesTitle">Show Round Notes</string>
-    <string name="showRoundNotesDescription">Click on a player\'s name to view and edit notes for each round</string>
+    <string name="showRoundNotesDescription">Tap a player\'s name to view and edit notes for each round</string>
     <string name="useCalculatorTitle">Calculator Keyboard</string>
     <string name="useCalculatorDescription">Use the custom calculator keyboard. Will use the system keyboard if not enabled.</string>
+    <string name="maxScoreTitle">Target Score</string>
+    <string name="maxScoreDescription">Finish game once score is reached</string>
+    <string name="maxRoundsTitle">Target Rounds</string>
+    <string name="maxRoundsDescription">Maximum number of rounds to play</string>
+    <string name="gameNameRequired">Please enter a name for the game</string>
+    <string name="gamePlayersRequired">Please add a player</string>
+    <!--Shown under the title of an existing game's settings and player picker, since they save on their own-->
+    <string name="saveStatusSaving">Saving…</string>
+    <string name="saveStatusSaved">All changes saved</string>
+    <string name="saveStatusNameNotSaved">Blank name isn\'t saved</string>
+    <string name="saveStatusPlayersNotSaved">Empty player list isn\'t saved</string>
+    <string name="saveStatusAutomatic">Changes save automatically</string>
 
     <!--Select Player Screen-->
     <string name="pickPlayers">Pick Players</string>
     <string name="playerCreateTitle">New Player</string>
-    <string name="playerIcon">Player Icon</string>
+    <string name="playerEditTitle">Edit Player</string>
+    <!-- The player dialog's delete button, named for the player so it isn't read as clearing the color above it -->
+    <string name="playerDelete">Delete Player</string>
     <string name="playerEmptyTitle">No players added</string>
-    <string name="playerEmptyMessage">Start by clicking the + button down below to add a new player!</string>
+    <string name="playerEmptyMessage">Start by tapping the + button down below to add a new player!</string>
     <string name="playerEmptySearchTitle">No players match</string>
-    <string name="playerEmptySearchMessage">No players match the current search criteria. You can add a new player by clicking the + button down below!</string>
+    <string name="playerEmptySearchMessage">No players match the current search criteria. You can add a new player by tapping the + button down below!</string>
 
     <!--Game Screen-->
     <string name="addRound">Add Round</string>
+    <string name="finishGame">Finish Game</string>
+    <string name="finishGameTitle">Goal Reached!</string>
+    <string name="finishGameConfirmation">Would you like to finish the game and see the standings?</string>
+    <string name="finish">Finish</string>
+    <string name="continuePlaying">Another Round!</string>
     <string name="makePlayerDealerMessage">Make %s dealer for this round?</string>
+    <string name="setDealer">Set Dealer</string>
     <string name="scoreHint">Score</string>
+    <!-- Spoken by screen readers for a score cell, e.g. "Alice, round 2" -->
+    <string name="scoreCellHint">%1$s, round %2$d</string>
+    <!-- Spoken by screen readers for a player's name at the top of the game, e.g. "Alice, total 12" -->
+    <string name="playerTotalDescription">%1$s, total %2$s</string>
+    <string name="leading">Leading</string>
+    <string name="editNotes">Edit notes</string>
     <string name="incomplete">Incomplete</string>
+    <!-- Spoken by screen readers for calculator keys whose symbols don't read well -->
+    <string name="calculatorNextDescription">Next</string>
+    <string name="calculatorMultiplyDescription">Multiply</string>
+    <string name="calculatorDivideDescription">Divide</string>
+    <string name="calculatorOpenParenDescription">Open parenthesis</string>
+    <string name="calculatorCloseParenDescription">Close parenthesis</string>
+    <string name="calculatorDecimalDescription">Decimal point</string>
+    <string name="calculatorMinusDescription">Minus</string>
+    <string name="calculatorEqualsDescription">Equals</string>
 
     <!--Graph Screen-->
     <string name="graphByRoundsLabel">Score by rounds</string>
+    <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistics</string>
+    <!-- Spoken by screen readers for the rounds graph, e.g. "Score by rounds, 3 Rounds. Alice: 5, 7, 12. Bob: 3, 3, 9" -->
+    <string name="graphDescription">Score by rounds, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <!-- Spoken by screen readers for the podium, by score, e.g. "Podium, 3 Rounds. Alice, total 12. Bob, total 9" -->
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
 
     <!--Player Round Dialog-->
     <string name="playerNotesTitle">Notes for %s</string>
@@ -62,13 +142,36 @@
     <!--Player Standing Dialog-->
     <string name="playerStandingTitle">Player Standings</string>
     <string name="playerStanding">#%d</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Round Played</item>
+        <item quantity="other">%d Rounds Played</item>
+    </plurals>
 
     <!--Player dialog-->
     <string name="playerName">Player Name</string>
+    <!-- The color picked for a player, used for them in the graphs -->
+    <string name="playerColor">Color</string>
+    <string name="playerColorInvalid">Enter a color as 6 hex digits, like 1E88E5</string>
+    <!-- Spoken by screen readers for each color to pick, in the same order as the graph colors -->
+    <string-array name="seatColorNames">
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Yellow</item>
+        <item>Red</item>
+        <item>Purple</item>
+        <item>Orange</item>
+        <item>Cyan</item>
+        <item>Pink</item>
+        <item>Brown</item>
+        <item>Gray</item>
+    </string-array>
+    <!-- Spoken by screen readers for the edit button next to a player, e.g. "Edit Alice" -->
+    <string name="editPlayer">Edit %s</string>
 
     <!--Game List Delete Dialog-->
     <string name="deleteGameConfirmation">Do you want to delete this game?</string>
     <string name="delete">Delete</string>
+    <string name="deleteFailed">Delete failed</string>
     <string name="deleteSuccessful">Deleted %s</string>
     <string name="undo">Undo</string>
 

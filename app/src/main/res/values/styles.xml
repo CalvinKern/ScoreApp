@@ -1,77 +1,201 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
+    <style name="Base.AppTheme" parent="Theme.Material3Expressive.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+        <item name="colorPrimaryInverse">@color/md_theme_primaryInverse</item>
+        <item name="colorPrimaryFixed">@color/md_theme_primaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/md_theme_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixed">@color/md_theme_onPrimaryFixed</item>
+        <item name="colorOnPrimaryFixedVariant">@color/md_theme_onPrimaryFixedVariant</item>
+        <item name="colorSecondary">@color/md_theme_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+        <item name="colorSecondaryFixed">@color/md_theme_secondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/md_theme_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixed">@color/md_theme_onSecondaryFixed</item>
+        <item name="colorOnSecondaryFixedVariant">@color/md_theme_onSecondaryFixedVariant</item>
+        <item name="colorTertiary">@color/md_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer</item>
+        <item name="colorTertiaryFixed">@color/md_theme_tertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/md_theme_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixed">@color/md_theme_onTertiaryFixed</item>
+        <item name="colorOnTertiaryFixedVariant">@color/md_theme_onTertiaryFixedVariant</item>
+        <item name="colorError">@color/md_theme_error</item>
+        <item name="colorOnError">@color/md_theme_onError</item>
+        <item name="colorErrorContainer">@color/md_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/md_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+        <item name="colorSurfaceInverse">@color/md_theme_surfaceInverse</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_onSurfaceInverse</item>
+        <item name="colorSurfaceBright">@color/md_theme_surfaceBright</item>
+        <item name="colorSurfaceDim">@color/md_theme_surfaceDim</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+        <item name="colorOutline">@color/md_theme_outline</item>
+        <item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
 
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="snackbarStyle">@style/SnackbarStyle</item>
-        <item name="snackbarTextViewStyle">@style/SnackbarText</item>
-        <item name="snackbarButtonStyle">@style/SnackbarButton</item>
+        <item name="checkboxStyle">@style/AppTheme.Checkbox</item>
+        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="floatingActionButtonStyle">@style/AppTheme.FloatingActionButton</item>
 
         <!-- For NoActionBar -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="SnackbarStyle" parent="@style/Widget.MaterialComponents.Snackbar">
-        <item name="backgroundTint">@color/colorBackgroundPopup</item>
+    <!--
+        Light mode values for the app's primary accent (the dark mode values are in values-night).
+        The accent is used by the FAB so the brand color stays consistent.
+    -->
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="colorPrimaryAccent">?attr/colorPrimaryFixedDim</item>
+        <item name="colorOnPrimaryAccent">?attr/colorOnPrimaryFixed</item>
     </style>
 
-    <style name="SnackbarText" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
-        <item name="android:textColor">@color/textBlack</item>
+    <!-- "True black" setting overlay, only has values in dark mode (values-night) -->
+    <style name="ThemeOverlay.App.TrueBlack" parent="" />
+
+    <style name="AppTheme.FloatingActionButton" parent="Widget.Material3Expressive.FloatingActionButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.FloatingActionButton</item>
     </style>
 
-    <style name="SnackbarButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="actionTextColorAlpha">1</item>
-        <item name="rippleColor">@color/colorSecondary</item>
+    <style name="ThemeOverlay.App.FloatingActionButton" parent="">
+        <item name="colorContainer">?attr/colorPrimaryAccent</item>
+        <item name="colorOnContainer">?attr/colorOnPrimaryAccent</item>
     </style>
 
-    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorPrimary</item>
+    <style name="AppTheme.Checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:padding">@dimen/margin_checkbox</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">?attr/colorPrimarySurface</item>
+    <style name="AppTheme.OverflowMenu" parent="Widget.Material3.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/bg_popup_rounded</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay">
-        <item name="android:background">@color/colorBackgroundPopup</item>
-        <item name="android:textColor">@color/textBlack</item>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="dropDownListViewStyle">@style/AppTheme.DropDownListView</item>
     </style>
 
+    <style name="AppTheme.DropDownListView" parent="Widget.AppCompat.ListView.DropDown">
+        <item name="android:listSelector">@drawable/bg_popup_item_selectable</item>
+    </style>
+
+    <!-- Section headers and empty state titles -->
     <style name="AppTheme.TextHeader">
-        <item name="android:textSize">@dimen/text_header</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/textBlack</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <style name="AppTheme.CalculatorButton" parent="@style/Widget.MaterialComponents.Button">
+    <!-- Settings row title + supporting text (M3 list item headline / supporting text) -->
+    <style name="AppTheme.TextListHeadline">
+        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="AppTheme.TextListSupporting">
+        <item name="android:textAppearance">?attr/textAppearanceBodyMedium</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <!--
+        Score cells typed on the system keyboard. A short window (e.g. a phone in landscape) has no room for a score
+        above the keyboard, so the table would shrink away and close it again: the keyboard may take the whole
+        screen and show the score itself. Taller windows keep the table in view instead (see values-h480dp).
+    -->
+    <style name="AppTheme.ScoreInput" parent="">
+        <item name="android:imeOptions">actionNext</item>
+    </style>
+
+    <!-- Calculator keys: digits on a surface container, operators tonal, actions filled -->
+    <style name="AppTheme.CalculatorButton" parent="@style/Widget.Material3Expressive.Button">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/calculator_button_size</item>
         <item name="android:layout_columnWeight">1</item>
-        <item name="android:textColor">@color/textWhite</item>
+        <item name="android:layout_margin">@dimen/calculator_button_spacing</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetTop">0dp</item>
-        <item name="android:paddingTop">@dimen/fab_margin</item>
-        <item name="android:paddingBottom">@dimen/fab_margin</item>
-        <item name="cornerRadius">0dp</item>
-        <item name="rippleColor">@color/textWhite</item>
-        <item name="backgroundTint">@color/gray</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CalculatorKey</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Operator">
-        <item name="backgroundTint">@color/darkGray</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3Expressive.Button.Tonal</item>
     </style>
 
     <style name="AppTheme.CalculatorButton.Action">
-        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3Expressive.Button.Filled</item>
+    </style>
+
+    <!--
+        Expressive buttons also read checked and unchecked colors (like Material's own button overlays define). Keys
+        can't be checked, so they all match the normal colors.
+    -->
+    <style name="ThemeOverlay.App.CalculatorKey" parent="">
+        <item name="colorContainer">?attr/colorSurfaceContainerHighest</item>
+        <item name="colorOnContainer">?attr/colorOnSurface</item>
+        <item name="colorContainerChecked">?attr/colorSurfaceContainerHighest</item>
+        <item name="colorOnContainerChecked">?attr/colorOnSurface</item>
+        <item name="colorContainerUnchecked">?attr/colorSurfaceContainerHighest</item>
+        <item name="colorOnContainerUnchecked">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Settings screen: M3 list subheaders and two-line list items -->
+    <style name="AppTheme.SettingsSubheader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">@dimen/fab_margin</item>
+        <item name="android:paddingEnd">@dimen/fab_margin</item>
+        <item name="android:paddingTop">@dimen/fab_margin</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleSmall</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <!-- Ignored below API 28, where screen readers read it as plain text -->
+        <item name="android:accessibilityHeading" tools:targetApi="p">true</item>
+    </style>
+
+    <style name="AppTheme.SettingsRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/settings_row_min_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">@dimen/fab_margin</item>
+        <item name="android:paddingEnd">@dimen/fab_margin</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppTheme.SettingsRowIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginEnd">@dimen/fab_margin</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="tint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="AppTheme.SettingsRowText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
     </style>
 </resources>

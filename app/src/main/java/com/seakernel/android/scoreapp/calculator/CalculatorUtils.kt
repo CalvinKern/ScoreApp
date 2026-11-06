@@ -2,6 +2,8 @@ package com.seakernel.android.scoreapp.calculator
 
 import android.content.Context
 import com.seakernel.android.scoreapp.R
+import com.seakernel.android.scoreapp.utility.ScoreFormat
+import kotlin.math.abs
 import kotlin.math.pow
 
 /**
@@ -20,6 +22,8 @@ object CalculatorUtils {
     const val DIVIDE = '/'
     const val EXPONENT = '^'
 
+    private const val MAX_WHOLE_NUMBER = 1e18
+
     // Doesn't quite work, splitting by regex will remove the matched patterns
     private val CALCULATOR_REGEX = Regex("(\\d*\\.?\\d+)(?![\\d*\\.?])|([()])|([+\\-x/])(?![+\\-x/])|\\s")
     private val VALIDATOR_REGEX =
@@ -33,12 +37,23 @@ object CalculatorUtils {
             .replace(resources.getString(R.string.divide), DIVIDE.toString())
             .replace(resources.getString(R.string.close_paren), CLOSE_PAREN.toString())
             .replace(resources.getString(R.string.open_paren), OPEN_PAREN.toString())
-            .replace(resources.getString(R.string.decimal), DECIMAL.toString())
+    }
+
+    /** Replaces the user's decimal separator (e.g. the ',' in a German "2,5") with [DECIMAL] */
+    private fun normalizeDecimal(input: String): String {
+        val separator = ScoreFormat.decimalSeparator()
+        return if (separator == DECIMAL) input else input.replace(separator, DECIMAL)
+    }
+
+    /** Shows a computed result with the user's decimal separator, the reverse of [normalizeDecimal] */
+    fun toDisplay(result: String): String {
+        val separator = ScoreFormat.decimalSeparator()
+        return if (separator == DECIMAL) result else result.replace(DECIMAL, separator)
     }
 
     // Answer snagged from this post: https://stackoverflow.com/a/26227947/4472135
     fun eval(input: String, context: Context? = null): String? {
-        val str = if (context != null) sanitize(input, context) else input
+        val str = normalizeDecimal(if (context != null) sanitize(input, context) else input)
         if (!VALIDATOR_REGEX.matches(str)) return null
 
         val output = object : Any() {
@@ -60,10 +75,7 @@ object CalculatorUtils {
             fun parse(): Double? {
                 nextChar()
                 val x = parseExpression()
-                if (pos < str.length) {
-                    println("Unexpected: ${ch.toChar()}")
-                    return null
-                }
+                if (pos < str.length) return null // Characters were left over that couldn't be parsed
                 return x
             }
 
@@ -114,24 +126,36 @@ object CalculatorUtils {
 //                            "sin" -> sin(Math.toRadians(x))
 //                            "cos" -> cos(Math.toRadians(x))
 //                            "tan" -> tan(Math.toRadians(x))
-//                            else -> {
-//                                println("Unknown function: $func")
-//                                return null
-//                            }
+//                            else -> return null // Unknown function
 //                        }
                 } else {
-                    println("Unexpected: ${ch.toChar()} ($ch)")
-                    return null
+                    return null // Not a number or an opening parenthesis
                 }
                 if (eat(EXPONENT.code)) x = x.pow(parseFactor() ?: return null) // exponentiation
                 return x
             }
         }.parse() ?: return null
 
-        return if (output.toInt() - output == 0.0) {
-            output.toInt().toString()
+        // Infinity (dividing by zero) and NaN (0/0) aren't scores, so treat them like an incomplete equation
+        if (!output.isFinite()) return null
+
+        // Whole numbers drop the decimal, as a Long so large numbers don't overflow. Others avoid scientific
+        // notation (e.g. "3.0E9"), which can't be read back.
+        return if (output % 1.0 == 0.0 && abs(output) < MAX_WHOLE_NUMBER) {
+            output.toLong().toString()
         } else {
-            output.toString()
+            output.toBigDecimal().toPlainString()
         }
     }
+
+    /**
+     * Converts typed input into the form scores store it in: [DECIMAL] for decimals, [MULTIPLY] for
+     * multiplication, and no spaces. This keeps stored input readable after the language changes.
+     */
+    fun toCanonicalInput(input: String, context: Context): String =
+        normalizeDecimal(sanitize(input, context)).filterNot { it.isWhitespace() }
+
+    /** Shows stored input the way the user types it, the reverse of [toCanonicalInput] */
+    fun toDisplayInput(canonicalInput: String, context: Context): String =
+        toDisplay(canonicalInput).replace(MULTIPLY.toString(), context.getString(R.string.multiply))
 }

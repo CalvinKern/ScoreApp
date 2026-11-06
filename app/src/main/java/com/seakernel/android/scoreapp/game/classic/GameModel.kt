@@ -25,11 +25,12 @@ sealed class GameEvent {
         val roundId: Long,
         val playerId: Long,
         val score: Double,
-        val metadata: String
+        val input: String?,
     ) : GameEvent()
 
     data class ScoreFocused(val scoreId: Long) : GameEvent()
     data class ScoreFocusLost(val scoreId: Long) : GameEvent()
+    data object RequestFinishGame : GameEvent()
 }
 
 sealed class GameEffect {
@@ -37,20 +38,95 @@ sealed class GameEffect {
     data class SaveRound(val gameId: Long, val round: Round) : GameEffect()
     data class SaveScore(val roundId: Long, val score: Score) : GameEffect()
     data class NewGame(val gameId: Long, val initialPlayerId: Long?) : GameEffect()
+    data object ShowFinishGame : GameEffect()
 }
 
 data class GameModel(
     val settings: GameSettings = GameSettings(),
     val rounds: List<Round> = emptyList(),
-    val focusedScoreId: Long? = null
+    val playerTotals: Map<Long, Double> = emptyMap(),
+    val leadPlayerIds: List<Long> = emptyList(),
+    val focusedScoreId: Long? = null,
+    val isGoalReached: Boolean = false,
 ) {
 
+    /**
+     * Whether any player's total has reached the max score. Totals start at 0, so a positive max score is reached
+     * going up and a negative one going down. The game ends when someone reaches it in both scoring modes, reversed
+     * scoring only changes the leader.
+     */
+    fun hasReachedGoalScore(): Boolean {
+        val maxScore = settings.maxScore?.takeIf { it != 0.0 } ?: return false
+        return playerTotals.values.any { if (maxScore > 0) it >= maxScore else it <= maxScore }
+    }
+
     companion object {
+
+        private fun calculateTotals(rounds: List<Round>): Map<Long, Double> {
+            val totalsMap = mutableMapOf<Long, Double>()
+            rounds.forEach { round ->
+                round.scores.forEach { score ->
+                    score.player.id?.let { totalsMap[it] = (totalsMap[it] ?: 0.0) + score.value }
+                }
+            }
+            return totalsMap
+        }
+
+        private fun calculateLeadPlayerIds(settings: GameSettings, totals: Map<Long, Double>): List<Long> {
+            if (totals.isEmpty()) return emptyList()
+
+            val leadPlayerIds = mutableListOf<Long>()
+            var leadScore: Double? = null
+
+            totals.forEach { (playerId, score) ->
+                if (leadScore == null) {
+                    leadScore = score
+                    leadPlayerIds.add(playerId)
+                } else {
+                    val isBetter = if (settings.reversedScoring) score < leadScore else score > leadScore
+                    val isTied = score == leadScore
+
+                    if (isBetter) {
+                        leadScore = score
+                        leadPlayerIds.clear()
+                        leadPlayerIds.add(playerId)
+                    } else if (isTied) {
+                        leadPlayerIds.add(playerId)
+                    }
+                }
+            }
+
+            // Don't show a lead player if everyone is tied
+            return if (leadPlayerIds.size == totals.size) {
+                emptyList()
+            } else {
+                leadPlayerIds
+            }
+        }
+
+        private fun checkGoalReached(model: GameModel): Boolean {
+            // A limit of 0 would end the game before it starts, so treat it as no limit
+            val maxRounds = model.settings.maxRounds?.takeIf { it > 0 }
+            if (maxRounds != null && model.rounds.size >= maxRounds) {
+                return true
+            }
+
+            return model.hasReachedGoalScore()
+        }
+
+        private fun updateComputedFields(model: GameModel): GameModel {
+            val totals = calculateTotals(model.rounds)
+            val leadPlayerIds = calculateLeadPlayerIds(model.settings, totals)
+            val newModel = model.copy(playerTotals = totals, leadPlayerIds = leadPlayerIds)
+            return newModel.copy(isGoalReached = checkGoalReached(newModel))
+        }
 
         private fun getNextDealer(model: GameModel): Player? {
             if (model.rounds.isEmpty()) return null
 
             val lastRound = model.rounds.last()
+            if (lastRound.scores.isEmpty()) return null // No players left in the game
+
             val nextIndex =
                 (lastRound.scores.indexOfFirst { it.player == lastRound.dealer } + 1) % lastRound.scores.size
             return lastRound.scores[nextIndex].player
@@ -93,13 +169,14 @@ data class GameModel(
                         }
                     }
 
-                    Next.next(
+                    val newModel = updateComputedFields(
                         model.copy(
                             settings = event.game.settings,
                             rounds = newRounds,
-                            focusedScoreId = newFocusedScoreId
+                            focusedScoreId = newFocusedScoreId,
                         )
                     )
+                    Next.next(newModel)
                 }
                 is GameEvent.RequestLoad -> Next.dispatch(
                     Effects.effects(
@@ -155,28 +232,35 @@ data class GameModel(
                         model.focusedScoreId
                     }
 
-                    Next.next(model.copy(rounds = rounds, focusedScoreId = focusedScoreId))
+                    val newModel = updateComputedFields(
+                        model.copy(
+                            rounds = rounds,
+                            focusedScoreId = focusedScoreId,
+                        )
+                    )
+                    Next.next(newModel)
                 }
                 is GameEvent.ScoreSaved -> {
+                    // The round (or the player) can be gone by the time the save finishes, e.g. deleted rounds
+                    // loading first, and then there's nothing left to update
+                    val index = model.rounds.indexOfFirst { it.id == event.roundId }
+                    val scoreIndex = model.rounds.getOrNull(index)?.scores?.indexOfFirst { it.id == event.score.id }
+                    if (scoreIndex == null || scoreIndex < 0) return Next.noChange()
+
                     val rounds = model.rounds.toMutableList()
-                    val index = rounds.indexOfFirst { it.id == event.roundId }
                     val round = rounds[index].let {
                         val scores = it.scores.toMutableList()
-                        val scoreIndex = scores.indexOfFirst { score -> score.id == event.score.id }
-
-                        scores.removeAt(scoreIndex)
-                        scores.add(scoreIndex, event.score)
+                        scores[scoreIndex] = event.score
                         it.copy(scores = scores)
                     }
-
-                    rounds.removeAt(index)
-                    rounds.add(index, round)
-                    Next.next(model.copy(rounds = rounds))
+                    rounds[index] = round
+                    val newModel = updateComputedFields(model.copy(rounds = rounds))
+                    Next.next(newModel)
                 }
                 is GameEvent.UpdateScore -> {
                     val round = model.rounds.firstOrNull { it.id == event.roundId }
                     val score = round?.scores?.firstOrNull { it.player.id == event.playerId }
-                        ?.copy(value = event.score)
+                        ?.copy(value = event.score, input = event.input)
 
                     if (score != null) {
                         Next.dispatch(
@@ -199,6 +283,10 @@ data class GameModel(
                         Next.noChange()
                     }
                 }
+                is GameEvent.RequestFinishGame ->
+                    model.settings.id?.let {
+                        Next.dispatch(Effects.effects(GameEffect.ShowFinishGame))
+                    } ?: Next.noChange()
             }
         }
     }

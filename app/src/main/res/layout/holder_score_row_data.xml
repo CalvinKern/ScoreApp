@@ -14,13 +14,14 @@
 
         <EditText
             android:id="@+id/playerScore"
+            style="@style/AppTheme.ScoreInput"
+            android:minHeight="@dimen/min_touch_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:background="@drawable/selectable_bordered"
             android:gravity="center"
-            android:imeOptions="actionNext|flagNoExtractUi"
             android:inputType="number|numberSigned|numberDecimal"
             android:textIsSelectable="false"
             android:lines="1"

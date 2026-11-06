@@ -26,12 +26,14 @@
     <Button
         android:id="@+id/calculatorKeyOpenParen"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorOpenParenDescription"
         android:text="@string/open_paren"
         />
 
     <Button
         android:id="@+id/calculatorKeyCloseParen"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorCloseParenDescription"
         android:text="@string/close_paren"
         />
 
@@ -62,6 +64,7 @@
     <Button
         android:id="@+id/calculatorKeyMinus"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorMinusDescription"
         android:text="@string/minus"
         />
 
@@ -86,6 +89,7 @@
     <Button
         android:id="@+id/calculatorKeyMultiply"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorMultiplyDescription"
         android:text="@string/multiply"
         android:textAllCaps="false"
         />
@@ -93,6 +97,7 @@
     <Button
         android:id="@+id/calculatorKeyDivide"
         style="@style/AppTheme.CalculatorButton.Operator"
+        android:contentDescription="@string/calculatorDivideDescription"
         android:text="@string/divide"
         />
 
@@ -112,18 +117,21 @@
     <Button
         android:id="@+id/calculatorKeyDecimal"
         style="@style/AppTheme.CalculatorButton"
+        android:contentDescription="@string/calculatorDecimalDescription"
         android:text="@string/decimal"
         />
 
     <Button
         android:id="@+id/calculatorKeyEquals"
         style="@style/AppTheme.CalculatorButton.Action"
+        android:contentDescription="@string/calculatorEqualsDescription"
         android:text="@string/equals"
         />
 
     <Button
         android:id="@+id/calculatorKeyNext"
         style="@style/AppTheme.CalculatorButton.Action"
+        android:contentDescription="@string/calculatorNextDescription"
         android:text="@string/next"
         />
 

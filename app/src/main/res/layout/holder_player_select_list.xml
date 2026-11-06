@@ -12,12 +12,11 @@
         android:id="@+id/playerCheckHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playerNameHolder"
-        />
+    />
 
     <TextView
         android:id="@+id/playerNameHolder"
@@ -30,7 +29,7 @@
         app:layout_constraintEnd_toStartOf="@id/playerNameSettings"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="@dimen/text_title"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         tools:text="Player Name"
         android:labelFor="@+id/playerCheckHolder"
         tools:ignore="LabelFor"
@@ -42,14 +41,14 @@
         android:layout_height="@dimen/min_touch_size"
         android:layout_margin="@dimen/fab_margin"
         android:padding="@dimen/image_padding"
-        android:src="@drawable/ic_settings"
-        android:foreground="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_edit"
+        android:background="?selectableItemBackgroundBorderless"
         android:contentDescription="@string/actionEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/playerNameHolder"
-        app:tint="@color/textBlack"
+        app:tint="?attr/colorOnSurfaceVariant"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

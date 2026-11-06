@@ -10,10 +10,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.calculator.CalculatorKeyboardView.Companion.KEYCODE_NEXT
 import com.seakernel.android.scoreapp.databinding.ViewCalculatorKeyboardBinding
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,6 +41,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         // Delay just long enough that they stopped typing so it's not too intrusive
         const val DELAY_VALID_COMPUTATION_MESSAGE = 1150L
 
+        // How long the keypad waits to hide once no score has focus, in case focus is moving to another score
+        const val HIDE_DELAY_MS = 100L
+
         const val KEYCODE_EQUALS = KeyEvent.KEYCODE_EQUALS
         const val KEYCODE_NEXT = EditorInfo.IME_ACTION_NEXT
     }
@@ -54,6 +58,15 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
             // Immediately hide if not enabled
             if (!value) visibility = GONE
         }
+
+    /** Called whenever the keypad shows or hides, e.g. to make room for it */
+    var onShownChanged: ((shown: Boolean) -> Unit)? = null
+
+    override fun setVisibility(visibility: Int) {
+        val wasShown = isVisible
+        super.setVisibility(visibility)
+        if (isVisible != wasShown) onShownChanged?.invoke(isVisible)
+    }
 
     private var delayCheckJob: Job? = null
     private var calculatorFailed = false
@@ -99,7 +112,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         if (inputText == null) {
             // Delay hiding slightly to allow for focus transitions between scores (e.g. when adding a round)
             hideJob = GlobalScope.launch(Dispatchers.Main) {
-                delay(100.milliseconds)
+                delay(HIDE_DELAY_MS.milliseconds)
                 if (!isAttachedToWindow) return@launch
 
                 inputView = null
@@ -128,6 +141,7 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         calculatorEditIndex = calculatorString.length
 
         inputView = inputText
+        inputText.setOnKeyListener(::onHardwareKey)
 
         val inputString = inputText.text.toString().let {
             if (it.toDoubleOrNull() == 0.0) {
@@ -168,7 +182,9 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
     private fun setupView() {
         alignmentMode = ALIGN_MARGINS
-        setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
+
+        // Show the decimal separator of the user's language, so what is typed matches how scores are shown
+        binding.calculatorKeyDecimal.text = ScoreFormat.decimalSeparator().toString()
     }
 
     private fun setKeyboardListeners() {
@@ -198,10 +214,61 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         binding.calculatorKeyPrev.setOnClickListener { onPrevClicked() }
     }
 
+    /**
+     * Lets a hardware keyboard type into the calculator the same as its keys: tab and shift+tab move like next and
+     * previous. Keys the calculator doesn't have (e.g. arrows, enter, ctrl+v) are left to the score's text field.
+     */
+    private fun onHardwareKey(view: View, keyCode: Int, event: KeyEvent): Boolean {
+        if (view !== inputView || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed) return false
+
+        val onPress: () -> Unit = when (keyCode) {
+            KeyEvent.KEYCODE_TAB -> if (event.isShiftPressed) ::onPrevClicked else ::onNextClicked
+            else -> calculatorKey(keyCode, event)?.let { key -> { onButtonClicked(key) } } ?: return false
+        }
+
+        // Only the press counts, the release goes to whichever score has focus by then
+        if (event.action == KeyEvent.ACTION_DOWN) onPress()
+        return true
+    }
+
+    /** The calculator key a hardware key stands for, e.g. "×" for '*' or 'x' */
+    private fun calculatorKey(keyCode: Int, event: KeyEvent): String? {
+        if (keyCode == KeyEvent.KEYCODE_DEL) return resources.getString(R.string.del)
+
+        val decimalSeparator = ScoreFormat.decimalSeparator()
+        return when (val char = event.getUnicodeChar(event.metaState).toChar()) {
+            in '0'..'9' -> char.toString()
+            CalculatorUtils.DECIMAL, decimalSeparator -> decimalSeparator.toString()
+            CalculatorUtils.PLUS -> resources.getString(R.string.plus)
+            CalculatorUtils.MINUS -> resources.getString(R.string.minus)
+            '*', 'x', 'X', '×' -> resources.getString(R.string.multiply)
+            CalculatorUtils.DIVIDE, '÷' -> resources.getString(R.string.divide)
+            CalculatorUtils.OPEN_PAREN -> resources.getString(R.string.open_paren)
+            CalculatorUtils.CLOSE_PAREN -> resources.getString(R.string.close_paren)
+            '=' -> resources.getString(R.string.equals)
+            else -> null
+        }
+    }
+
+    /**
+     * Picks up text changed outside the calculator (e.g. a forward delete, or a keyboard app typing for a hardware
+     * keyboard), so the next key edits what's shown instead of putting back the calculator's older text.
+     */
+    private fun syncWithInput() {
+        val text = inputView?.text?.toString() ?: return
+        // A zero score starts the calculator empty (see setInput), which isn't a change
+        if (text == calculatorString || (calculatorString.isEmpty() && text.toDoubleOrNull() == 0.0)) return
+        calculatorString = text
+    }
+
     private fun onButtonClicked(key: String) {
+        syncWithInput()
         calculatorEditIndex = inputView?.selectionStart ?: calculatorEditIndex
 
         val failure = !appendToString(key)
+
+        // Equals saves the score and clears focus, after which the cell shows the saved score instead
+        if (inputView?.hasFocus() != true) return
         inputChangedListener?.invoke(calculatorString, failure)
     }
 
@@ -225,25 +292,23 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
         if (inputView == null) return false
         calculatorString = when (key) {
             resources.getString(R.string.del) -> {
-                if (calculatorString.isEmpty()) {
-                    calculatorString
-                } else {
-                    calculatorEditIndex--
-                    try {
-                        calculatorString.run {
-                            removeRange(calculatorEditIndex, calculatorEditIndex + 1)
-                        }
-                    } catch (_: Throwable) {
-                        // Default to empty string if error removing anything?
-                        // This has been observed in weird selection cases (shouldn't be able to select though)
-                        ""
+                // Works like backspace: removes the selected text, or the character before the cursor
+                calculatorEditIndex = calculatorEditIndex.coerceAtMost(calculatorString.length)
+                val selectionEnd = (inputView?.selectionEnd ?: calculatorEditIndex)
+                    .coerceIn(calculatorEditIndex, calculatorString.length)
+                when {
+                    selectionEnd > calculatorEditIndex -> calculatorString.removeRange(calculatorEditIndex, selectionEnd)
+                    calculatorEditIndex == 0 -> calculatorString // Nothing before the cursor to delete
+                    else -> {
+                        calculatorEditIndex--
+                        calculatorString.removeRange(calculatorEditIndex, calculatorEditIndex + 1)
                     }
                 }
             }
 
             resources.getString(R.string.equals) -> {
                 inputView?.onEditorAction(KEYCODE_EQUALS)
-                computeString() ?: calculatorString
+                computeString()?.let(CalculatorUtils::toDisplay) ?: calculatorString
             }
 
             else -> {
@@ -260,7 +325,8 @@ class CalculatorKeyboardView(context: Context, attrs: AttributeSet) : GridLayout
 
         return (computeString() != null).also { validEquation ->
             calculatorFailed = !validEquation
-            inputView?.error =
+            // A cell that lost focus (after equals) shows its saved score, including any mistake, instead
+            inputView?.takeIf { it.hasFocus() }?.error =
                 if (calculatorFailed && key == resources.getString(R.string.equals)) {
                     resources.getString(R.string.incomplete)
                 } else {

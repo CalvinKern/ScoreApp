@@ -75,13 +75,14 @@ class PlayerDaoTest {
             )
         val playerIds = playerDao.insertAll(arrayOf(player))
 
-        playerDao.updateName(
-            playerIds[0],
-            "User one",
-        )
+        playerDao.updateNameAndColor(playerIds[0], "User one", 0xFF1E88E5.toInt())
 
-        val playerList = playerDao.loadAllByIds(longArrayOf(playerIds[0]))
-        assertEquals(playerList[0].name, "User one")
+        val updated = playerDao.loadAllByIds(longArrayOf(playerIds[0]))[0]
+        assertEquals("User one", updated.name)
+        assertEquals(0xFF1E88E5.toInt(), updated.color)
+
+        playerDao.updateNameAndColor(playerIds[0], "User one", null)
+        assertEquals(null, playerDao.loadAllByIds(longArrayOf(playerIds[0]))[0].color)
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.seakernel.android.scoreapp.data
 import com.seakernel.android.scoreapp.database.entities.GameEntity
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 /**
  * Created by Calvin on 12/16/18.
@@ -19,8 +20,9 @@ data class GameSettings(
     val reversedScoring: Boolean = false,
     val maxScore: Double? = null,
     val maxRounds: Int? = null,
-    val showRoundNotes: Boolean = false,
+    val showRoundNotes: Boolean = false, // Only shows the notes icon, notes can always be opened from a player's name
     val useCalculator: Boolean = false,
+    val roundCount: Int = 0, // Only loaded for the game list and game settings
 ) {
 
     constructor(settings: GameEntity, players: List<Player>) : this(
@@ -37,13 +39,15 @@ data class GameSettings(
         useCalculator = settings.useCalculator,
     )
 
-    val lastPlayedAt: String = lastPlayed.format(UI_DATE_FORMATTER)
+    /** The last played date in the user's language and date order, created each time so language changes apply */
+    val lastPlayedAt: String
+        get() = lastPlayed.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
 
     fun toGameEntity() =
         GameEntity(
             uid = id ?: 0,
             name = name,
-            date = ZonedDateTime.now().format(DATE_FORMATTER),
+            date = lastPlayed.format(DATE_FORMATTER),
             hasDealer = hasDealer,
             showRounds = showRounds,
             reversedScoring = reversedScoring,
@@ -54,8 +58,6 @@ data class GameSettings(
         )
 
     companion object {
-        private const val DATE_FORMAT = "MMM dd, YYYY"
         val DATE_FORMATTER = DateTimeFormatter.ISO_DATE_TIME!!
-        val UI_DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT)!!
     }
 }

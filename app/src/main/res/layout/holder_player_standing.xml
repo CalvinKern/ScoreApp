@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toStartOf="@+id/playerNameHolder"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="@dimen/text_title"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         tools:text="#1"
         />
 
@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toStartOf="@+id/playerScoreHolder"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="@dimen/text_title"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         tools:text="Player Name"
         />
 
@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="@dimen/text_title"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         tools:text="3"
         />
 

@@ -1,26 +1,23 @@
 package com.seakernel.android.scoreapp.playerselect
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
+import androidx.core.os.BundleCompat
 import androidx.core.view.ViewGroupCompat
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.seakernel.android.scoreapp.R
-import com.seakernel.android.scoreapp.databinding.DialogPlayerNameBinding
+import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.databinding.FragmentPlayerSelectBinding
 import com.seakernel.android.scoreapp.playerselect.CreateModel.Companion.update
+import com.seakernel.android.scoreapp.playerselect.PlayerSelectFragment.Companion.KEY_PLAYER_IDS
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.repository.PlayerRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
@@ -28,12 +25,12 @@ import com.seakernel.android.scoreapp.utility.AnalyticsConstants
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
-import com.seakernel.android.scoreapp.utility.logEvent
 import com.seakernel.android.scoreapp.utility.logScreenView
+import com.seakernel.android.scoreapp.utility.setOptionalIconsVisible
+import com.seakernel.android.scoreapp.utility.setStatusSubtitle
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
-import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.coroutines.Dispatchers
@@ -47,13 +44,8 @@ import kotlinx.coroutines.withContext
  */
 class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffect>() {
 
-    interface PlayerSelectListener {
-        fun onPlayersSelected(playerIds: List<Long>)
-    }
-
     private var playerRepository: PlayerRepository? = null
     private var gameRepository: GameRepository? = null
-    private var listener: PlayerSelectListener? = null
     private var addPlayerJob: Job? = null
 
     private lateinit var toolbarItemClickListener: Toolbar.OnMenuItemClickListener
@@ -63,23 +55,29 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val savesAutomatically get() = arguments?.getBoolean(ARG_SAVES_AUTOMATICALLY) == true
+    private val initialPlayerIds get() = arguments?.getLongArray(PLAYER_IDS)?.toList().orEmpty()
+
+    // Whether the picks came back with the screen, to be sent once they load (see connectViews)
+    private var sendPicksOnLoad = false
+
+    // Set while the screen is connected to the loop, for the player dialog's result
+    private var eventConsumer: Consumer<PlayerEvent>? = null
+
     init {
-        loop = Mobius.loop(::update, ::effectHandler)
+        loop = createLoop(::update)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         playerRepository = PlayerRepository(requireContext())
         gameRepository = GameRepository(requireContext())
-
-        listener = context as? PlayerSelectListener
     }
 
     override fun onDetach() {
         super.onDetach()
         playerRepository = null
         gameRepository = null
-        listener = null
     }
 
     override fun onCreateView(
@@ -101,17 +99,25 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
             ::initMobius
         )
 
+        sendPicksOnLoad = savedInstanceState != null
         super.onViewCreated(view, savedInstanceState)
 
         // Setup views
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.menu_player_select)
+        (binding.toolbar.menu.findItem(R.id.actionSearch).actionView as? SearchView)?.queryHint =
+            getString(R.string.playerName)
+        binding.toolbar.setOptionalIconsVisible()
         binding.playerRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
-        binding.toolbar.applyWindowInsetsCutout()
+        binding.appBar.applyWindowInsetsCutout()
         binding.fab.applyWindowInsetsNavigationMargin()
         binding.playerRecycler.applyWindowInsetsNavigationPadding()
+
+        childFragmentManager.setFragmentResultListener(PlayerDialog.REQUEST_PLAYER, viewLifecycleOwner) { _, result ->
+            onPlayerDialogResult(result)
+        }
     }
 
     override fun onDestroyView() {
@@ -136,6 +142,7 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
     }
 
     override fun connectViews(eventConsumer: Consumer<PlayerEvent>): Connection<CreateModel> {
+        this.eventConsumer = eventConsumer
         toolbarItemClickListener = Toolbar.OnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.actionSave -> eventConsumer.accept(DoneSelectingPlayersClicked)
@@ -181,11 +188,35 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     ), false
                 )
 
+                // Picks are sent as they're made, so they're kept however the screen is left (back, or save), and an
+                // existing game saves them right away. Renames are sent too, so the game setup shows the new names.
+                val previous = lastModel
+                val changed = previous != null && !previous.isLoading &&
+                    (model.selectedPlayerList != previous.selectedPlayerList || model.allPlayers != previous.allPlayers)
+                // Picks that came back with the screen (e.g. after Android closed the app) are sent once they load,
+                // in case they were made too late to reach the game setup before the app closed
+                val restoredPicksLoaded = sendPicksOnLoad && previous?.isLoading == true && !model.isLoading
+                if (changed || restoredPicksLoaded) {
+                    val picks = Bundle().apply { putLongArray(KEY_PLAYER_IDS, model.selectedPlayerList.toLongArray()) }
+                    setFragmentResult(REQUEST_PLAYERS, picks)
+                }
+                if (!model.isLoading) sendPicksOnLoad = false
+
+                // An existing game says its picks save on their own, or that none picked keeps its old players
+                if (savesAutomatically && !model.isLoading) {
+                    val playersNotSaved = model.selectedPlayerList.isEmpty() && initialPlayerIds.isNotEmpty()
+                    binding.toolbar.setStatusSubtitle(
+                        getString(if (playersNotSaved) R.string.saveStatusPlayersNotSaved else R.string.saveStatusAutomatic),
+                        announce = true,
+                    )
+                }
+
                 lastModel = model
             }
 
             override fun dispose() {
                 // Don't forget to remove listeners when the UI is disconnected
+                this@PlayerSelectFragment.eventConsumer = null
                 binding.fab.setOnClickListener(null)
                 binding.playerEmptyImage.setOnClickListener(null)
                 binding.playerRecycler.swapAdapter(null, true)
@@ -199,17 +230,17 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
 
             override fun accept(effect: PlayerEffect) {
                 when (effect) {
-                    is ShowPlayerNameDialog -> {
-                        view?.post {
-                            if (!isDisposed) {
-                                showPlayerNameDialog(eventConsumer, effect) { isDisposed }
-                            }
-                        }
+                    // Effects run in the background, so anything touching the screen moves to the main thread
+                    is ShowPlayerDialog -> runWhenStarted {
+                        // One at a time, e.g. when the + button is tapped twice quickly
+                        if (isDisposed || childFragmentManager.findFragmentByTag(PlayerDialog.TAG) != null) return@runWhenStarted
+                        PlayerDialog.newInstance(effect.player, effect.seatedPlayers)
+                            .show(childFragmentManager, PlayerDialog.TAG)
                     }
                     is ShowDeletePlayerSnackbar -> {
                         playerRepository?.deleteUser(effect.playerId)
                         eventConsumer.accept(PlayerDeleteSuccessful(effect.playerId))
-                        showDeletePlayerSnackbar(eventConsumer, effect) { isDisposed }
+                        runWhenStarted { showDeletePlayerSnackbar(eventConsumer, effect) { isDisposed } }
                     }
                     is UndoDeletePlayer -> {
                         playerRepository?.undoDelete(effect.playerId)
@@ -226,7 +257,8 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                             )
                         )
                     }
-                    is DoneSelectingPlayers -> listener?.onPlayersSelected(effect.playerIds)
+                    // The picked players were already sent back as they changed (see connectViews)
+                    is DoneSelectingPlayers -> runWhenStarted { parentFragmentManager.popBackStack() }
                 }
             }
 
@@ -253,83 +285,41 @@ class PlayerSelectFragment : MobiusFragment<CreateModel, PlayerEvent, PlayerEffe
                     eventConsumer.accept(PlayerDeleteUndo(effect.playerId, effect.playerSelected))
                 }
             }
-            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorSecondary))
             .show()
     }
 
-    private fun showPlayerNameDialog(
-        eventConsumer: Consumer<PlayerEvent>,
-        effect: ShowPlayerNameDialog,
-        isDisposed: () -> Boolean
-    ) {
-        var name = ""
-        val binding =
-            DialogPlayerNameBinding.inflate(LayoutInflater.from(requireContext()), null, false)
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle(if (effect.playerId == null) R.string.playerCreateTitle else R.string.playerName)
-            .setView(binding.root)
-            .setCancelable(false)
-            .setPositiveButton(android.R.string.ok) { _, _ ->
-                if (name.isEmpty()) return@setPositiveButton
-                logEvent(if (effect.playerId == null) AnalyticsConstants.Event.PLAYER_CREATE else AnalyticsConstants.Event.PLAYER_RENAMED) {
-                    putString(AnalyticsConstants.Param.ITEM_NAME, name)
-                }
-                addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
-                    playerRepository?.addOrUpdateUser(effect.playerId, name)?.let { player ->
-                        if (isDisposed()) return@let
-                        withContext(Dispatchers.Main) {
-                            if (isDisposed()) return@withContext // Double check we're not disposed
-                            eventConsumer.accept(
-                                PlayerNameChanged(
-                                    player.id!!,
-                                    player.name
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-            .setNegativeButton(android.R.string.cancel, null)
-            .also {
-                if (effect.playerId == null) return@also
-
-                it.setNeutralButton(R.string.delete) { _, _ ->
-                    logEvent(AnalyticsConstants.Event.PLAYER_DELETED)
-                    if (!isDisposed()) {
-                        eventConsumer.accept(PlayerDeleteClicked(effect.playerId))
-                    }
-                }
-            }
-            .create()
-
-        binding.playerNameEdit.apply {
-            setText(effect.playerName)
-            setSelection(effect.playerName.length)
-            addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                override fun afterTextChanged(p0: Editable?) {
-                    name = p0?.toString() ?: ""
-                    dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = name.isNotEmpty()
-                }
-            })
+    /** Saves the player from the player dialog (or deletes them), see [PlayerDialog] */
+    private fun onPlayerDialogResult(result: Bundle) {
+        val player = BundleCompat.getParcelable(result, PlayerDialog.KEY_PLAYER, Player::class.java) ?: return
+        if (result.getBoolean(PlayerDialog.KEY_DELETE)) {
+            player.id?.let { eventConsumer?.accept(PlayerDeleteClicked(it)) }
+            return
         }
 
-        // Disable "ok" button until there is text in the dialog
-        dialog.setOnShowListener {
-            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = effect.playerName.isNotEmpty()
+        addPlayerJob = lifecycleScope.launch(Dispatchers.IO) {
+            val saved = playerRepository?.addOrUpdateUser(player.id, player.name, player.color) ?: return@launch
+            withContext(Dispatchers.Main) {
+                eventConsumer?.accept(PlayerSaved(saved)) // Gone when the screen closed first
+            }
         }
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        dialog.show()
     }
 
     companion object {
         private const val ARG_SELECTED_IDS = "selected_ids"
         private const val PLAYER_IDS = "game_id"
+        private const val ARG_SAVES_AUTOMATICALLY = "saves_automatically"
 
-        fun newInstance(playerIds: List<Long>): PlayerSelectFragment {
+        /** The picked players, sent with [KEY_PLAYER_IDS] (in seat order) whenever they change */
+        const val REQUEST_PLAYERS = "PLAYERS"
+        const val KEY_PLAYER_IDS = "player_ids"
+
+        /** @param savesAutomatically whether the picks save to the game as they're made, which the screen says */
+        fun newInstance(playerIds: List<Long>, savesAutomatically: Boolean = false): PlayerSelectFragment {
             return PlayerSelectFragment().apply {
-                arguments = Bundle().apply { putLongArray(PLAYER_IDS, playerIds.toLongArray()) }
+                arguments = Bundle().apply {
+                    putLongArray(PLAYER_IDS, playerIds.toLongArray())
+                    putBoolean(ARG_SAVES_AUTOMATICALLY, savesAutomatically)
+                }
             }
         }
     }

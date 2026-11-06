@@ -16,15 +16,16 @@ data class PlayerRowLongClicked(val playerId: Long) : PlayerEvent()
 data class PlayerSelected(val playerId: Long, val selected: Boolean) : PlayerEvent()
 data class PlayerDeleteClicked(val playerId: Long) : PlayerEvent()
 data class PlayerDeleteUndo(val playerId: Long, val playerSelected: Boolean) : PlayerEvent()
-data class PlayerNameChanged(val playerId: Long, val newName: String) : PlayerEvent()
+data class PlayerSaved(val player: Player) : PlayerEvent()
 data class PlayerDeleteSuccessful(val playerId: Long) : PlayerEvent()
 data class PlayersLoaded(val players: List<Player>) : PlayerEvent()
 data class PlayerSearchRequest(val playerName: String?) : PlayerEvent()
 data object RequestLoad : PlayerEvent()
 
 sealed class PlayerEffect
-data class DoneSelectingPlayers(val playerIds: List<Long>) : PlayerEffect()
-data class ShowPlayerNameDialog(val playerId: Long?, val playerName: String) : PlayerEffect()
+data object DoneSelectingPlayers : PlayerEffect()
+/** @param seatedPlayers the game being set up's players in seat order, with [player] in theirs, for its default color */
+data class ShowPlayerDialog(val player: Player, val seatedPlayers: List<Player>) : PlayerEffect()
 data class ShowDeletePlayerSnackbar(
     val playerId: Long,
     val playerName: String?,
@@ -52,7 +53,25 @@ data class CreateModel(
         return player(playerId)?.name
     }
 
+    /** The picked players in seat order, with [player] in their seat, or in the next one when they aren't picked */
+    fun seatedWith(player: Player): List<Player> {
+        val seated = selectedPlayerList.mapNotNull { id -> if (id == player.id) player else player(id) }
+        return if (player.id in selectedPlayerList) seated else seated + player
+    }
+
     companion object {
+        /** Adds the player before the first player whose name sorts after it */
+        private fun List<Player>.insertSorted(player: Player): List<Player> {
+            val index = indexOfFirst { Player.NAME_ORDER.compare(it, player) > 0 }.let { if (it >= 0) it else size }
+            return toMutableList().apply { add(index, player) }
+        }
+
+        /** The players whose names contain the search term, the list shown while searching */
+        private fun List<Player>.matching(searchTerm: String) = filter { it.name.contains(searchTerm, ignoreCase = true) }
+
+        private fun showPlayerDialog(model: CreateModel, player: Player): Next<CreateModel, PlayerEffect> =
+            Next.dispatch(Effects.effects(ShowPlayerDialog(player, model.seatedWith(player))))
+
         fun createDefault(selectedPlayers: List<Long>?): CreateModel {
             return CreateModel(
                 selectedPlayerList = selectedPlayers ?: listOf()
@@ -61,13 +80,7 @@ data class CreateModel(
 
         fun update(model: CreateModel, event: PlayerEvent): Next<CreateModel, PlayerEffect> {
             return when (event) {
-                is DoneSelectingPlayersClicked -> Next.dispatch(
-                    Effects.effects(
-                        DoneSelectingPlayers(
-                            model.selectedPlayerList
-                        )
-                    )
-                )
+                is DoneSelectingPlayersClicked -> Next.dispatch(Effects.effects(DoneSelectingPlayers))
                 is RequestLoad -> Next.next(
                     model.copy(isLoading = true), Effects.effects(
                         FetchData
@@ -77,28 +90,12 @@ data class CreateModel(
                     model.copy(
                         isLoading = false,
                         allPlayers = event.players,
-                        filteredPlayerList = event.players
+                        // Players load again after undoing a delete, while the search can still be open
+                        filteredPlayerList = event.players.matching(model.searchTerm)
                     )
                 )
-                is AddPlayerClicked -> Next.dispatch(
-                    Effects.effects(
-                        ShowPlayerNameDialog(
-                            null,
-                            ""
-                        )
-                    )
-                )
-                is PlayerRowLongClicked -> {
-                    val name = model.playerName(event.playerId)
-                    Next.dispatch(
-                        Effects.effects(
-                            ShowPlayerNameDialog(
-                                event.playerId,
-                                name ?: ""
-                            )
-                        )
-                    )
-                }
+                is AddPlayerClicked -> showPlayerDialog(model, Player())
+                is PlayerRowLongClicked -> model.player(event.playerId)?.let { showPlayerDialog(model, it) } ?: Next.noChange()
                 is PlayerSelected -> {
                     val selected = model.selectedPlayerList.toMutableList()
                     if (event.selected) {
@@ -134,37 +131,17 @@ data class CreateModel(
 
                     Next.next(nextModel, Effects.effects(UndoDeletePlayer(event.playerId)))
                 }
-                is PlayerNameChanged -> {
-                    val list = model.allPlayers.toMutableList()
+                is PlayerSaved -> {
+                    val player = event.player
+                    val existingPlayer = model.player(player.id!!)
                     val selected = model.selectedPlayerList.toMutableList()
-                    val index = list.indexOfFirst { it.id == event.playerId }
-                    var oldPlayer: Player? = null
+                    if (existingPlayer == null) selected.add(player.id) // New players are picked right away
 
-                    val insertIndex =
-                        list.indexOfFirst { player -> player.name > event.newName }.let {
-                            if (it >= 0) it else if (list.isNotEmpty()) list.size - 1 else 0
-                        }
-                    if (index >= 0) {
-                        oldPlayer = list.removeAt(index)
-                        list.add(insertIndex, oldPlayer.copy(name = event.newName))
-                    } else {
-                        list.add(insertIndex, Player(event.playerId, event.newName))
-                        selected.add(event.playerId)
+                    // Move the player to where the new name sorts, the same order the players are loaded in
+                    val list = model.allPlayers.filterNot { it.id == player.id }.insertSorted(player)
+                    val filteredList = model.filteredPlayerList.filterNot { it.id == player.id }.let {
+                        if (player.name.contains(model.searchTerm, ignoreCase = true)) it.insertSorted(player) else it
                     }
-
-                    val filteredList = if (event.newName.contains(model.searchTerm)) {
-                        model.filteredPlayerList.toMutableList().also {
-                            val filteredIndex =
-                                it.indexOfFirst { player -> player.name > event.newName }
-                                    .let { index ->
-                                        if (index >= 0) index else it.size
-                                    }
-                            it.add(filteredIndex, Player(event.playerId, event.newName))
-                        }
-                    } else {
-                        model.filteredPlayerList.toMutableList()
-                    }
-                    if (oldPlayer != null) filteredList.remove(oldPlayer)
                     Next.next(
                         model.copy(
                             allPlayers = list,
@@ -191,14 +168,7 @@ data class CreateModel(
                     Next.next(
                         model.copy(
                             searchTerm = event.playerName ?: "",
-                            filteredPlayerList = model.allPlayers.toMutableList().let { list ->
-                                list.filter { player ->
-                                    player.name.contains(
-                                        event.playerName ?: "",
-                                        ignoreCase = true
-                                    )
-                                }
-                            })
+                            filteredPlayerList = model.allPlayers.matching(event.playerName ?: ""))
                     )
                 }
             }

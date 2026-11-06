@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
@@ -17,12 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.data.Player
-import com.seakernel.android.scoreapp.databinding.DialogPlayerRoundBinding
+import com.seakernel.android.scoreapp.databinding.DialogPlayerNotesBinding
 import com.seakernel.android.scoreapp.databinding.HolderPlayerRoundNotesBinding
 import com.seakernel.android.scoreapp.repository.PlayerRoundNote
 import com.seakernel.android.scoreapp.repository.RoundRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
-import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -46,7 +46,7 @@ class PlayerRoundNotesDialog : DialogFragment() {
     }
 
     private val adapter = PlayerRoundNotesAdapter()
-    private var _binding: DialogPlayerRoundBinding? = null
+    private var _binding: DialogPlayerNotesBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -62,24 +62,27 @@ class PlayerRoundNotesDialog : DialogFragment() {
         }!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)
+        // Notes are only saved with the save button, so don't let a tap outside or back throw them away. The
+        // fragment controls this, setting it on the dialog builder is overridden.
+        isCancelable = false
+        _binding = DialogPlayerNotesBinding.inflate(layoutInflater, null, false)
 
-        binding.dialogPlayerRoundRecycler.layoutManager =
+        binding.dialogPlayerNotesRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true)
-        binding.dialogPlayerRoundRecycler.adapter = adapter
-        binding.root.applyWindowInsetsNavigationPadding()
+        binding.dialogPlayerNotesRecycler.adapter = adapter
 
+        // The context can't be read off the main thread, the dialog may have closed by then
+        val appContext = requireContext().applicationContext
         lifecycleScope.launch(Dispatchers.IO) {
-            val roundNotes = RoundRepository(requireContext()).getNotesForPlayer(player, gameId)
+            val roundNotes = RoundRepository(appContext).getNotesForPlayer(player, gameId)
             withContext(Dispatchers.Main) {
                 adapter.setNotes(roundNotes)
             }
         }
 
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.playerNotesTitle, player.name))
             .setView(binding.root)
-            .setCancelable(false)
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.actionSave, null)
             .create()
@@ -97,9 +100,10 @@ class PlayerRoundNotesDialog : DialogFragment() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         (dialog as? AlertDialog)?.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
+            val appContext = requireContext().applicationContext
             lifecycleScope.launch(Dispatchers.IO) {
                 val playerRounds = adapter.playerRounds
-                RoundRepository(requireContext()).updatePlayerNotes(playerRounds)
+                RoundRepository(appContext).updatePlayerNotes(playerRounds)
                 withContext(Dispatchers.Main) {
                     dialog?.dismiss()
                 }

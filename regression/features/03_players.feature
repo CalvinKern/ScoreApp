@@ -1,0 +1,297 @@
+Feature: Picking players
+  "Pick Players" opens from "Edit" on a game's setup. Players are shared by every game, and listed by name ignoring
+  case. Deleting a player archives them: they leave the list and every game, and their scores are kept.
+
+  "I am picking players for a new game" means: from the game list, tap +, then "Edit".
+
+  @smoke
+  Scenario: Adding a new player picks them right away
+    Given I am picking players for a new game
+    When I tap the + button
+    Then I see "New Player"
+    And "OK" is disabled
+    When I type "Quinn"
+    Then "OK" is enabled
+    When I tap "OK"
+    Then "Quinn" is in the list and checked
+    When I tap "Save"
+    Then the title is "New Game"
+    And the players are "Quinn"
+
+  Scenario: Cancelling a new player adds no one
+    Given I am picking players for a new game
+    When I tap the + button
+    And I type "Nobody"
+    And I tap "Cancel"
+    Then I don't see "Nobody"
+
+  Scenario: Tapping outside the new player dialog doesn't close it
+    Given I am picking players for a new game
+    When I tap the + button
+    And I tap outside the dialog
+    Then I see "New Player"
+
+  @seed
+  Scenario: Players are sorted by name ignoring case, and deleted players are hidden
+    Given the seed data is loaded
+    And I am picking players for a new game
+    Then the first players listed are:
+      | alice                                 |
+      | Bartholomew Fitzgerald-Montgomery III |
+      | Bob                                   |
+      | Calvin                                |
+      | Grandma Jo                            |
+    And the last players listed are:
+      | 李雷           |
+      | 🎲 Dice Goblin |
+    And I see "Never Played"
+    And I don't see "Old Roommate"
+    And I don't see "Moved Away"
+    And I don't see "Ex-Coworker"
+
+  Scenario: A new player is placed in name order
+    Given the players "Amy, Carl" exist
+    And I am picking players for a new game
+    When I add the player "bea"
+    Then "bea" is listed between "Amy" and "Carl"
+
+  @smoke
+  Scenario: Tapping a row or its checkbox picks and unpicks the player
+    Given the players "Calvin, Lindsay" exist
+    And I am picking players for a new game
+    When I tap the row "Calvin"
+    Then "Calvin" is checked
+    When I tap the checkbox for "Calvin"
+    Then "Calvin" is not checked
+
+  Scenario: Players keep their order, and new picks go at the end
+    Given the players "Calvin, Lindsay, Bob" exist
+    And I am picking players for a new game
+    When I pick "Lindsay"
+    And I pick "Calvin"
+    And I tap "Save"
+    Then the players are "Lindsay, Calvin"
+    When I tap "Edit"
+    Then "Lindsay" and "Calvin" are checked
+    When I pick "Bob"
+    And I tap "Save"
+    Then the players are "Lindsay, Calvin, Bob"
+
+  Scenario: Unpicking a player removes them from the game being set up
+    Given the players "Calvin, Lindsay" exist
+    And I am picking players for a new game
+    When I pick "Calvin" and "Lindsay"
+    And I tap "Save"
+    And I tap "Edit"
+    And I tap the row "Lindsay"
+    And I tap "Save"
+    Then the players are "Calvin"
+
+  Scenario: Going back from the player picker keeps the picks, like Save
+    Given the players "Calvin, Lindsay, Bob" exist
+    And I am picking players for a new game
+    When I pick "Calvin"
+    And I tap "Save"
+    And I tap "Edit"
+    And I pick "Lindsay"
+    And I go back
+    Then the title is "New Game"
+    And the players are "Calvin, Lindsay"
+    When I tap "Edit"
+    And I tap the row "Calvin"
+    And I pick "Bob"
+    And I tap the toolbar's back arrow
+    Then the players are "Lindsay, Bob"
+
+  Scenario: A new game's screens don't say anything is saved, since it's created with Save
+    Given the players "Calvin" exist
+    And I am picking players for a new game
+    Then there's no subtitle
+    When I pick "Calvin"
+    And I tap "Save"
+    Then the title is "New Game"
+    And there's no subtitle
+
+  Scenario: Going back from the player picker without changes keeps the players
+    Given the players "Calvin" exist
+    And I am picking players for a new game
+    When I pick "Calvin"
+    And I tap "Save"
+    And I tap "Edit"
+    And I go back
+    Then the players are "Calvin"
+
+  Scenario: A picked player renamed in the player picker shows the new name
+    Given the players "Renamed Pick" exist
+    And I am picking players for a new game
+    When I pick "Renamed Pick"
+    And I long press the row "Renamed Pick"
+    And I replace the name with "Renamed Pick Two"
+    And I tap "OK"
+    And I go back
+    Then the players are "Renamed Pick Two"
+
+  Scenario Outline: Renaming a player (<how>)
+    Given the players "Renamee" exist
+    And I am picking players for a new game
+    When I <how> "Renamee"
+    Then I see "Edit Player"
+    And the name field shows "Renamee"
+    When I replace the name with "Zelda Renamed"
+    And I tap "OK"
+    Then I see "Zelda Renamed"
+    And I don't see "Renamee"
+    And "Zelda Renamed" is listed in name order
+
+    Examples:
+      | how                            |
+      | long press the row             |
+      | tap the edit icon next to      |
+
+  Scenario: The rename dialog's OK is disabled for an empty name
+    Given the players "Calvin" exist
+    And I am picking players for a new game
+    When I long press the row "Calvin"
+    And I clear the name
+    Then "OK" is disabled
+
+  @seed
+  Scenario: The player dialog hints at the color of the player's seat until one is picked
+    Given the seed data is loaded
+    When I open the game "Phase 10"
+    And I choose "Edit" from the game menu
+    And I tap "Edit"
+    And I tap the edit icon next to "Lindsay"
+    Then the color field is empty, with the hint "9C8600" in the hint color
+    And the "Yellow" swatch is checked
+    When I tap "Cancel"
+    And I tap the edit icon next to "alice"
+    Then the color field's hint shows "D32F2F", since Grandma Jo picked the first seat's green and the others skip it
+    When I tap "Cancel"
+    And I tap the + button
+    Then the color field's hint shows "E65100"
+    And the "Orange" swatch is checked
+
+  @seed @visual
+  Scenario: Picking a player's color
+    Given the seed data is loaded
+    When I open the game "Phase 10"
+    And I choose "Edit" from the game menu
+    And I tap "Edit"
+    And I tap the edit icon next to "Lindsay"
+    And I tap the "Orange" swatch
+    Then the color field shows "E65100"
+    And the "Orange" swatch is checked
+    When I replace the color with "ff00aa"
+    Then the color field shows "FF00AA"
+    And no swatch is checked
+    When I tap "OK"
+    And I go back
+    And I go back
+    And I choose "Show Graph" from the game menu
+    Then Lindsay's line and bar are pink (FF00AA)
+
+  @seed
+  Scenario: A color has to be 6 hex digits, and an empty one follows the seat
+    Given the seed data is loaded
+    When I open the game "Phase 10"
+    And I choose "Edit" from the game menu
+    And I tap "Edit"
+    And I tap the edit icon next to "Grandma Jo"
+    Then the color field shows "2E7D32"
+    When I replace the color with "1976"
+    Then I see "Enter a color as 6 hex digits, like 1E88E5"
+    And "OK" is disabled
+    When I clear the color
+    Then the color field's hint shows "8E24AA"
+    And the "Purple" swatch is checked
+    And "OK" is enabled
+
+  @seed
+  Scenario: A renamed player is renamed in every game
+    Given the seed data is loaded
+    And I am picking players for a new game
+    When I long press the row "Grandma Jo"
+    And I replace the name with "Grandma Josephine"
+    And I tap "OK"
+    And I go back to the game list
+    And I open the game "Cribbage"
+    Then the players are "Grandma Josephine, Calvin"
+    And the totals are:
+      | Grandma Josephine | Calvin |
+      | 123               | 114    |
+
+  @smoke
+  Scenario: Deleting a player can be undone, and they stay picked
+    Given the players "Calvin, Undo Me" exist
+    And I am picking players for a new game
+    When I pick "Undo Me"
+    And I long press the row "Undo Me"
+    And I tap "Delete Player"
+    Then I see "Deleted Undo Me"
+    And I don't see the row "Undo Me"
+    When I tap "Undo"
+    Then "Undo Me" is in the list and checked
+
+  @seed
+  Scenario: A deleted player leaves their games
+    Given the seed data is loaded
+    And I am picking players for a new game
+    When I long press the row "Taylor"
+    And I tap "Delete Player"
+    And I go back to the game list
+    Then the game "Darts 301" shows "1 Player"
+    When I open the game "Darts 301"
+    Then the players are "Sam"
+    And the totals are:
+      | Sam |
+      | 253 |
+
+  @seed
+  Scenario: Undoing a delete puts the player back in their games with their scores
+    Given the seed data is loaded
+    And I am picking players for a new game
+    When I long press the row "Taylor"
+    And I tap "Delete Player"
+    And I tap "Undo"
+    And I go back to the game list
+    And I open the game "Darts 301"
+    Then the totals are:
+      | Sam | Taylor |
+      | 253 | 283    |
+
+  Scenario: Searching filters the players by any part of the name, ignoring case
+    Given the players "Calvin, Lindsay, Marcus" exist
+    And I am picking players for a new game
+    When I tap the search icon
+    And I type "C"
+    Then I see "Calvin"
+    And I see "Marcus"
+    And I don't see the row "Lindsay"
+
+  Scenario: A search with no matches says so
+    Given the players "Calvin" exist
+    And I am picking players for a new game
+    When I tap the search icon
+    And I type "zzzz"
+    Then I see "No players match"
+    When I clear the search
+    Then I see "Calvin"
+
+  Scenario: A player added during a search shows when the name matches it
+    Given I am picking players for a new game
+    When I tap the search icon
+    And I type "Zan"
+    And I add the player "Zander"
+    Then "Zander" is in the list and checked
+
+  Scenario: Undoing a delete during a search keeps the search
+    Given the players "Calvin, Undo Search" exist
+    And I am picking players for a new game
+    When I tap the search icon
+    And I type "Undo"
+    And I long press the row "Undo Search"
+    And I tap "Delete Player"
+    And I tap "Undo"
+    Then I see "Undo Search"
+    And I don't see the row "Calvin"

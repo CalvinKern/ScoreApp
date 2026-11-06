@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,18 +15,23 @@ import com.seakernel.android.scoreapp.databinding.HolderPlayerStandingBinding
 import com.seakernel.android.scoreapp.game.classic.GameFragment
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.BaseViewHolder
+import com.seakernel.android.scoreapp.ui.Confetti
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DecimalFormat
 
 class PlayerStandingDialog : DialogFragment() {
 
     companion object {
         private const val KEY_GAME_ID = "GAME_ID"
-        fun newInstance(gameId: Long): PlayerStandingDialog {
+        private const val KEY_CELEBRATE = "CELEBRATE"
+
+        /** @param celebrate shoot confetti when it opens, for a game that just finished */
+        fun newInstance(gameId: Long, celebrate: Boolean = false): PlayerStandingDialog {
             val args = Bundle().apply {
                 putLong(KEY_GAME_ID, gameId)
+                putBoolean(KEY_CELEBRATE, celebrate)
             }
 
             val fragment = PlayerStandingDialog()
@@ -44,13 +49,18 @@ class PlayerStandingDialog : DialogFragment() {
 
     private val gameId get() = requireArguments().getLong(KEY_GAME_ID)
 
+    // Only when it first opens, not when it's shown again (e.g. after rotating)
+    private var celebrate = false
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        celebrate = savedInstanceState == null && requireArguments().getBoolean(KEY_CELEBRATE)
         _binding = DialogPlayerRoundBinding.inflate(layoutInflater, null, false)
 
         binding.dialogPlayerRoundRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.dialogPlayerRoundRecycler.adapter = adapter
 
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setIcon(R.drawable.ic_trophy)
             .setTitle(getString(R.string.playerStandingTitle))
             .setView(binding.root)
             .setNegativeButton(R.string.actionClose, null)
@@ -62,8 +72,10 @@ class PlayerStandingDialog : DialogFragment() {
             }
             .create()
 
+        // The context can't be read off the main thread, the dialog may have closed by then
+        val appContext = requireContext().applicationContext
         lifecycleScope.launch(Dispatchers.IO) {
-            val game = GameRepository(requireContext()).loadFullGame(gameId)
+            val game = GameRepository(appContext).loadFullGame(gameId) ?: return@launch
             val scoreMap = mutableMapOf<Long, Double>()
             game.rounds.forEach { round ->
                 round.scores.forEach { score ->
@@ -95,10 +107,20 @@ class PlayerStandingDialog : DialogFragment() {
 
             withContext(Dispatchers.Main) {
                 adapter.setScores(playerScores)
+                binding.dialogPlayerRoundSubheader.text =
+                    resources.getQuantityString(R.plurals.playerStandingRoundsPlayed, game.rounds.size, game.rounds.size)
             }
         }
 
         return dialog
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!celebrate) return
+        celebrate = false
+        // Once the dialog's window is showing, so the confetti's window can go above it
+        dialog?.window?.decorView?.let { decor -> decor.post { Confetti.showAbove(decor, Confetti.fromTopCorners()) } }
     }
 
     override fun onDestroyView() {
@@ -138,7 +160,7 @@ private class PlayerStandingViewHolder(parent: ViewGroup) :
 
     fun onBind(playerScore: PlayerScore) {
         binding.playerNameHolder.text = playerScore.name
-        binding.playerScoreHolder.text = DecimalFormat("##.###").format(playerScore.score)
+        binding.playerScoreHolder.text = ScoreFormat.format(playerScore.score)
         binding.playerStandingHolder.text =
             itemView.context.getString(R.string.playerStanding, playerScore.position)
     }

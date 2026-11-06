@@ -5,51 +5,145 @@
     <string name="actionSave">salva</string>
     <string name="actionSearch">Căutare</string>
     <string name="addRound">Adaugă runda</string>
-    <string name="dealerLabel">comerciant</string>
+    <string name="dealerLabel">Dealer</string>
+    <string name="dealerDescription">Sfat: atingeți lung scorul unui jucător în joc pentru a schimba dealerul pentru acea rundă</string>
     <string name="delete">Șterge</string>
     <string name="deleteGameConfirmation">Doriți să ștergeți acest joc?</string>
     <string name="deleteSuccessful">şters %s</string>
     <string name="gameCreateTitle">Joc nou</string>
-    <string name="gameListEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a crea un joc nou!</string>
+    <string name="gameListEmptyMessage">Începeți atingând butonul + de mai jos pentru a crea un joc nou!</string>
     <string name="gameListEmptyTitle">Nu au fost create jocuri</string>
     <string name="gameListTitle">Jocuri</string>
     <string name="gameNameHint">Numele jocului</string>
-    <string name="gamePlayersEmptyMessage">Pentru a începe un joc, adăugați câțiva jucători cu butonul „EDITĂ”.</string>
+    <string name="gamePlayersEmptyMessage">Pentru a începe un joc, adăugați câțiva jucători cu butonul „Editați”.</string>
     <string name="gamePlayersEmptyTitle">Nu s-au adăugat jucători</string>
     <string name="gamePlayersHeader">Jucători</string>
     <string name="gameSettingsTitle">Setările jocului</string>
     <string name="graphByRoundsLabel">Scor după runde</string>
+    <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistici</string>
-    <string name="makePlayerDealerMessage">Faceți %s dealer pentru această rundă?</string>
+    <string name="makePlayerDealerMessage">Setați %s ca dealer pentru această rundă?</string>
+    <string name="setDealer">Setați ca dealer</string>
     <string name="pickPlayers">Alegeți jucători</string>
     <string name="playerCreateTitle">Jucator nou</string>
-    <string name="playerEmptyMessage">Începeți făcând clic pe butonul + de mai jos pentru a adăuga un jucător nou!</string>
-    <string name="playerEmptySearchMessage">Niciun jucător nu corespunde criteriilor de căutare actuale. Puteți adăuga un jucător nou, făcând clic pe butonul + de mai jos!</string>
+    <string name="playerEditTitle">Editați jucătorul</string>
+    <string name="playerDelete">Șterge jucătorul</string>
+    <string name="playerEmptyMessage">Începeți atingând butonul + de mai jos pentru a adăuga un jucător nou!</string>
+    <string name="playerEmptySearchMessage">Niciun jucător nu corespunde criteriilor de căutare actuale. Puteți adăuga un jucător nou atingând butonul + de mai jos!</string>
     <string name="playerEmptySearchTitle">Nu se potrivesc jucători</string>
     <string name="playerEmptyTitle">Nu s-au adăugat jucători</string>
-    <string name="playerIcon">Pictograma jucătorului</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Rundă Jucată</item>
+        <item quantity="few">%d Runde Jucate</item>
+        <item quantity="other">%d de Runde Jucate</item>
+    </plurals>
     <string name="playerName">Numele jucatorului</string>
+    <string name="playerColor">Culoare</string>
+    <string name="playerColorInvalid">Introdu o culoare din 6 cifre hexazecimale, de exemplu 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>Verde</item>
+        <item>Albastru</item>
+        <item>Galben</item>
+        <item>Roșu</item>
+        <item>Mov</item>
+        <item>Portocaliu</item>
+        <item>Cyan</item>
+        <item>Roz</item>
+        <item>Maro</item>
+        <item>Gri</item>
+    </string-array>
     <string name="playerNotesTitle">Note pentru %s</string>
     <string name="playerRoundNumberFormat">Runda %d:</string>
     <string name="playerRoundNumberHint">notițe</string>
-    <string name="playersHolder">%d jucători</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d jucător</item>
+        <item quantity="few">%d jucători</item>
+        <item quantity="other">%d de jucători</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d rundă</item>
+        <item quantity="few">%d runde</item>
+        <item quantity="other">%d de runde</item>
+    </plurals>
+    <string name="lastPlayedLabel">Jucat ultima dată:</string>
     <string name="reversedScoringDescription">Jucătorul cu cel mai mic scor câștigă, în loc să obțină cel mai mare scor</string>
     <string name="reversedScoringTitle">Scoring invers</string>
     <string name="scoreHint">Scor</string>
-    <string name="showRoundNotesDescription">Faceți clic pe numele unui jucător pentru a vizualiza și edita notele pentru fiecare rundă</string>
+    <string name="showRoundNotesDescription">Atingeți numele unui jucător pentru a vizualiza și edita notele pentru fiecare rundă</string>
     <string name="showRoundNotesTitle">Afișează note rotunde</string>
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">Clasamentul jucătorilor</string>
     <string name="actionPlayerStanding">Clasamente</string>
     <string name="copiedUrl">URL copiat</string>
     <string name="storeToReview">Deschideți magazinul de aplicații pentru a lăsa o recenzie</string>
+    <string name="changelogUnavailable">Nu s-a putut deschide jurnalul de modificări</string>
+    <string name="gameNameRequired">Introduceți un nume pentru joc</string>
+    <string name="gamePlayersRequired">Adăugați un jucător</string>
+    <string name="saveStatusSaving">Se salvează…</string>
+    <string name="saveStatusSaved">Toate modificările au fost salvate</string>
+    <string name="saveStatusNameNotSaved">Un nume gol nu se salvează</string>
+    <string name="saveStatusPlayersNotSaved">O listă de jucători goală nu se salvează</string>
+    <string name="saveStatusAutomatic">Modificările se salvează automat</string>
     <string name="actionClose">Închide</string>
     <string name="useCalculatorDescription">Utilizați tastatura calculatorului personalizată. Va folosi tastatura de sistem dacă nu este activată.</string>
     <string name="useCalculatorTitle">Tastatură Calculator</string>
     <string name="actionChangelog">Jurnal de schimbări</string>
     <string name="actionRateApp">Evaluează aplicația</string>
+    <string name="actionSettings">Setări</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">Aspect</string>
+    <string name="settingsAboutHeader">Despre</string>
+    <string name="settingsDynamicColorTitle">Culorile imaginii de fundal</string>
+    <string name="settingsDynamicColorSummary">Potriviți culorile aplicației cu imaginea de fundal a dispozitivului (culori dinamice)</string>
+    <string name="settingsTrueBlackTitle">Negru pur</string>
+    <string name="settingsTrueBlackSummary">Folosiți un fundal complet negru în modul întunecat</string>
+    <string name="settingsGamesHeader">Jocuri</string>
+    <string name="settingsAutoLoadSettingsTitle">Încarcă setările anterioare</string>
+    <string name="settingsAutoLoadSettingsSummary">Alegerea numelui unui joc anterior completează ultimele setări și jucători ale acestuia</string>
+    <string name="settingsCalculatorDefaultSummary">Jocurile noi pornesc cu tastatura calculator activată</string>
+    <string name="settingsChangelogSummary">Vedeți noutățile din fiecare versiune</string>
+    <string name="settingsRateSummary">Lăsați o recenzie pe Google Play</string>
+    <string name="settingsVersionTitle">Versiune</string>
     <string name="undo">Anula</string>
     <string name="deleteRounds">Ștergeți rundele</string>
     <string name="deleteRoundItem">Runda %d</string>
     <string name="incomplete">Incomplet</string>
+    <string name="maxScoreTitle">Scor țintă</string>
+    <string name="maxScoreDescription">Termină jocul când scorul este atins</string>
+    <string name="maxRoundsTitle">Runde țintă</string>
+    <string name="maxRoundsDescription">Numărul maxim de runde de jucat</string>
+    <string name="finishGame">Termină jocul</string>
+    <string name="finishGameTitle">Obiectiv atins!</string>
+    <string name="finishGameConfirmation">Dorești să închei jocul și să vezi clasamentul?</string>
+    <string name="finish">Termină</string>
+    <string name="continuePlaying">Încă o rundă!</string>
+    <string name="errorGeneric">A apărut o eroare</string>
+    <string name="settingsPrivacyHeader">Confidențialitate</string>
+    <string name="settingsShareDataTitle">Partajați datele de utilizare</string>
+    <string name="settingsShareDataSummary">Trimiteți statistici de utilizare pentru a ajuta la îmbunătățirea aplicației. Numele și scorurile nu sunt partajate niciodată.</string>
+    <string name="settingsCrashReportsTitle">Trimiteți rapoarte de erori</string>
+    <string name="settingsCrashReportsSummary">Trimiteți un raport când aplicația se blochează, pentru a ajuta la remedierea problemei. Numele și scorurile nu sunt partajate niciodată.</string>
+    <string name="navigateUp">Navigați în sus</string>
+    <string name="scoreCellHint">%1$s, runda %2$d</string>
+    <string name="playerTotalDescription">%1$s, total %2$s</string>
+    <string name="leading">În frunte</string>
+    <string name="editNotes">Editați notițele</string>
+    <string name="calculatorNextDescription">Următorul</string>
+    <string name="calculatorMultiplyDescription">Înmulțire</string>
+    <string name="calculatorDivideDescription">Împărțire</string>
+    <string name="editPlayer">Editați %s</string>
+    <string name="deleteFailed">Ștergerea a eșuat</string>
+    <string name="calculatorOpenParenDescription">Paranteză deschisă</string>
+    <string name="calculatorCloseParenDescription">Paranteză închisă</string>
+    <string name="calculatorDecimalDescription">Virgulă</string>
+    <string name="calculatorMinusDescription">Minus</string>
+    <string name="calculatorEqualsDescription">Egal</string>
+    <string name="graphDescription">Scor după runde, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
+    <string name="usageDataConsentTitle">Partajați datele de utilizare?</string>
+    <string name="usageDataConsentMessage">Trimiteți statistici de utilizare și rapoarte de erori pentru a ajuta la îmbunătățirea aplicației? Acestea sunt colectate de Google Firebase. Numele și scorurile nu sunt partajate niciodată.</string>
+    <string name="usageDataConsentAllow">Permiteți</string>
+    <string name="usageDataConsentDeny">Nu permiteți</string>
 </resources>

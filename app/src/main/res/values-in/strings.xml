@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionEdit">Edit</string>
+    <string name="actionGraph">Tampilkan Grafik</string>
+    <string name="actionSave">Menyimpan</string>
+    <string name="actionSearch">Cari</string>
+    <string name="addRound">Tambahkan Round</string>
+    <string name="dealerLabel">Pembagi kartu</string>
+    <string name="dealerDescription">Tips: Tekan lama skor pemain dalam game untuk mengganti pembagi kartu pada putaran itu</string>
+    <string name="delete">Menghapus</string>
+    <string name="deleteGameConfirmation">Apakah Anda ingin menghapus game ini?</string>
+    <string name="deleteSuccessful">Dihapus %s</string>
+    <string name="gameCreateTitle">Permainan baru</string>
+    <string name="gameListEmptyMessage">Mulailah dengan mengetuk tombol + di bawah untuk membuat game baru!</string>
+    <string name="gameListEmptyTitle">Tidak ada permainan yang dibuat</string>
+    <string name="gameListTitle">permainan</string>
+    <string name="gameNameHint">Nama permainan</string>
+    <string name="gamePlayersEmptyMessage">Untuk memulai permainan, tambahkan beberapa pemain dengan tombol \"Edit\".</string>
+    <string name="gamePlayersEmptyTitle">Tidak ada pemain yang ditambahkan</string>
+    <string name="gamePlayersHeader">Pemain</string>
+    <string name="gameSettingsTitle">Pengaturan permainan</string>
+    <string name="graphByRoundsLabel">Skor dengan putaran</string>
+    <string name="graphPodiumLabel">Podium</string>
+    <string name="graphSubtitle">Statistik</string>
+    <string name="makePlayerDealerMessage">Jadikan %s pembagi kartu untuk putaran ini?</string>
+    <string name="setDealer">Jadikan pembagi kartu</string>
+    <string name="pickPlayers">Pilih Pemain</string>
+    <string name="playerCreateTitle">Pemain baru</string>
+    <string name="playerEditTitle">Edit pemain</string>
+    <string name="playerDelete">Hapus pemain</string>
+    <string name="playerEmptyMessage">Mulailah dengan mengetuk tombol + di bawah untuk menambah pemain baru!</string>
+    <string name="playerEmptySearchMessage">Tidak ada pemain yang cocok dengan kriteria pencarian saat ini. Anda dapat menambahkan pemain baru dengan mengetuk tombol + di bawah!</string>
+    <string name="playerEmptySearchTitle">Tidak ada pemain yang cocok</string>
+    <string name="playerEmptyTitle">Tidak ada pemain yang ditambahkan</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="other">%d Babak Dimainkan</item>
+    </plurals>
+    <string name="playerName">Nama pemain</string>
+    <string name="playerColor">Warna</string>
+    <string name="playerColorInvalid">Masukkan warna sebagai 6 digit heksadesimal, seperti 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>Hijau</item>
+        <item>Biru</item>
+        <item>Kuning</item>
+        <item>Merah</item>
+        <item>Ungu</item>
+        <item>Oranye</item>
+        <item>Sian</item>
+        <item>Merah muda</item>
+        <item>Cokelat</item>
+        <item>Abu-abu</item>
+    </string-array>
+    <string name="playerNotesTitle">Catatan untuk %s</string>
+    <string name="playerRoundNumberFormat">Babak %d:</string>
+    <string name="playerRoundNumberHint">Catatan</string>
+    <plurals name="playersHolder">
+        <item quantity="other">%d Pemain</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="other">%d Babak</item>
+    </plurals>
+    <string name="lastPlayedLabel">Terakhir dimainkan:</string>
+    <string name="reversedScoringDescription">Pemain dengan skor terendah menang, alih-alih memiliki skor tertinggi</string>
+    <string name="reversedScoringTitle">Membalikkan Skor</string>
+    <string name="scoreHint">Skor</string>
+    <string name="showRoundNotesDescription">Ketuk nama pemain untuk melihat dan mengedit catatan untuk setiap putaran</string>
+    <string name="showRoundNotesTitle">Tampilkan Catatan Bulat</string>
+    <string name="copiedUrl">URL disalin</string>
+    <string name="storeToReview">Silakan buka toko aplikasi untuk memberi ulasan</string>
+    <string name="changelogUnavailable">Tidak dapat membuka catatan perubahan</string>
+    <string name="gameNameRequired">Silakan masukkan nama permainan</string>
+    <string name="gamePlayersRequired">Silakan tambahkan pemain</string>
+    <string name="saveStatusSaving">Menyimpan…</string>
+    <string name="saveStatusSaved">Semua perubahan disimpan</string>
+    <string name="saveStatusNameNotSaved">Nama kosong tidak disimpan</string>
+    <string name="saveStatusPlayersNotSaved">Daftar pemain kosong tidak disimpan</string>
+    <string name="saveStatusAutomatic">Perubahan disimpan otomatis</string>
+    <string name="actionClose">Menutup</string>
+    <string name="actionPlayerStanding">Klasemen</string>
+    <string name="playerStandingTitle">Klasemen Pemain</string>
+    <string name="playerStanding">#%d</string>
+    <string name="actionRateApp">Beri Nilai Aplikasi</string>
+    <string name="actionChangelog">Changelog</string>
+    <string name="actionSettings">Setelan</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">Tampilan</string>
+    <string name="settingsAboutHeader">Tentang</string>
+    <string name="settingsDynamicColorTitle">Warna Wallpaper</string>
+    <string name="settingsDynamicColorSummary">Sesuaikan warna aplikasi dengan wallpaper perangkat (warna dinamis)</string>
+    <string name="settingsTrueBlackTitle">Hitam Pekat</string>
+    <string name="settingsTrueBlackSummary">Gunakan latar belakang hitam pekat dalam mode gelap</string>
+    <string name="settingsGamesHeader">Permainan</string>
+    <string name="settingsAutoLoadSettingsTitle">Muat Pengaturan Sebelumnya</string>
+    <string name="settingsAutoLoadSettingsSummary">Memilih nama permainan sebelumnya akan mengisi pengaturan dan pemain terakhirnya</string>
+    <string name="settingsCalculatorDefaultSummary">Permainan baru dimulai dengan keyboard kalkulator aktif</string>
+    <string name="settingsChangelogSummary">Lihat yang baru di setiap rilis</string>
+    <string name="settingsRateSummary">Beri ulasan di Google Play</string>
+    <string name="settingsVersionTitle">Versi</string>
+    <string name="useCalculatorTitle">Keyboard Kalkulator</string>
+    <string name="useCalculatorDescription">Gunakan keyboard kalkulator khusus. Akan menggunakan keyboard sistem jika tidak diaktifkan.</string>
+    <string name="undo">Membuka</string>
+    <string name="deleteRounds">Hapus Putaran</string>
+    <string name="deleteRoundItem">Putaran %d</string>
+    <string name="incomplete">Tidak lengkap</string>
+    <string name="maxScoreTitle">Skor Target</string>
+    <string name="maxScoreDescription">Akhiri permainan setelah skor tercapai</string>
+    <string name="maxRoundsTitle">Target Ronde</string>
+    <string name="maxRoundsDescription">Jumlah maksimum ronde yang dimainkan</string>
+    <string name="finishGame">Akhiri Permainan</string>
+    <string name="finishGameTitle">Target Tercapai!</string>
+    <string name="finishGameConfirmation">Apakah Anda ingin mengakhiri permainan dan melihat klasemen?</string>
+    <string name="finish">Selesai</string>
+    <string name="continuePlaying">Satu Ronde Lagi!</string>
+    <string name="errorGeneric">Terjadi kesalahan</string>
+    <string name="settingsPrivacyHeader">Privasi</string>
+    <string name="settingsShareDataTitle">Bagikan Data Penggunaan</string>
+    <string name="settingsShareDataSummary">Kirim statistik penggunaan untuk membantu meningkatkan aplikasi. Nama dan skor tidak pernah dibagikan.</string>
+    <string name="settingsCrashReportsTitle">Kirim Laporan Error</string>
+    <string name="settingsCrashReportsSummary">Kirim laporan saat aplikasi error, untuk membantu memperbaikinya. Nama dan skor tidak pernah dibagikan.</string>
+    <string name="navigateUp">Kembali ke atas</string>
+    <string name="scoreCellHint">%1$s, putaran %2$d</string>
+    <string name="playerTotalDescription">%1$s, total %2$s</string>
+    <string name="leading">Memimpin</string>
+    <string name="editNotes">Edit catatan</string>
+    <string name="calculatorNextDescription">Berikutnya</string>
+    <string name="calculatorMultiplyDescription">Kali</string>
+    <string name="calculatorDivideDescription">Bagi</string>
+    <string name="editPlayer">Edit %s</string>
+    <string name="deleteFailed">Gagal menghapus</string>
+    <string name="calculatorOpenParenDescription">Kurung buka</string>
+    <string name="calculatorCloseParenDescription">Kurung tutup</string>
+    <string name="calculatorDecimalDescription">Koma desimal</string>
+    <string name="calculatorMinusDescription">Kurang</string>
+    <string name="calculatorEqualsDescription">Sama dengan</string>
+    <string name="graphDescription">Skor dengan putaran, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
+    <string name="usageDataConsentTitle">Bagikan data penggunaan?</string>
+    <string name="usageDataConsentMessage">Kirim statistik penggunaan dan laporan error untuk membantu meningkatkan aplikasi? Data ini dikumpulkan oleh Google Firebase. Nama dan skor tidak pernah dibagikan.</string>
+    <string name="usageDataConsentAllow">Izinkan</string>
+    <string name="usageDataConsentDeny">Jangan izinkan</string>
+</resources>

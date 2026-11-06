@@ -11,5 +11,12 @@ import kotlinx.parcelize.Parcelize
 data class Player(
     val id: Long? = null,
     val name: String = "",
-    val archived: Boolean = false
-) : Parcelable
+    val archived: Boolean = false,
+    val color: Int? = null, // An ARGB color, null to use the color of their seat in each game
+) : Parcelable {
+    companion object {
+        /** Alphabetical, ignoring case, so "alice" isn't listed after "Zed" */
+        @Suppress("SpellCheckingInspection")
+        val NAME_ORDER: Comparator<Player> = compareBy(String.CASE_INSENSITIVE_ORDER) { it.name }
+    }
+}

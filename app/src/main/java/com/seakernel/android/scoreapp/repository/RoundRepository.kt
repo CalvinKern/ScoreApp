@@ -1,27 +1,31 @@
 package com.seakernel.android.scoreapp.repository
 
 import android.content.Context
+import com.seakernel.android.scoreapp.data.GameSettings
 import com.seakernel.android.scoreapp.data.Player
 import com.seakernel.android.scoreapp.data.Round
 import com.seakernel.android.scoreapp.data.Score
 import com.seakernel.android.scoreapp.database.AppDatabase
 import com.seakernel.android.scoreapp.database.entities.RoundEntity
 import com.seakernel.android.scoreapp.database.entities.ScoreEntity
+import org.threeten.bp.ZonedDateTime
 
 /**
  * Created by Calvin on 12/23/18.
  * Copyright © 2018 SeaKernel. All rights reserved.
  */
 class RoundRepository(val context: Context) {
-    private val roundDao = AppDatabase.getInstance(context).roundDao()
+    private val database = AppDatabase.getInstance(context)
+    private val roundDao = database.roundDao()
 
 //    fun getNotesForPlayer(player: Player, gameId: Long): List<Round> {
     fun getNotesForPlayer(player: Player, gameId: Long): List<PlayerRoundNote> {
         val rounds = roundDao.getNotesForPlayer(player.id!!, gameId)
-        return rounds.map { round ->
+        return rounds.mapIndexed { index, round ->
             PlayerRoundNote(
                 roundId = round.score.roundId,
-                roundNumber = round.round_number,
+                // Newest first, so the first note is for the last round in the game
+                roundNumber = rounds.size - 1 - index,
                 score = Score(id = round.score.id, player = player, value = round.score.score, metadata = round.score.scoreData)
             )
         }
@@ -46,8 +50,9 @@ class RoundRepository(val context: Context) {
         return roundDao.getRoundIds(gameId)
     }
 
-    fun addOrUpdateRound(gameId: Long, round: Round): Round {
-        return if (round.id == null) {
+    /** Saves the round and its scores together, so a failure can't leave a round with missing scores */
+    fun addOrUpdateRound(gameId: Long, round: Round): Round = database.runInTransaction<Round> {
+        if (round.id == null) {
             createRound(gameId, round)
         } else {
             updateRound(gameId, round)
@@ -58,7 +63,11 @@ class RoundRepository(val context: Context) {
     }
 
     fun updateScore(score: Score): Score {
-        roundDao.updateScore(score.id, score.value)
+        roundDao.updateScore(score.id, score.value, score.input)
+        roundDao.updateLastPlayedForScore(
+            score.id,
+            ZonedDateTime.now().format(GameSettings.DATE_FORMATTER)
+        )
         return score.copy()
     }
 
@@ -73,7 +82,7 @@ class RoundRepository(val context: Context) {
             RoundEntity(
                 round.id!!,
                 gameId,
-                round.dealer?.id ?: 0,
+                round.dealer?.id, // No dealer is stored as null, 0 would break the players foreign key
                 round.number
             )
         )
@@ -83,7 +92,8 @@ class RoundRepository(val context: Context) {
                 it.player.id!!,
                 round.id,
                 it.value,
-                it.metadata
+                it.metadata,
+                it.input,
             )
         }.toTypedArray())
         return round.copy()
@@ -95,7 +105,7 @@ class RoundRepository(val context: Context) {
                 RoundEntity(
                     0,
                     gameId,
-                    round.dealer?.id ?: 0,
+                    round.dealer?.id, // No dealer is stored as null, 0 would break the players foreign key
                     round.number
                 )
             )
@@ -107,6 +117,7 @@ class RoundRepository(val context: Context) {
                 roundId,
                 it.value,
                 it.metadata,
+                it.input,
             )
         }.toTypedArray())
         return round.copy(
@@ -118,10 +129,10 @@ class RoundRepository(val context: Context) {
     fun deleteRounds(vararg roundIds: Long) {
         roundDao.deleteRoundsById(longArrayOf(*roundIds))
     }
-
-    fun deleteScore(id: Long) {
-        roundDao.deleteScoreById(id)
-    }
 }
 
+/**
+ * @param roundNumber the round's position in the game, starting at 0. Rounds are labeled by where they are in the game
+ * (instead of their saved number, which keeps gaps after rounds are deleted), the same as everywhere else.
+ */
 data class PlayerRoundNote(val roundId: Long, val roundNumber: Int, val score: Score)

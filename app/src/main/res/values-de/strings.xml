@@ -5,51 +5,142 @@
     <string name="actionSave">speichern</string>
     <string name="actionSearch">Suche</string>
     <string name="addRound">Runde hinzufügen</string>
-    <string name="dealerLabel">Händler</string>
+    <string name="dealerLabel">Geber</string>
+    <string name="dealerDescription">Tipp: Halten Sie im Spiel die Punktzahl eines Spielers gedrückt, um den Geber für diese Runde zu ändern</string>
     <string name="delete">Löschen</string>
     <string name="deleteGameConfirmation">Möchten Sie dieses Spiel löschen?</string>
     <string name="deleteSuccessful">Gelöscht %s</string>
     <string name="gameCreateTitle">Neues Spiel</string>
-    <string name="gameListEmptyMessage">Beginnen Sie mit einem Klick auf die Schaltfläche + unten, um ein neues Spiel zu erstellen!</string>
+    <string name="gameListEmptyMessage">Beginnen Sie, indem Sie unten auf die Schaltfläche + tippen, um ein neues Spiel zu erstellen!</string>
     <string name="gameListEmptyTitle">Keine Spiele erstellt</string>
     <string name="gameListTitle">Spiele</string>
     <string name="gameNameHint">Spielname</string>
-    <string name="gamePlayersEmptyMessage">Um ein Spiel zu starten, fügen Sie einige Spieler mit der Schaltfläche \"BEARBEITEN\" hinzu.</string>
+    <string name="gamePlayersEmptyMessage">Um ein Spiel zu starten, fügen Sie einige Spieler mit der Schaltfläche \"Bearbeiten\" hinzu.</string>
     <string name="gamePlayersEmptyTitle">Keine Spieler hinzugefügt</string>
     <string name="gamePlayersHeader">Spieler</string>
     <string name="gameSettingsTitle">Spieleinstellungen</string>
     <string name="graphByRoundsLabel">Ergebnis nach Runden</string>
+    <string name="graphPodiumLabel">Podium</string>
     <string name="graphSubtitle">Statistiken</string>
-    <string name="makePlayerDealerMessage">%s-Händler für diese Runde machen?</string>
+    <string name="makePlayerDealerMessage">%s in dieser Runde zum Geber machen?</string>
+    <string name="setDealer">Als Geber festlegen</string>
     <string name="pickPlayers">Spieler auswählen</string>
     <string name="playerCreateTitle">Neuer Spieler</string>
-    <string name="playerEmptyMessage">Beginnen Sie, indem Sie auf das + unten klicken, um einen neuen Spieler hinzuzufügen!</string>
-    <string name="playerEmptySearchMessage">Kein Spieler entspricht den aktuellen Suchkriterien. Sie können einen neuen Spieler hinzufügen, indem Sie auf das + unten klicken!</string>
+    <string name="playerEditTitle">Spieler bearbeiten</string>
+    <string name="playerDelete">Spieler löschen</string>
+    <string name="playerEmptyMessage">Beginnen Sie, indem Sie unten auf das + tippen, um einen neuen Spieler hinzuzufügen!</string>
+    <string name="playerEmptySearchMessage">Kein Spieler entspricht den aktuellen Suchkriterien. Sie können einen neuen Spieler hinzufügen, indem Sie unten auf das + tippen!</string>
     <string name="playerEmptySearchTitle">Keine Spieler passen zusammen</string>
     <string name="playerEmptyTitle">Keine Spieler hinzugefügt</string>
-    <string name="playerIcon">Spieler-Symbol</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d Runde gespielt</item>
+        <item quantity="other">%d Runden gespielt</item>
+    </plurals>
     <string name="playerName">Spielername</string>
+    <string name="playerColor">Farbe</string>
+    <string name="playerColorInvalid">Gib eine Farbe als 6 Hex-Ziffern ein, z. B. 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>Grün</item>
+        <item>Blau</item>
+        <item>Gelb</item>
+        <item>Rot</item>
+        <item>Lila</item>
+        <item>Orange</item>
+        <item>Cyan</item>
+        <item>Rosa</item>
+        <item>Braun</item>
+        <item>Grau</item>
+    </string-array>
     <string name="playerNotesTitle">Notizen für %s</string>
     <string name="playerRoundNumberFormat">Runde %d:</string>
     <string name="playerRoundNumberHint">Anmerkungen</string>
-    <string name="playersHolder">%d Spieler</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d Spieler</item>
+        <item quantity="other">%d Spieler</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d Runde</item>
+        <item quantity="other">%d Runden</item>
+    </plurals>
+    <string name="lastPlayedLabel">Zuletzt gespielt:</string>
     <string name="reversedScoringDescription">Der Spieler mit der niedrigsten Punktzahl gewinnt, anstatt die höchste Punktzahl zu erzielen</string>
     <string name="reversedScoringTitle">Reverse Scoring</string>
     <string name="scoreHint">Ergebnis</string>
-    <string name="showRoundNotesDescription">Klicken Sie auf den Namen eines Spielers, um Notizen für jede Runde anzuzeigen und zu bearbeiten</string>
+    <string name="showRoundNotesDescription">Tippen Sie auf den Namen eines Spielers, um Notizen für jede Runde anzuzeigen und zu bearbeiten</string>
     <string name="showRoundNotesTitle">Runde Noten anzeigen</string>
     <string name="copiedUrl">URL kopiert</string>
     <string name="storeToReview">Bitte öffnen Sie den App-Store, um eine Bewertung abzugeben</string>
+    <string name="changelogUnavailable">Das Änderungsprotokoll konnte nicht geöffnet werden</string>
+    <string name="gameNameRequired">Bitte geben Sie einen Namen für das Spiel ein</string>
+    <string name="gamePlayersRequired">Bitte fügen Sie einen Spieler hinzu</string>
+    <string name="saveStatusSaving">Wird gespeichert…</string>
+    <string name="saveStatusSaved">Alle Änderungen gespeichert</string>
+    <string name="saveStatusNameNotSaved">Leerer Name wird nicht gespeichert</string>
+    <string name="saveStatusPlayersNotSaved">Leere Spielerliste wird nicht gespeichert</string>
+    <string name="saveStatusAutomatic">Änderungen werden automatisch gespeichert</string>
     <string name="actionClose">Schließen</string>
     <string name="actionPlayerStanding">Stehen</string>
     <string name="playerStandingTitle">Spielerwertung</string>
     <string name="playerStanding">#%d</string>
-    <string name="actionRateApp">Bewertungs App</string>
+    <string name="actionRateApp">App bewerten</string>
     <string name="actionChangelog">Änderungsprotokoll</string>
+    <string name="actionSettings">Einstellungen</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">Darstellung</string>
+    <string name="settingsAboutHeader">Info</string>
+    <string name="settingsDynamicColorTitle">Hintergrundbild-Farben</string>
+    <string name="settingsDynamicColorSummary">App-Farben an das Hintergrundbild des Geräts anpassen (dynamische Farben)</string>
+    <string name="settingsTrueBlackTitle">Echtes Schwarz</string>
+    <string name="settingsTrueBlackSummary">Im dunklen Modus einen rein schwarzen Hintergrund verwenden</string>
+    <string name="settingsGamesHeader">Spiele</string>
+    <string name="settingsAutoLoadSettingsTitle">Vorherige Einstellungen laden</string>
+    <string name="settingsAutoLoadSettingsSummary">Bei Auswahl eines früheren Spielnamens werden dessen letzte Einstellungen und Spieler übernommen</string>
+    <string name="settingsCalculatorDefaultSummary">Neue Spiele starten mit eingeschalteter Rechner-Tastatur</string>
+    <string name="settingsChangelogSummary">Neuerungen in jeder Version ansehen</string>
+    <string name="settingsRateSummary">Eine Bewertung bei Google Play abgeben</string>
+    <string name="settingsVersionTitle">Version</string>
     <string name="useCalculatorTitle">Rechner Tastatur</string>
     <string name="useCalculatorDescription">Verwenden Sie die benutzerdefinierte Taschenrechner-Tastatur. Verwendet die Systemtastatur, wenn sie nicht aktiviert ist.</string>
     <string name="undo">cancel</string>
     <string name="deleteRounds">Runden löschen</string>
     <string name="deleteRoundItem">Runde %d</string>
     <string name="incomplete">Unvollständig</string>
+    <string name="maxScoreTitle">Zielpunktzahl</string>
+    <string name="maxScoreDescription">Spiel beenden, sobald die Punktzahl erreicht ist</string>
+    <string name="maxRoundsTitle">Zielrundenzahl</string>
+    <string name="maxRoundsDescription">Maximale Anzahl an Runden</string>
+    <string name="finishGame">Spiel beenden</string>
+    <string name="finishGameTitle">Ziel erreicht!</string>
+    <string name="finishGameConfirmation">Möchtest du das Spiel beenden und die Rangliste ansehen?</string>
+    <string name="finish">Beenden</string>
+    <string name="continuePlaying">Noch eine Runde!</string>
+    <string name="errorGeneric">Etwas ist schiefgelaufen</string>
+    <string name="settingsPrivacyHeader">Datenschutz</string>
+    <string name="settingsShareDataTitle">Nutzungsdaten teilen</string>
+    <string name="settingsShareDataSummary">Nutzungsstatistiken senden, um die App zu verbessern. Namen und Punktzahlen werden nie geteilt.</string>
+    <string name="settingsCrashReportsTitle">Absturzberichte senden</string>
+    <string name="settingsCrashReportsSummary">Einen Bericht senden, wenn die App abstürzt, damit der Fehler behoben werden kann. Namen und Punktzahlen werden nie geteilt.</string>
+    <string name="navigateUp">Nach oben</string>
+    <string name="scoreCellHint">%1$s, Runde %2$d</string>
+    <string name="playerTotalDescription">%1$s, gesamt %2$s</string>
+    <string name="leading">In Führung</string>
+    <string name="editNotes">Anmerkungen bearbeiten</string>
+    <string name="calculatorNextDescription">Weiter</string>
+    <string name="calculatorMultiplyDescription">Multiplizieren</string>
+    <string name="calculatorDivideDescription">Dividieren</string>
+    <string name="editPlayer">%s bearbeiten</string>
+    <string name="deleteFailed">Löschen fehlgeschlagen</string>
+    <string name="calculatorOpenParenDescription">Klammer auf</string>
+    <string name="calculatorCloseParenDescription">Klammer zu</string>
+    <string name="calculatorDecimalDescription">Komma</string>
+    <string name="calculatorMinusDescription">Minus</string>
+    <string name="calculatorEqualsDescription">Gleich</string>
+    <string name="graphDescription">Ergebnis nach Runden, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">Podium, %1$s. %2$s</string>
+    <string name="usageDataConsentTitle">Nutzungsdaten teilen?</string>
+    <string name="usageDataConsentMessage">Nutzungsstatistiken und Absturzberichte senden, um die App zu verbessern? Sie werden von Google Firebase erfasst. Namen und Punktzahlen werden nie geteilt.</string>
+    <string name="usageDataConsentAllow">Zulassen</string>
+    <string name="usageDataConsentDeny">Nicht zulassen</string>
 </resources>

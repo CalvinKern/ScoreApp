@@ -1,25 +1,23 @@
 package com.seakernel.android.scoreapp.gamelist
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.ViewGroupCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.seakernel.android.scoreapp.R
 import com.seakernel.android.scoreapp.databinding.FragmentGameListBinding
 import com.seakernel.android.scoreapp.repository.GameRepository
 import com.seakernel.android.scoreapp.ui.MobiusFragment
 import com.seakernel.android.scoreapp.utility.AnalyticsConstants
+import com.seakernel.android.scoreapp.utility.AppPreferences
+import com.seakernel.android.scoreapp.utility.UsageData
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsCutout
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationMargin
 import com.seakernel.android.scoreapp.utility.applyWindowInsetsNavigationPadding
@@ -28,13 +26,11 @@ import com.seakernel.android.scoreapp.utility.logScreenView
 import com.seakernel.android.scoreapp.utility.setVisible
 import com.spotify.mobius.Connection
 import com.spotify.mobius.First
-import com.spotify.mobius.Mobius
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.functions.Consumer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.core.net.toUri
 
 /**
  * Created by Calvin on 12/15/18.
@@ -44,10 +40,13 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
 
     interface GameListListener {
         fun onShowGameScreen(gameId: Long)
+        fun onShowGameSetupScreen(gameId: Long)
         fun onShowCreateGameScreen()
+        fun onShowSettingsScreen()
     }
 
     private var gameRepository: GameRepository? = null
+    private var appContext: Context? = null // For effects, which run off the main thread
     private var listener: GameListListener? = null
     private var _binding: FragmentGameListBinding? = null
 
@@ -55,8 +54,14 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    // The usage data card and the games keep their own ids, and their view types never overlap
+    private val listAdapterConfig = ConcatAdapter.Config.Builder()
+        .setIsolateViewTypes(false)
+        .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
+        .build()
+
     init {
-        loop = Mobius.loop(ListModel.Companion::update, ::effectHandler)
+        loop = createLoop(ListModel.Companion::update)
         controller = MobiusAndroid.controller(loop, ListModel.createDefault(), ::initMobius)
     }
 
@@ -64,6 +69,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         super.onAttach(context)
 
         gameRepository = GameRepository(requireContext())
+        appContext = context.applicationContext
         listener = context as? GameListListener
     }
 
@@ -71,6 +77,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         super.onDetach()
 
         gameRepository = null
+        appContext = null
         listener = null
     }
 
@@ -99,12 +106,8 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         binding.toolbar.inflateMenu(R.menu.menu_game_list)
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.actionRate -> {
-                    rateApp()
-                    true
-                }
-                R.id.actionChangelog -> {
-                    openChangelog()
+                R.id.actionSettings -> {
+                    listener?.onShowSettingsScreen()
                     true
                 }
                 else -> false
@@ -112,7 +115,7 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         }
 
         ViewGroupCompat.installCompatInsetsDispatch(binding.root)
-        binding.toolbar.applyWindowInsetsCutout()
+        binding.appBar.applyWindowInsetsCutout()
         binding.fab.applyWindowInsetsNavigationMargin()
         binding.gameRecycler.applyWindowInsetsNavigationPadding()
     }
@@ -146,7 +149,11 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 binding.gameListEmptyGroup.setVisible(!model.isLoading && model.gameList.isEmpty())
 
                 binding.gameRecycler.swapAdapter(
-                    GameListAdapter(model.gameList, eventConsumer),
+                    ConcatAdapter(
+                        listAdapterConfig,
+                        UsageDataCardAdapter(model.showUsageDataCard, eventConsumer),
+                        GameListAdapter(model.gameList, eventConsumer)
+                    ),
                     true
                 )
             }
@@ -164,19 +171,25 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
         return object : Connection<ListEffect> {
             override fun accept(effect: ListEffect) {
                 when (effect) {
-                    is ListEffect.ShowCreateGameScreen -> listener?.onShowCreateGameScreen()
-                    is ListEffect.ShowGameScreen -> listener?.onShowGameScreen(effect.gameId)
-                    is ListEffect.ShowGameRowDialog -> {
-                        showDeleteGameDialog(eventConsumer, effect.gameId)
-                    }
+                    // Effects run in the background, so anything touching the screen moves to the main thread
+                    is ListEffect.ShowCreateGameScreen -> runWhenStarted { listener?.onShowCreateGameScreen() }
+                    is ListEffect.ShowGameScreen -> runWhenStarted { listener?.onShowGameScreen(effect.gameId) }
+                    is ListEffect.ShowGameSetupScreen -> runWhenStarted { listener?.onShowGameSetupScreen(effect.gameId) }
+                    is ListEffect.ShowGameRowDialog -> runWhenStarted { showDeleteGameDialog(eventConsumer, effect.gameId) }
                     is ListEffect.ShowDeleteSnackbar -> {
+                        // TODO: Show a snackbar with an undo for deleted games in a future release. Games are deleted
+                        //  right away for now, so undo needs a delay or a way to restore the game first.
                     }
                     is ListEffect.FetchData -> {
                         eventConsumer.accept(
                             ListEvent.Loaded(
-                                gameRepository?.loadAllGames() ?: listOf()
+                                gameRepository?.loadAllGames() ?: listOf(),
+                                askUsageData = appContext?.let { !AppPreferences.hasAnsweredShareUsageData(it) } == true
                             )
                         )
+                    }
+                    is ListEffect.SaveUsageDataAnswer -> {
+                        appContext?.let { UsageData.setShareEnabled(it, effect.allowed) }
                     }
                 }
             }
@@ -188,15 +201,14 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
     }
 
     private fun showDeleteGameDialog(eventConsumer: Consumer<ListEvent>, gameId: Long) {
-        view?.post {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage(R.string.deleteGameConfirmation)
-                .setPositiveButton(R.string.delete) { _, _ ->
-                    deleteGameAsync(eventConsumer, gameId)
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-            builder.create().show()
-        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.deleteGameConfirmation)
+            .setPositiveButton(R.string.delete) { _, _ ->
+                deleteGameAsync(eventConsumer, gameId)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+            .show()
     }
 
     private fun deleteGameAsync(eventConsumer: Consumer<ListEvent>, gameId: Long) {
@@ -207,68 +219,10 @@ class GameListFragment : MobiusFragment<ListModel, ListEvent, ListEffect>() {
                 if (deleted == true) {
                     eventConsumer.accept(ListEvent.GameDeleteSuccessful(gameId))
                 } else {
-                    // TODO: Show error, shouldn't happen, but why not catch it?
-                    Toast.makeText(requireContext(), R.string.delete, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.deleteFailed, Toast.LENGTH_SHORT).show()
                 }
             }
         }
-    }
-
-    private fun rateApp() {
-        logEvent(AnalyticsConstants.Event.SHOW_RATING_DIALOG)
-        val manager = ReviewManagerFactory.create(requireContext())
-        val reviewRequest = manager.requestReviewFlow()
-        reviewRequest.addOnCompleteListener { request ->
-            if (request.isSuccessful) {
-                // We got the ReviewInfo object
-                val reviewInfo = request.result
-                val flow = manager.launchReviewFlow(activity ?: return@addOnCompleteListener, reviewInfo)
-                flow.addOnCompleteListener { _ ->
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-                    // matter the result, we continue our app flow.
-                }
-            } else {
-                // There was some problem, continue regardless of the result.
-                openPlayStore()
-                logEvent(AnalyticsConstants.Event.FAILED_RATING_DIALOG) {
-                    putString(AnalyticsConstants.Param.MESSAGE, request.exception?.message)
-                }
-            }
-        }
-    }
-
-    private fun openPlayStore() {
-        val url = "https://play.google.com/store/apps/details?id=com.seakernel.scorepad"
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = url.toUri()
-            setPackage("com.android.vending")
-        }
-        try {
-            startActivity(intent)
-        } catch (_: Exception) {
-            val clipboard: ClipboardManager? =
-                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-
-            if (clipboard == null) {
-                Toast.makeText(requireContext(), R.string.storeToReview, Toast.LENGTH_SHORT).show()
-            } else {
-                clipboard.setPrimaryClip(ClipData.newPlainText("", url))
-
-                // Only show a toast for Android 12 and lower
-                if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.S_V2) {
-                    Toast.makeText(requireContext(), R.string.copiedUrl, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun openChangelog() {
-        logEvent(AnalyticsConstants.Event.SHOW_CHANGELOG)
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = "https://github.com/CalvinKern/ScoreApp/releases".toUri()
-        }
-        startActivity(intent)
     }
 
     // End Mobius functions

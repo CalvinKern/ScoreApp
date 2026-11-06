@@ -17,6 +17,8 @@ gen/
 # Gradle files
 .gradle/
 build/
+# Written by Android Studio when it opens a new checkout
+gradle/gradle-daemon-jvm.properties
 
 # Local configuration file (sdk path, etc)
 keys/
@@ -46,3 +48,12 @@ app/release/*
 
 # Mac file
 .DS_Store
+
+# Database backups from scripts/emulator-db.sh
+db-backups/
+
+# Traces from scripts/emulator-perf.sh
+perf-traces/
+
+# Results from the regression plan (regression/README.md)
+regression-results/

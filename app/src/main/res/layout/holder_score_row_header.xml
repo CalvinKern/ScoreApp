@@ -5,12 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_horizontal"
     >
 
-    <TextView
+    <!-- Names shrink to fit their column (see PlayerNameView). Hyphens are for names that still don't fit, and for
+         words that share a line, like "Gran-" over "dma Jo" rather than "Grandm" over "a Jo". -->
+    <com.seakernel.android.scoreapp.game.classic.PlayerNameView
         android:id="@+id/playerNameHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,6 +19,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:layout_gravity="center"
+        android:hyphenationFrequency="full"
         android:maxLines="3"
         android:padding="8dp"
         tools:text="@tools:sample/full_names"
@@ -30,7 +32,7 @@
         android:adjustViewBounds="true"
         android:src="@drawable/ic_notes_black"
         android:layout_gravity="center_vertical"
-        android:contentDescription="@string/showRoundNotesTitle"
-        app:tint="@color/gray"
+        android:importantForAccessibility="no"
+        app:tint="?attr/colorOnSurfaceVariant"
         />
 </LinearLayout>

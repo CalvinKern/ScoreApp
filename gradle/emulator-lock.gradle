@@ -1,0 +1,70 @@
+// Install, uninstall, and connected test tasks put the build on every connected device (or only ANDROID_SERIAL's), so
+// they first check the device locks from scripts/emulator-lock.sh, and stop when another checkout holds one. They
+// don't take the lock themselves, so building and installing without the scripts still works on a free device.
+
+class EmulatorLockCheck {
+    static String run(File adb, String... args) {
+        def process = new ProcessBuilder([adb.absolutePath] + args.toList()).redirectErrorStream(true).start()
+        def out = process.inputStream.text
+        process.waitFor()
+        return out
+    }
+
+    static List<String> targetSerials(File adb, String serial) {
+        if (serial) return [serial]
+        return run(adb, 'devices').readLines().drop(1)
+            .collect { it.split('\t') }
+            .findAll { it.length == 2 && it[1].trim() }
+            .collect { it[0].trim() }
+    }
+
+    // An emulator's AVD name, since emulator serials swap when emulators restart, otherwise the serial
+    static String lockName(File adb, String serial) {
+        if (!serial.startsWith('emulator-')) return serial
+        def avd = run(adb, '-s', serial, 'emu', 'avd', 'name').readLines().find()?.trim()
+        return avd ?: serial
+    }
+
+    static String owner(File checkout, String ownerEnv) {
+        if (ownerEnv) return ownerEnv
+        def process = new ProcessBuilder('git', '-C', checkout.absolutePath, 'rev-parse', '--show-toplevel').start()
+        def out = process.inputStream.text.trim()
+        process.waitFor()
+        return out
+    }
+
+    static void check(File adb, File lockDir, String serial, String ownerEnv, File checkout) {
+        def me = owner(checkout, ownerEnv)
+        targetSerials(adb, serial).each { device ->
+            def name = lockName(adb, device)
+            def ownerFile = new File(lockDir, "${name}.lock/owner")
+            if (!ownerFile.isFile()) return
+            def fields = ownerFile.readLines().collectEntries { line ->
+                def i = line.indexOf('=')
+                i > 0 ? [(line.substring(0, i)): line.substring(i + 1)] : [:]
+            }
+            def holder = fields.owner
+            // A lock whose checkout was removed is free, the same as in emulator-lock.sh
+            if (holder && holder != me && new File(holder).isDirectory()) {
+                throw new GradleException("$name ($device) is locked by $holder (since ${fields.since}). Wait for " +
+                    "it to be released, set ANDROID_SERIAL to another device, or if it's no longer in use: " +
+                    "scripts/emulator-lock.sh release $name --force")
+            }
+        }
+    }
+}
+
+def lockAdb = androidComponents.sdkComponents.adb
+def lockDir = providers.environmentVariable('EMULATOR_LOCK_DIR')
+    .orElse(new File(System.getProperty('user.home'), '.android/emulator-locks').path)
+def lockSerial = providers.environmentVariable('ANDROID_SERIAL').orElse('')
+def lockOwner = providers.environmentVariable('EMULATOR_LOCK_OWNER').orElse('')
+def lockCheckout = rootDir
+
+tasks.configureEach { task ->
+    if (!(task.name ==~ /(install|uninstall|connected)[A-Z]\w*/)) return
+    task.doFirst {
+        EmulatorLockCheck.check(lockAdb.get().asFile, new File(lockDir.get()), lockSerial.get(), lockOwner.get(),
+            lockCheckout)
+    }
+}

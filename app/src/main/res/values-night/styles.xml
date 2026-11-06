@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark mode values for the app's primary accent (see values/styles.xml) -->
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="colorPrimaryAccent">?attr/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryAccent">?attr/colorOnPrimaryContainer</item>
+    </style>
+
+    <!--
+        "True black" setting: pure black background/surface, containers keep their off-black tones.
+        Applied in MainActivity after dynamic colors so it works with both color sources.
+    -->
+    <style name="ThemeOverlay.App.TrueBlack" parent="">
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="colorSurface">@android:color/black</item>
+        <item name="colorSurfaceDim">@android:color/black</item>
+    </style>
+</resources>

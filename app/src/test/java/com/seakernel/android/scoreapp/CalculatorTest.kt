@@ -1,8 +1,10 @@
 package com.seakernel.android.scoreapp
 
 import com.seakernel.android.scoreapp.calculator.CalculatorUtils
+import com.seakernel.android.scoreapp.utility.ScoreFormat
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.Locale
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -64,6 +66,26 @@ class CalculatorTest {
     }
 
     @Test
+    fun localizedDecimals() = withLocale(Locale.GERMANY) {
+        assertEquals("2.5", CalculatorUtils.eval("2,5"))
+        assertEquals("4.33", CalculatorUtils.eval("3,33 + 1"))
+        assertEquals("2.5", CalculatorUtils.eval("2.5")) // A '.' is always accepted
+        assertEquals("4,33", CalculatorUtils.toDisplay("4.33"))
+        assertEquals(2.5, ScoreFormat.parse("2,5"))
+        assertEquals("3,33", ScoreFormat.format(10.0 / 3))
+    }
+
+    private fun withLocale(locale: Locale, block: () -> Unit) {
+        val original = Locale.getDefault()
+        Locale.setDefault(locale)
+        try {
+            block()
+        } finally {
+            Locale.setDefault(original)
+        }
+    }
+
+    @Test
     fun errors() {
         assertEquals(null, CalculatorUtils.eval(""))
         assertEquals(null, CalculatorUtils.eval("."))
@@ -82,5 +104,19 @@ class CalculatorTest {
         assertEquals(null, CalculatorUtils.eval("//1"))
         assertEquals(null, CalculatorUtils.eval("1..0"))
         assertEquals(null, CalculatorUtils.eval("1.2.3"))
+    }
+
+    @Test
+    fun nonFiniteResultsAreErrors() {
+        assertEquals(null, CalculatorUtils.eval("5 / 0"))
+        assertEquals(null, CalculatorUtils.eval("0 / 0"))
+        assertEquals(null, CalculatorUtils.eval("-5 / 0"))
+    }
+
+    @Test
+    fun largeResultsCanBeReadBack() {
+        assertEquals("3000000000", CalculatorUtils.eval("3000000000"))
+        assertEquals("6000000000", CalculatorUtils.eval("3000000000 x 2"))
+        assertEquals("3000000000.5", CalculatorUtils.eval("3000000000.5"))
     }
 }

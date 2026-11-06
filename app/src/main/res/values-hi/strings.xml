@@ -5,12 +5,13 @@
     <string name="actionSave">सहेजें</string>
     <string name="actionSearch">खोज</string>
     <string name="addRound">राउंड जोड़ें</string>
-    <string name="dealerLabel">विक्रेता</string>
+    <string name="dealerLabel">डीलर</string>
+    <string name="dealerDescription">सुझाव: उस राउंड का डीलर बदलने के लिए गेम में किसी खिलाड़ी के स्कोर को देर तक दबाएं</string>
     <string name="delete">हटाएं</string>
     <string name="deleteGameConfirmation">क्या आप इस गेम को हटाना चाहते हैं?</string>
     <string name="deleteSuccessful">हटाए गए %s</string>
     <string name="gameCreateTitle">नया खेल</string>
-    <string name="gameListEmptyMessage">एक नया गेम बनाने के लिए नीचे दिए गए + बटन पर क्लिक करके शुरू करें!</string>
+    <string name="gameListEmptyMessage">एक नया गेम बनाने के लिए नीचे दिए गए + बटन पर टैप करके शुरू करें!</string>
     <string name="gameListEmptyTitle">कोई गेम नहीं बनाया गया</string>
     <string name="gameListTitle">खेल</string>
     <string name="gameNameHint">खेल का नाम</string>
@@ -18,38 +19,128 @@
     <string name="gamePlayersEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
     <string name="gamePlayersHeader">खिलाड़ियों</string>
     <string name="gameSettingsTitle">खेल व्यवस्था</string>
-    <string name="graphByRoundsLabel">गोल करके स्कोर करें</string>
+    <string name="graphByRoundsLabel">राउंड के अनुसार स्कोर</string>
+    <string name="graphPodiumLabel">पोडियम</string>
     <string name="graphSubtitle">आंकड़े</string>
-    <string name="makePlayerDealerMessage">इस दौर के लिए %s डीलर बनाएं?</string>
+    <string name="makePlayerDealerMessage">इस राउंड के लिए %s को डीलर बनाएं?</string>
+    <string name="setDealer">डीलर बनाएं</string>
     <string name="pickPlayers">खिलाड़ियों को चुनें</string>
     <string name="playerCreateTitle">नया खिलाडी</string>
-    <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन नीचे क्लिक करके शुरू करें!</string>
-    <string name="playerEmptySearchMessage">कोई भी खिलाड़ी वर्तमान खोज मापदंड से मेल नहीं खाता है। आप नीचे दिए गए + बटन पर क्लिक करके एक नया खिलाड़ी जोड़ सकते हैं!</string>
+    <string name="playerEditTitle">खिलाडी संपादित करें</string>
+    <string name="playerDelete">खिलाडी हटाएं</string>
+    <string name="playerEmptyMessage">एक नया खिलाड़ी जोड़ने के लिए नीचे + बटन पर टैप करके शुरू करें!</string>
+    <string name="playerEmptySearchMessage">कोई भी खिलाड़ी वर्तमान खोज मापदंड से मेल नहीं खाता है। आप नीचे दिए गए + बटन पर टैप करके एक नया खिलाड़ी जोड़ सकते हैं!</string>
     <string name="playerEmptySearchTitle">कोई भी खिलाड़ी मैच नहीं करता</string>
     <string name="playerEmptyTitle">कोई खिलाड़ी नहीं जोड़ा</string>
-    <string name="playerIcon">प्लेयर आइकन</string>
+    <plurals name="playerStandingRoundsPlayed">
+        <item quantity="one">%d राउंड खेला गया</item>
+        <item quantity="other">%d राउंड खेले गए</item>
+    </plurals>
     <string name="playerName">खिलाडि का नाम</string>
+    <string name="playerColor">रंग</string>
+    <string name="playerColorInvalid">रंग को 6 हेक्स अंकों में लिखें, जैसे 1E88E5</string>
+    <string-array name="seatColorNames">
+        <item>हरा</item>
+        <item>नीला</item>
+        <item>पीला</item>
+        <item>लाल</item>
+        <item>बैंगनी</item>
+        <item>नारंगी</item>
+        <item>सियान</item>
+        <item>गुलाबी</item>
+        <item>भूरा</item>
+        <item>धूसर</item>
+    </string-array>
     <string name="playerNotesTitle">%s के लिए नोट्स</string>
     <string name="playerRoundNumberFormat">दौर %d:</string>
     <string name="playerRoundNumberHint">टिप्पणियाँ</string>
-    <string name="playersHolder">%d खिलाड़ी</string>
+    <plurals name="playersHolder">
+        <item quantity="one">%d खिलाड़ी</item>
+        <item quantity="other">%d खिलाड़ी</item>
+    </plurals>
+    <plurals name="roundsHolder">
+        <item quantity="one">%d राउंड</item>
+        <item quantity="other">%d राउंड</item>
+    </plurals>
+    <string name="lastPlayedLabel">अंतिम बार खेला:</string>
     <string name="reversedScoringDescription">उच्चतम स्कोर होने के बजाय सबसे कम स्कोर वाला खिलाड़ी जीतता है</string>
     <string name="reversedScoringTitle">रिवर्स स्कोरिंग</string>
     <string name="scoreHint">स्कोर</string>
-    <string name="showRoundNotesDescription">प्रत्येक दौर के लिए नोट्स देखने और संपादित करने के लिए एक खिलाड़ी के नाम पर क्लिक करें</string>
+    <string name="showRoundNotesDescription">प्रत्येक दौर के लिए नोट्स देखने और संपादित करने के लिए एक खिलाड़ी के नाम पर टैप करें</string>
     <string name="showRoundNotesTitle">राउंड नोट्स दिखाएं</string>
     <string name="playerStanding">#%d</string>
     <string name="playerStandingTitle">खिलाड़ी स्थान</string>
     <string name="actionPlayerStanding">स्थान</string>
     <string name="copiedUrl">यूआरएल कॉपी किया गया</string>
     <string name="storeToReview">कृपया समीक्षा के लिए ऐप स्टोर खोलें</string>
+    <string name="changelogUnavailable">परिवर्तन लॉग नहीं खोला जा सका</string>
+    <string name="gameNameRequired">कृपया खेल के लिए एक नाम दर्ज करें</string>
+    <string name="gamePlayersRequired">कृपया एक खिलाड़ी जोड़ें</string>
+    <string name="saveStatusSaving">सहेजा जा रहा है…</string>
+    <string name="saveStatusSaved">सभी बदलाव सहेजे गए</string>
+    <string name="saveStatusNameNotSaved">खाली नाम सहेजा नहीं जाता</string>
+    <string name="saveStatusPlayersNotSaved">खाली खिलाड़ी सूची सहेजी नहीं जाती</string>
+    <string name="saveStatusAutomatic">बदलाव अपने आप सहेजे जाते हैं</string>
     <string name="actionClose">बंद करे</string>
     <string name="useCalculatorDescription">कस्टम कैलकुलेटर कीबोर्ड का उपयोग करें। सक्षम नहीं होने पर सिस्टम कीबोर्ड का उपयोग करेगा।</string>
     <string name="useCalculatorTitle">कैलकुलेटर कीबोर्ड</string>
     <string name="actionChangelog">चंगेलोग</string>
     <string name="actionRateApp">एप्प का मूल्यांकन</string>
+    <string name="actionSettings">सेटिंग्स</string>
+
+    <!--Settings Screen-->
+    <string name="settingsAppearanceHeader">दिखावट</string>
+    <string name="settingsAboutHeader">ऐप के बारे में</string>
+    <string name="settingsDynamicColorTitle">वॉलपेपर रंग</string>
+    <string name="settingsDynamicColorSummary">ऐप के रंगों को डिवाइस के वॉलपेपर से मिलाएँ (डायनैमिक कलर)</string>
+    <string name="settingsTrueBlackTitle">शुद्ध काला</string>
+    <string name="settingsTrueBlackSummary">डार्क मोड में पूरी तरह काली पृष्ठभूमि का उपयोग करें</string>
+    <string name="settingsGamesHeader">खेल</string>
+    <string name="settingsAutoLoadSettingsTitle">पिछली सेटिंग्स लोड करें</string>
+    <string name="settingsAutoLoadSettingsSummary">पिछले खेल का नाम चुनने पर उसकी आखिरी सेटिंग्स और खिलाड़ी भर दिए जाते हैं</string>
+    <string name="settingsCalculatorDefaultSummary">नए खेल कैलकुलेटर कीबोर्ड चालू करके शुरू होते हैं</string>
+    <string name="settingsChangelogSummary">हर रिलीज़ में क्या नया है, देखें</string>
+    <string name="settingsRateSummary">Google Play पर समीक्षा लिखें</string>
+    <string name="settingsVersionTitle">संस्करण</string>
     <string name="undo">पूर्ववत</string>
     <string name="deleteRounds">राउंड हटाएं</string>
     <string name="deleteRoundItem">राउंड %d</string>
     <string name="incomplete">अधूरा</string>
+    <string name="maxScoreTitle">लक्ष्य स्कोर</string>
+    <string name="maxScoreDescription">स्कोर पूरा होने पर गेम समाप्त करें</string>
+    <string name="maxRoundsTitle">लक्ष्य राउंड</string>
+    <string name="maxRoundsDescription">खेलने के लिए राउंड की अधिकतम संख्या</string>
+    <string name="finishGame">गेम समाप्त करें</string>
+    <string name="finishGameTitle">लक्ष्य पूरा हुआ!</string>
+    <string name="finishGameConfirmation">क्या आप गेम समाप्त करके अंक तालिका देखना चाहेंगे?</string>
+    <string name="finish">समाप्त करें</string>
+    <string name="continuePlaying">एक और राउंड!</string>
+    <string name="errorGeneric">कुछ गलत हो गया</string>
+    <string name="settingsPrivacyHeader">गोपनीयता</string>
+    <string name="settingsShareDataTitle">उपयोग डेटा साझा करें</string>
+    <string name="settingsShareDataSummary">ऐप को बेहतर बनाने के लिए उपयोग के आंकड़े भेजें। नाम और स्कोर कभी साझा नहीं किए जाते।</string>
+    <string name="settingsCrashReportsTitle">क्रैश रिपोर्ट भेजें</string>
+    <string name="settingsCrashReportsSummary">ऐप क्रैश होने पर रिपोर्ट भेजें, ताकि समस्या ठीक की जा सके। नाम और स्कोर कभी साझा नहीं किए जाते।</string>
+    <string name="navigateUp">ऊपर नेविगेट करें</string>
+    <string name="scoreCellHint">%1$s, राउंड %2$d</string>
+    <string name="playerTotalDescription">%1$s, कुल %2$s</string>
+    <string name="leading">आगे</string>
+    <string name="editNotes">टिप्पणियाँ संपादित करें</string>
+    <string name="calculatorNextDescription">अगला</string>
+    <string name="calculatorMultiplyDescription">गुणा करें</string>
+    <string name="calculatorDivideDescription">भाग दें</string>
+    <string name="editPlayer">%s संपादित करें</string>
+    <string name="deleteFailed">हटाना विफल रहा</string>
+    <string name="calculatorOpenParenDescription">कोष्ठक खोलें</string>
+    <string name="calculatorCloseParenDescription">कोष्ठक बंद करें</string>
+    <string name="calculatorDecimalDescription">दशमलव</string>
+    <string name="calculatorMinusDescription">घटाएं</string>
+    <string name="calculatorEqualsDescription">बराबर</string>
+    <string name="graphDescription">राउंड के अनुसार स्कोर, %1$s. %2$s</string>
+    <string name="graphPlayerRoundsDescription">%1$s: %2$s</string>
+    <string name="podiumDescription">पोडियम, %1$s. %2$s</string>
+    <string name="usageDataConsentTitle">उपयोग डेटा साझा करें?</string>
+    <string name="usageDataConsentMessage">ऐप को बेहतर बनाने में मदद के लिए उपयोग के आंकड़े और क्रैश रिपोर्ट भेजें? इन्हें Google Firebase द्वारा एकत्र किया जाता है। नाम और स्कोर कभी साझा नहीं किए जाते।</string>
+    <string name="usageDataConsentAllow">अनुमति दें</string>
+    <string name="usageDataConsentDeny">अनुमति न दें</string>
 </resources>

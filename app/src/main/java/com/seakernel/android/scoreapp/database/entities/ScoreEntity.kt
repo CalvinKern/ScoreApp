@@ -37,7 +37,8 @@ data class ScoreEntity(
     @ColumnInfo(name = COLUMN_PLAYER_ID) var playerId: Long,
     @ColumnInfo(name = COLUMN_ROUND_ID) var roundId: Long,
     @ColumnInfo(name = COLUMN_SCORE) var score: Double,
-    @ColumnInfo(name = COLUMN_SCORE_DATA) var scoreData: String
+    @ColumnInfo(name = COLUMN_SCORE_DATA) var scoreData: String,
+    @ColumnInfo(name = COLUMN_SCORE_INPUT) var scoreInput: String? = null,
 ) {
     companion object {
         const val TABLE_NAME = "scores"
@@ -46,10 +47,11 @@ data class ScoreEntity(
         const val COLUMN_ROUND_ID = "round_id"
         const val COLUMN_SCORE = "score"
         const val COLUMN_SCORE_DATA = "score_data"
+        const val COLUMN_SCORE_INPUT = "score_input"
         const val INDEX_ROUND_ID = "index_${TABLE_NAME}_$COLUMN_ROUND_ID"
         const val INDEX_PLAYER_ID = "index_${TABLE_NAME}_$COLUMN_PLAYER_ID"
 
         const val QUALIFIED_COLUMNS =
-            "$TABLE_NAME.$COLUMN_ID, $TABLE_NAME.$COLUMN_PLAYER_ID, $TABLE_NAME.$COLUMN_ROUND_ID, $TABLE_NAME.$COLUMN_SCORE, $TABLE_NAME.$COLUMN_SCORE_DATA"
+            "$TABLE_NAME.$COLUMN_ID, $TABLE_NAME.$COLUMN_PLAYER_ID, $TABLE_NAME.$COLUMN_ROUND_ID, $TABLE_NAME.$COLUMN_SCORE, $TABLE_NAME.$COLUMN_SCORE_DATA, $TABLE_NAME.$COLUMN_SCORE_INPUT"
     }
 }
